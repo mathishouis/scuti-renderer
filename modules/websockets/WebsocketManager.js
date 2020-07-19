@@ -16,6 +16,8 @@ export default class WebsocketManager {
     static connect(connectionURL) {
         this.ws = new WebSocket(connectionURL);
         
+        this.ws.binaryType = "arraybuffer";
+        
         this.ws.onopen = function() {
             this.connected = true;
             console.log("CONNECTED TO " + connectionURL)

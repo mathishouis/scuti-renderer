@@ -1,3 +1,6 @@
+import * as Game from '../../Main.js'
+import LoginHandler from '../incoming/users/LoginHandler.js'
+
 export default class ServerMessage {
     
     static parseJSON(data) {
@@ -6,7 +9,9 @@ export default class ServerMessage {
     
     static handleMessage(message) {
         var msg = ServerMessage.parseJSON(message);
-        console.log(msg);
+        if(msg.action == "LoginHandler") {
+            LoginHandler.handle(message);
+        }
     }
     
 }

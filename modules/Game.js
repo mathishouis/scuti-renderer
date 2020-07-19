@@ -9,6 +9,7 @@ export class Game {
 
 	
 	constructor() {
+        this.state = "loading";
         this.ssoTicket = ssoTicket;
         console.log("SSO Ticket: " + this.ssoTicket)
 		this.userManager = new UserManager();
@@ -16,8 +17,6 @@ export class Game {
         this.interface = new Interface(this);
         this.startGame();
 		this.userManager.updateCredits(1090);
-		this.userManager.setUser(1, "Kozen", "Motto", "Monlook");
-		this.userManager.getUser(1);
         this.interface.render("catalog");
         this.requestLogin = new RequestLogin();
         
@@ -29,7 +28,7 @@ export class Game {
     
     load() {
         console.log("loading bro")
-        this.requestLogin.login(1, "Kozen", this.ssoTicket);
+        this.requestLogin.login(3, "Kozen", this.ssoTicket);
     }
     
     stop() {

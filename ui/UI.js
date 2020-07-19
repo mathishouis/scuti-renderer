@@ -1,17 +1,8 @@
 import Catalogue from './catalogue/Catalogue.js'
+import Loading from './splash/Loading.js'
 
 Catalogue.import();
-
-Vue.component('loading', {
-    data: function () {
-        return {
-        }
-    },
-    template: `
-<div style="position: fixed; width: 100%; height: 100%; background-color: rgba(15, 15, 15, 0.95); z-index: 100000; background-repeat: no-repeat; background-position: center center; background-image: url(./client/img/loading.gif);">
-</div>
-`
-})
+Loading.import();
 
 
 Vue.component('leftbar', {
@@ -220,7 +211,7 @@ MEETINGS
 })
 
 
-
+Vue.forceUpdate();
 
 
 var app = new Vue({
