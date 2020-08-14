@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js';
+
 export class Client {
     constructor(data) {
         this.app = new PIXI.Application({

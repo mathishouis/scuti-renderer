@@ -1,3 +1,4 @@
+import * as PIXI from 'pixi.js';
 import { app, container } from "./../../main.js";
 
 export class Tile extends PIXI.Graphics {

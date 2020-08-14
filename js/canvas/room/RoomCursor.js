@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js';
+
 export class RoomCursor extends PIXI.Graphics {
     constructor(x, y) {
         super(coords);

@@ -1,0 +1,21 @@
+{
+  "name": "scuti-client",
+  "version": "0.0.1",
+  "description": "Habbo client coded in HTML5 enft !",
+  "scripts": {
+    "start": "parcel index.html --no-cache --log-level 4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tiig3r/scuti-client.git"
+  },
+  "author": "KOZEN & Tig3r",
+  "license": "ISC",
+  "homepage": "https://github.com/Tiig3r/scuti-client#readme",
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "pixi.js": "^5.3.3"
+  }
+}
