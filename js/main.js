@@ -3,6 +3,7 @@ import { Network } from "./networking/Network.js";
 
 import { IncomingManager } from "./messages/incoming/IncomingManager.js";
 import { OutgoingManager } from "./messages/outcoming/OutgoingManager.js";
+import { IncomingUserMessages } from "./messages/incoming/Incoming.js";
 
 export let ws = new Network("localhost", "30000");
 let incomingManager = new IncomingManager();
@@ -26,7 +27,7 @@ ws.onmessage = function(event) {
     let dataParsed = JSON.parse(event.data);
     console.log("Data received: " + dataParsed);
 
-    let messageClassCorresponding = incomingManager.messages.get(222);
+    let messageClassCorresponding = incomingManager.messages.get(IncomingUserMessages.UserLoginMessage);
     let message = new messageClassCorresponding(dataParsed);
     message.execute();
 }

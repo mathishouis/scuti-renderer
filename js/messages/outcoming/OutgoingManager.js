@@ -16,6 +16,10 @@ export class OutgoingManager {
     }
 
     registerUserEvents() {
-        this.events.set(212, UserLoginEvent)
+        this.events.set(OutgoingUserEvents.UserLoginEvent, UserLoginEvent)
+    }
+
+    UIEvent() {
+
     }
 }
