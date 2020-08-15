@@ -1,3 +1,3 @@
-// export const {
-//     UserLoginMessage = 222,
-// };
+export const IncomingUserMessages = {
+    UserLoginMessage: 222,
+};
