@@ -26,6 +26,6 @@ export class Client {
 
     displayBeautifulRoom() {
         // display a room... this is a test method!
-        this.app.stage.addChild(this.container);
+        app.stage.addChild(this.container);
     }
 }
