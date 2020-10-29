@@ -1,5 +1,6 @@
 import { client } from "../../../main.js";
 import { OutgoingUserEvents } from "../Outgoing.js";
+import {Log} from "../../../util/logger/Logger";
 
 export class UserPingEvent {
 
@@ -15,7 +16,7 @@ export class UserPingEvent {
             packetId: OutgoingUserEvents.UserPingEvent,
         };
         client.getWebSocket().send(JSON.stringify(dataPacket));
-        console.log("Pinnnng")
+        Log("🏓 Ping", 'info');
 
     }
 }

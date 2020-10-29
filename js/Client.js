@@ -7,6 +7,7 @@ import {UserLoginEvent} from "./messages/outgoing/user/UserLoginEvent";
 import { UserPingEvent } from "./messages/outgoing/user/UserPingEvent.js";
 import {IncomingManager} from "./messages/incoming/IncomingManager";
 import {Network} from "./networking/Network";
+import { Log } from "./util/logger/Logger.js";
 
 export class Client {
     constructor() {
@@ -92,7 +93,7 @@ export class Client {
 
     wsOnClose() {
         this.ws.onclose = function(event) {
-            window.document.body.textContent = "Connexion échouée";
+            Log("WS connection closed!", 'error');
         }
     }
 
@@ -100,7 +101,7 @@ export class Client {
         const incomingMessages = this.incomingManager.messages;
         this.ws.onmessage = function(event) {
             let dataParsed = JSON.parse(event.data);
-            console.log("Data received: " + JSON.stringify(dataParsed));
+            Log("Data received: " + JSON.stringify(dataParsed), 'info');
 
             let messageClassCorresponding = incomingMessages.get(dataParsed.packetId);
             let message = new messageClassCorresponding(dataParsed);
