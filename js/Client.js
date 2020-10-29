@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import {OutgoingManager} from "./messages/outgoing/OutgoingManager";
 import {RoomGenerator} from "./canvas/room/RoomGenerator";
+import { RoomEngine } from "./rooms/RoomEngine";
 import {OutgoingUserEvents} from "./messages/outgoing/Outgoing";
 import {DataManager} from "./util/DataManager";
 import {UserLoginEvent} from "./messages/outgoing/user/UserLoginEvent";
@@ -75,7 +76,12 @@ export class Client {
     displayBeautifulRoom() {
         const floor = "xxxxxxxxxxxxxxxx\nxxxx00002100xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxx000000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx";
         // display a room... this is a test method!
-        this.currentRoom = RoomGenerator.execute(this.app, floor, 8);
+        //this.currentRoom = RoomGenerator.execute(this.app, floor, 8);
+        this.currentRoom = new RoomEngine(this.app, {
+            'floor': floor,
+            'tileHeight': 8
+        }).renderRoom();
+
     }
 
     wsOnOpen() {
