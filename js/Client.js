@@ -4,6 +4,7 @@ import {RoomGenerator} from "./canvas/room/RoomGenerator";
 import {OutgoingUserEvents} from "./messages/outgoing/Outgoing";
 import {DataManager} from "./util/DataManager";
 import {UserLoginEvent} from "./messages/outgoing/user/UserLoginEvent";
+import { UserPingEvent } from "./messages/outgoing/user/UserPingEvent.js";
 import {IncomingManager} from "./messages/incoming/IncomingManager";
 import {Network} from "./networking/Network";
 
@@ -19,6 +20,7 @@ export class Client {
 
         this.eventListener();
         this.displayClient();
+        this.ping();
     }
 
     setApp() {
@@ -37,6 +39,18 @@ export class Client {
 
     getApp() {
         return this.app;
+    }
+
+    ping() {
+
+        setInterval(
+            function() {
+
+                const userPingEvent = new UserPingEvent();
+                userPingEvent.sendToServer();
+
+            }, 5 * 1000);
+
     }
 
     eventListener() {
