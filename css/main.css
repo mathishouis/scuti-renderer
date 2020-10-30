@@ -93,22 +93,6 @@ body {
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
-.login {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    z-index: 10000;
-    left: 0;
-    background-color: #151618;
-}
-.login .center {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    width: 300px;
-}
 .hotel {
     width: 100%;
     height: 100%;
@@ -117,75 +101,7 @@ body {
     left: 0;
     background-color: #212225;
 }
-.leftbar {
-    width: 58px;
-    position: fixed;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    top: 45px;
-    z-index: 1000;
-    left: 0;
-    background-color: rgba(21, 22, 24, 0.95);
-}
-.bar {
-    height: 58px;
-    width: 100%;
-    position: fixed;
-    z-index: 1000;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(21, 22, 24, 0.95);
-}
-.bar .bottom_bar_left {
-    height: 100%;
-    position: absolute;
-    left: 10px;
-    
-}
 
-.bar .bottom_bar_right {
-    height: 100%;
-    position: absolute;
-    right: 10px;
-    
-}
-
-.icons {
-    height: 40px;
-    width: 40px;
-    cursor: pointer;
-    margin: 9px;
-    float: left;
-    background-repeat: no-repeat;
-    background-position: center center;
-    
-}.icons.hotel-view {
-    background-image: url(../img/hotel_view.png)
-    
-}.icons.navigator {
-    background-image: url(../img/navigator.png)
-    
-}.icons.catalog {
-    background-image: url(../img/catalog.png)
-    
-}.icons.inventory {
-    background-image: url(../img/inventory.png)
-    
-}.icons.messenger {
-    background-image: url(../img/messenger.png)
-    
-}.icons.friends {
-    background-image: url(../img/friends.png)
-    
-}
-.icons:hover {
-    background-position: top calc(50% - 1px) left calc(50% - 1px);
-    
-}
-.icons:active {
-    background-position: top calc(50% - 1px) left calc(50% + 1px);
-    opacity: 0.5;
-}
 .frame.resizable {
     resize: both;
     overflow: auto;
@@ -539,4 +455,207 @@ canvas {
     position: absolute;
     top: 0; 
     left: 0;
+}
+
+
+
+
+
+
+body, html {
+    width: 100%;
+    height: 100%;
+    font-family: Ubuntu,sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    image-rendering: pixelated;
+    -webkit-user-select: none;
+    user-select: none;
+    background-color: #212225;
+}
+
+body {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #fff;
+    text-align: left;
+}
+
+*, :after, :before {
+    box-sizing: border-box;
+}
+
+img, svg {
+    vertical-align: middle;
+}
+
+.bobbax-toolbar-component {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 1000;
+}
+
+.bobbax-toolbar-component .bottom-left {
+    height: 100%;
+    position: absolute;
+    left: 10px;
+}
+
+.bobbax-toolbar-component .bottom-right {
+    height: 100%;
+    position: absolute;
+    right: 10px;
+}
+.bobbax-toolbar-component .bottom-center-left {
+    height: 100%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-left: -285px;
+}
+.bobbax-toolbar-component .bottom-center-right {
+    height: 100%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-left: 285px;
+}
+
+.list-group {
+    display: flex;
+    flex-direction: row;
+    padding-left: 0;
+    border-radius: 0;
+    margin: 0;
+}
+
+.list-group-item {
+    vertical-align: middle;
+    display: flex;
+    margin: 5px;
+    margin-left: 13px;
+    margin-right: 13px;
+    cursor: pointer;
+
+}
+.list-group .list-group-item.avatar-image {
+    width: 75px;
+    height: 70px;
+    overflow: hidden;
+}
+
+.list-group .list-group-item.avatar-image img {
+    position: absolute;
+    top: -35px;
+}
+
+.gradient {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: linear-gradient(0deg, rgba(21,22,24,1) 0%, rgba(253,187,45,0) 100%);
+}
+
+/* Chat input */
+
+.bobbax-room-chatinput-component {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    bottom: 10px;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.bobbax-room-chatinput-component .chatinput-container {
+    position: relative;
+    width: 450px;
+    height: 45px;
+    left: 0px;
+    border-radius: 10px;
+    border: 3px solid #000;
+    background: #ededed;
+    pointer-events: all;
+}
+
+.bobbax-room-chatinput-component .chatinput-container:before {
+    content: "";
+    position: absolute;
+    width: 98%;
+    height: 5px;
+    border-radius: 5px;
+    top: 3px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background: #fff;
+    z-index: 1;
+}
+
+.bobbax-room-chatinput-component .chatinput-container .chat-input {
+    width: calc(100% - 25px);
+    height: 100%;
+    font-size: 18px;
+    padding: 0 10px;
+    outline: 0;
+    border: 0;
+    position: relative;
+    background: transparent;
+}
+
+.bobbax-room-chatinput-styleselector-component {
+    display: flex;
+    position: relative;
+    right: -10px;
+    pointer-events: all;
+}
+
+/* Icons */
+
+i.icon.chatstyles-icon {
+    background-image: url(../img/styles-icon.png);
+    width: 17px;
+    height: 19px;
+}
+
+i.icon.icon-habbo {
+    background-image: url(../img/habbo.png);
+    width: 28px;
+    height: 28px;
+}
+
+i.icon.icon-rooms {
+    background-image: url(../img/rooms.png);
+    width: 44px;
+    height: 30px;
+}
+
+i.icon.icon-catalog {
+    background-image: url(../img/catalog.png);
+    width: 33px;
+    height: 33px;
+}
+
+i.icon.icon-message {
+    background-image: url(../img/message.png);
+    width: 26px;
+    height: 32px;
+}
+i.icon.icon-friends {
+    background-image: url(../img/friends.png);
+    width: 32px;
+    height: 33px;
+}
+i.icon.icon-inventory {
+    background-image: url(../img/inventory.png);
+    width: 28px;
+    height: 29px;
 }

@@ -20,11 +20,26 @@ export class RoomEngine {
                     x: 32 * x - 32 * y,
                     y: 16 * x + 16 * y - 32 * map[y][x]
                 }
-                console.log(map[y][x]);
-                map[y][x] = new RoomModel(this.canvas, coords, this.room.tileHeight).drawTile();
+
+                // Generate walls (to finish)
+                if(x > 0 && y > 0) {
+                    //if(map[y - 1][x] == 'x') {
+                    //    new RoomModel(this.canvas).drawWall(coords, 1);
+                    //}
+                    if(map[y][x - 1] == 'x') {
+                        new RoomModel(this.canvas).drawWall({x: coords.x - 32, y: coords.y - 16}, 1);
+                    }
+
+                }
+
+                // Generate floor
+                new RoomModel(this.canvas).drawTile(coords, this.room.tileHeight);
+
+
             }
         }
-        return this.renderFurni()
+        new Room(this.canvas, map);
+        //return this.renderFurni()
 
     }
 

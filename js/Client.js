@@ -31,8 +31,15 @@ export class Client {
             height: window.innerHeight,
             antialias: false,
             transparent: false,
-            backgroundColor: 0x121212
+            backgroundColor: 0x212225
         });
+        this.container = new PIXI.Container();
+        this.container.interactive = true;
+        this.container.buttonMode = true;
+        this.container.x = this.app.screen.width / 2;
+        this.container.y = this.app.screen.height / 2;
+        this.container.sortableChildren = true;
+        this.app.stage.addChild(this.container);
     }
 
     getWebSocket() {
@@ -77,13 +84,13 @@ export class Client {
         const floor = "xxxxxxxxxxxxxxxx\nxxxx00002100xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxx000000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx";
         // display a room... this is a test method!
         //this.currentRoom = RoomGenerator.execute(this.app, floor, 8);
-        this.currentRoom = new RoomEngine(this.app, {
+        this.currentRoom = new RoomEngine(this.container, {
             'floor': floor,
             'tileHeight': 8,
             'furnitures': [
                 { id: 1, baseId: 1, position: {x: 1, y: 2, z: 4}, direction: 2, state: 2},
                 { id: 1, baseId: 1, position: {x: 1, y: 4, z: 4}, direction: 6, state: 1},
-                { id: 10, baseId: 10, position: {x: 1, y: 2, z: 4}, direction: 2, state: 2},
+                { id: 10, baseId: 1, position: {x: 1, y: 2, z: 4}, direction: 2, state: 2},
                 { id: 1, baseId: 1, position: {x: 3, y: 2, z: 1}, direction: 4, state: 2},
             ]
         }).renderRoom();
