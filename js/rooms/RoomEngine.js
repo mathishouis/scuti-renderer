@@ -23,11 +23,13 @@ export class RoomEngine {
 
                 // Generate walls (to finish)
                 if(x > 0 && y > 0) {
-                    //if(map[y - 1][x] == 'x') {
-                    //    new RoomModel(this.canvas).drawWall(coords, 1);
-                    //}
+                    // Left walls
                     if(map[y][x - 1] == 'x') {
-                        new RoomModel(this.canvas).drawWall({x: coords.x - 32, y: coords.y - 16}, 1);
+                        new RoomModel(this.canvas).drawWall({x: coords.x - 32, y: coords.y - 16}, 1, 'left');
+                    }
+                    // Right walls
+                    if(map[y - 1][x] == 'x') {
+                        new RoomModel(this.canvas).drawWall({x: coords.x + 8, y: coords.y - 28}, 1, 'right');
                     }
 
                 }
