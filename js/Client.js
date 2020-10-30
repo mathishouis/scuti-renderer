@@ -104,7 +104,8 @@ export class Client {
         //this.currentRoom = RoomGenerator.execute(this.app, floor, 8);
         this.currentRoom = new RoomEngine(this.container, {
             'floor': floor,
-            'tileHeight': 8,
+            'tileThickness': 8,
+            'wallHeight': 1,
             'furnitures': [
                 { id: 1, baseId: 1, position: {x: 1, y: 2, z: 4}, direction: 2, state: 2},
                 { id: 1, baseId: 1, position: {x: 1, y: 4, z: 4}, direction: 6, state: 1},

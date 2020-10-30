@@ -9,6 +9,8 @@ export class RoomEngine {
         this.room = room;
         this.roomFurnitureManager = new RoomFurnitureManager();
         this.furnitures = room.furnitures;
+        this.tileThickness = room.tileThickness;
+        this.wallHeight = room.wallHeight;
         this.maxTile = 0;
     }
 
@@ -17,7 +19,7 @@ export class RoomEngine {
 
 
         this.highestTile();
-        this.roomModel = new RoomModel(this.canvas, this.maxTile, 1);
+        this.roomModel = new RoomModel(this.canvas, this.maxTile, this.wallHeight, this.tileThickness);
 
 
         for(let y = 0; y < map.length; y++) {
@@ -47,14 +49,14 @@ export class RoomEngine {
                             // xxx
                             // xx0
                             // xxx
-                            this.roomModel.drawStair({x: coords.x - 8, y: coords.y - 36}, this.room.tileHeight, 'right')
+                            this.roomModel.drawStair({x: coords.x - 8, y: coords.y - 36}, 'right')
                         } else if (map[y - 1][x] == parseInt(map[y][x]) + 1) {
                             // xxx
                             // xxx
                             // x0x
-                            this.roomModel.drawStair({x: coords.x + 32, y: coords.y - 48}, this.room.tileHeight, 'bottom')
+                            this.roomModel.drawStair({x: coords.x + 32, y: coords.y - 48}, 'bottom')
                         } else {
-                            this.roomModel.drawTile(coords, this.room.tileHeight);
+                            this.roomModel.drawTile(coords);
                         }
                     }
                 }

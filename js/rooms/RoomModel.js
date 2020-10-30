@@ -2,25 +2,26 @@ import * as PIXI from 'pixi.js';
 import {Application} from 'pixi.js';
 
 export class RoomModel extends PIXI.Graphics {
-    constructor(canvas, maxTile, wallHeight) {
+    constructor(canvas, maxTile, wallHeight, tileThickness) {
         super();
 
         this.canvas = canvas;
         this.maxTile = maxTile;
         this.wallHeight = wallHeight;
+        this.tileThickness = tileThickness;
 
     }
 
-    drawTile(coords, tileHeight) {
+    drawTile(coords) {
         this.first = { x: coords.x, y: coords.y };
         this.second = { x: coords.x + 32, y: coords.y - 16 };
         this.third = { x: this.second.x + 32, y: this.first.y };
         this.fourth = { x: this.second.x, y: this.first.y + 16 };
         this.thikness = {
             first: { x: this.first.x, y: this.first.y },
-            second: { x: this.first.x, y: this.first.y + tileHeight },
-            third: { x: this.fourth.x , y: this.fourth.y + tileHeight },
-            fourth: { x: this.third.x, y: this.third.y + tileHeight },
+            second: { x: this.first.x, y: this.first.y + this.tileThickness },
+            third: { x: this.fourth.x , y: this.fourth.y + this.tileThickness },
+            fourth: { x: this.third.x, y: this.third.y + this.tileThickness },
             fifth: { x: this.third.x, y: this.third.y },
             sixth: { x: this.fourth.x , y: this.fourth.y }
         };
@@ -58,11 +59,11 @@ export class RoomModel extends PIXI.Graphics {
         this.canvas.addChild(this);
     }
 
-    drawWall(coords, type, tileHeight) {
+    drawWall(coords, type, tileZ) {
         switch(type) {
             case 'left':
                 coords.x = coords.x + 24
-                coords.y = coords.y - this.wallHeight * 123 + tileHeight * 32 + 20 - this.maxTile * 32
+                coords.y = coords.y - this.wallHeight * 123 + tileZ * 32 + 12 - this.maxTile * 32
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 32, y: coords.y - 16 };
                 this.third = { x: this.second.x + 8, y: this.first.y - 12 };
@@ -87,7 +88,7 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 8, y: coords.y + 4 };
-                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileHeight * 32 + this.maxTile * 32};
+                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileZ * 32 + this.maxTile * 32  + this.tileThickness};
                 //this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight };
                 this.fourth = { x: this.third.x - 8, y: this.third.y - 4};
 
@@ -103,7 +104,7 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x + 8, y: coords.y + 4 };
                 this.second = { x: this.first.x + 32, y: this.first.y - 16 };
-                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileHeight * 32 + this.maxTile * 32};
+                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileZ * 32 + this.maxTile * 32  + this.tileThickness};
                 //this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight };
                 this.fourth = { x: this.third.x - 32, y: this.third.y + 16};
 
@@ -117,7 +118,7 @@ export class RoomModel extends PIXI.Graphics {
                 break;
             case 'right':
                 coords.x = coords.x + 24
-                coords.y = coords.y - this.wallHeight * 123 + tileHeight * 32 + 20 - this.maxTile * 32
+                coords.y = coords.y - this.wallHeight * 123 + tileZ * 32 + 12 - this.maxTile * 32
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 32, y: coords.y + 16 };
                 this.third = { x: this.second.x + 8, y: this.first.y + 12 };
@@ -141,7 +142,7 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 32, y: coords.y + 16 };
-                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileHeight * 32 + this.maxTile * 32};
+                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileZ * 32 + this.maxTile * 32 + this.tileThickness};
                 //this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight };
                 this.fourth = { x: this.third.x - 32, y: this.third.y - 16};
 
@@ -157,7 +158,7 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x + 32, y: coords.y + 16 };
                 this.second = { x: this.first.x + 8, y: this.first.y - 4 };
-                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileHeight * 32 + this.maxTile * 32};
+                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileZ * 32 + this.maxTile * 32  + this.tileThickness};
                 //this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight };
                 this.fourth = { x: this.third.x - 8, y: this.third.y + 4};
 
@@ -172,7 +173,7 @@ export class RoomModel extends PIXI.Graphics {
                 break;
             case 'corner':
                 coords.x = coords.x + 24
-                coords.y = coords.y - this.wallHeight * 123 + tileHeight * 32 + 20 - this.maxTile * 32
+                coords.y = coords.y - this.wallHeight * 123 + tileZ * 32 + 12 - this.maxTile * 32
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 8, y: coords.y - 4 };
                 this.third = { x: this.second.x + 8, y: this.second.y + 4 };
@@ -199,7 +200,7 @@ export class RoomModel extends PIXI.Graphics {
 
     }
 
-    drawStair(coords, tileHeight, type) {
+    drawStair(coords, type) {
         switch(type) {
             case 'right':
                 for (let i = 0; i < 4; i++) {
@@ -211,9 +212,9 @@ export class RoomModel extends PIXI.Graphics {
                     this.fourth = { x: this.third.x - 32, y: this.third.y + 16 };
                     this.thikness = {
                         first: { x: this.first.x, y: this.first.y },
-                        second: { x: this.first.x, y: this.first.y + tileHeight },
-                        third: { x: this.fourth.x , y: this.fourth.y + tileHeight },
-                        fourth: { x: this.third.x, y: this.third.y + tileHeight },
+                        second: { x: this.first.x, y: this.first.y + this.tileThickness },
+                        third: { x: this.fourth.x , y: this.fourth.y + this.tileThickness },
+                        fourth: { x: this.third.x, y: this.third.y + this.tileThickness },
                         fifth: { x: this.third.x, y: this.third.y },
                         sixth: { x: this.fourth.x , y: this.fourth.y }
                     };
@@ -262,9 +263,9 @@ export class RoomModel extends PIXI.Graphics {
                     this.fourth = { x: this.third.x - 8, y: this.third.y + 4 };
                     this.thikness = {
                         first: { x: this.first.x, y: this.first.y },
-                        second: { x: this.first.x, y: this.first.y + tileHeight },
-                        third: { x: this.fourth.x , y: this.fourth.y + tileHeight },
-                        fourth: { x: this.third.x, y: this.third.y + tileHeight },
+                        second: { x: this.first.x, y: this.first.y + this.tileThickness },
+                        third: { x: this.fourth.x , y: this.fourth.y + this.tileThickness },
+                        fourth: { x: this.third.x, y: this.third.y + this.tileThickness },
                         fifth: { x: this.third.x, y: this.third.y },
                         sixth: { x: this.fourth.x , y: this.fourth.y }
                     };
