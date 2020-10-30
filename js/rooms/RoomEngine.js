@@ -1,11 +1,14 @@
 import { RoomModel } from './RoomModel'
 import { Room } from "./Room";
+import { RoomFurnitureManager } from "./furnitures/RoomFurnitureManager";
 
 export class RoomEngine {
     constructor(canvas, room) {
 
         this.canvas = canvas
         this.room = room;
+        this.roomFurnitureManager = new RoomFurnitureManager();
+        this.furnitures = room.furnitures;
 
     }
 
@@ -21,7 +24,15 @@ export class RoomEngine {
                 map[y][x] = new RoomModel(this.canvas, coords, this.room.tileHeight).drawTile();
             }
         }
+        return this.renderFurni()
 
+    }
+
+    renderFurni() {
+        var that = this;
+        this.furnitures.forEach(function(furni) {
+            that.roomFurnitureManager.addFurni(furni.id, furni.baseId, furni.position, furni.direction, furni.state, that.canvas);
+        });
     }
 
     generateMap(model) {
@@ -38,6 +49,8 @@ export class RoomEngine {
         }
         return matrix;
     }
+
+
 
 
 }
