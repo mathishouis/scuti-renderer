@@ -58,7 +58,7 @@ export class Client {
                 const userPingEvent = new UserPingEvent();
                 userPingEvent.sendToServer();
 
-            }, 5 * 1000);
+            }, 30 * 1000);
 
     }
 
@@ -85,13 +85,13 @@ export class Client {
             "xxxxxxxxxxxx\n" +
             "xxxxx111111x\n" +
             "xxxxx111111x\n" +
-            "xxxx1111111x\n" +
+            "xxxxx111111x\n" +
             "xxxxx111111x\n" +
             "xxxxx111111x\n" +
             "xxxxx000000x\n" +
             "xxxxx000000x\n" +
             "xxx00000000x\n" +
-            "xxx00000500x\n" +
+            "xxx00000000x\n" +
             "xxx00000000x\n" +
             "xxx00000000x\n" +
             "xxxxxxxxxxxx\n" +

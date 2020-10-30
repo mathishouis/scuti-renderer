@@ -12,6 +12,10 @@ npm install
 npm run start
  ```
 
+### Images
+
+![Drag Racing](https://i.ibb.co/WK3nbKn/readmescuti.png)
+
 ### Follow us
 Join our Discord for more information : https://discord.gg/s6fQAPt
 
