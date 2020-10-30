@@ -57,11 +57,11 @@ export class RoomModel extends PIXI.Graphics {
         this.canvas.addChild(this);
     }
 
-    drawWall(coords, wallHeight, type) {
+    drawWall(coords, wallHeight, type, tileHeight) {
         switch(type) {
             case 'left':
                 coords.x = coords.x + 24
-                coords.y = coords.y - wallHeight * 123 + 20
+                coords.y = coords.y - wallHeight * 123 + tileHeight * 32 + 20
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 32, y: coords.y - 16 };
                 this.third = { x: this.second.x + 8, y: this.first.y - 12 };
@@ -86,6 +86,7 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 8, y: coords.y + 4 };
+                //this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight - tileHeight * 32};
                 this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight };
                 this.fourth = { x: this.third.x - 8, y: this.third.y - 4};
 
@@ -101,7 +102,8 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x + 8, y: coords.y + 4 };
                 this.second = { x: this.first.x + 32, y: this.first.y - 16 };
-                this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight};
+                //this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight - tileHeight * 32};
+                this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight };
                 this.fourth = { x: this.third.x - 32, y: this.third.y + 16};
 
                 this.beginFill("0x90929E");
@@ -114,7 +116,7 @@ export class RoomModel extends PIXI.Graphics {
                 break;
             case 'right':
                 coords.x = coords.x + 24
-                coords.y = coords.y - wallHeight * 123 + 20
+                coords.y = coords.y - wallHeight * 123 + tileHeight * 32 + 20
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 32, y: coords.y + 16 };
                 this.third = { x: this.second.x + 8, y: this.first.y + 12 };
@@ -138,8 +140,9 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 32, y: coords.y + 16 };
+                //this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight - tileHeight * 32};
                 this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight };
-                this.fourth = { x: this.third.x - 32, y: this.third.y - 4};
+                this.fourth = { x: this.third.x - 32, y: this.third.y - 16};
 
                 this.beginFill("0xBBBECD");
                 this.moveTo(this.first.x, this.first.y);
@@ -153,7 +156,8 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x + 32, y: coords.y + 16 };
                 this.second = { x: this.first.x + 8, y: this.first.y - 4 };
-                this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight};
+                //this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight - tileHeight * 32};
+                this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight };
                 this.fourth = { x: this.third.x - 8, y: this.third.y + 4};
 
                 this.beginFill("0x90929E");
@@ -167,7 +171,7 @@ export class RoomModel extends PIXI.Graphics {
                 break;
             case 'corner':
                 coords.x = coords.x + 24
-                coords.y = coords.y - wallHeight * 123 + 20
+                coords.y = coords.y - wallHeight * 123 + tileHeight * 32 + 20
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 8, y: coords.y - 4 };
                 this.third = { x: this.second.x + 8, y: this.second.y + 4 };

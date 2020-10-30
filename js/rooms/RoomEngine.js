@@ -26,15 +26,15 @@ export class RoomEngine {
                 if(x > 0 && y > 0) {
                     // Corner walls
                     if(map[y - 1][x - 1] == 'x' && map[y - 1][x] == 'x' && map[y][x - 1] == 'x' && map[y][x] != 'x') {
-                        new RoomModel(this.canvas).drawWall({x: coords.x, y: coords.y - 32}, 2, 'corner');
+                        new RoomModel(this.canvas).drawWall({x: coords.x, y: coords.y - 32}, 1, 'corner', map[y][x]);
                     }
                     // Left walls
                     if(map[y][x - 1] == 'x' && map[y][x] != 'x') {
-                        new RoomModel(this.canvas).drawWall({x: coords.x - 32, y: coords.y - 16}, 2, 'left');
+                        new RoomModel(this.canvas).drawWall({x: coords.x - 32, y: coords.y - 16}, 1, 'left', map[y][x]);
                     }
                     // Right walls
                     if(map[y - 1][x] == 'x' && map[y][x] != 'x') {
-                        new RoomModel(this.canvas).drawWall({x: coords.x + 8, y: coords.y - 28}, 2, 'right');
+                        new RoomModel(this.canvas).drawWall({x: coords.x + 8, y: coords.y - 28}, 1, 'right', map[y][x]);
                     }
                 }
 
