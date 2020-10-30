@@ -81,7 +81,8 @@ export class Client {
     }
 
     displayBeautifulRoom() {
-        const floor = "xxxxxxxxxxxxxxxx\nxxxx00002100xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxx000000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx";
+        //const floor = "xxxxxxxxxxxxxxxx\nxxxx00002100xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxx000000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx";
+        const floor = "xxxxxxxxxxxx\nxxxxxxx0000x\nxxxxxxx0000x\nxxx00000000x\nxxx00000000x\nxx000000000x\nxxx00000000x\nx0000000000x\nx0000000000x\nx0000000000x\nx0000000000x\nxxxxxxxxxxxx\nxxxxxxxxxxxx\nxxxxxxxxxxxx\nxxxxxxxxxxxx\nxxxxxxxxxxxx\n";
         // display a room... this is a test method!
         //this.currentRoom = RoomGenerator.execute(this.app, floor, 8);
         this.currentRoom = new RoomEngine(this.container, {

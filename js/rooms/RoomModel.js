@@ -165,6 +165,31 @@ export class RoomModel extends PIXI.Graphics {
 
                 this.canvas.addChild(this);
                 break;
+            case 'corner':
+                coords.x = coords.x + 24
+                coords.y = coords.y - wallHeight * 123 + 20
+                this.first = { x: coords.x, y: coords.y };
+                this.second = { x: coords.x + 8, y: coords.y - 4 };
+                this.third = { x: this.second.x + 8, y: this.second.y + 4 };
+                this.fourth = { x: this.third.x - 8, y: this.third.y + 4};
+
+                this.lineStyle({
+                    width: 0.5,
+                    color: "0x6F717A",
+                    alignment: 0,
+                });
+                this.beginFill("0x6F717A");
+                this.moveTo(this.first.x, this.first.y);
+                this.lineTo(this.second.x, this.second.y);
+                this.lineTo(this.third.x, this.third.y);
+                this.lineTo(this.fourth.x, this.fourth.y);
+                this.lineTo(this.first.x, this.first.y);
+                this.endFill();
+
+
+
+                this.canvas.addChild(this);
+                break;
         }
 
     }

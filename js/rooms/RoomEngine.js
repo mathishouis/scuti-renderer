@@ -14,6 +14,7 @@ export class RoomEngine {
 
     renderRoom() {
         let map = this.generateMap(this.room.floor);
+
         for(let y = 0; y < map.length; y++) {
             for(let x = 0; x < map[y].length; x++) {
                 const coords = {
@@ -23,15 +24,18 @@ export class RoomEngine {
 
                 // Generate walls (to finish)
                 if(x > 0 && y > 0) {
+                    // Corner walls
+                    if(map[y - 1][x - 1] == 'x' && map[y - 1][x] == 'x' && map[y][x - 1] == 'x' && map[y][x] != 'x') {
+                        new RoomModel(this.canvas).drawWall({x: coords.x, y: coords.y - 32}, 2, 'corner');
+                    }
                     // Left walls
-                    if(map[y][x - 1] == 'x') {
-                        new RoomModel(this.canvas).drawWall({x: coords.x - 32, y: coords.y - 16}, 1, 'left');
+                    if(map[y][x - 1] == 'x' && map[y][x] != 'x') {
+                        new RoomModel(this.canvas).drawWall({x: coords.x - 32, y: coords.y - 16}, 2, 'left');
                     }
                     // Right walls
-                    if(map[y - 1][x] == 'x') {
-                        new RoomModel(this.canvas).drawWall({x: coords.x + 8, y: coords.y - 28}, 1, 'right');
+                    if(map[y - 1][x] == 'x' && map[y][x] != 'x') {
+                        new RoomModel(this.canvas).drawWall({x: coords.x + 8, y: coords.y - 28}, 2, 'right');
                     }
-
                 }
 
                 // Generate floor
