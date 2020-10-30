@@ -81,7 +81,24 @@ export class Client {
     }
 
     displayBeautifulRoom() {
-        const floor = "xxxxxxxxxxxxxxxx\nxxxx00002100xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxx000000000xxxx\nxxxx00000000xxxx\nxxxx20000000xxxx\nxxxx10000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx";
+        const floor = "xxxxxxxxxxxx\n" +
+            "xxxxxxxxxxxx\n" +
+            "xxxxx111111x\n" +
+            "xxxxx111111x\n" +
+            "xxxx1111111x\n" +
+            "xxxxx111111x\n" +
+            "xxxxx111111x\n" +
+            "xxxxx000000x\n" +
+            "xxxxx000000x\n" +
+            "xxx00000000x\n" +
+            "xxx00000500x\n" +
+            "xxx00000000x\n" +
+            "xxx00000000x\n" +
+            "xxxxxxxxxxxx\n" +
+            "xxxxxxxxxxxx\n" +
+            "xxxxxxxxxxxx"
+        //const floor = "xxxxxxxxxxxxxxxxxxx\nxxxxxxxxxxx22222222\nxxxxxxxxxxx22222222\nxxxxxxxxxxx22222222\nxxxxxxxxxx222222222\nxxxxxxxxxxx22222222\nxxxxxxxxxxx22222222\nx222222222222222222\nx222222222222222222\nx222222222222222222\nx222222222222222222\nx222222222222222222\nx222222222222222222\nx2222xxxxxxxxxxxxxx\nx2222xxxxxxxxxxxxxx\nx2222211111xx000000\nx222221111110000000\nx222221111110000000\nx2222211111xx000000\nxx22xxx1111xxxxxxxx\nxx11xxx1111xxxxxxxx\nx1111xx1111xx000000\nx1111xx111110000000\nx1111xx111110000000\nx1111xx1111xx000000\nxxxxxxxxxxxxxxxxxxx\n"
+        //const floor = "xxxxxxxxxxxxxxxx\nxxxx00002100xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxx000000000xxxx\nxxxx54321000xxxx\nxxxx20000000xxxx\nxxxx10000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxx00000000xxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxx";
         //const floor = "xxxxxxxxxxxx\nxxxxxxx0000x\nxxxxxxx0000x\nxxx00000000x\nxxx00000000x\nxx000000000x\nxxx00000000x\nx0000000000x\nx0000000000x\nx0000000000x\nx0000000000x\nxxxxxxxxxxxx\nxxxxxxxxxxxx\nxxxxxxxxxxxx\nxxxxxxxxxxxx\nxxxxxxxxxxxx\n";
         // display a room... this is a test method!
         //this.currentRoom = RoomGenerator.execute(this.app, floor, 8);

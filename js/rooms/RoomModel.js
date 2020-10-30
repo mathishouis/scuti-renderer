@@ -2,11 +2,12 @@ import * as PIXI from 'pixi.js';
 import {Application} from 'pixi.js';
 
 export class RoomModel extends PIXI.Graphics {
-    constructor(canvas) {
+    constructor(canvas, maxTile, wallHeight) {
         super();
 
         this.canvas = canvas;
-
+        this.maxTile = maxTile;
+        this.wallHeight = wallHeight;
 
     }
 
@@ -57,11 +58,11 @@ export class RoomModel extends PIXI.Graphics {
         this.canvas.addChild(this);
     }
 
-    drawWall(coords, wallHeight, type, tileHeight) {
+    drawWall(coords, type, tileHeight) {
         switch(type) {
             case 'left':
                 coords.x = coords.x + 24
-                coords.y = coords.y - wallHeight * 123 + tileHeight * 32 + 20
+                coords.y = coords.y - this.wallHeight * 123 + tileHeight * 32 + 20 - this.maxTile * 32
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 32, y: coords.y - 16 };
                 this.third = { x: this.second.x + 8, y: this.first.y - 12 };
@@ -86,8 +87,8 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 8, y: coords.y + 4 };
-                //this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight - tileHeight * 32};
-                this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight };
+                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileHeight * 32 + this.maxTile * 32};
+                //this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight };
                 this.fourth = { x: this.third.x - 8, y: this.third.y - 4};
 
                 this.beginFill("0xBBBECD");
@@ -102,8 +103,8 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x + 8, y: coords.y + 4 };
                 this.second = { x: this.first.x + 32, y: this.first.y - 16 };
-                //this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight - tileHeight * 32};
-                this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight };
+                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileHeight * 32 + this.maxTile * 32};
+                //this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight };
                 this.fourth = { x: this.third.x - 32, y: this.third.y + 16};
 
                 this.beginFill("0x90929E");
@@ -116,7 +117,7 @@ export class RoomModel extends PIXI.Graphics {
                 break;
             case 'right':
                 coords.x = coords.x + 24
-                coords.y = coords.y - wallHeight * 123 + tileHeight * 32 + 20
+                coords.y = coords.y - this.wallHeight * 123 + tileHeight * 32 + 20 - this.maxTile * 32
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 32, y: coords.y + 16 };
                 this.third = { x: this.second.x + 8, y: this.first.y + 12 };
@@ -140,8 +141,8 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 32, y: coords.y + 16 };
-                //this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight - tileHeight * 32};
-                this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight };
+                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileHeight * 32 + this.maxTile * 32};
+                //this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight };
                 this.fourth = { x: this.third.x - 32, y: this.third.y - 16};
 
                 this.beginFill("0xBBBECD");
@@ -156,8 +157,8 @@ export class RoomModel extends PIXI.Graphics {
                 });
                 this.first = { x: coords.x + 32, y: coords.y + 16 };
                 this.second = { x: this.first.x + 8, y: this.first.y - 4 };
-                //this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight - tileHeight * 32};
-                this.third = { x: this.second.x, y: this.second.y + 123 * wallHeight };
+                this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight - tileHeight * 32 + this.maxTile * 32};
+                //this.third = { x: this.second.x, y: this.second.y + 123 * this.wallHeight };
                 this.fourth = { x: this.third.x - 8, y: this.third.y + 4};
 
                 this.beginFill("0x90929E");
@@ -171,7 +172,7 @@ export class RoomModel extends PIXI.Graphics {
                 break;
             case 'corner':
                 coords.x = coords.x + 24
-                coords.y = coords.y - wallHeight * 123 + tileHeight * 32 + 20
+                coords.y = coords.y - this.wallHeight * 123 + tileHeight * 32 + 20 - this.maxTile * 32
                 this.first = { x: coords.x, y: coords.y };
                 this.second = { x: coords.x + 8, y: coords.y - 4 };
                 this.third = { x: this.second.x + 8, y: this.second.y + 4 };
@@ -196,6 +197,113 @@ export class RoomModel extends PIXI.Graphics {
                 break;
         }
 
+    }
+
+    drawStair(coords, tileHeight, type) {
+        switch(type) {
+            case 'right':
+                for (let i = 0; i < 4; i++) {
+                    coords.x = coords.x + 8
+                    coords.y = coords.y + 12
+                    this.first = { x: coords.x, y: coords.y };
+                    this.second = { x: coords.x + 32, y: coords.y - 16 };
+                    this.third = { x: this.second.x + 8, y: this.second.y + 4 };
+                    this.fourth = { x: this.third.x - 32, y: this.third.y + 16 };
+                    this.thikness = {
+                        first: { x: this.first.x, y: this.first.y },
+                        second: { x: this.first.x, y: this.first.y + tileHeight },
+                        third: { x: this.fourth.x , y: this.fourth.y + tileHeight },
+                        fourth: { x: this.third.x, y: this.third.y + tileHeight },
+                        fifth: { x: this.third.x, y: this.third.y },
+                        sixth: { x: this.fourth.x , y: this.fourth.y }
+                    };
+
+                    this.lineStyle({
+                        width: 0.5,
+                        color: "0x8E8E5E",
+                        alignment: 0,
+                    });
+                    this.beginFill("0x989865");
+                    this.moveTo(this.first.x, this.first.y);
+                    this.lineTo(this.second.x, this.second.y);
+                    this.lineTo(this.third.x, this.third.y);
+                    this.lineTo(this.fourth.x, this.fourth.y);
+                    this.lineTo(this.first.x, this.first.y);
+                    this.endFill();
+
+                    // thik
+                    this.lineStyle(1, "0x7A7A51");
+                    this.beginFill("0x838357");
+                    this.moveTo(this.thikness.first.x, this.thikness.first.y);
+                    this.lineTo(this.thikness.second.x, this.thikness.second.y);
+                    this.lineTo(this.thikness.third.x, this.thikness.third.y);
+                    this.lineTo(this.fourth.x, this.fourth.y);
+                    this.endFill();
+
+                    this.lineStyle(1, "0x676744");
+                    this.beginFill("0x6F6F49");
+                    this.moveTo(this.fourth.x, this.fourth.y);
+                    this.lineTo(this.thikness.third.x, this.thikness.third.y);
+                    this.lineTo(this.thikness.fourth.x, this.thikness.fourth.y);
+                    this.lineTo(this.third.x, this.third.y);
+                    this.lineStyle({ width: 0 })
+                    this.lineTo(this.fourth.x, this.fourth.y);
+                    this.canvas.addChild(this);
+                }
+
+                break;
+            case 'bottom':
+                for (let i = 0; i < 4; i++) {
+                    coords.x = coords.x - 8
+                    coords.y = coords.y + 12
+                    this.first = { x: coords.x, y: coords.y };
+                    this.second = { x: coords.x + 8, y: coords.y - 4 };
+                    this.third = { x: this.second.x + 32, y: this.second.y + 16 };
+                    this.fourth = { x: this.third.x - 8, y: this.third.y + 4 };
+                    this.thikness = {
+                        first: { x: this.first.x, y: this.first.y },
+                        second: { x: this.first.x, y: this.first.y + tileHeight },
+                        third: { x: this.fourth.x , y: this.fourth.y + tileHeight },
+                        fourth: { x: this.third.x, y: this.third.y + tileHeight },
+                        fifth: { x: this.third.x, y: this.third.y },
+                        sixth: { x: this.fourth.x , y: this.fourth.y }
+                    };
+
+                    this.lineStyle({
+                        width: 0.5,
+                        color: "0x8E8E5E",
+                        alignment: 0,
+                    });
+                    this.beginFill("0x989865");
+                    this.moveTo(this.first.x, this.first.y);
+                    this.lineTo(this.second.x, this.second.y);
+                    this.lineTo(this.third.x, this.third.y);
+                    this.lineTo(this.fourth.x, this.fourth.y);
+                    this.lineTo(this.first.x, this.first.y);
+                    this.endFill();
+
+                    // thik
+                    this.lineStyle(1, "0x7A7A51");
+                    this.beginFill("0x838357");
+                    this.moveTo(this.thikness.first.x, this.thikness.first.y);
+                    this.lineTo(this.thikness.second.x, this.thikness.second.y);
+                    this.lineTo(this.thikness.third.x, this.thikness.third.y);
+                    this.lineTo(this.fourth.x, this.fourth.y);
+                    this.endFill();
+
+                    this.lineStyle(1, "0x676744");
+                    this.beginFill("0x6F6F49");
+                    this.moveTo(this.fourth.x, this.fourth.y);
+                    this.lineTo(this.thikness.third.x, this.thikness.third.y);
+                    this.lineTo(this.thikness.fourth.x, this.thikness.fourth.y);
+                    this.lineTo(this.third.x, this.third.y);
+                    this.lineStyle({ width: 0 })
+                    this.lineTo(this.fourth.x, this.fourth.y);
+                    this.canvas.addChild(this);
+                }
+
+                break;
+        }
     }
 
     getCoords() {
