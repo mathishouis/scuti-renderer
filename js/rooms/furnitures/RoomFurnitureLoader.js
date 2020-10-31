@@ -13,6 +13,7 @@ export class RoomFurnitureLoader extends PIXI.Graphics {
 
     loadFurni(furniName) {
         this.furnitureLoader.add(furniName, furniName+'/'+furniName+'.json');
+
     }
 
     getFurni(furniName) {

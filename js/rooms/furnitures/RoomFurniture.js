@@ -16,7 +16,7 @@ export class RoomFurniture extends PIXI.Graphics {
         this.furniLoader = client.getFurniLoader();
     }
 
-    drawFurni() {
+    addFurni() {
 
         let furniName = furniData.floorItems[this.baseId].className
 
@@ -28,9 +28,14 @@ export class RoomFurniture extends PIXI.Graphics {
             Log(furniName + ' is already loaded!', 'info')
         }
 
+    }
+
+    drawFurni() {
+
         // Load furni
         this.furniLoader.furnitureLoader.load(() => {
 
+            let furniName = furniData.floorItems[this.baseId].className
             let furniProperty = this.furniLoader.getProperty(furniName);
             let furniContainer = new PIXI.Container();
             let zIndex = (this.position.x + this.position.y + this.position.z)*100;
@@ -40,7 +45,7 @@ export class RoomFurniture extends PIXI.Graphics {
 
             for(let i = 0; i < layerCount; i++) {
                 let layer = furniProperty.visualization.layers[i];
-                let sprite = new PIXI.Sprite(this.furniLoader.getFurni(furniName).textures[furniName+'_'+furniName+'_64_' + layerLetters[i] + '_'+this.direction+'_0']);
+                let sprite = new PIXI.Sprite(this.furniLoader.getFurni(furniName).textures[furniName+'_'+furniName+'_64_' + layerLetters[i] + '_'+this.direction+'_'+this.state]);
 
                 sprite.zIndex = zIndex;
 
@@ -50,7 +55,10 @@ export class RoomFurniture extends PIXI.Graphics {
             furniContainer.x = 32 + 32 * this.position.x - 32 * this.position.y;
             furniContainer.y = 63 + 16 * this.position.x + 16 * this.position.y - 32;
 
+            furniContainer.zIndex = zIndex;
+
             this.container.addChild(furniContainer);
+            this.container.updateTransform();
 
         });
 

@@ -4,6 +4,7 @@ import { RoomFurnitureManager } from "./furnitures/RoomFurnitureManager";
 import { TileObject } from "./utils/TileObject";
 import { WallObject } from "./utils/WallObject";
 import { StairObject } from "./utils/StairObject";
+import { client} from "../main";
 import { RoomFurnitureLoader } from "./furnitures/RoomFurnitureLoader";
 
 
@@ -80,8 +81,11 @@ export class RoomEngine {
 
     renderFurni() {
         var that = this;
-        this.furnitures.forEach(function(furni) {
+        this.furnitures.forEach((furni, i) => {
             that.roomFurnitureManager.addFurni(furni.id, furni.baseId, furni.position, furni.direction, furni.state, that.container);
+        });
+        this.furnitures.forEach((furni, i) => {
+            that.roomFurnitureManager.drawFurni(furni.id, furni.baseId, furni.position, furni.direction, furni.state, that.container);
         });
     }
 

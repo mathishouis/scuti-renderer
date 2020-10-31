@@ -117,11 +117,14 @@ export class Client {
             'tileThickness': 8,
             'wallHeight': 1,
             'furnitures': [
-                { id: 13, baseId: 2567, position: {x: 0, y: 0, z: 0}, direction: 0, state: 2},
-                { id: 13, baseId: 2567, position: {x: 0, y: 3, z: 0}, direction: 0, state: 2},
-                { id: 13, baseId: 2567, position: {x: 3, y: 0, z: 0}, direction: 0, state: 2},
-                { id: 13, baseId: 2567, position: {x: 3, y: 3, z: 0}, direction: 0, state: 2},
-                { id: 13, baseId: 2643, position: {x: 1, y: 1, z: 0}, direction: 0, state: 2},
+                { id: 13, baseId: 2567, position: {x: 0, y: 0, z: 0}, direction: 0, state: 0},
+                { id: 13, baseId: 2567, position: {x: 0, y: 3, z: 0}, direction: 0, state: 0},
+                { id: 13, baseId: 2567, position: {x: 3, y: 0, z: 0}, direction: 0, state: 0},
+                { id: 13, baseId: 2567, position: {x: 3, y: 3, z: 0}, direction: 0, state: 0},
+                { id: 13, baseId: 2643, position: {x: 5, y: 1, z: 0}, direction: 0, state: 0},
+                { id: 13, baseId: 2643, position: {x: 3, y: 1, z: 0}, direction: 0, state: 0},
+                { id: 13, baseId: 2643, position: {x: 2, y: 1, z: 0}, direction: 0, state: 0},
+                { id: 13, baseId: 2643, position: {x: 1, y: 1, z: 0}, direction: 0, state: 0},
             ]
         }).renderRoom();
 
