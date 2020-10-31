@@ -31,6 +31,8 @@ export class Client {
     }
 
     setApp() {
+        PIXI.utils.clearTextureCache()
+        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
         this.app = new PIXI.Application({
             width: window.innerWidth,
             height: window.innerHeight,
@@ -91,7 +93,7 @@ export class Client {
     }
 
     displayBeautifulRoom() {
-        const floor = "xxxxxxxxxxxxxxxxxxx\n" +
+        const floor2 = "xxxxxxxxxxxxxxxxxxx\n" +
                         "xxxxxxxxxxxxx00000x\n" +
                         "xxxxx1111111000000x\n" +
                         "xxxxx1111111000000x\n" +
@@ -107,6 +109,7 @@ export class Client {
                         "xxxxxxxxxxxxxxxxxxx\n" +
                         "xxxxxxxxxxxxxxxxxxx\n" +
                         "xxxxxxxxxxxxxxxxxxx"
+        const floor = "xxxxxxx\nx000000\nx000000\nx000000\nx000000\nx000000\nx000000\n"
         // display a room... this is a test method!
         //this.currentRoom = RoomGenerator.execute(this.app, floor, 8);
         this.currentRoom = new RoomEngine(this.container, {
@@ -114,7 +117,11 @@ export class Client {
             'tileThickness': 8,
             'wallHeight': 1,
             'furnitures': [
-                { id: 13, baseId: 2066, position: {x: 1, y: 2, z: 4}, direction: 2, state: 2},
+                { id: 13, baseId: 2567, position: {x: 0, y: 0, z: 0}, direction: 0, state: 2},
+                { id: 13, baseId: 2567, position: {x: 0, y: 3, z: 0}, direction: 0, state: 2},
+                { id: 13, baseId: 2567, position: {x: 3, y: 0, z: 0}, direction: 0, state: 2},
+                { id: 13, baseId: 2567, position: {x: 3, y: 3, z: 0}, direction: 0, state: 2},
+                { id: 13, baseId: 2643, position: {x: 1, y: 1, z: 0}, direction: 0, state: 2},
             ]
         }).renderRoom();
 

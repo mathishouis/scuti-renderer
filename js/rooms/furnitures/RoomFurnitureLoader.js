@@ -16,10 +16,10 @@ export class RoomFurnitureLoader extends PIXI.Graphics {
     }
 
     getFurni(furniName) {
-        return this.furnitureLoader.resources[furniName].data;
+        return this.furnitureLoader.resources[furniName];
     }
 
     getProperty(furniName) {
-        return this.getFurni(furniName).furniProperty
+        return this.getFurni(furniName).data.furniProperty
     }
 }
