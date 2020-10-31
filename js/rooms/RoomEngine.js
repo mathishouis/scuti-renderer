@@ -1,17 +1,21 @@
 import { RoomModel } from './RoomModel'
 import { Room } from "./Room";
 import { RoomFurnitureManager } from "./furnitures/RoomFurnitureManager";
+import { TileObject } from "./utils/TileObject";
+import { WallObject } from "./utils/WallObject";
+import { StairObject } from "./utils/StairObject";
+
 
 export class RoomEngine {
-    constructor(canvas, room) {
+    constructor(container, room) {
 
-        this.canvas = canvas
+        this.container = container
         this.room = room;
         this.roomFurnitureManager = new RoomFurnitureManager();
         this.furnitures = room.furnitures;
         this.tileThickness = room.tileThickness;
         this.wallHeight = room.wallHeight;
-        this.maxTile = 0;
+        this.zMax = 0;
     }
 
     renderRoom() {
@@ -19,7 +23,7 @@ export class RoomEngine {
 
 
         this.highestTile();
-        this.roomModel = new RoomModel(this.canvas, this.maxTile, this.wallHeight, this.tileThickness);
+        this.roomModel = new RoomModel(this.container, this.zMax, this.wallHeight, this.tileThickness);
 
 
         for(let y = 0; y < map.length; y++) {
@@ -29,34 +33,36 @@ export class RoomEngine {
                     y: 16 * x + 16 * y - 32 * map[y][x]
                 }
 
-                // Generate walls (to finish)
+                // Generate walls & stairs (to finish)
                 if(x > 0 && y > 0) {
                     // Corner walls
                     if(map[y - 1][x - 1] == 'x' && map[y - 1][x] == 'x' && map[y][x - 1] == 'x' && map[y][x] != 'x') {
-                        this.roomModel.drawWall({x: coords.x, y: coords.y - 32}, 'corner', map[y][x]);
+                        //this.roomModel.drawWall({x: coords.x, y: coords.y - 32}, 'corner', map[y][x]);
+                        new WallObject(this.container, {x: coords.x, y: coords.y - 32}, this.tileThickness, this.wallHeight, 'c', map[y][x], this.zMax).draw();
                     }
                     // Left walls
                     if(map[y][x - 1] == 'x' && map[y][x] != 'x') {
-                        this.roomModel.drawWall({x: coords.x - 32, y: coords.y - 16}, 'left', map[y][x]);
+                        new WallObject(this.container, {x: coords.x - 32, y: coords.y - 16}, this.tileThickness, this.wallHeight, 'l', map[y][x], this.zMax).draw();
                     }
                     // Right walls
                     if(map[y - 1][x] == 'x' && map[y][x] != 'x') {
-                        this.roomModel.drawWall({x: coords.x + 8, y: coords.y - 28}, 'right', map[y][x]);
+                        new WallObject(this.container, {x: coords.x + 8, y: coords.y - 28}, this.tileThickness, this.wallHeight, 'r', map[y][x], this.zMax).draw();
                     }
 
+                    // Stairs
                     if(map[y][x] != 'x') {
                         if (map[y][x - 1] == parseInt(map[y][x]) + 1) {
                             // xxx
                             // xx0
                             // xxx
-                            this.roomModel.drawStair({x: coords.x - 8, y: coords.y - 36}, 'right')
+                            new StairObject(this.container, {x: coords.x - 8, y: coords.y - 36}, this.tileThickness, 'r').draw();
                         } else if (map[y - 1][x] == parseInt(map[y][x]) + 1) {
                             // xxx
                             // xxx
                             // x0x
-                            this.roomModel.drawStair({x: coords.x + 32, y: coords.y - 48}, 'bottom')
+                            new StairObject(this.container, {x: coords.x + 32, y: coords.y - 48}, this.tileThickness, 'b').draw();
                         } else {
-                            this.roomModel.drawTile(coords);
+                            new TileObject(this.container, coords, this.tileThickness).draw();
                         }
                     }
                 }
@@ -66,8 +72,8 @@ export class RoomEngine {
 
             }
         }
-        new Room(this.canvas, map);
-        //return this.renderFurni()
+
+        return this.renderFurni()
 
     }
 
@@ -117,7 +123,7 @@ export class RoomEngine {
         for(let y = 0; y < mapValue.length; y++) {
             finalMapValue.push(Math.max.apply(Math, mapValue[y]))
         }
-        this.maxTile = Math.max.apply(Math, finalMapValue);
+        this.zMax = Math.max.apply(Math, finalMapValue);
     }
 
 
