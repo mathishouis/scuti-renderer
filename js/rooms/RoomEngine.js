@@ -82,10 +82,10 @@ export class RoomEngine {
     renderFurni() {
         var that = this;
         this.furnitures.forEach((furni, i) => {
-            that.roomFurnitureManager.addFurni(furni.id, furni.baseId, furni.position, furni.direction, furni.state, that.container);
+            that.roomFurnitureManager.addFurni(furni.id, furni.baseId, furni.positions, furni.direction, furni.state, that.container);
         });
         this.furnitures.forEach((furni, i) => {
-            that.roomFurnitureManager.drawFurni(furni.id, furni.baseId, furni.position, furni.direction, furni.state, that.container);
+            that.roomFurnitureManager.drawFurni(furni.id, furni.baseId, furni.positions, furni.direction, furni.state, that.container);
         });
     }
 
