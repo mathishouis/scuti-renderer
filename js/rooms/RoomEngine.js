@@ -18,6 +18,8 @@ export class RoomEngine {
         this.tileThickness = room.tileThickness;
         this.wallHeight = room.wallHeight;
         this.zMax = 0;
+
+        this.roomDragging();
     }
 
     renderRoom() {
@@ -129,6 +131,42 @@ export class RoomEngine {
             finalMapValue.push(Math.max.apply(Math, mapValue[y]))
         }
         this.zMax = Math.max.apply(Math, finalMapValue);
+    }
+
+    roomDragging() {
+
+        let draggingMode;
+        let clickCoords;
+        let roomCoordsSave;
+
+        this.container.on("mouseup", (event) => {
+            draggingMode = false;
+        });
+
+        this.container.on("mouseupoutside", (event) => {
+            draggingMode = false;
+        });
+
+        this.container.on("mousemove", (event) => {
+            if(draggingMode) {
+                let dx = event.data.global.x - clickCoords.x;
+                let dy = event.data.global.y - clickCoords.y;
+                this.container.x = roomCoordsSave.x + dx;
+                this.container.y = roomCoordsSave.y + dy;
+            }
+        });
+
+        this.container.on("mousedown", (event) => {
+            draggingMode = true;
+            clickCoords = {
+                x: event.data.global.x,
+                y: event.data.global.y
+            };
+            roomCoordsSave = {
+                x: this.container.x,
+                y: this.container.y
+            };
+        });
     }
 
 
