@@ -18,6 +18,7 @@ export class UserLoginMessage {
     execute() {
         if(this.packet.data.isLogged) {
             client.setUser(this.packet.data.user);
+            client.displayClient();
             console.log(client);
             console.log("You're connected as: " + client.getUsername());
         } else {

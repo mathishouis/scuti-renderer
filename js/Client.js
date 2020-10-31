@@ -9,20 +9,25 @@ import { UserPingEvent } from "./messages/outgoing/user/UserPingEvent.js";
 import {IncomingManager} from "./messages/incoming/IncomingManager";
 import {Network} from "./networking/Network";
 import { Log } from "./util/logger/Logger.js";
+import { RoomFurnitureLoader } from "./rooms/furnitures/RoomFurnitureLoader";
 
 export class Client {
     constructor() {
         this.ws = new Network("localhost", "30000");
         this.incomingManager = new IncomingManager();
-
         // WebSocket
         this.wsOnOpen();
         this.wsOnClose();
         this.wsOnMessage();
 
+
         this.eventListener();
-        this.displayClient();
         this.ping();
+
+    }
+
+    getFurniLoader() {
+        return this.furnitureLoader;
     }
 
     setApp() {
@@ -40,6 +45,7 @@ export class Client {
         this.container.y = this.app.screen.height / 2;
         this.container.sortableChildren = true;
         this.app.stage.addChild(this.container);
+        this.furnitureLoader = new RoomFurnitureLoader();
     }
 
     getWebSocket() {
@@ -108,10 +114,7 @@ export class Client {
             'tileThickness': 8,
             'wallHeight': 1,
             'furnitures': [
-                { id: 1, baseId: 1, position: {x: 1, y: 2, z: 4}, direction: 2, state: 2},
-                { id: 1, baseId: 1, position: {x: 1, y: 4, z: 4}, direction: 6, state: 1},
-                { id: 10, baseId: 1, position: {x: 1, y: 2, z: 4}, direction: 2, state: 2},
-                { id: 1, baseId: 1, position: {x: 3, y: 2, z: 1}, direction: 4, state: 2},
+                { id: 13, baseId: 2066, position: {x: 1, y: 2, z: 4}, direction: 2, state: 2},
             ]
         }).renderRoom();
 
