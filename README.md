@@ -14,7 +14,9 @@ npm run start
 
 ### Images
 
-![Drag Racing](https://i.ibb.co/WK3nbKn/readmescuti.png)
+![Room with furni](https://i.ibb.co/QFCLzLs/room.png)
+
+![Room with stairs](https://i.ibb.co/WK3nbKn/readmescuti.png)
 
 ### Follow us
 Join our Discord for more information : https://discord.gg/s6fQAPt

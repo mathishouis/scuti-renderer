@@ -47,6 +47,12 @@ export class RoomFurniture extends PIXI.Graphics {
                 let layer = furniProperty.visualization.layers[i];
                 let sprite = new PIXI.Sprite(this.furniLoader.getFurni(furniName).textures[furniName+'_'+furniName+'_64_' + layerLetters[i] + '_'+this.direction+'_'+this.state]);
 
+                // To complete
+                if (layer !== undefined && layer.ink !== undefined) {
+                    sprite.blendMode = PIXI.BLEND_MODES.ADD;
+                }
+
+
                 sprite.zIndex = zIndex;
 
                 furniContainer.addChild(sprite);
