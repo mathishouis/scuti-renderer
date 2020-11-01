@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Habbo client coded in HTML5 enft !",
   "scripts": {
-    "start": "parcel index.html --no-cache --log-level 4",
-    "serve:assets":  "http-server ./furnitures/ -p 8081 -i --cors"
+    "start": "parcel ./public/index.html --no-cache --log-level 4",
+    "serve:assets": "http-server ./public/assets/furnitures/ -p 8081 -i --cors"
   },
   "repository": {
     "type": "git",
@@ -14,12 +14,16 @@
   "license": "ISC",
   "homepage": "https://github.com/Tiig3r/scuti-client#readme",
   "devDependencies": {
+    "@vue/component-compiler-utils": "^3.2.0",
     "http-server": "^0.12.3",
-    "parcel": "^1.12.4"
+    "parcel": "^1.12.4",
+    "vue-template-compiler": "^2.6.12"
   },
   "dependencies": {
     "draggable-el": "^1.0.7",
     "jquery": "^3.5.1",
-    "pixi.js": "^5.3.3"
+    "pixi.js": "^5.3.3",
+    "vue": "^2.6.12",
+    "vue-hot-reload-api": "^2.3.4"
   }
 }

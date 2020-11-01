@@ -17,6 +17,7 @@ export class UserLoginMessage {
 
     execute() {
         if(this.packet.data.isLogged) {
+            client.setVue();
             client.setUser(this.packet.data.user);
             client.displayClient();
             console.log(client);

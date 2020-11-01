@@ -10,6 +10,8 @@ import {IncomingManager} from "./messages/incoming/IncomingManager";
 import {Network} from "./networking/Network";
 import { Log } from "./util/logger/Logger.js";
 import { RoomFurnitureLoader } from "./rooms/furnitures/RoomFurnitureLoader";
+import Vue from 'vue'
+import App from "../interface/App";
 
 export class Client {
     constructor() {
@@ -28,6 +30,13 @@ export class Client {
 
     getFurniLoader() {
         return this.furnitureLoader;
+    }
+
+    setVue() {
+        new Vue({
+            el: '#app',
+            render: h => h(App)
+        })
     }
 
     setApp() {
@@ -112,7 +121,7 @@ export class Client {
         const floor = "xxxxxxx\nx000000\nx000000\nx000000\nx000000\nx000000\nx000000\n"
         // display a room... this is a test method!
         //this.currentRoom = RoomGenerator.execute(this.app, floor, 8);
-        this.currentRoom = new RoomEngine(this.container, {
+        this.currentRoom = new RoomEngine(this.app,this.container, {
             'floor': floor,
             'tileThickness': 8,
             'wallHeight': 1,

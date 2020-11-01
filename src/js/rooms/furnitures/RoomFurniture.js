@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import {client} from "../../main";
-import furniData from './../../../furnitures/furnidata.json';
+import furniData from './../../../../public/assets/furnitures/furnidata.json';
 import {Log} from "../../util/logger/Logger";
 
 export class RoomFurniture extends PIXI.Graphics {

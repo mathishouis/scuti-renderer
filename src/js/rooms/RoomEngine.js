@@ -6,11 +6,13 @@ import { WallObject } from "./utils/WallObject";
 import { StairObject } from "./utils/StairObject";
 import { client} from "../main";
 import { RoomFurnitureLoader } from "./furnitures/RoomFurnitureLoader";
+import { TileCursor} from "./utils/TileCursor";
 
 
 export class RoomEngine {
-    constructor(container, room) {
+    constructor(app, container, room) {
 
+        this.app = app;
         this.container = container
         this.room = room;
         this.roomFurnitureManager = new RoomFurnitureManager();
@@ -18,6 +20,7 @@ export class RoomEngine {
         this.tileThickness = room.tileThickness;
         this.wallHeight = room.wallHeight;
         this.zMax = 0;
+        //this.tileCursor = new TileCursor(this.container, this.generateMap(this.room.floor));
 
         this.roomDragging();
     }
@@ -168,6 +171,7 @@ export class RoomEngine {
             };
         });
     }
+
 
 
 
