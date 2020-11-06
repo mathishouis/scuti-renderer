@@ -4,7 +4,7 @@ export class RoomFurnitureLoader extends PIXI.Graphics {
     constructor() {
         super();
 
-        this.furnitureLoader = new PIXI.Loader("http://127.0.0.1:8081/", 2);
+        this.furnitureLoader = new PIXI.Loader("http://127.0.0.1:8081/furnitures/", 2);
     }
 
     isLoaded(furniName) {

@@ -12,6 +12,7 @@ import { Log } from "./util/logger/Logger.js";
 import { RoomFurnitureLoader } from "./rooms/furnitures/RoomFurnitureLoader";
 import Vue from 'vue'
 import App from "../interface/App";
+import  {store} from "../interface/store/store"
 
 export class Client {
     constructor() {
@@ -33,10 +34,15 @@ export class Client {
     }
 
     setVue() {
-        new Vue({
+        this.vue = new Vue({
             el: '#app',
+            store,
             render: h => h(App)
         })
+    }
+
+    getVue() {
+        return this.vue;
     }
 
     setApp() {

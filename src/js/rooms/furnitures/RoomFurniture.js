@@ -1,6 +1,5 @@
 import * as PIXI from 'pixi.js';
 import {client} from "../../main";
-import furniData from './../../../../public/assets/furnitures/furnidata.json';
 import {Log} from "../../util/logger/Logger";
 
 export class RoomFurniture extends PIXI.Graphics {
@@ -14,11 +13,27 @@ export class RoomFurniture extends PIXI.Graphics {
         this.container = container;
 
         this.furniLoader = client.getFurniLoader();
+
+        // Temporary :D
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var obj=this.responseText;
+                var obj1 = JSON.parse(obj);
+                this.furniData = JSON.stringify(obj1);
+                console.log(obj1);
+            }
+        };
+        xhttp.open("GET", "http://127.0.0.1:8081/furnitures/furnidata.json", true);
+        xhttp.send();
+
+
     }
 
     addFurni() {
 
-        let furniName = furniData.floorItems[this.baseId].className
+        let furniName = this.furniData.floorItems[this.baseId].className
 
         // Furni loader
         if(!this.furniLoader.isLoaded(furniName)) {
@@ -35,7 +50,7 @@ export class RoomFurniture extends PIXI.Graphics {
         // Load furni
         this.furniLoader.furnitureLoader.load(() => {
 
-            let furniName = furniData.floorItems[this.baseId].className
+            let furniName = this.furniData.floorItems[this.baseId].className
             let furniProperty = this.furniLoader.getProperty(furniName);
             let furniContainer = new PIXI.Container();
             let zIndex = (this.positions.x + this.positions.y + this.positions.z)*100;

@@ -8,7 +8,7 @@
                 <li class="list-group-item">
                     <i class="icon icon-habbo"></i>
                 </li>
-                <li id="navigator"  class="list-group-item">
+                <li id="navigator"  class="list-group-item" v-on:click="toggleVisibility">
                     <i class="icon icon-rooms"></i>
                 </li>
                 <li class="list-group-item">
@@ -44,9 +44,15 @@
 </template>
 
 <script>
+    import {client} from "./../../../js/main";
 
     export default {
         name: 'ToolBar',
+        methods: {
+            toggleVisibility: function() {
+                this.$store.commit('toggleVisibility', 'navigator')
+            }
+        }
     };
 
 </script>

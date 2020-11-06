@@ -1,3 +1,48 @@
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('Ubuntu-Medium.woff2') format('woff2'),
+    url('Ubuntu-Medium.woff') format('woff'),
+    url('Ubuntu-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('Ubuntu-Bold.woff2') format('woff2'),
+    url('Ubuntu-Bold.woff') format('woff'),
+    url('Ubuntu-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('Ubuntu-Light.woff2') format('woff2'),
+    url('Ubuntu-Light.woff') format('woff'),
+    url('Ubuntu-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('Ubuntu-Regular.woff2') format('woff2'),
+    url('Ubuntu-Regular.woff') format('woff'),
+    url('Ubuntu-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+* {
+    font-family: 'Ubuntu', sans-serif;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -17,7 +62,6 @@ body {
 .loadingWrapper .center {
     padding: 0px;
     text-align: center;
-    font-family: 'Ubuntu', sans-serif;
     position: absolute;
     text-transform: uppercase;
     letter-spacing: 7Px;
@@ -143,7 +187,6 @@ body {
     height: 22px;
     cursor: default;
     position: absolute;
-    font-family: 'Ubuntu', sans-serif;
     font-weight: 600;
     left: 50%;
     transform: translate(-50%, 0);
@@ -153,7 +196,6 @@ body {
 button {
     cursor: pointer;
     height: 22px;
-    font-family: 'Ubuntu', sans-serif;
     border: none;
     text-align: center;
     color: white;
@@ -187,7 +229,6 @@ input {
     box-sizing: border-box;
     border-bottom: 1px solid #000;
     border-radius: 3px;
-    font-family: 'Ubuntu', sans-serif;
     float: left;
     background-color: white;
     -webkit-box-shadow: inset 0px 2px 0px 0px rgba(0,0,0,0.12);
@@ -207,7 +248,6 @@ box-shadow: inset 0px 2px 0px 0px rgba(0,0,0,0.12);
 .frame.s1 .tabs {
     cursor: pointer;
     height: 30px;
-    font-family: 'Ubuntu', sans-serif;
     border: none;
     flex: auto;
     text-align: center;
@@ -263,7 +303,6 @@ box-shadow: inset 0px 2px 0px 0px rgba(0,0,0,0.12);
     height: 21px;
     font-size: 13px;
     line-height: 18px;
-    font-family: 'Ubuntu', sans-serif;
     font-weight: 500;
     letter-spacing: 1px;
     border-bottom: 1px solid #292829;
@@ -308,7 +347,6 @@ box-shadow: inset 0px 2px 0px 0px rgba(0,0,0,0.12);
 .frame.s1 .roomtab .text {
     left: 80px;
     top: 7px;
-    font-family: 'Ubuntu', sans-serif;
     color: white;
     font-size: 15px;
     position: absolute;
@@ -320,7 +358,6 @@ box-shadow: inset 0px 2px 0px 0px rgba(0,0,0,0.12);
     top: 48px;
     border-radius: 3px;
     background-color: #ddd;
-    font-family: 'Ubuntu', sans-serif;
     color: white;
     text-align: center;
     position: absolute;
@@ -484,6 +521,35 @@ body {
     text-align: left;
 }
 
+/* Buttons */
+
+button {
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    color: white;
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #000;
+    background-color: #282729;
+    border-radius: 3px;
+    height: auto;
+
+}
+button:hover {
+    background-color: #39383A;
+    border-top: 1px solid #474647;
+    border-bottom: 1px solid #201F21;
+}
+button.green {
+    border-bottom: 1px solid #528937;
+    background-color: #6BB74B;
+    border-top: 1px solid #87B573;
+}
+button.green:hover {
+    border-bottom: 1px solid #426D2C;
+    background-color: #5FA342;
+    border-top: 1px solid #739961;
+}
 
 /* Chat input */
 
