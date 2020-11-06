@@ -1,5 +1,4 @@
 node_modules/*
-public/assets/furnitures/*
 yarn-error.log
 yarn.lock
 
