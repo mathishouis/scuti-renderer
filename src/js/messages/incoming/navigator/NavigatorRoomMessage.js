@@ -1,4 +1,6 @@
 import $ from "jquery";
+import {client} from "../../../main";
+import {store} from "../../../../interface/store/store";
 
 export class NavigatorRoomMessage {
     constructor(packet) {
@@ -6,8 +8,10 @@ export class NavigatorRoomMessage {
     }
 
     execute() {
+        console.log(this.packet.data)
         const allRoomsTab = $('#allRoomsTab');
         allRoomsTab.empty();
+        store.state.rooms = this.packet.data;
 
         for(const name in this.packet.data) {
             if(this.packet.data.hasOwnProperty(name)) {

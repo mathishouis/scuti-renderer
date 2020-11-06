@@ -27,88 +27,11 @@
                         <div class="but hide">
                         </div>
                     </div>
-                    <div class="roomtab">
+                    <div class="roomtab" v-for="room in this.$store.state.rooms" :key="room.id">
                         <div class="thumbnail" style="background-image: url(./../../../../public/img/2.png);">
                         </div>
                         <div class="text">
-                            Club NX<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">Kozen</span>
-                        </div>
-                        <div class="usercount red">
-                            <img src="./../../../../public/img/user.png"> 71
-                        </div>
-                        <div class="room-info"></div>
-                    </div>
-                    <div class="roomtab">
-                        <div class="thumbnail" style="background-image: url(./../../../../public/img/3.png);">
-                        </div>
-                        <div class="text">
-                            Coffe House<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">Kozen</span>
-                        </div>
-                        <div class="usercount orange">
-                            <img src="./../../../../public/img/user.png"> 44
-                        </div>
-                        <div class="room-info"></div>
-                    </div>
-                    <div class="roomtab">
-                        <div class="thumbnail" style="background-image: url(./../../../../public/img/4.png);">
-                        </div>
-                        <div class="text">
-                            Picnic Park<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">Kozen</span>
-                        </div>
-                        <div class="usercount green">
-                            <img src="./../../../../public/img/user.png"> 22
-                        </div>
-                        <div class="room-info"></div>
-                    </div>
-                    <div class="roomtab">
-                        <div class="thumbnail" style="background-image: url(./../../../../public/img/5.png);">
-                        </div>
-                        <div class="text">
-                            Welcome Lounge<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">Kozen</span>
-                        </div>
-                        <div class="usercount green">
-                            <img src="./../../../../public/img/user.png"> 9
-                        </div>
-                        <div class="room-info"></div>
-                    </div>
-                    <div class="roomtab">
-                        <div class="thumbnail" style="background-image: url(./../../../../public/img/6.png);">
-                        </div>
-                        <div class="text">
-                            Theater<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">Kozen</span>
-                        </div>
-                        <div class="usercount gray">
-                            <img src="./../../../../public/img/user.png"> 0
-                        </div>
-                        <div class="room-info"></div>
-                    </div>
-                    <div class="roomtab">
-                        <div class="thumbnail" style="background-image: url(./../../../../public/img/1.png);">
-                        </div>
-                        <div class="text">
-                            Home<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">Kozen</span>
-                        </div>
-                        <div class="usercount gray">
-                            <img src="./../../../../public/img/user.png"> 0
-                        </div>
-                        <div class="room-info"></div>
-                    </div>
-                    <div class="roomtab">
-                        <div class="thumbnail" style="background-image: url(./../../../../public/img/1.png);">
-                        </div>
-                        <div class="text">
-                            Welcome Lounge<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">Kozen</span>
-                        </div>
-                        <div class="usercount gray">
-                            <img src="./../../../../public/img/user.png"> 0
-                        </div>
-                        <div class="room-info"></div>
-                    </div>
-                    <div class="roomtab">
-                        <div class="thumbnail" style="background-image: url(./../../../../public/img/1.png);">
-                        </div>
-                        <div class="text">
-                            Welcome Lounge<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">Kozen</span>
+                            {{ room.name }}<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">{{ room.ownerName }}</span>
                         </div>
                         <div class="usercount gray">
                             <img src="./../../../../public/img/user.png"> 0

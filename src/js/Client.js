@@ -24,7 +24,7 @@ export class Client {
         this.wsOnMessage();
 
 
-        this.eventListener();
+        //this.eventListener();
         this.ping();
 
     }

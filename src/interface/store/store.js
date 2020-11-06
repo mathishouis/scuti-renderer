@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { OpenNavigatorEvent } from "../../js/messages/outgoing/navigator/OpenNavigatorEvent";
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export const store = new Vuex.Store({
                 state.visibility[frame] = false
             } else {
                 state.visibility[frame] = true
+                OpenNavigatorEvent.listen();
             }
         }
     },
