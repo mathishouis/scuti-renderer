@@ -16,17 +16,7 @@ export class RoomFurniture extends PIXI.Graphics {
 
         // Temporary :D
 
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                var obj=this.responseText;
-                var obj1 = JSON.parse(obj);
-                this.furniData = JSON.stringify(obj1);
-                console.log(obj1);
-            }
-        };
-        xhttp.open("GET", "http://127.0.0.1:8081/furnitures/furnidata.json", true);
-        xhttp.send();
+        this.furniData = this.furniLoader.furniData;
 
 
     }

@@ -7,6 +7,7 @@ import { StairObject } from "./utils/StairObject";
 import { client} from "../main";
 import { RoomFurnitureLoader } from "./furnitures/RoomFurnitureLoader";
 import { TileCursor} from "./utils/TileCursor";
+import {Log} from "../util/logger/Logger";
 
 
 export class RoomEngine {
@@ -91,13 +92,16 @@ export class RoomEngine {
     }
 
     renderFurni() {
-        var that = this;
-        this.furnitures.forEach((furni, i) => {
-            that.roomFurnitureManager.addFurni(furni.id, furni.baseId, furni.positions, furni.direction, furni.state, that.container);
-        });
-        this.furnitures.forEach((furni, i) => {
-            that.roomFurnitureManager.drawFurni(furni.id, furni.baseId, furni.positions, furni.direction, furni.state, that.container);
-        });
+
+            this.furnitures.forEach((furni, i) => {
+                this.roomFurnitureManager.addFurni(furni.id, furni.baseId, furni.positions, furni.direction, furni.state, this.container);
+            });
+            this.furnitures.forEach((furni, i) => {
+                this.roomFurnitureManager.drawFurni(furni.id, furni.baseId, furni.positions, furni.direction, furni.state, this.container);
+            });
+
+
+
     }
 
     generateMap(model) {

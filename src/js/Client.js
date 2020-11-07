@@ -63,6 +63,7 @@ export class Client {
         this.container.sortableChildren = true;
         this.app.stage.addChild(this.container);
         this.furnitureLoader = new RoomFurnitureLoader();
+        this.furnitureLoader.loadFurnidata();
     }
 
     getWebSocket() {
@@ -104,7 +105,7 @@ export class Client {
     displayClient() {
         this.setApp();
         document.getElementById("room-container").appendChild(this.app.view);
-        this.displayBeautifulRoom();
+        this.currentRoom = undefined;
     }
 
     displayBeautifulRoom() {
@@ -127,33 +128,6 @@ export class Client {
         const floor = "xxxxxxx\nx000000\nx000000\nx000000\nx000000\nx000000\nx000000\n"
         // display a room... this is a test method!
         //this.currentRoom = RoomGenerator.execute(this.app, floor, 8);
-        this.currentRoom = new RoomEngine(this.app,this.container, {
-            'floor': floor,
-            'tileThickness': 8,
-            'wallHeight': 1,
-            'furnitures': [
-                { id: 13, baseId: 2567, positions: {x: 0, y: 0, z: 0}, direction: 0, state: 0},
-                { id: 13, baseId: 2567, positions: {x: 0, y: 3, z: 0}, direction: 0, state: 0},
-                { id: 13, baseId: 2567, positions: {x: 3, y: 0, z: 0}, direction: 0, state: 0},
-                { id: 13, baseId: 2567, positions: {x: 3, y: 3, z: 0}, direction: 0, state: 0},
-                { id: 13, baseId: 2645, positions: {x: 5, y: 1, z: 1}, direction: 2, state: 0},
-                { id: 13, baseId: 2643, positions: {x: 5, y: 1, z: 0}, direction: 0, state: 0},
-                { id: 13, baseId: 3119, positions: {x: 4, y: 1, z: 0}, direction: 0, state: 3},
-                { id: 13, baseId: 2643, positions: {x: 3, y: 1, z: 0}, direction: 0, state: 0},
-                { id: 13, baseId: 8262, positions: {x: 3, y: 1, z: 1}, direction: 2, state: 0},
-                { id: 13, baseId: 8261, positions: {x: 2, y: 1, z: 1}, direction: 2, state: 0},
-                { id: 13, baseId: 2643, positions: {x: 2, y: 1, z: 0}, direction: 0, state: 0},
-                { id: 13, baseId: 2674, positions: {x: 1, y: 1, z: 0}, direction: 0, state: 0},
-                { id: 13, baseId: 3705, positions: {x: 2, y: 2, z: 0.1}, direction: 2, state: 0},
-                { id: 13, baseId: 2650, positions: {x: 3, y: 3, z: 0.1}, direction: 6, state: 0},
-                { id: 13, baseId: 2643, positions: {x: 1, y: 2, z: 0}, direction: 2, state: 0},
-                { id: 13, baseId: 2643, positions: {x: 1, y: 3, z: 0}, direction: 2, state: 0},
-                { id: 13, baseId: 2643, positions: {x: 1, y: 4, z: 0}, direction: 2, state: 0},
-                { id: 13, baseId: 3704, positions: {x: 2, y: 4, z: 0}, direction: 4, state: 0},
-                { id: 13, baseId: 3114, positions: {x: 2, y: 5, z: 0}, direction: 0, state: 1},
-                { id: 13, baseId: 2643, positions: {x: 1, y: 5, z: 0}, direction: 2, state: 0},
-            ]
-        }).renderRoom();
 
 
 

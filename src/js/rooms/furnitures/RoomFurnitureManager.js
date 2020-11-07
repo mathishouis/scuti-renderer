@@ -1,4 +1,5 @@
 import { RoomFurniture } from './RoomFurniture';
+import {client} from "../../main";
 
 export class RoomFurnitureManager {
 
@@ -11,4 +12,5 @@ export class RoomFurnitureManager {
         const furni = new RoomFurniture(id, baseId, positions, direction, state, canvas);
         furni.drawFurni();
     }
+
 }
