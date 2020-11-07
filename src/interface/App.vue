@@ -4,6 +4,7 @@
         <ToolBar></ToolBar>
         <ChatInput></ChatInput>
         <Navigator></Navigator>
+        <RoomCreator></RoomCreator>
     </div>
 </template>
 
@@ -13,11 +14,13 @@
     import ChatInput from "./components/Chat/ChatInput";
     import RoomView from "./components/Room/RoomView";
     import Navigator from "./components/Navigator/Navigator";
+    import RoomCreator from "./components/Navigator/RoomCreator";
     import {client} from "../js/main";
 
     export default {
         name: 'App',
         components: {
+            RoomCreator,
             Navigator,
             ToolBar,
             ChatInput,

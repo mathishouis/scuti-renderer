@@ -9,6 +9,7 @@ export const store = new Vuex.Store({
     state: {
         visibility: {
             navigator: false,
+            roomcreator: false,
         },
         rooms: {}
     },

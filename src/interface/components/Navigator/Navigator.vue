@@ -1,17 +1,19 @@
 <template>
-    <Frame v-if="this.$store.state.visibility.navigator" width="500px" height="550px">
-        <template #header>
-            <div class="title">Navigator</div>
-            <div class="right">
-                <button><img src="./../../../../public/img/question_mark.png"></button>
-                <button v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
+    <Frame v-if="this.$store.state.visibility.navigator" width="500px" height="550px" >
+        <template #header >
+            <div class="navigatorDragger">
+                <div class="title">Navigator</div>
+                <div class="right">
+                    <button><img src="./../../../../public/img/question_mark.png"></button>
+                    <button v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
+                </div>
             </div>
         </template>
         <div class="left-panel">
             <input placeholder="Search for a room...">
             <div class="separator"></div>
-            <button><img src="./../../../../public/img/Rooms.png">Create a room</button>
-            <button><img src="./../../../../public/img/Rooms.png">Random room</button>
+            <button class="blue" v-on:click="openRoomCreator"><img src="./../../../../public/img/CreateRoom.png">Create a room</button>
+            <button class="green"><img src="./../../../../public/img/RandomRoom.png">Random room</button>
         </div>
         <div class="right-panel">
             <div class="tab-container">
@@ -58,6 +60,9 @@
         methods: {
             toggleVisibility: function() {
                 this.$store.commit('toggleVisibility', 'navigator')
+            },
+            openRoomCreator: function() {
+                this.$store.commit('toggleVisibility', 'roomcreator')
             },
             loadRoom: function(id) {
                 this.$store.commit('loadRoom', id);
@@ -205,6 +210,8 @@
         scrollbar-width: none;
         float: left;
         width: 100%;
+        display: flex;
+        flex-wrap: wrap;
     }
 
     .hiddentab {

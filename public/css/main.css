@@ -193,34 +193,7 @@ body {
     font-size: 17px;
     color: white;
 }
-button {
-    cursor: pointer;
-    height: 22px;
-    border: none;
-    text-align: center;
-    color: white;
-    border-top: 1px solid #444;
-    border-bottom: 1px solid #000;
-    background-color: #282729;
-    border-radius: 3px;
-    
-}
-button:hover {
-    background-color: #39383A;
-    border-top: 1px solid #474647;
-    border-bottom: 1px solid #201F21;
-}
 
-.blue {
-    border-bottom: 1px solid #051E23;
-    background-color: #3B7F8F;
-    border-top: 1px solid #4C727D;
-}
-button.blue:hover {
-    border-bottom: 1px solid #051E23;
-    background-color: #3B7F8F;
-    border-top: 1px solid #4C727D;
-}
 input {
     width: 100%;
     padding: 10px 10px;
@@ -539,16 +512,28 @@ button:hover {
     background-color: #39383A;
     border-top: 1px solid #474647;
     border-bottom: 1px solid #201F21;
+    transition: 0.2s;
+}
+
+button.blue {
+    border-bottom: 1px solid #00A6D8;
+    background-color: #00B1EA;
+    border-top: 1px solid #7DD8F5;
+}
+button.blue:hover {
+    border-bottom: 1px solid #017a9f;
+    background-color: #0092c1;
+    border-top: 1px solid #6abad4;
 }
 button.green {
-    border-bottom: 1px solid #528937;
-    background-color: #6BB74B;
-    border-top: 1px solid #87B573;
+    border-bottom: 1px solid #52A033;
+    background-color: #5BB639;
+    border-top: 1px solid #AEDB9D;
 }
 button.green:hover {
-    border-bottom: 1px solid #426D2C;
-    background-color: #5FA342;
-    border-top: 1px solid #739961;
+    border-bottom: 1px solid #3a7024;
+    background-color: #44862b;
+    border-top: 1px solid #8aae7d;
 }
 
 /* Chat input */

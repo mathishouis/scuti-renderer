@@ -20,6 +20,7 @@
     "vue-template-compiler": "^2.6.12"
   },
   "dependencies": {
+    "@branu-jp/v-drag": "^0.1.0",
     "draggable-el": "^1.0.7",
     "jquery": "^3.5.1",
     "pixi.js": "^5.3.3",

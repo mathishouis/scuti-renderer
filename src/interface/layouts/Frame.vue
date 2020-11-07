@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="frame" :style="{ width: width, height: height }" v-drag="{ handle: '#header' }">
-            <div class="header" id="header">
+        <div class="frame" :style="{ width: width, height: height }" v-drag:dragger>
+            <div class="header" id="dragger">
                 <slot name="header"></slot>
             </div>
             <div class="content">
@@ -14,13 +14,14 @@
 <script>
 
     import Vue from 'vue'
-    import vdrag from 'v-drag';
-
-    Vue.use(vdrag);
+    import drag from '@branu-jp/v-drag'
 
     export default {
         name: 'Frame',
-        props: ['width', 'height']
+        props: ['width', 'height'],
+        directives: {
+            drag
+        },
     };
 
 </script>
@@ -41,6 +42,7 @@
         display: flex;
         flex-direction: column;
         padding: 12px 12px;
+        position: absolute;
 
     }
     .frame .header {
