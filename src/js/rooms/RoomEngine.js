@@ -26,6 +26,8 @@ export class RoomEngine {
     }
 
     renderRoom() {
+        this.destroyRoom();
+
         var map = this.generateMap(this.room.floor);
 
 
@@ -84,6 +86,10 @@ export class RoomEngine {
 
     }
 
+    destroyRoom() {
+        for (var i = this.container.children.length - 1; i >= 0; i--) {	this.container.removeChild(this.container.children[i]);}
+    }
+
     renderFurni() {
         var that = this;
         this.furnitures.forEach((furni, i) => {
@@ -99,7 +105,7 @@ export class RoomEngine {
         let lines = 0;
         matrix = [[]];
         for(let i = 0; i < model.length; i++) {
-            if(model[i] === "\n") {
+            if(model[i] === "\n" || model[i] === "\r") {
                 matrix.push([]);
                 lines++;
             } else {

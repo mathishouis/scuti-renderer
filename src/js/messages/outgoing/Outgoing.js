@@ -7,3 +7,7 @@ export const OutgoingNavigatorEvents = {
     OpenNavigatorEvent: 213,
     CreateRoomEvent: 214,
 }
+
+export const OutgoingRoomEvents = {
+    LoadRoomEvent: 215,
+}

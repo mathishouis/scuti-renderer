@@ -27,7 +27,7 @@
                         <div class="but hide">
                         </div>
                     </div>
-                    <div class="roomtab" v-for="room in this.$store.state.rooms" :key="room.id">
+                    <div class="roomtab" v-for="room in this.$store.state.rooms" :key="room.id" v-on:click="loadRoom(room.id)">
                         <div class="thumbnail" style="background-image: url(./../../../../public/img/2.png);">
                         </div>
                         <div class="text">
@@ -48,6 +48,7 @@
 <script>
 
     import Frame from "../../layouts/Frame";
+    import {LoadRoomEvent} from '../../../js/messages/outgoing/rooms/LoadRoomEvent';
 
     export default {
         name: 'Navigator',
@@ -57,6 +58,9 @@
         methods: {
             toggleVisibility: function() {
                 this.$store.commit('toggleVisibility', 'navigator')
+            },
+            loadRoom: function(id) {
+                this.$store.commit('loadRoom', id);
             }
         }
     };

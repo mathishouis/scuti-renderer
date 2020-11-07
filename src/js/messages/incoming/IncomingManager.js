@@ -1,24 +1,24 @@
 import { IncomingUserMessages } from "./Incoming.js";
 import { UserLoginMessage } from "./user/UserLoginMessage.js";
-import {IncomingNavigatorMessages} from "./Incoming";
+import {IncomingNavigatorMessages, IncomingRoomMessages} from "./Incoming";
 import {NavigatorRoomMessage} from "./navigator/NavigatorRoomMessage";
+import {LoadRoomMessage} from "./rooms/LoadRoomMessage";
 
 export class IncomingManager {
     constructor() {
         this.messages = new Map();
 
         //load
-        this.registerUserMessages();
-        this.registerNavigatorMessages();
+        this.registerMessages();
     }
     
-    registerUserMessages() {
+    registerMessages() {
         this.messages.set(IncomingUserMessages.UserLoginMessage, UserLoginMessage);
+        this.messages.set(IncomingNavigatorMessages.RoomNavigatorListMessage, NavigatorRoomMessage);
+        this.messages.set(IncomingRoomMessages.LoadRoomMessage, LoadRoomMessage);
     }
 
-    registerNavigatorMessages() {
-        this.messages.set(IncomingNavigatorMessages.RoomNavigatorListMessage, NavigatorRoomMessage);
-    }
+
 
     getMessages() {
         return this.messages;
