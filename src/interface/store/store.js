@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
             navigator: false,
             roomcreator: false,
             catalog: false,
+            landingview: true,
         },
         rooms: {}
     },

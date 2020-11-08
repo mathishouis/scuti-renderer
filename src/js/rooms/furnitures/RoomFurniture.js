@@ -56,17 +56,36 @@ export class RoomFurniture extends PIXI.Graphics {
                 if (layer !== undefined && layer.ink !== undefined) {
                     sprite.blendMode = PIXI.BLEND_MODES.ADD;
                 }
+                if (layer !== undefined && layer.ignoreMouse !== undefined) {
+                    if(layer.ignoreMouse == false) {
+                        sprite.interactive = true;
+
+                        sprite.on("mousedown", (event) => {
+                            console.log("IS BACK TOUBI: ")
+                            if(sprite.alpha == 0.7) {
+                                sprite.alpha = 1.0
+                            } else {
+                                sprite.alpha = 0.7
+                            }
+                            this.container.updateTransform();
+                        });
+                    }
+                }
 
 
                 sprite.zIndex = zIndex;
 
+
                 furniContainer.addChild(sprite);
             }
+
+
 
             furniContainer.x = 32 + 32 * this.positions.x - 32 * this.positions.y;
             furniContainer.y = 63 + 16 * this.positions.x + 16 * this.positions.y - 32 - this.positions.z * 32;
 
             furniContainer.zIndex = zIndex;
+
 
             this.container.addChild(furniContainer);
             this.container.updateTransform();

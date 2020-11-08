@@ -1,5 +1,5 @@
 <template>
-    <div class="scuti-room-chatinput-component">
+    <div class="scuti-room-chatinput-component" v-if="this.$store.state.visibility.landingview == false">
         <div class="chatinput-container">
             <input type="text" class="chat-input">
         </div>

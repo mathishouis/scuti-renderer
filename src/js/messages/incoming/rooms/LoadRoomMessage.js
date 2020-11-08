@@ -1,6 +1,7 @@
 import $ from "jquery";
 import {client} from "../../../main";
 import {RoomEngine} from "../../../rooms/RoomEngine";
+import {store} from "../../../../interface/store/store";
 
 
 export class LoadRoomMessage {
@@ -9,6 +10,8 @@ export class LoadRoomMessage {
     }
 
     execute() {
+        store.state.visibility.landingview = false;
+
         var heightmap = this.packet.data["heightmap"]
         var floorThickness = this.packet.data["floorThickness"]
         var wallHeight = this.packet.data["wallHeight"]

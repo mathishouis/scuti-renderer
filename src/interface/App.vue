@@ -1,6 +1,7 @@
 <template>
     <div class="scuti-main-component">
         <RoomView></RoomView>
+        <LandingView></LandingView>
         <ToolBar></ToolBar>
         <ChatInput></ChatInput>
         <Navigator></Navigator>
@@ -18,10 +19,12 @@
     import RoomCreator from "./components/Navigator/RoomCreator";
     import Catalog from "./components/Catalog/Catalog";
     import {client} from "../js/main";
+    import LandingView from "./components/LandingView/LandingView";
 
     export default {
         name: 'App',
         components: {
+            LandingView,
             RoomCreator,
             Navigator,
             ToolBar,
