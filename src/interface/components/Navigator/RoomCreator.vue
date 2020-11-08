@@ -1,39 +1,41 @@
 <template>
-    <Frame v-if="this.$store.state.visibility.roomcreator" width="600px" height="440px">
-        <template #header>
-            <div class="title">Room Creation</div>
-            <div class="right">
-                <button style="height: 22px;" v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
+    <transition name="slide-fade">
+        <Frame v-if="this.$store.state.visibility.roomcreator" width="600px" height="440px">
+            <template #header>
+                <div class="title">Room Creation</div>
+                <div class="right">
+                    <button style="height: 22px;" v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
+                </div>
+            </template>
+            <div class="left-panel">
+                <label>Room name</label>
+                <input>
+                <label>Room description</label>
+                <textarea rows="2"></textarea>
+                <div class="separator"></div>
+                <label>Category</label>
+                <select>
+                    <option value="0">Trading</option>
+                </select>
+                <label>Max users</label>
+                <select>
+                    <option value="0">10</option>
+                </select>
+                <div class="separator"></div>
+                <button class="green"><img src="./../../../../public/img/CreateRoom.png">Create room</button>
             </div>
-        </template>
-        <div class="left-panel">
-            <label>Room name</label>
-            <input>
-            <label>Room description</label>
-            <textarea rows="2"></textarea>
-            <div class="separator"></div>
-            <label>Category</label>
-            <select>
-                <option value="0">Trading</option>
-            </select>
-            <label>Max users</label>
-            <select>
-                <option value="0">10</option>
-            </select>
-            <div class="separator"></div>
-            <button class="green"><img src="./../../../../public/img/CreateRoom.png">Create room</button>
-        </div>
-        <div class="right-panel">
-            <label style="margin-left: 6px;">Room Model</label>
-            <div class="scrollbox" style="width: calc(100% + 6px);height: calc(100% - 27px); margin-top: -5px;">
-                <div class="room-selector" v-for="model in roomModel" :key="model.name" v-on:click="selectedModel = model.name">
-                    <img :src="roomModelImages[model.name]">
-                    <div v-if="selectedModel == model.name" class="check"></div>
+            <div class="right-panel">
+                <label style="margin-left: 6px;">Room Model</label>
+                <div class="scrollbox" style="width: calc(100% + 6px);height: calc(100% - 27px); margin-top: -5px;">
+                    <div class="room-selector" v-for="model in roomModel" :key="model.name" v-on:click="selectedModel = model.name">
+                        <img :src="roomModelImages[model.name]">
+                        <div v-if="selectedModel == model.name" class="check"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </Frame>
+        </Frame>
+    </transition>
 </template>
 
 <script>
@@ -146,6 +148,18 @@
 </script>
 
 <style scoped>
+
+    .slide-fade-enter-active {
+        transition: all .3s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active below version 2.1.8 */ {
+        transform: translateX(10px);
+        opacity: 0;
+    }
 
     .tab-container {
         width: 100%;

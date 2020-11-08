@@ -1,50 +1,52 @@
 <template>
-    <Frame v-if="this.$store.state.visibility.navigator" width="500px" height="550px" >
-        <template #header >
-            <div class="navigatorDragger">
-                <div class="title">Navigator</div>
-                <div class="right">
-                    <button style="height: 22px;"><img src="./../../../../public/img/question_mark.png"></button>
-                    <button style="height: 22px;" v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
-                </div>
-            </div>
-        </template>
-        <div class="left-panel">
-            <input placeholder="Search for a room...">
-            <div class="separator"></div>
-            <button class="blue" v-on:click="openRoomCreator"><img src="./../../../../public/img/CreateRoom.png">Create a room</button>
-            <button class="green"><img src="./../../../../public/img/RandomRoom.png">Random room</button>
-        </div>
-        <div class="right-panel">
-            <div class="tab-container">
-                <button>Featured</button>
-                <button>Popular</button>
-                <button>Events</button>
-                <button>Me</button>
-            </div>
-            <div class="scrollbox" style="height: calc(100% - 49px)">
-                <div class="hiddentab" style="padding: 0px 0px; height: auto;">
-                    <div class="header">
-                        PUBLIC ROOMS
-                        <div class="but hide">
-                        </div>
-                    </div>
-                    <div class="roomtab" v-for="room in this.$store.state.rooms" :key="room.id" v-on:click="loadRoom(room.id)">
-                        <div class="thumbnail" style="background-image: url(./../../../../public/img/2.png);">
-                        </div>
-                        <div class="text">
-                            {{ room.name }}<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">{{ room.ownerName }}</span>
-                        </div>
-                        <div class="usercount gray">
-                            <img src="./../../../../public/img/user.png"> 0
-                        </div>
-                        <div class="room-info"></div>
+    <transition name="slide-fade">
+        <Frame v-if="this.$store.state.visibility.navigator" width="500px" height="550px" >
+            <template #header >
+                <div class="navigatorDragger">
+                    <div class="title">Navigator</div>
+                    <div class="right">
+                        <button style="height: 22px;"><img src="./../../../../public/img/question_mark.png"></button>
+                        <button style="height: 22px;" v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
                     </div>
                 </div>
+            </template>
+            <div class="left-panel">
+                <input placeholder="Search for a room...">
+                <div class="separator"></div>
+                <button class="blue" v-on:click="openRoomCreator"><img src="./../../../../public/img/CreateRoom.png">Create a room</button>
+                <button class="green"><img src="./../../../../public/img/RandomRoom.png">Random room</button>
             </div>
-        </div>
+            <div class="right-panel">
+                <div class="tab-container">
+                    <button>Featured</button>
+                    <button>Popular</button>
+                    <button>Events</button>
+                    <button>Me</button>
+                </div>
+                <div class="scrollbox" style="height: calc(100% - 49px)">
+                    <div class="hiddentab" style="padding: 0px 0px; height: auto;">
+                        <div class="header">
+                            PUBLIC ROOMS
+                            <div class="but hide">
+                            </div>
+                        </div>
+                        <div class="roomtab" v-for="room in this.$store.state.rooms" :key="room.id" v-on:click="loadRoom(room.id)">
+                            <div class="thumbnail" style="background-image: url(./../../../../public/img/2.png);">
+                            </div>
+                            <div class="text">
+                                {{ room.name }}<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">{{ room.ownerName }}</span>
+                            </div>
+                            <div class="usercount gray">
+                                <img src="./../../../../public/img/user.png"> 0
+                            </div>
+                            <div class="room-info"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    </Frame>
+        </Frame>
+    </transition>
 </template>
 
 <script>
@@ -74,6 +76,17 @@
 
 <style scoped>
 
+    .slide-fade-enter-active {
+        transition: all .3s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active below version 2.1.8 */ {
+        transform: translateX(10px);
+        opacity: 0;
+    }
     .tab-container {
         width: 100%;
         height: 37px;

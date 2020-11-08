@@ -1,29 +1,31 @@
 <template>
-    <Frame v-if="this.$store.state.visibility.catalog" width="600px" height="450px" >
-        <template #header >
-            <div class="navigatorDragger">
-                <div class="title">Catalog</div>
-                <div class="right">
-                    <button style="height: 22px;"><img src="./../../../../public/img/question_mark.png"></button>
-                    <button style="height: 22px;" v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
+    <transition name="slide-fade">
+        <Frame v-if="this.$store.state.visibility.catalog" width="600px" height="450px" >
+            <template #header >
+                <div class="navigatorDragger">
+                    <div class="title">Catalog</div>
+                    <div class="right">
+                        <button style="height: 22px;"><img src="./../../../../public/img/question_mark.png"></button>
+                        <button style="height: 22px;" v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
+                    </div>
                 </div>
+            </template>
+            <div class="left-panel">
+                <input placeholder="Search...">
+                <div class="separator"></div>
             </div>
-        </template>
-        <div class="left-panel">
-            <input placeholder="Search...">
-            <div class="separator"></div>
-        </div>
-        <div class="right-panel">
-            <div class="tab-container">
-                <button>Featured</button>
-                <button>Popular</button>
-                <button>Events</button>
-                <button>Me</button>
+            <div class="right-panel">
+                <div class="tab-container">
+                    <button>Featured</button>
+                    <button>Popular</button>
+                    <button>Events</button>
+                    <button>Me</button>
+                </div>
+                <div class="separator"></div>
             </div>
-            <div class="separator"></div>
-        </div>
 
-    </Frame>
+        </Frame>
+    </transition>
 </template>
 
 <script>
@@ -46,6 +48,18 @@
 </script>
 
 <style scoped>
+
+    .slide-fade-enter-active {
+        transition: all .3s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active below version 2.1.8 */ {
+        transform: translateX(10px);
+        opacity: 0;
+    }
 
     .tab-container {
         width: 100%;

@@ -1,15 +1,17 @@
 <template>
-    <div class="landing-view" v-if="this.$store.state.visibility.landingview">
-        <div class="drape">
+    <transition name="fade">
+        <div class="landing-view" v-if="this.$store.state.visibility.landingview">
+            <div class="drape">
 
-        </div>
-        <div class="left">
+            </div>
+            <div class="left">
 
-        </div>
-        <div class="right">
+            </div>
+            <div class="right">
 
+            </div>
         </div>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -22,6 +24,13 @@
 </script>
 
 <style scoped>
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+    }
 
     .landing-view {
         width: 100%;

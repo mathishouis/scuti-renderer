@@ -11,6 +11,7 @@ export class LoadRoomMessage {
 
     execute() {
         store.state.visibility.landingview = false;
+        store.state.visibility.navigator = false;
 
         var heightmap = this.packet.data["heightmap"]
         var floorThickness = this.packet.data["floorThickness"]

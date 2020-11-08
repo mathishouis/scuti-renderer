@@ -5,7 +5,7 @@
         </div>
         <div class="bottom-left">
             <ul class="list-group">
-                <li class="list-group-item" v-on:click="toggleVisibility('landingview')">
+                <li class="list-group-item" v-on:click="showLandingView">
                     <i class="icon icon-habbo"></i>
                 </li>
                 <li class="list-group-item" v-on:click="toggleVisibility('navigator')">
@@ -51,6 +51,9 @@
         methods: {
             toggleVisibility: function(frame) {
                 this.$store.commit('toggleVisibility', frame)
+            },
+            showLandingView: function() {
+                this.$store.state.visibility.landingview = true
             }
         }
     };
@@ -118,6 +121,17 @@
         margin-right: 13px;
         cursor: pointer;
 
+    }
+    .list-group-item:hover {
+        margin-left: 12px;
+        margin-right: 14px;
+        margin-top: 4px;
+    }
+    .list-group-item:active {
+        margin-left: 13px;
+        margin-right: 13px;
+        margin-top: 5px;
+        opacity: 0.7;
     }
     .list-group .list-group-item.avatar-image {
         width: 75px;
