@@ -5,6 +5,7 @@
         <ChatInput></ChatInput>
         <Navigator></Navigator>
         <RoomCreator></RoomCreator>
+        <Catalog></Catalog>
     </div>
 </template>
 
@@ -15,6 +16,7 @@
     import RoomView from "./components/Room/RoomView";
     import Navigator from "./components/Navigator/Navigator";
     import RoomCreator from "./components/Navigator/RoomCreator";
+    import Catalog from "./components/Catalog/Catalog";
     import {client} from "../js/main";
 
     export default {
@@ -25,6 +27,7 @@
             ToolBar,
             ChatInput,
             RoomView,
+            Catalog,
         },
     };
 

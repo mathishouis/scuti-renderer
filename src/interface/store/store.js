@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
         visibility: {
             navigator: false,
             roomcreator: false,
+            catalog: false,
         },
         rooms: {}
     },
@@ -19,7 +20,12 @@ export const store = new Vuex.Store({
                 state.visibility[frame] = false
             } else {
                 state.visibility[frame] = true
-                OpenNavigatorEvent.listen();
+                switch(frame) {
+                    case 'navigator':
+                        OpenNavigatorEvent.listen();
+                        break;
+                }
+
             }
         },
         loadRoom (state, id) {

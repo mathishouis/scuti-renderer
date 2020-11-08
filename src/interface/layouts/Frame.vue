@@ -32,7 +32,7 @@
         left: 10px;
         top: 10px;
         border-radius: 4px;
-        background: rgba(27,28,30,0.9);
+        background: rgba(27,28,30,0.95);
         height: 550px;
         -webkit-tap-highlight-color: transparent;
         -moz-osx-font-smoothing: grayscale;
@@ -43,6 +43,9 @@
         flex-direction: column;
         padding: 12px 12px;
         position: absolute;
+        -webkit-box-shadow: 0px 0px 55px -20px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 0px 55px -20px rgba(0,0,0,0.75);
+        box-shadow: 0px 0px 55px -20px rgba(0,0,0,0.75);
 
     }
     .frame .header {

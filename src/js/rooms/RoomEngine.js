@@ -93,7 +93,10 @@ export class RoomEngine {
 
     renderFurni() {
 
+            console.log(this.furnitures);
+
             this.furnitures.forEach((furni, i) => {
+                console.log(furni);
                 this.roomFurnitureManager.addFurni(furni.id, furni.baseId, furni.positions, furni.direction, furni.state, this.container);
             });
             this.furnitures.forEach((furni, i) => {

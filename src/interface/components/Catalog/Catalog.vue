@@ -1,8 +1,8 @@
 <template>
-    <Frame v-if="this.$store.state.visibility.navigator" width="500px" height="550px" >
+    <Frame v-if="this.$store.state.visibility.catalog" width="600px" height="450px" >
         <template #header >
             <div class="navigatorDragger">
-                <div class="title">Navigator</div>
+                <div class="title">Catalog</div>
                 <div class="right">
                     <button style="height: 22px;"><img src="./../../../../public/img/question_mark.png"></button>
                     <button style="height: 22px;" v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
@@ -10,10 +10,8 @@
             </div>
         </template>
         <div class="left-panel">
-            <input placeholder="Search for a room...">
+            <input placeholder="Search...">
             <div class="separator"></div>
-            <button class="blue" v-on:click="openRoomCreator"><img src="./../../../../public/img/CreateRoom.png">Create a room</button>
-            <button class="green"><img src="./../../../../public/img/RandomRoom.png">Random room</button>
         </div>
         <div class="right-panel">
             <div class="tab-container">
@@ -22,26 +20,7 @@
                 <button>Events</button>
                 <button>Me</button>
             </div>
-            <div class="scrollbox" style="height: calc(100% - 49px)">
-                <div class="hiddentab" style="padding: 0px 0px; height: auto;">
-                    <div class="header">
-                        PUBLIC ROOMS
-                        <div class="but hide">
-                        </div>
-                    </div>
-                    <div class="roomtab" v-for="room in this.$store.state.rooms" :key="room.id" v-on:click="loadRoom(room.id)">
-                        <div class="thumbnail" style="background-image: url(./../../../../public/img/2.png);">
-                        </div>
-                        <div class="text">
-                            {{ room.name }}<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">{{ room.ownerName }}</span>
-                        </div>
-                        <div class="usercount gray">
-                            <img src="./../../../../public/img/user.png"> 0
-                        </div>
-                        <div class="room-info"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="separator"></div>
         </div>
 
     </Frame>
@@ -53,20 +32,14 @@
     import {LoadRoomEvent} from '../../../js/messages/outgoing/rooms/LoadRoomEvent';
 
     export default {
-        name: 'Navigator',
+        name: 'Catalog',
         components: {
             Frame,
         },
         methods: {
             toggleVisibility: function() {
-                this.$store.commit('toggleVisibility', 'navigator')
+                this.$store.commit('toggleVisibility', 'catalog')
             },
-            openRoomCreator: function() {
-                this.$store.commit('toggleVisibility', 'roomcreator')
-            },
-            loadRoom: function(id) {
-                this.$store.commit('loadRoom', id);
-            }
         }
     };
 
@@ -109,14 +82,14 @@
 
     .left-panel {
         position: absolute;
-        width: 150px;
+        width: 190px;
         height: 100%;
         display: flex;
         flex-direction: column;
     }
     .right-panel {
         position: absolute;
-        width: calc(100% - 162px);
+        width: calc(100% - 202px);
         height: 100%;
         right: 0;
         display: flex;

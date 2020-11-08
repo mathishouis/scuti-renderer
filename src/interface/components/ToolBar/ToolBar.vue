@@ -8,10 +8,10 @@
                 <li class="list-group-item">
                     <i class="icon icon-habbo"></i>
                 </li>
-                <li id="navigator"  class="list-group-item" v-on:click="toggleVisibility">
+                <li class="list-group-item" v-on:click="toggleVisibility('navigator')">
                     <i class="icon icon-rooms"></i>
                 </li>
-                <li class="list-group-item">
+                <li class="list-group-item" v-on:click="toggleVisibility('catalog')">
                     <i class="icon icon-catalog"></i>
                 </li>
             </ul>
@@ -49,8 +49,8 @@
     export default {
         name: 'ToolBar',
         methods: {
-            toggleVisibility: function() {
-                this.$store.commit('toggleVisibility', 'navigator')
+            toggleVisibility: function(frame) {
+                this.$store.commit('toggleVisibility', frame)
             }
         }
     };

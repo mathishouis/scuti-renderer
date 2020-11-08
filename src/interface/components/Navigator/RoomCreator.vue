@@ -3,8 +3,7 @@
         <template #header>
             <div class="title">Room Creation</div>
             <div class="right">
-                <button><img src="./../../../../public/img/question_mark.png"></button>
-                <button v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
+                <button style="height: 22px;" v-on:click="toggleVisibility"><img src="./../../../../public/img/cross.png"></button>
             </div>
         </template>
         <div class="left-panel">
