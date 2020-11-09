@@ -1,12 +1,14 @@
 <template>
-    <div class="scuti-room-chatinput-component" v-if="this.$store.state.visibility.landingview == false">
-        <div class="chatinput-container">
-            <input type="text" class="chat-input">
+    <transition name="slide-fade">
+        <div class="scuti-room-chatinput-component" v-if="this.$store.state.visibility.landingview == false">
+            <div class="chatinput-container">
+                <input type="text" class="chat-input">
+            </div>
+            <div class="scuti-room-chatinput-styleselector-component">
+                <i class="icon chatstyles-icon"></i>
+            </div>
         </div>
-        <div class="scuti-room-chatinput-styleselector-component">
-            <i class="icon chatstyles-icon"></i>
-        </div>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -18,6 +20,18 @@
 </script>
 
 <style scoped>
+
+    .slide-fade-enter-active {
+        transition: all .3s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active below version 2.1.8 */ {
+        transform: translateX(10px);
+        opacity: 0;
+    }
 
     .scuti-room-chatinput-component {
         position: fixed;

@@ -59,6 +59,10 @@
         left: 50%;
         transform: translate(-50%, 0);
     }
+    .frame .header .title.left {
+        left: 0px;
+        transform: none;
+    }
     .frame .header .right {
         height: 22px;
         position: absolute;

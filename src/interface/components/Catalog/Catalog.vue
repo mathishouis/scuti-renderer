@@ -1,6 +1,6 @@
 <template>
     <transition name="slide-fade">
-        <Frame v-if="this.$store.state.visibility.catalog" width="600px" height="450px" >
+        <Frame v-show="this.$store.state.visibility.catalog" width="600px" height="450px" >
             <template #header >
                 <div class="navigatorDragger">
                     <div class="title">Catalog</div>
@@ -13,6 +13,55 @@
             <div class="left-panel">
                 <input placeholder="Search...">
                 <div class="separator"></div>
+                <div class="scrollbox" style="height: calc(100% - 94px); margin-bottom: 12px;">
+                    <div class="menu-container">
+                        <button>
+                            <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_11.png"> HOME <img class="chevron" src="./../../../../public/img/chevron_bottom.png">
+                        </button>
+                        <button>
+                            <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_209.png"> Credits <img class="chevron" src="./../../../../public/img/chevron_bottom.png">
+                        </button>
+                        <button>
+                            <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_206.png"> Furni by type <img class="chevron" src="./../../../../public/img/chevron_bottom.png">
+                        </button>
+                        <button>
+                            <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_206.png"> Furni by culture <img class="chevron active" src="./../../../../public/img/chevron_bottom.png">
+                        </button>
+                        <div class="subcategory">
+                            <button>
+                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_281.png"> Tokyo
+                            </button>
+                            <button>
+                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_36.png"> Japan
+                            </button>
+                            <button>
+                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_38.png"> Tribe
+                            </button>
+                            <button>
+                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_273.png"> Greek
+                            </button>
+                            <button>
+                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_59.png"> Tiki
+                            </button>
+                            <button>
+                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_171.png"> Maya
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="scrollbox" style="height: 32px;">
+                    <div class="menu-container" style="display: flex; flex: 0 1 auto; flex-direction: row;">
+                        <button style="text-align: right; width: 40%;">
+                            <img src="./../../../../public/img/credits.png" style="float: left;"> 100000
+                        </button>
+                        <button style="text-align: right; width: 30%;">
+                            <img src="./../../../../public/img/duckets.png" style="float: left;"> 100
+                        </button>
+                        <button style="text-align: right; width: 30%;">
+                            <img src="./../../../../public/img/diamonds.png" style="float: left;"> 5
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="right-panel">
                 <div class="tab-container">
@@ -77,6 +126,66 @@
         -webkit-text-stroke: 0.2px white;
     }
 
+    .menu-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    .menu-container button {
+        border-radius: 0px;
+        text-align: left;
+        height: 32px;
+        padding: 5px 7px;
+        -webkit-text-stroke: 0.2px white;
+        text-transform: uppercase;
+        font-size: 12px;
+    }
+    .menu-container button img {
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+    .menu-container button img.chevron {
+        position: absolute;
+        right: 5px;
+        margin-top: 5px;
+        transform: rotate(180deg);
+    }
+    .menu-container button img.chevron.active {
+        transform: rotate(0deg);
+    }
+
+    .menu-container .subcategory button {
+        border-radius: 0px;
+        text-align: left;
+        height: 32px;
+        padding: 7px 7px;
+        -webkit-text-stroke: 0.2px white;
+        text-transform: uppercase;
+        font-size: 12px;
+        width: 100%;
+        background-color: #39383A;
+        border-top: 1px solid #474647;
+        border-bottom: 1px solid #201F21;
+    }
+
+    .menu-container .subcategory button img {
+        vertical-align: middle;
+        margin-right: 5px;
+        margin-left: 20px;
+    }
+
+    .menu-container .subcategory button img.chevron {
+        position: absolute;
+        right: 5px;
+        margin-top: 5px;
+    }
+    .menu-container .subcategory button img.chevron.active {
+        transform: rotate(180deg);
+    }
+
     input {
         width: 100%;
         padding: 10px 10px;
@@ -96,28 +205,18 @@
 
     .left-panel {
         position: absolute;
-        width: 190px;
+        width: 210px;
         height: 100%;
         display: flex;
         flex-direction: column;
     }
     .right-panel {
         position: absolute;
-        width: calc(100% - 202px);
+        width: calc(100% - 222px);
         height: 100%;
         right: 0;
         display: flex;
         flex-direction: column;
-    }
-    .left-panel button {
-        padding: 15px 5px;
-        display: flex;
-        flex-direction: column;
-        justify-items: center;
-        align-items: center;
-        line-height: 25px;
-        -webkit-text-stroke: 0.2px white;
-        margin-bottom: 10px;
     }
     .separator {
         margin-bottom: 10px;
@@ -126,70 +225,6 @@
         background: rgba(255,255,255,0.05);
     }
 
-    .roomtab {
-        height: 78px;
-        width: 100%;
-        box-sizing: border-box;
-        border-bottom: 1px solid #292829;
-        float: left;
-        position: relative;
-        cursor: pointer;
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
-    .roomtab .thumbnail {
-        height: 65px;
-        background-color: #000;
-        border-radius: 3px;
-        position: absolute;
-        left: 0;
-        width: 65px;
-    }
-    .roomtab .text {
-        left: 80px;
-        top: 7px;
-        font-family: 'Ubuntu', sans-serif;
-        color: white;
-        font-size: 15px;
-        position: absolute;
-        line-height: 16px;
-    }
-    .roomtab .room-info {
-        width: 18px;
-        height: 18px;
-        position: absolute;
-        right: 0px;
-        top: 30px;
-        cursor: pointer;
-        background-image: url(./../../../../public/img/room_info.png);
-    }
-    .roomtab .usercount {
-        left: 80px;
-        height: 19px;
-        width: 44px;
-        top: 48px;
-        border-radius: 3px;
-        background-color: #ddd;
-        font-family: 'Ubuntu', sans-serif;
-        color: white;
-        text-align: center;
-        position: absolute;
-        font-size: 13Px;
-        line-height: 18px;
-        font-weight: 500;
-    }
-    .roomtab .usercount.green {
-        background-color: #4B9A38;
-    }
-    .roomtab .usercount.orange {
-        background-color: #DB7F31;
-    }
-    .roomtab .usercount.red {
-        background-color: #AE232D;
-    }
-    .roomtab .usercount.gray {
-        background-color: #343435;
-    }
 
     .scrollbox {
         overflow-y: scroll;
@@ -201,41 +236,4 @@
         flex-wrap: wrap;
     }
 
-    .hiddentab {
-        width: 100%;
-        overflow: hidden;
-        height: 22px;
-        cursor: pointer;
-        margin-bottom: 5px;
-        color: #969496;
-    }
-    .hiddentab .header {
-        width: 100%;
-        position: relative;
-        height: 21px;
-        font-size: 13px;
-        line-height: 18px;
-        font-family: 'Ubuntu', sans-serif;
-        font-weight: 500;
-        letter-spacing: 1px;
-        border-bottom: 1px solid #292829;
-        color: #969496;
-        text-transform: uppercase;
-    }
-    .hiddentab .header img {
-        vertical-align: middle;
-    }
-    .hiddentab .but {
-        width: 9px;
-        height: 9px;
-        position: absolute;
-        right: 0;
-        top: 4px;
-    }
-    .hiddentab .but.show {
-        background-image: url(./../../../../public/img/plus.png);
-    }
-    .hiddentab .but.hide {
-        background-image: url(./../../../../public/img/sub.png);
-    }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <transition name="slide-fade">
-        <Frame v-if="this.$store.state.visibility.navigator" width="500px" height="550px" >
+        <Frame v-show="this.$store.state.visibility.navigator" width="500px" height="550px" >
             <template #header >
                 <div class="navigatorDragger">
                     <div class="title">Navigator</div>

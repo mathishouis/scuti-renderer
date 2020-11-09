@@ -43,6 +43,18 @@ export class RoomEngine {
                     y: 16 * x + 16 * y - 32 * map[y][x]
                 }
 
+                //if(x == 0 || y == 0) {
+                //    if(map[y][x + 1] == '0') {
+                //        new WallObject(this.container, {x: coords.x - 32, y: coords.y - 16}, this.tileThickness, this.wallHeight, 'l', map[y][x], this.zMax).draw();
+                //    }
+                //    if(map[y + 1][x] == '0') {
+                //        new WallObject(this.container, {x: coords.x + 8, y: coords.y - 28}, this.tileThickness, this.wallHeight, 'r', map[y][x], this.zMax).draw();
+                //    }
+                //    if(map[y][x] == '0') {
+                //        new TileObject(this.container, coords, this.tileThickness).draw();
+                //    }
+                //    console.log('cc');
+                //}
                 // Generate walls & stairs (to finish)
                 if(x > 0 && y > 0) {
                     // Corner walls

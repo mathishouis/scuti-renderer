@@ -29,7 +29,9 @@
                 <div class="scrollbox" style="width: calc(100% + 6px);height: calc(100% - 27px); margin-top: -5px;">
                     <div class="room-selector" v-for="model in roomModel" :key="model.name" v-on:click="selectedModel = model.name">
                         <img :src="roomModelImages[model.name]">
+                        <transition name="slide-fade">
                         <div v-if="selectedModel == model.name" class="check"></div>
+                        </transition>
                     </div>
                 </div>
             </div>
