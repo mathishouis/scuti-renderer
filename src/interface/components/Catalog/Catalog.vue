@@ -16,35 +16,11 @@
                 <div class="scrollbox" style="height: calc(100% - 94px); margin-bottom: 12px;">
                     <div class="menu-container">
                         <button>
-                            <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_11.png"> HOME <img class="chevron" src="./../../../../public/img/chevron_bottom.png">
-                        </button>
-                        <button>
-                            <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_209.png"> Credits <img class="chevron" src="./../../../../public/img/chevron_bottom.png">
-                        </button>
-                        <button>
-                            <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_206.png"> Furni by type <img class="chevron" src="./../../../../public/img/chevron_bottom.png">
-                        </button>
-                        <button>
                             <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_206.png"> Furni by culture <img class="chevron active" src="./../../../../public/img/chevron_bottom.png">
                         </button>
                         <div class="subcategory">
                             <button>
                                 <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_281.png"> Tokyo
-                            </button>
-                            <button>
-                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_36.png"> Japan
-                            </button>
-                            <button>
-                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_38.png"> Tribe
-                            </button>
-                            <button>
-                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_273.png"> Greek
-                            </button>
-                            <button>
-                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_59.png"> Tiki
-                            </button>
-                            <button>
-                                <img src="https://www.habboassets.com/assets/images/catalog/icons/icon_171.png"> Maya
                             </button>
                         </div>
                     </div>
@@ -65,10 +41,7 @@
             </div>
             <div class="right-panel">
                 <div class="tab-container">
-                    <button>Featured</button>
-                    <button>Popular</button>
-                    <button>Events</button>
-                    <button>Me</button>
+                    <button v-for="tabPage in catalogData" :key="tabPage.index" v-on:click="catalogActiveTab = tabPage.index">{{tabPage.caption}}</button>
                 </div>
                 <div class="separator"></div>
             </div>
@@ -91,6 +64,94 @@
             toggleVisibility: function() {
                 this.$store.commit('toggleVisibility', 'catalog')
             },
+        },
+        data() {
+            return {
+                treeData: {
+                    name: "My Tree",
+                    children: [
+                        { name: "hello" },
+                        { name: "wat" },
+                        {
+                            name: "child folder",
+                            children: [
+                                {
+                                    name: "child folder",
+                                    children: [{ name: "hello" }, { name: "wat" }]
+                                },
+                                { name: "hello" },
+                                { name: "wat" },
+                                {
+                                    name: "child folder",
+                                    children: [{ name: "hello" }, { name: "wat" }]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                catalogActiveTab: 1,
+                catalogData: [
+                    {
+                        index: 1,
+                        id: -1,
+                        visible: true,
+                        enabled: false,
+                        caption: 'Mobis',
+                        icon: '',
+                        categories: [
+                            {
+                                id: 1,
+                                caption: 'Gammes',
+                                icon: 'https://www.habboassets.com/assets/images/catalog/icons/icon_206.png',
+                                categories: [
+                                    {
+                                        id: 1,
+                                        caption: 'Japan',
+                                        icon: 'https://www.habboassets.com/assets/images/catalog/icons/icon_36.png',
+                                        categories: [
+                                            {
+                                                id: 4933,
+                                                caption: 'Tokyo',
+                                                icon: 'https://www.habboassets.com/assets/images/catalog/icons/icon_281.png',
+                                                items: [
+                                                    {
+                                                        id: 1,
+                                                        caption: 'Arcade machine',
+                                                        icon: ''
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                id: 4933,
+                                                caption: 'Japan',
+                                                icon: 'https://www.habboassets.com/assets/images/catalog/icons/icon_36.png',
+                                                items: [
+                                                    {
+                                                        id: 1,
+                                                        caption: 'Issou',
+                                                        icon: ''
+                                                    }
+                                                ]
+                                            },
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        index: 2,
+                        id: -1,
+                        visible: true,
+                        enabled: false,
+                        caption: 'Crédits',
+                        icon: '',
+                        categories: [
+
+                        ]
+                    }
+                ]
+            }
         }
     };
 

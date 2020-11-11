@@ -3,6 +3,7 @@
         <RoomView></RoomView>
         <LandingView></LandingView>
         <ToolBar></ToolBar>
+        <RoomTool></RoomTool>
         <ChatInput></ChatInput>
         <Navigator></Navigator>
         <RoomCreator></RoomCreator>
@@ -20,6 +21,7 @@
     import Catalog from "./components/Catalog/Catalog";
     import {client} from "../js/main";
     import LandingView from "./components/LandingView/LandingView";
+    import RoomTool from "./components/Room/RoomTool";
 
     export default {
         name: 'App',
@@ -31,6 +33,7 @@
             ChatInput,
             RoomView,
             Catalog,
+            RoomTool,
         },
     };
 
