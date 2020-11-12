@@ -13,7 +13,13 @@ export const store = new Vuex.Store({
             catalog: false,
             landingview: true,
         },
-        rooms: {}
+        rooms: {},
+        currentRoom: {
+            id: 0,
+            name: 'Room Name',
+            owner_name: 'Kozen',
+
+        }
     },
     mutations: {
         toggleVisibility (state, frame) {

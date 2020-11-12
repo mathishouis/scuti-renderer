@@ -21,19 +21,11 @@
   },
   "dependencies": {
     "@branu-jp/v-drag": "^0.1.0",
-    "draggable-el": "^1.0.7",
     "jquery": "^3.5.1",
     "pixi.js": "^5.3.3",
     "request": "^2.88.2",
-    "v-drag": "^2.1.3",
-    "v-movable": "^0.3.2",
     "vue": "^2.6.12",
-    "vue-drag-tree": "^1.1.9",
     "vue-hot-reload-api": "^2.3.4",
-    "vue-teatree": "^2.0.1",
-    "vuedraggable": "^2.24.3",
-    "vuetify": "^2.3.17",
-    "vuetify-draggable-treeview": "0.0.6",
     "vuex": "^3.5.1"
   }
 }

@@ -3,7 +3,7 @@
             <transition name="slide-fade">
                 <div class="room-tool" v-show="showRoomTool">
                     <div class="text">
-                        Room Name<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">Room Owner</span>
+                        {{ this.$store.state.currentRoom.name }}<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">{{ this.$store.state.currentRoom.owner_name }}</span>
                     </div>
                     <div class="button-area">
                         <button><img src="./../../../../public/img/settings.png"></button>
@@ -62,6 +62,7 @@
         -webkit-box-shadow: 0px 0px 55px -20px rgba(0,0,0,0.75);
         -moz-box-shadow: 0px 0px 55px -20px rgba(0,0,0,0.75);
         box-shadow: 0px 0px 55px -20px rgba(0,0,0,0.75);
+        cursor: pointer;
     }
     .toggle .arrow {
         background-image: url(./../../../../public/img/chevron_bottom.png);

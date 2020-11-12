@@ -18,7 +18,7 @@ export class LoadRoomMessage {
         var wallHeight = this.packet.data["wallHeight"]
         var furnitures = this.packet.data["furnitures"]
 
-        console.log(heightmap);
+        console.log(this.packet.data);
 
 
         client.currentRoom = new RoomEngine(client.app,client.container, {
