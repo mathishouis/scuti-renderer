@@ -18,6 +18,9 @@ export class LoadRoomMessage {
         var wallHeight = this.packet.data["wallHeight"]
         var furnitures = this.packet.data["furnitures"]
 
+        store.state.currentRoom.name = this.packet.data["name"]
+        store.state.currentRoom.owner_name = this.packet.data["ownerName"]
+
         console.log(this.packet.data);
 
 
