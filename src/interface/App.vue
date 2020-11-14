@@ -1,6 +1,7 @@
 <template>
     <div class="scuti-main-component">
         <RoomView></RoomView>
+        <FurniViewer></FurniViewer>
         <LandingView></LandingView>
         <ToolBar></ToolBar>
         <RoomTool></RoomTool>
@@ -22,6 +23,7 @@
     import {client} from "../js/main";
     import LandingView from "./components/LandingView/LandingView";
     import RoomTool from "./components/Room/RoomTool";
+    import FurniViewer from "./components/Furni/FurniViewer";
 
     export default {
         name: 'App',
@@ -34,6 +36,7 @@
             RoomView,
             Catalog,
             RoomTool,
+            FurniViewer,
         },
     };
 

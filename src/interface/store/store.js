@@ -12,6 +12,7 @@ export const store = new Vuex.Store({
             roomcreator: false,
             catalog: false,
             landingview: true,
+            furniviewer: false,
         },
         rooms: {},
         currentRoom: {
@@ -19,7 +20,8 @@ export const store = new Vuex.Store({
             name: 'Room Name',
             owner_name: 'Kozen',
 
-        }
+        },
+        currentFurni: {}
     },
     mutations: {
         toggleVisibility (state, frame) {

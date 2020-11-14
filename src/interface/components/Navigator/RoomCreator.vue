@@ -9,9 +9,9 @@
             </template>
             <div class="left-panel">
                 <label>Room name</label>
-                <input>
+                <input v-model="roomName">
                 <label>Room description</label>
-                <textarea rows="2"></textarea>
+                <textarea rows="2" v-model="roomDescription"></textarea>
                 <div class="separator"></div>
                 <label>Category</label>
                 <select>
@@ -22,7 +22,7 @@
                     <option value="0">10</option>
                 </select>
                 <div class="separator"></div>
-                <button class="green"><img src="./../../../../public/img/CreateRoom.png">Create room</button>
+                <button :disabled="roomName.length == 0" class="green"><img src="./../../../../public/img/CreateRoom.png">Create room</button>
             </div>
             <div class="right-panel">
                 <label style="margin-left: 6px;">Room Model</label>
@@ -143,6 +143,8 @@
                 },
                 selectedModel: "model_a",
                 roomModelImages,
+                roomName: '',
+                roomDescription: '',
             }
         }
     };
@@ -341,5 +343,9 @@
     }
     .hiddentab .but.hide {
         background-image: url(./../../../../public/img/sub.png);
+    }
+    button:disabled {
+        opacity: 0.75;
+        cursor: not-allowed;
     }
 </style>

@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import {client} from "../../main";
 import {Log} from "../../util/logger/Logger";
+import {store} from "../../../interface/store/store";
 
 export class RoomFurniture extends PIXI.Graphics {
     constructor(id, baseId, positions, direction, state, container) {
@@ -58,14 +59,15 @@ export class RoomFurniture extends PIXI.Graphics {
                 }
                 if (layer !== undefined && layer.ignoreMouse !== undefined) {
                     if(layer.ignoreMouse == false) {
-                        sprite.interactive = true;
+                        furniContainer.interactive = true;
 
-                        sprite.on("mousedown", (event) => {
+                        furniContainer.on("mousedown", (event) => {
                             console.log("IS BACK TOUBI: ")
-                            if(sprite.alpha == 0.7) {
-                                sprite.alpha = 1.0
+                            store.state.visibility.furniviewer = true;
+                            if(furniContainer.alpha == 0.7) {
+                                furniContainer.alpha = 1.0
                             } else {
-                                sprite.alpha = 0.7
+                                furniContainer.alpha = 0.7
                             }
                             this.container.updateTransform();
                         });

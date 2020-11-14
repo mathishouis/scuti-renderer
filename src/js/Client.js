@@ -98,6 +98,10 @@ export class Client {
         this.username = data.username;
     }
 
+    getCurrentRoom() {
+        return this.currentRoom;
+    }
+
     getUsername() {
         return this.username;
     }

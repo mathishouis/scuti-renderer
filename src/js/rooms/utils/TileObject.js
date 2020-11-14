@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import {client} from "../../main";
 
 export class TileObject extends PIXI.Graphics {
     constructor(container, coords, tileThickness) {
@@ -54,6 +55,19 @@ export class TileObject extends PIXI.Graphics {
         this.lineStyle({ width: 0 })
         this.lineTo(this.fourth.x, this.fourth.y);
         this.container.addChild(this);
+        this.interactive = true;
+
+        this.mouseover = function(mouseData) {
+            client.getCurrentRoom().tileCursor.visibility(1);
+            client.getCurrentRoom().tileCursor.set({x: this.coords.x, y: this.coords.y - 18});
+        }
+
+        this.mouseout = function(mouseData) {
+            client.getCurrentRoom().tileCursor.visibility(0);
+        }
+
+        this.click = function(mouseData) {
+        }
     }
 
 }

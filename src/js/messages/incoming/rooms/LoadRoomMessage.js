@@ -30,8 +30,8 @@ export class LoadRoomMessage {
             'wallHeight': wallHeight,
             'furnitures': furnitures
 
-        }).renderRoom();
-
+        })
+        client.currentRoom.renderRoom();
 
     }
 }

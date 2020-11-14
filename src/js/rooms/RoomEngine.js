@@ -21,6 +21,7 @@ export class RoomEngine {
         this.tileThickness = room.tileThickness;
         this.wallHeight = room.wallHeight;
         this.zMax = 0;
+        this.tileCursor = new TileCursor(this.container);
         //this.tileCursor = new TileCursor(this.container, this.generateMap(this.room.floor));
 
         this.roomDragging();
