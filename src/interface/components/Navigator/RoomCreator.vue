@@ -18,11 +18,13 @@
                     <option value="0">Trading</option>
                 </select>
                 <label>Max users</label>
-                <select>
-                    <option value="0">10</option>
+                <select v-model="roomMaxUsers">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
                 </select>
                 <div class="separator"></div>
-                <button :disabled="roomName.length == 0" class="green"><img src="./../../../../public/img/CreateRoom.png">Create room</button>
+                <button v-on:click="createRoom(roomName, selectedModel, roomMaxUsers, roomDescription)" :disabled="roomName.length == 0" class="green"><img src="./../../../../public/img/CreateRoom.png">Create room</button>
             </div>
             <div class="right-panel">
                 <label style="margin-left: 6px;">Room Model</label>
@@ -45,6 +47,7 @@
     import Frame from "../../layouts/Frame";
     import {LoadRoomEvent} from '../../../js/messages/outgoing/rooms/LoadRoomEvent';
     import roomModelImages from './../../../../public/img/rooms/*.png'
+    import {CreateRoomEvent} from "../../../js/messages/outgoing/navigator/CreateRoomEvent";
 
     export default {
         name: 'RoomCreator',
@@ -55,96 +58,97 @@
             toggleVisibility: function() {
                 this.$store.commit('toggleVisibility', 'roomcreator')
             },
-            createRoom: function(id) {
-                this.$store.commit('createRoom', id);
+            createRoom: function(name, model, maxusers, description) {
+                CreateRoomEvent.createRoom(name, model, maxusers, description);
             }
         },
         data() {
             return {
                 roomModel: {
-                    model_a: {
-                        name: "model_a"
+                    1: {
+                        name: 1
                     },
-                    model_b: {
-                        name: "model_b"
+                    2: {
+                        name: 2
                     },
-                    model_c: {
-                        name: "model_c"
+                    3: {
+                        name: 3
                     },
-                    model_d: {
-                        name: "model_d"
+                    4: {
+                        name: 4
                     },
-                    model_e: {
-                        name: "model_e"
+                    5: {
+                        name: 5
                     },
-                    model_f: {
-                        name: "model_f"
+                    6: {
+                        name: 6
                     },
-                    model_g: {
-                        name: "model_g"
+                    7: {
+                        name: 7
                     },
-                    model_h: {
-                        name: "model_h"
+                    8: {
+                        name: 8
                     },
-                    model_i: {
-                        name: "model_i"
+                    9: {
+                        name: 9
                     },
-                    model_j: {
-                        name: "model_j"
+                    10: {
+                        name: 10
                     },
-                    model_k: {
-                        name: "model_k"
+                    11: {
+                        name: 11
                     },
-                    model_l: {
-                        name: "model_l"
+                    12: {
+                        name: 12
                     },
-                    model_m: {
-                        name: "model_m"
+                    13: {
+                        name: 13
                     },
-                    model_n: {
-                        name: "model_n"
+                    14: {
+                        name: 14
                     },
-                    model_o: {
-                        name: "model_o"
+                    15: {
+                        name: 15
                     },
-                    model_p: {
-                        name: "model_p"
+                    16: {
+                        name: 16
                     },
-                    model_q: {
-                        name: "model_q"
+                    17: {
+                        name: 17
                     },
-                    model_r: {
-                        name: "model_r"
+                    18: {
+                        name: 18
                     },
-                    model_t: {
-                        name: "model_t"
+                    19: {
+                        name: 19
                     },
-                    model_u: {
-                        name: "model_u"
+                    20: {
+                        name: 20
                     },
-                    model_v: {
-                        name: "model_v"
+                    21: {
+                        name: 21
                     },
-                    model_w: {
-                        name: "model_w"
+                    22: {
+                        name: 22
                     },
-                    model_x: {
-                        name: "model_x"
+                    23: {
+                        name: 23
                     },
-                    model_y: {
-                        name: "model_y"
+                    24: {
+                        name: 24
                     },
-                    model_z: {
-                        name: "model_z"
+                    25: {
+                        name: 25
                     },
-                    model_0: {
-                        name: "model_0"
+                    26: {
+                        name: 26
                     },
                 },
-                selectedModel: "model_a",
+                selectedModel: 1,
                 roomModelImages,
                 roomName: '',
                 roomDescription: '',
+                roomMaxUsers: 10,
             }
         }
     };

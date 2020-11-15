@@ -55,6 +55,7 @@ export class Client {
             transparent: false,
             backgroundColor: 0x212225
         });
+
         this.container = new PIXI.Container();
         this.container.interactive = true;
         this.container.buttonMode = true;
@@ -112,30 +113,6 @@ export class Client {
         this.currentRoom = undefined;
     }
 
-    displayBeautifulRoom() {
-        const floor2 = "xxxxxxxxxxxxxxxxxxx\n" +
-                        "xxxxxxxxxxxxx00000x\n" +
-                        "xxxxx1111111000000x\n" +
-                        "xxxxx1111111000000x\n" +
-                        "xxxxx1111111000000x\n" +
-                        "xxxxx1111111000000x\n" +
-                        "xxxxx1111111000000x\n" +
-                        "xxxxx000000xxxxxxxx\n" +
-                        "xxxxx000000xxxxxxxx\n" +
-                        "xxx00000000xxxxxxxx\n" +
-                        "xxx00000000xxxxxxxx\n" +
-                        "xxx00000000xxxxxxxx\n" +
-                        "xxx00000000xxxxxxxx\n" +
-                        "xxxxxxxxxxxxxxxxxxx\n" +
-                        "xxxxxxxxxxxxxxxxxxx\n" +
-                        "xxxxxxxxxxxxxxxxxxx"
-        const floor = "xxxxxxx\nx000000\nx000000\nx000000\nx000000\nx000000\nx000000\n"
-        // display a room... this is a test method!
-        //this.currentRoom = RoomGenerator.execute(this.app, floor, 8);
-
-
-
-    }
 
     wsOnOpen() {
         this.ws.onopen = function(event) {

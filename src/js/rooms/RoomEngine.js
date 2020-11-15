@@ -28,6 +28,10 @@ export class RoomEngine {
     }
 
     renderRoom() {
+
+        this.container.x = this.app.screen.width / 2;
+        this.container.y = this.app.screen.height / 2;
+
         this.destroyRoom();
 
         var map = this.generateMap(this.room.floor);

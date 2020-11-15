@@ -26,6 +26,7 @@ export class TileCursor extends PIXI.Graphics {
             console.log(this.cursorLoader.resources['TileCursor']);
             this.cursor = new PIXI.Sprite(this.cursorLoader.resources['TileCursor'].texture);
             this.cursor.zIndex = 800
+            this.cursor.alpha = 0
 
 
             this.container.addChild(this.cursor);

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { OpenNavigatorEvent } from "../../js/messages/outgoing/navigator/OpenNavigatorEvent";
 import { LoadRoomEvent} from "../../js/messages/outgoing/rooms/LoadRoomEvent";
+import {CreateRoomEvent} from "../../js/messages/outgoing/navigator/CreateRoomEvent";
 
 Vue.use(Vuex);
 
@@ -39,6 +40,6 @@ export const store = new Vuex.Store({
         },
         loadRoom (state, id) {
             LoadRoomEvent.loadRoom(id);
-        }
+        },
     },
 })

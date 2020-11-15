@@ -1,5 +1,6 @@
 import {client} from "../../../main";
 import $ from "jquery";
+import {store} from "../../../../interface/store/store";
 import {OutgoingNavigatorEvents} from "../Outgoing";
 
 export class CreateRoomEvent {
@@ -12,22 +13,22 @@ export class CreateRoomEvent {
         client.getWebSocket().send(JSON.stringify(this.packet));
     }
 
-    static listen() {
-        const createRoomAction = $("#createRoomAction")
-        createRoomAction.click(function () {
-            const name = document.getElementById("roomName").value;
-            console.log(name);
-            if(name.length >= 2 && name.length <= 20) {
-                const packet = {
-                    packetId: OutgoingNavigatorEvents.CreateRoomEvent,
-                    data: {
-                        roomName: name,
-                    }
-                };
-                const event = new CreateRoomEvent(packet);
-                event.sendToServer();
-                $("createroom-component").hide();
+    static createRoom(name, model, maxusers, description) {
+
+        const packet = {
+            packetId: OutgoingNavigatorEvents.CreateRoomEvent,
+            data: {
+                roomName: name,
+                modelId: model,
+                maxUsers: maxusers,
+                categoryId: 1,
+                description: description,
             }
-        })
+        };
+
+        store.state.visibility.roomcreator = false;
+
+        const event = new CreateRoomEvent(packet);
+        event.sendToServer()
     }
 }
