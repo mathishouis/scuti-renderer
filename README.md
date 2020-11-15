@@ -24,4 +24,4 @@ Join our Discord for more information : https://discord.gg/s6fQAPt
 ### Contributors
 - [@Tig3r](https://github.com/Tiig3r)
 - [@KOZEN](https://github.com/kozennnn)
-- [@LaSecretaire](https://github.com/maximehery)
+- [@Pi-Bouf enft](https://github.com/Pi-Bouf)
