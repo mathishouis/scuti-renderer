@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import {client} from "../../main";
 
 export class StairObject extends PIXI.Graphics {
     constructor(container, coords, tileThickness, direction) {
@@ -59,9 +60,21 @@ export class StairObject extends PIXI.Graphics {
                     this.lineTo(this.third.x, this.third.y);
                     this.lineStyle({ width: 0 })
                     this.lineTo(this.fourth.x, this.fourth.y);
-                    this.container.addChild(this);
+
+                }
+                this.container.addChild(this);
+                this.interactive = true;
+                this.mouseover = function(mouseData) {
+                    client.getCurrentRoom().tileCursor.visibility(1);
+                    client.getCurrentRoom().tileCursor.set({x: this.coords.x - 25, y: this.coords.y - 32});
                 }
 
+                this.mouseout = function(mouseData) {
+                    client.getCurrentRoom().tileCursor.visibility(0);
+                }
+
+                this.click = function(mouseData) {
+                }
                 break;
             case 'b':
                 for (let i = 0; i < 4; i++) {
@@ -110,10 +123,22 @@ export class StairObject extends PIXI.Graphics {
                     this.lineTo(this.third.x, this.third.y);
                     this.lineStyle({ width: 0 })
                     this.lineTo(this.fourth.x, this.fourth.y);
-                    this.container.addChild(this);
+                }
+                this.container.addChild(this);
+                this.interactive = true;
+                this.mouseover = function(mouseData) {
+                    client.getCurrentRoom().tileCursor.visibility(1);
+                    client.getCurrentRoom().tileCursor.set({x: this.coords.x, y: this.coords.y - 18});
                 }
 
+                this.mouseout = function(mouseData) {
+                    client.getCurrentRoom().tileCursor.visibility(0);
+                }
+
+                this.click = function(mouseData) {
+                }
                 break;
         }
+
     }
 }
