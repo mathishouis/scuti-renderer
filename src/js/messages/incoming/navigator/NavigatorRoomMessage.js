@@ -8,6 +8,7 @@ export class NavigatorRoomMessage {
     }
 
     execute() {
+        console.log(this.packet.data);
         store.state.rooms = this.packet.data;
     }
 }

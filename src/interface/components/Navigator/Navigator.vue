@@ -36,8 +36,8 @@
                             <div class="text">
                                 {{ room.name }}<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">{{ room.ownerName }}</span>
                             </div>
-                            <div class="usercount gray">
-                                <img src="./../../../../public/img/user.png"> 0
+                            <div v-bind:class="['usercount', room.users === 0 ? 'gray' : room.users > room.maxUsers / 2 ? room.users > room.maxUsers - 2 ? 'red' : 'orange' : 'green']">
+                                <img src="./../../../../public/img/user.png"> {{ room.users }}
                             </div>
                             <div class="room-info"></div>
                         </div>
