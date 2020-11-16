@@ -4,6 +4,7 @@ export const IncomingUserMessages = {
 
 export const IncomingNavigatorMessages = {
     RoomNavigatorListMessage: 223,
+    MyRoomsMessage: 225,
 }
 
 export const IncomingRoomMessages = {

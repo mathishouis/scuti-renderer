@@ -2,17 +2,13 @@ import $ from "jquery";
 import {client} from "../../../main";
 import {store} from "../../../../interface/store/store";
 
-export class NavigatorRoomMessage {
+export class MyRoomsMessage {
     constructor(packet) {
         this.packet = packet;
     }
 
     execute() {
         console.log(this.packet.data);
-        store.state.rooms = this.packet.data;
-        for (var rooms in this.packet.data) {
-            var room = this.packet.data[rooms];
-            console.log(room);
-        }
+        store.state.navigator.tabs.me.category.my_rooms = this.packet.data;
     }
 }

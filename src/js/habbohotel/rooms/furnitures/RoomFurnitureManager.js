@@ -1,5 +1,5 @@
 import { RoomFurniture } from './RoomFurniture';
-import {client} from "../../main";
+import {client} from "../../../main";
 
 export class RoomFurnitureManager {
 

@@ -7,9 +7,9 @@ export class Room extends PIXI.Container {
 
         this.map = map;
 
-        this.drawTiles();
-        this.display(app);
-        this.setDrag(app);
+
+        //this.display(app);
+        //this.setDrag(app);
     }
 
     getTile(coords) {
@@ -35,17 +35,16 @@ export class Room extends PIXI.Container {
         let clickCoords;
         let roomCoordsSave;
 
-        app.stage.interactive = true;
 
-        app.stage.on("mouseup", (event) => {
+        app.on("mouseup", (event) => {
             draggingMode = false;
         });
 
-        app.stage.on("mouseupoutside", (event) => {
+        app.on("mouseupoutside", (event) => {
             draggingMode = false;
         });
 
-        app.stage.on("mousemove", (event) => {
+        app.on("mousemove", (event) => {
             if(draggingMode) {
                 let dx = event.data.global.x - clickCoords.x;
                 let dy = event.data.global.y - clickCoords.y;
@@ -54,7 +53,7 @@ export class Room extends PIXI.Container {
             }
         });
 
-        app.stage.on("mousedown", (event) => {
+        app.on("mousedown", (event) => {
             draggingMode = true;
             clickCoords = {
                 x: event.data.global.x,

@@ -9,6 +9,7 @@
         <Navigator></Navigator>
         <RoomCreator></RoomCreator>
         <Catalog></Catalog>
+        <Splash></Splash>
     </div>
 </template>
 
@@ -24,10 +25,12 @@
     import LandingView from "./components/LandingView/LandingView";
     import RoomTool from "./components/Room/RoomTool";
     import FurniViewer from "./components/Furni/FurniViewer";
+    import Splash from "./components/Splash/Splash";
 
     export default {
         name: 'App',
         components: {
+            Splash,
             LandingView,
             RoomCreator,
             Navigator,

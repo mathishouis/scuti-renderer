@@ -4,10 +4,10 @@ import { RoomFurnitureManager } from "./furnitures/RoomFurnitureManager";
 import { TileObject } from "./utils/TileObject";
 import { WallObject } from "./utils/WallObject";
 import { StairObject } from "./utils/StairObject";
-import { client} from "../main";
+import { client} from "../../main";
 import { RoomFurnitureLoader } from "./furnitures/RoomFurnitureLoader";
 import { TileCursor} from "./utils/TileCursor";
-import {Log} from "../util/logger/Logger";
+import {Log} from "../../util/logger/Logger";
 
 
 export class RoomEngine {
@@ -27,12 +27,12 @@ export class RoomEngine {
         this.roomDragging();
     }
 
-    renderRoom() {
+    render() {
 
         this.container.x = this.app.screen.width / 2;
         this.container.y = this.app.screen.height / 2;
 
-        this.destroyRoom();
+        this.destroy();
 
         var map = this.generateMap(this.room.floor);
 
@@ -104,7 +104,7 @@ export class RoomEngine {
 
     }
 
-    destroyRoom() {
+    destroy() {
         for (var i = this.container.children.length - 1; i >= 0; i--) {	this.container.removeChild(this.container.children[i]);}
     }
 

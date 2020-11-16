@@ -1,7 +1,6 @@
 import * as PIXI from 'pixi.js';
 import {OutgoingManager} from "./messages/outgoing/OutgoingManager";
-import {RoomGenerator} from "./canvas/room/RoomGenerator";
-import { RoomEngine } from "./rooms/RoomEngine";
+import { RoomEngine } from "./habbohotel/rooms/RoomEngine";
 import {OutgoingUserEvents} from "./messages/outgoing/Outgoing";
 import {DataManager} from "./util/DataManager";
 import {UserLoginEvent} from "./messages/outgoing/user/UserLoginEvent";
@@ -9,7 +8,7 @@ import { UserPingEvent } from "./messages/outgoing/user/UserPingEvent.js";
 import {IncomingManager} from "./messages/incoming/IncomingManager";
 import {Network} from "./networking/Network";
 import { Log } from "./util/logger/Logger.js";
-import { RoomFurnitureLoader } from "./rooms/furnitures/RoomFurnitureLoader";
+import { RoomFurnitureLoader } from "./habbohotel/rooms/furnitures/RoomFurnitureLoader";
 import Vue from 'vue'
 import App from "../interface/App";
 import  {store} from "../interface/store/store"

@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
-import {client} from "../../main";
-import {Log} from "../../util/logger/Logger";
-import {store} from "../../../interface/store/store";
+import {client} from "../../../main";
+import {Log} from "../../../util/logger/Logger";
+import {store} from "../../../../interface/store/store";
 
 export class RoomFurniture extends PIXI.Graphics {
     constructor(id, baseId, positions, direction, state, container) {

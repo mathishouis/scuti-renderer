@@ -1,6 +1,6 @@
 <template>
     <transition name="slide-fade">
-        <Frame v-show="this.$store.state.visibility.navigator" width="500px" height="550px" >
+        <Frame v-show="this.$store.state.visibility.navigator" width="400px" height="600px" >
             <template #header >
                 <div class="navigatorDragger">
                     <div class="title">Navigator</div>
@@ -10,23 +10,35 @@
                     </div>
                 </div>
             </template>
-            <div class="left-panel">
-                <input placeholder="Search for a room...">
-                <div class="separator"></div>
-                <button class="blue" v-on:click="openRoomCreator"><img src="./../../../../public/img/CreateRoom.png">Create a room</button>
-                <button class="green"><img src="./../../../../public/img/RandomRoom.png">Random room</button>
-            </div>
-            <div class="right-panel">
+            <div style="display: flex; flex-direction: column; height: 100%;">
+                <input style="margin-top: 0px;" placeholder="Search for a room...">
                 <div class="tab-container">
-                    <button>Featured</button>
-                    <button>Popular</button>
-                    <button>Events</button>
-                    <button>Me</button>
+                    <button v-on:click="$store.state.navigator.currentTab = 'public'">Public</button>
+                    <button v-on:click="$store.state.navigator.currentTab = 'popular'">Popular</button>
+                    <button v-on:click="$store.state.navigator.currentTab = 'events'">Events</button>
+                    <button v-on:click="myRooms()">Me</button>
                 </div>
-                <div class="scrollbox" style="height: calc(100% - 49px)">
+
+
+
+                <div class="scrollbox" style="height: calc(100% - 185px)" v-if="this.$store.state.navigator.currentTab == 'public'">
                     <div class="hiddentab" style="padding: 0px 0px; height: auto;">
                         <div class="header">
                             PUBLIC ROOMS
+                            <div class="but hide">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+                <div class="scrollbox" style="height: calc(100% - 185px)" v-if="this.$store.state.navigator.currentTab == 'popular'">
+                    <div class="hiddentab" style="padding: 0px 0px; height: auto;">
+                        <div class="header">
+                            MOST POPULAR ROOMS
                             <div class="but hide">
                             </div>
                         </div>
@@ -39,9 +51,68 @@
                             <div v-bind:class="['usercount', room.users === 0 ? 'gray' : room.users > room.maxUsers / 2 ? room.users > room.maxUsers - 2 ? 'red' : 'orange' : 'green']">
                                 <img src="./../../../../public/img/user.png"> {{ room.users }}
                             </div>
+                            <div class="room-state">
+                                <img v-if="room.state == 'locked'" src="./../../../../public/img/rooms/locked.png">
+                                <img v-if="room.state == 'password'" src="./../../../../public/img/rooms/locked_pw.png">
+                            </div>
                             <div class="room-info"></div>
+
                         </div>
                     </div>
+                </div>
+
+
+
+                <div class="scrollbox" style="height: calc(100% - 185px)" v-if="this.$store.state.navigator.currentTab == 'events'">
+                    <div class="hiddentab" style="padding: 0px 0px; height: auto;">
+                        <div class="header">
+                            TOP PROMOTIONS
+                            <div class="but hide">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="scrollbox" style="height: calc(100% - 185px)" v-if="this.$store.state.navigator.currentTab == 'me'">
+                    <div class="hiddentab" style="padding: 0px 0px; height: auto;">
+                        <div class="header">
+                            MY ROOMS
+                            <div class="but hide">
+                            </div>
+                        </div>
+                        <div class="roomtab" v-for="room in this.$store.state.navigator.tabs.me.category.my_rooms" :key="room.id" v-on:click="loadRoom(room.id)">
+                            <div class="thumbnail" style="background-image: url(./../../../../public/img/2.png);">
+                            </div>
+                            <div class="text">
+                                {{ room.name }}<br/><span style="color: #8F8E90; font-size: 13px; ">Owner: </span><span style="color: #72BBC1; font-size: 13px; ">{{ room.ownerName }}</span>
+                            </div>
+                            <div v-bind:class="['usercount', room.users === 0 ? 'gray' : room.users > room.maxUsers / 2 ? room.users > room.maxUsers - 2 ? 'red' : 'orange' : 'green']">
+                                <img src="./../../../../public/img/user.png"> {{ room.users }}
+                            </div>
+                            <div class="room-state">
+                                <img v-if="room.state == 'locked'" src="./../../../../public/img/rooms/locked.png">
+                                <img v-if="room.state == 'password'" src="./../../../../public/img/rooms/locked_pw.png">
+                            </div>
+                            <div class="room-info"></div>
+
+                        </div>
+                        <div class="hiddentab" style="padding: 0px 0px; height: auto;">
+                            <div class="header">
+                                My Favorite Rooms
+                                <div class="but show">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div style="display: flex; flex-direction: row; height: 80px; margin-top: 12px;">
+                    <button class="blue icon-button" style="width: calc(50% - 6px); margin-right: 6px;" v-on:click="openRoomCreator"><img src="./../../../../public/img/CreateRoom.png"><br>Create a room</button>
+                    <button class="green icon-button" style="width: calc(50% - 6px); margin-left: 6px;"><img src="./../../../../public/img/RandomRoom.png"><br>Random room</button>
                 </div>
             </div>
 
@@ -52,7 +123,9 @@
 <script>
 
     import Frame from "../../layouts/Frame";
+    import {store} from "../../store/store";
     import {LoadRoomEvent} from '../../../js/messages/outgoing/rooms/LoadRoomEvent';
+    import {RequestMyRoomsEvent} from "../../../js/messages/outgoing/navigator/RequestMyRoomsEvent";
 
     export default {
         name: 'Navigator',
@@ -68,7 +141,11 @@
             },
             loadRoom: function(id) {
                 this.$store.commit('loadRoom', id);
-            }
+            },
+            myRooms: function() {
+                this.$store.state.navigator.currentTab = 'me'
+                RequestMyRoomsEvent.myRooms();
+            },
         }
     };
 
@@ -135,15 +212,9 @@
         display: flex;
         flex-direction: column;
     }
-    .left-panel button {
-        padding: 15px 5px;
-        display: flex;
-        flex-direction: column;
-        justify-items: center;
-        align-items: center;
-        line-height: 25px;
+    .icon-button {
+        flex-direction: row; align-items: center;
         -webkit-text-stroke: 0.2px white;
-        margin-bottom: 10px;
     }
     .separator {
         margin-bottom: 10px;
@@ -188,6 +259,13 @@
         top: 30px;
         cursor: pointer;
         background-image: url(./../../../../public/img/room_info.png);
+    }
+    .roomtab .room-state {
+        width: 13px;
+        height: 15px;
+        position: absolute;
+        right: 28px;
+        top: 29px;
     }
     .roomtab .usercount {
         left: 80px;

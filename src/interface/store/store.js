@@ -9,11 +9,39 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         visibility: {
+            splash: true,
             navigator: false,
             roomcreator: false,
             catalog: false,
             landingview: true,
             furniviewer: false,
+        },
+        navigator: {
+            currentTab: 'public',
+            tabs: {
+                public: {
+
+                },
+                popular: {
+                    category: {
+                        1: {
+                            name: 'Most Popular Rooms',
+                            visible: true,
+                            rooms: {},
+                        },
+                    }
+                },
+                events: {
+
+                },
+                me: {
+                    category: {
+                        my_rooms: {
+
+                        }
+                    }
+                }
+            }
         },
         rooms: {},
         currentRoom: {

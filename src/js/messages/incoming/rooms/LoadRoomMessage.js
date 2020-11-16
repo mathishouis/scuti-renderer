@@ -1,6 +1,6 @@
 import $ from "jquery";
 import {client} from "../../../main";
-import {RoomEngine} from "../../../rooms/RoomEngine";
+import {RoomEngine} from "../../../habbohotel/rooms/RoomEngine";
 import {store} from "../../../../interface/store/store";
 
 
@@ -31,7 +31,7 @@ export class LoadRoomMessage {
             'furnitures': furnitures
 
         })
-        client.currentRoom.renderRoom();
+        client.currentRoom.render();
 
     }
 }

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import {Log} from "../../util/logger/Logger";
+import {Log} from "../../../util/logger/Logger";
 
 export class TileCursor extends PIXI.Graphics {
     constructor(container) {

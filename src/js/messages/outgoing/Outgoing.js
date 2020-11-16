@@ -6,6 +6,7 @@ export const OutgoingUserEvents = {
 export const OutgoingNavigatorEvents = {
     OpenNavigatorEvent: 213,
     CreateRoomEvent: 214,
+    RequestMyRoomsEvent: 216,
 }
 
 export const OutgoingRoomEvents = {
