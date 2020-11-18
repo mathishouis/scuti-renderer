@@ -18,9 +18,6 @@ export class FloorGeometry {
     }
 
     valid(x,y) {
-        if(this.map[y][x] != 'x') {
-            return true;
-        }
-        return false;
+        return this.map[y][x] !== 'x';
     }
 }

@@ -9,6 +9,8 @@ export class StairObject extends PIXI.Graphics {
         this.container = container;
         this.tileThickness = tileThickness;
         this.direction = direction;
+
+
     }
 
     draw() {

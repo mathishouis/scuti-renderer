@@ -7,6 +7,8 @@ import { TileCursor} from "./utils/graphic/TileCursor";
 import {Log} from "../../util/logger/Logger";
 import {WallGeometry} from "./utils/geometry/WallGeometry";
 import {FloorGeometry} from "./utils/geometry/FloorGeometry";
+import {DoorGeometry} from "./utils/geometry/DoorGeometry";
+import {DoorObject} from "./utils/graphic/DoorObject";
 
 
 export class RoomEngine {
@@ -38,6 +40,7 @@ export class RoomEngine {
 
         this.floorGeometry = new FloorGeometry(this.generateMap(this.room.floor));
         this.wallGeometry = new WallGeometry(this.generateMap(this.room.floor));
+        this.doorGeometry = new DoorGeometry(this.generateMap(this.room.floor));
 
         this.zMax = this.floorGeometry.highest();
 
@@ -53,24 +56,29 @@ export class RoomEngine {
                 }
 
                 if(x > 0 && y > 0) {
-                    // Walls
-                    if(this.wallGeometry.corner(x,y)) {
-                        new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'c', this.map[y][x], this.zMax).draw();
-                    }
-                    if(this.wallGeometry.left(x,y)) {
-                        new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'l', this.map[y][x], this.zMax).draw();
-                    }
-                    if(this.wallGeometry.right(x,y)) {
-                        new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'r', this.map[y][x], this.zMax).draw();
-                    }
-                    // Stairs
                     if(this.floorGeometry.valid(x,y)) {
-                        if (this.map[y][x - 1] == parseInt(this.map[y][x]) + 1) {
-                            new StairObject(this.container, {x: coords.x - 8, y: coords.y - 36}, this.tileThickness, 'r').draw();
-                        } else if (this.map[y - 1][x] == parseInt(this.map[y][x]) + 1) {
-                            new StairObject(this.container, {x: coords.x + 32, y: coords.y - 48}, this.tileThickness, 'b').draw();
+                        if(this.doorGeometry.valid(x,y)) {
+                            new DoorObject(this.container, coords).drawTile();
+                            new DoorObject(this.container, coords).drawWall(8, this.tileThickness, this.map[y][x], this.zMax);
                         } else {
-                            new TileObject(this.container, coords, this.tileThickness).draw();
+                            // Walls
+                            if(this.wallGeometry.corner(x,y)) {
+                                new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'c', this.map[y][x], this.zMax).draw();
+                            }
+                            if(this.wallGeometry.left(x,y)) {
+                                new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'l', this.map[y][x], this.zMax, this.map[y + 1][x]).draw();
+                            }
+                            if(this.wallGeometry.right(x,y)) {
+                                new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'r', this.map[y][x], this.zMax, this.map[y][x + 1]).draw();
+                            }
+                            // Stairs
+                            if (this.map[y][x - 1] == parseInt(this.map[y][x]) + 1) {
+                                new StairObject(this.container, {x: coords.x - 8, y: coords.y - 36}, this.tileThickness, 'r').draw();
+                            } else if (this.map[y - 1][x] == parseInt(this.map[y][x]) + 1) {
+                                new StairObject(this.container, {x: coords.x + 32, y: coords.y - 48}, this.tileThickness, 'b').draw();
+                            } else {
+                                new TileObject(this.container, coords, this.tileThickness).draw();
+                            }
                         }
                     }
                 }

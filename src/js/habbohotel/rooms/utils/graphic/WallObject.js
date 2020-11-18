@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 
 export class WallObject extends PIXI.Graphics {
-    constructor(container, coords, tileThickness, wallThickness, wallHeight, direction, tileHeight, zMax) {
+    constructor(container, coords, tileThickness, wallThickness, wallHeight, direction, tileHeight, zMax, sideMap) {
         super();
 
         this.container = container;
@@ -12,6 +12,7 @@ export class WallObject extends PIXI.Graphics {
         this.direction = direction;
         this.tileHeight = tileHeight;
         this.zMax = zMax;
+        this.sideMap = sideMap;
     }
 
     draw() {
@@ -88,8 +89,12 @@ export class WallObject extends PIXI.Graphics {
         right.tint = PIXI.utils.premultiplyTint(color, 0.8);
 
         wall.addChild(top);
-        wall.addChild(right);
-        wall.addChild(left);
+        if(this.sideMap === 'x' && this.direction === 'r' || this.direction === 'l') {
+            wall.addChild(right);
+        }
+        if(this.sideMap === 'x' && this.direction === 'l' || this.direction === 'r') {
+            wall.addChild(left);
+        }
 
         this.container.addChild(wall);
     }
