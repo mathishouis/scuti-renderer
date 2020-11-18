@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import {client} from "../../../main";
+import {client} from "../../../../main";
 
 export class TileObject extends PIXI.Graphics {
     constructor(container, coords, tileThickness) {

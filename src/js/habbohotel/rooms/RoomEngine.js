@@ -1,13 +1,12 @@
-import { RoomModel } from './RoomModel'
-import { Room } from "./Room";
+
 import { RoomFurnitureManager } from "./furnitures/RoomFurnitureManager";
-import { TileObject } from "./utils/TileObject";
-import { WallObject } from "./utils/WallObject";
-import { StairObject } from "./utils/StairObject";
-import { client} from "../../main";
-import { RoomFurnitureLoader } from "./furnitures/RoomFurnitureLoader";
-import { TileCursor} from "./utils/TileCursor";
+import { TileObject } from "./utils/graphic/TileObject";
+import { WallObject } from "./utils/graphic/WallObject";
+import { StairObject } from "./utils/graphic/StairObject";
+import { TileCursor} from "./utils/graphic/TileCursor";
 import {Log} from "../../util/logger/Logger";
+import {WallGeometry} from "./utils/geometry/WallGeometry";
+import {FloorGeometry} from "./utils/geometry/FloorGeometry";
 
 
 export class RoomEngine {
@@ -22,7 +21,6 @@ export class RoomEngine {
         this.wallHeight = room.wallHeight;
         this.zMax = 0;
         this.tileCursor = new TileCursor(this.container);
-        //this.tileCursor = new TileCursor(this.container, this.generateMap(this.room.floor));
 
         this.roomDragging();
     }
@@ -34,93 +32,48 @@ export class RoomEngine {
 
         this.destroy();
 
-        var map = this.generateMap(this.room.floor);
-
-        var leftX = 10000;
-        var leftY = 10000;
-        var rightX = 10000;
-        var rightY = 0;
-        var takenX = [];
+        this.map = this.generateMap(this.room.floor);
 
 
-        this.highestTile();
-        this.maxX();
-        this.roomModel = new RoomModel(this.container, this.zMax, this.wallHeight, this.tileThickness);
+
+        this.floorGeometry = new FloorGeometry(this.generateMap(this.room.floor));
+        this.wallGeometry = new WallGeometry(this.generateMap(this.room.floor));
+
+        this.zMax = this.floorGeometry.highest();
 
 
-        for(let y = 0; y < map.length; y++) {
-            for(let x = 0; x < map[y].length; x++) {
+
+
+        for(let y = 0; y < this.map.length; y++) {
+            for(let x = 0; x < this.map[y].length; x++) {
+
                 const coords = {
                     x: 32 * x - 32 * y,
-                    y: 16 * x + 16 * y - 32 * map[y][x]
+                    y: 16 * x + 16 * y - 32 * this.map[y][x]
                 }
 
-                //if(x == 0 || y == 0) {
-                //    if(map[y][x + 1] == '0') {
-                //        new WallObject(this.container, {x: coords.x - 32, y: coords.y - 16}, this.tileThickness, this.wallHeight, 'l', map[y][x], this.zMax).draw();
-                //    }
-                //    if(map[y + 1][x] == '0') {
-                //        new WallObject(this.container, {x: coords.x + 8, y: coords.y - 28}, this.tileThickness, this.wallHeight, 'r', map[y][x], this.zMax).draw();
-                //    }
-                //    if(map[y][x] == '0') {
-                //        new TileObject(this.container, coords, this.tileThickness).draw();
-                //    }
-                //    console.log('cc');
-                //}
-                // Generate walls & stairs (to finish)
                 if(x > 0 && y > 0) {
-                    // Corner walls
-                    if(map[y - 1][x - 1] == 'x' && map[y - 1][x] == 'x' && map[y][x - 1] == 'x' && map[y][x] != 'x') {
-                        //this.roomModel.drawWall({x: coords.x, y: coords.y - 32}, 'corner', map[y][x]);
-                        new WallObject(this.container, {x: coords.x, y: coords.y - 32}, this.tileThickness, 8, this.wallHeight, 'c', map[y][x], this.zMax).draw();
+                    // Walls
+                    if(this.wallGeometry.corner(x,y)) {
+                        new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'c', this.map[y][x], this.zMax).draw();
                     }
-                    // Left walls
-                    if(map[y][x - 1] == 'x' && map[y][x] != 'x') {
-                        if(x <= leftX) {
-                            leftX = x;
-                            new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'l', map[y][x], this.zMax).draw();
-                        }
+                    if(this.wallGeometry.left(x,y)) {
+                        new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'l', this.map[y][x], this.zMax).draw();
                     }
-                    // Right walls
-                    if(map[y - 1][x] == 'x' && map[y][x] != 'x') {
-
-                        if(y > rightY || x - 1 == rightX) {
-                            if(takenX.includes(x) == false) {
-
-                                // Ouai c'est dégueu jrange tt ça demain
-                                rightY = y;
-                                rightX = x;
-                                takenX.push(x);
-                                new WallObject(this.container, {
-                                    x: coords.x + 8,
-                                    y: coords.y - 28
-                                }, this.tileThickness, 8, this.wallHeight, 'r', map[y][x], this.zMax).draw();
-                            }
-                        }
+                    if(this.wallGeometry.right(x,y)) {
+                        new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'r', this.map[y][x], this.zMax).draw();
                     }
-
                     // Stairs
-                    if(map[y][x] != 'x') {
-                        if (map[y][x - 1] == parseInt(map[y][x]) + 1) {
-                            // xxx
-                            // xx0
-                            // xxx
+                    if(this.floorGeometry.valid(x,y)) {
+                        if (this.map[y][x - 1] == parseInt(this.map[y][x]) + 1) {
                             new StairObject(this.container, {x: coords.x - 8, y: coords.y - 36}, this.tileThickness, 'r').draw();
-                        } else if (map[y - 1][x] == parseInt(map[y][x]) + 1) {
-                            // xxx
-                            // xxx
-                            // x0x
+                        } else if (this.map[y - 1][x] == parseInt(this.map[y][x]) + 1) {
                             new StairObject(this.container, {x: coords.x + 32, y: coords.y - 48}, this.tileThickness, 'b').draw();
                         } else {
                             new TileObject(this.container, coords, this.tileThickness).draw();
                         }
                     }
                 }
-
-
-
-
-
             }
         }
 
@@ -163,49 +116,7 @@ export class RoomEngine {
         return matrix;
     }
 
-    highestTile() {
-        var mapValue = this.generateMap(this.room.floor);
-        var finalMapValue = []
-        const heightMap = {
-            0: 0,
-            x: 0,
-            1: 1,
-            2: 2,
-            3: 3,
-            4: 4,
-            5: 5,
-            6: 6,
-            7: 7,
-            8: 8,
-            9: 9
-        }
-        for(let y = 0; y < mapValue.length; y++) {
-            for (let x = 0; x < mapValue[y].length; x++) {
-                mapValue[y][x] = heightMap[mapValue[y][x]]
-            }
-        }
-        for(let y = 0; y < mapValue.length; y++) {
-            finalMapValue.push(Math.max.apply(Math, mapValue[y]))
-        }
-        this.zMax = Math.max.apply(Math, finalMapValue);
-    }
 
-    maxX() {
-        var mapValue = this.generateMap(this.room.floor);
-        var startX = 99999;
-        for(let y = 0; y < mapValue.length; y++) {
-            for (let x = 0; x < mapValue[y].length; x++) {
-                if(mapValue[y][x] != 'x') {
-                    if(x < startX) {
-                        startX = x;
-                        console.log("X: " + startX);
-                    }
-
-                }
-            }
-        }
-        this.xMax = startX;
-    }
 
     roomDragging() {
 

@@ -29,8 +29,8 @@ export class WallObject extends PIXI.Graphics {
                 this.fourth = { x: this.third.x - 32, y: this.third.y + 16 };
                 break;
             case 'r':
-                this.coords.x = this.coords.x + 24
-                this.coords.y = this.coords.y + 12 + this.tileThickness
+                this.coords.x = this.coords.x + 32
+                this.coords.y = this.coords.y - 16 + this.tileThickness
                 this.first = { x: this.coords.x, y: this.coords.y - 123 - this.zMax * 32 + this.tileHeight * 32};
                 this.second = { x: this.first.x + this.wallThickness, y: this.first.y - this.wallThickness / 2 };
                 this.third = { x: this.second.x + 32, y: this.second.y + 16 };
@@ -38,7 +38,7 @@ export class WallObject extends PIXI.Graphics {
                 break;
             case 'c':
                 this.coords.x = this.coords.x + 32 - this.wallThickness
-                this.coords.y = this.coords.y + 16 + this.tileThickness - this.wallThickness / 2
+                this.coords.y = this.coords.y - 16 + this.tileThickness - this.wallThickness / 2
                 this.first = { x: this.coords.x, y: this.coords.y - 123 - this.zMax * 32 + this.tileHeight * 32};
                 this.second = { x: this.first.x + this.wallThickness, y: this.first.y - this.wallThickness / 2 };
                 this.third = { x: this.second.x + this.wallThickness, y: this.second.y + this.wallThickness / 2 };
