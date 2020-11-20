@@ -12,6 +12,8 @@ import { RoomFurnitureLoader } from "./habbohotel/rooms/furnitures/RoomFurniture
 import Vue from 'vue'
 import App from "../interface/App";
 import  {store} from "../interface/store/store"
+import {TextureLoader} from "./habbohotel/rooms/utils/textures/TextureLoader";
+import {Loader} from "./habbohotel/resources/Loader";
 
 export class Client {
     constructor() {
@@ -26,6 +28,14 @@ export class Client {
         //this.eventListener();
         this.ping();
 
+    }
+
+    getLoader() {
+        return this.Loader;
+    }
+
+    getTextureLoader() {
+        return this.textureLoader;
     }
 
     getFurniLoader() {
@@ -52,19 +62,26 @@ export class Client {
             height: window.innerHeight,
             antialias: false,
             transparent: false,
-            backgroundColor: 0x212225
+            backgroundColor: 0x212225,
+            resizeTo: window,
         });
 
         this.container = new PIXI.Container();
         this.container.interactive = true;
-        this.container.buttonMode = true;
         this.container.x = this.app.screen.width / 2;
         this.container.y = this.app.screen.height / 2;
         this.container.sortableChildren = true;
         this.app.stage.addChild(this.container);
         this.furnitureLoader = new RoomFurnitureLoader();
         this.furnitureLoader.loadFurnidata();
+        this.textureLoader = new TextureLoader();
+        this.textureLoader.loadPaperdata();
+        this.Loader = new Loader();
+        this.app.renderer.autoResize = true;
+
     }
+
+
 
     getWebSocket() {
         return this.ws;

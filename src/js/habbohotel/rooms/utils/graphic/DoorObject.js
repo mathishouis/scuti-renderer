@@ -7,74 +7,80 @@ export class DoorObject extends PIXI.Graphics {
 
         this.coords = coords;
         this.container = container;
+
+        this.textureLoader = client.getTextureLoader();
     }
 
-    drawTile() {
+    drawTile(floorMaterial) {
+        let floorMaterialInfo = this.textureLoader.paperData.paper_floor[floorMaterial];
+
+        this.textureLoader.initTexture(floorMaterialInfo.textureId + '_HabboRoomContent_floor_texture_64_' + floorMaterialInfo.colorable + '_floor_' + floorMaterialInfo.textureName);
+
+        let tile = new PIXI.Container();
+
         this.first = { x: this.coords.x, y: this.coords.y };
         this.second = { x: this.coords.x + 32, y: this.coords.y - 16 };
         this.third = { x: this.second.x + 32, y: this.first.y };
         this.fourth = { x: this.second.x, y: this.first.y + 16 };
         this.thikness = {
             first: { x: this.first.x, y: this.first.y },
-            second: { x: this.first.x, y: this.first.y + 0.5 },
-            third: { x: this.fourth.x , y: this.fourth.y + 0.5 },
-            fourth: { x: this.third.x, y: this.third.y + 0.5 },
+            second: { x: this.first.x, y: this.first.y + this.tileThickness },
+            third: { x: this.fourth.x , y: this.fourth.y + this.tileThickness },
+            fourth: { x: this.third.x, y: this.third.y + this.tileThickness },
             fifth: { x: this.third.x, y: this.third.y },
             sixth: { x: this.fourth.x , y: this.fourth.y }
         };
 
-        this.lineStyle({
-            width: 0.5,
-            color: "0x8E8E5E",
-            alignment: 0,
+        var drawTile = (() => {
+
+            let floorMaterial = PIXI.Texture.from(this.textureLoader.textureLoader.resources[floorMaterialInfo.textureId + '_HabboRoomContent_floor_texture_64_' + floorMaterialInfo.colorable + '_floor_' + floorMaterialInfo.textureName].url);
+
+            let top = new PIXI.Graphics()
+                .beginTextureFill({ texture: floorMaterial, color: PIXI.utils.premultiplyTint(floorMaterialInfo.textureColor, 0.9999), matrix: new PIXI.Matrix(1, 0.5, 1, -0.5, this.coords.x, this.coords.y)})
+                .moveTo(this.first.x, this.first.y)
+                .lineTo(this.second.x, this.second.y)
+                .lineTo(this.third.x, this.third.y)
+                .lineTo(this.fourth.x, this.fourth.y)
+                .lineTo(this.first.x, this.first.y)
+                .endFill();
+
+            tile.addChild(top);
+
+
         });
-        this.beginFill("0x989865");
-        this.moveTo(this.first.x, this.first.y);
-        this.lineTo(this.second.x, this.second.y);
-        this.lineTo(this.third.x, this.third.y);
-        this.lineTo(this.fourth.x, this.fourth.y);
-        this.lineTo(this.first.x, this.first.y);
-        this.endFill();
 
-        // thik
-        this.lineStyle(1, "0x7A7A51");
-        this.beginFill("0x838357");
-        this.moveTo(this.thikness.first.x, this.thikness.first.y);
-        this.lineTo(this.thikness.second.x, this.thikness.second.y);
-        this.lineTo(this.thikness.third.x, this.thikness.third.y);
-        this.lineTo(this.fourth.x, this.fourth.y);
-        this.endFill();
+        if(this.textureLoader.textureLoader.loading) {
+            this.textureLoader.textureLoader.onComplete.add((loader, res) => {
+                drawTile();
+            });
+        } else {
+            drawTile();
+        }
 
-        this.lineStyle(1, "0x676744");
-        this.beginFill("0x6F6F49");
-        this.moveTo(this.fourth.x, this.fourth.y);
-        this.lineTo(this.thikness.third.x, this.thikness.third.y);
-        this.lineTo(this.thikness.fourth.x, this.thikness.fourth.y);
-        this.lineTo(this.third.x, this.third.y);
-        this.lineStyle({ width: 0 })
-        this.lineTo(this.fourth.x, this.fourth.y);
-        this.container.addChild(this);
-        this.interactive = true;
+        tile.interactive = true;
 
-        this.mouseover = function(mouseData) {
+        tile.mouseover = ((mouseData) => {
             client.getCurrentRoom().tileCursor.visibility(1);
             client.getCurrentRoom().tileCursor.set({x: this.coords.x - 24, y: this.coords.y + 48});
-        }
+        });
 
-        this.mouseout = function(mouseData) {
+        tile.mouseout = ((mouseData) => {
             client.getCurrentRoom().tileCursor.visibility(0);
-        }
+        });
 
-        this.click = function(mouseData) {
-        }
+        tile.click = ((mouseData) => {
+        });
+
+        this.container.addChild(tile);
     }
 
-    drawWall(wallThickness, tileThickness, tileHeight, zMax) {
+    drawWall(wallThickness, tileThickness, tileHeight, zMax, wallMaterial) {
 
         let wall = new PIXI.Container();
-        let color = "0xB6B8C7";
 
-        console.log("wall door enft");
+        let wallMaterialInfo = this.textureLoader.paperData.paper_wall[wallMaterial];
+
+        this.textureLoader.initTexture(wallMaterialInfo.textureId + '_HabboRoomContent_wall_texture_64_' + wallMaterialInfo.colorable + '_wall_' + wallMaterialInfo.textureName);
 
         this.wallThickness = wallThickness;
         this.tileThickness = tileThickness;
@@ -96,31 +102,41 @@ export class DoorObject extends PIXI.Graphics {
             sixth: { x: this.fourth.x , y: this.fourth.y }
         };
 
-        let top = new PIXI.Graphics()
-            .beginFill("0xFFFFFF")
-            .moveTo(this.first.x, this.first.y)
-            .lineTo(this.second.x, this.second.y)
-            .lineTo(this.third.x, this.third.y)
-            .lineTo(this.fourth.x, this.fourth.y)
-            .lineTo(this.first.x, this.first.y)
-            .endFill();
+        var drawWall = (() => {
 
-        let right = new PIXI.Graphics()
-            .beginFill("0xFFFFFF")
-            .moveTo(this.fourth.x, this.fourth.y)
-            .lineTo(this.thikness.third.x, this.thikness.third.y)
-            .lineTo(this.thikness.fourth.x, this.thikness.fourth.y)
-            .lineTo(this.third.x, this.third.y)
-            .lineTo(this.fourth.x, this.fourth.y)
-            .endFill();
+            let wallMaterial = PIXI.Texture.from(this.textureLoader.textureLoader.resources[wallMaterialInfo.textureId + '_HabboRoomContent_wall_texture_64_' + wallMaterialInfo.colorable + '_wall_' + wallMaterialInfo.textureName].url);
 
-        // Todo: wall color system
+            let top = new PIXI.Graphics()
+                .beginFill("0xFFFFFF")
+                .moveTo(this.first.x, this.first.y)
+                .lineTo(this.second.x, this.second.y)
+                .lineTo(this.third.x, this.third.y)
+                .lineTo(this.fourth.x, this.fourth.y)
+                .lineTo(this.first.x, this.first.y)
+                .endFill();
 
-        top.tint = PIXI.utils.premultiplyTint(color, 0.61);
-        right.tint = PIXI.utils.premultiplyTint(color, 0.8);
+            top.tint = PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.61);
+            wall.addChild(top);
 
-        wall.addChild(top);
-        wall.addChild(right);
+            let right = new PIXI.Graphics()
+                .beginTextureFill({ texture: wallMaterial, color: PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.8), matrix: new PIXI.Matrix(1, 0.5, 0, 1, this.coords.x, this.coords.y - (123 + this.zMax * 32 - this.tileHeight * 32))})
+                .moveTo(this.fourth.x, this.fourth.y)
+                .lineTo(this.thikness.third.x, this.thikness.third.y)
+                .lineTo(this.thikness.fourth.x, this.thikness.fourth.y)
+                .lineTo(this.third.x, this.third.y)
+                .lineTo(this.fourth.x, this.fourth.y)
+                .endFill();
+
+            wall.addChild(right);
+        });
+
+        if(this.textureLoader.textureLoader.loading) {
+            this.textureLoader.textureLoader.onComplete.add((loader, res) => {
+                drawWall();
+            });
+        } else {
+            drawWall();
+        }
 
         this.container.addChild(wall);
     }

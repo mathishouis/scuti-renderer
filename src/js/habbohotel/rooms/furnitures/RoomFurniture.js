@@ -87,6 +87,7 @@ export class RoomFurniture extends PIXI.Graphics {
             furniContainer.y = 63 + 16 * this.positions.x + 16 * this.positions.y - 32 - this.positions.z * 32;
 
             furniContainer.zIndex = zIndex;
+            furniContainer.buttonMode = true;
 
 
             this.container.addChild(furniContainer);

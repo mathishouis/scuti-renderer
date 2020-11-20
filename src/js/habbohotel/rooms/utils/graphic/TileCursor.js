@@ -6,7 +6,7 @@ export class TileCursor extends PIXI.Graphics {
         super();
 
         this.container = container;
-        this.cursorLoader = new PIXI.Loader("http://127.0.0.1:8081/furnitures/", 2);
+        this.cursorLoader = new PIXI.Loader("http://127.0.0.1:8081/room/", 2);
         this.initCursor();
     }
 

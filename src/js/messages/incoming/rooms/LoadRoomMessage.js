@@ -2,6 +2,7 @@ import $ from "jquery";
 import {client} from "../../../main";
 import {RoomEngine} from "../../../habbohotel/rooms/RoomEngine";
 import {store} from "../../../../interface/store/store";
+import {Log} from "../../../util/logger/Logger";
 
 
 export class LoadRoomMessage {
@@ -22,6 +23,7 @@ export class LoadRoomMessage {
         store.state.currentRoom.owner_name = this.packet.data["ownerName"]
 
         console.log(this.packet.data);
+
 
 
         client.currentRoom = new RoomEngine(client.app,client.container, {

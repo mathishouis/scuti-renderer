@@ -1,7 +1,10 @@
 import * as PIXI from 'pixi.js';
+import {TextureLoader} from "../textures/TextureLoader";
+import {Log} from "../../../../util/logger/Logger";
+import {client} from "../../../../main";
 
 export class WallObject extends PIXI.Graphics {
-    constructor(container, coords, tileThickness, wallThickness, wallHeight, direction, tileHeight, zMax, sideMap) {
+    constructor(container, coords, tileThickness, wallThickness, wallHeight, direction, tileHeight, zMax, sideMap, wallMaterial) {
         super();
 
         this.container = container;
@@ -13,12 +16,18 @@ export class WallObject extends PIXI.Graphics {
         this.tileHeight = tileHeight;
         this.zMax = zMax;
         this.sideMap = sideMap;
+        this.wallMaterial = wallMaterial;
+
+        this.textureLoader = client.getTextureLoader();
     }
 
     draw() {
 
         let wall = new PIXI.Container();
-        let color = "0xB6B8C7";
+
+        let wallMaterialInfo = this.textureLoader.paperData.paper_wall[this.wallMaterial];
+
+        this.textureLoader.initTexture(wallMaterialInfo.textureId + '_HabboRoomContent_wall_texture_64_' + wallMaterialInfo.colorable + '_wall_' + wallMaterialInfo.textureName);
 
         switch(this.direction) {
             case 'l':
@@ -56,46 +65,67 @@ export class WallObject extends PIXI.Graphics {
             sixth: { x: this.fourth.x , y: this.fourth.y }
         };
 
-        let top = new PIXI.Graphics()
-            .beginFill("0xFFFFFF")
-            .moveTo(this.first.x, this.first.y)
-            .lineTo(this.second.x, this.second.y)
-            .lineTo(this.third.x, this.third.y)
-            .lineTo(this.fourth.x, this.fourth.y)
-            .lineTo(this.first.x, this.first.y)
-            .endFill();
+        var drawWall = (() => {
 
-        let left = new PIXI.Graphics()
-            .beginFill("0xFFFFFF")
-            .moveTo(this.thikness.first.x, this.thikness.first.y)
-            .lineTo(this.thikness.second.x, this.thikness.second.y)
-            .lineTo(this.thikness.third.x, this.thikness.third.y)
-            .lineTo(this.fourth.x, this.fourth.y)
-            .endFill();
+            let wallMaterial = PIXI.Texture.from(this.textureLoader.textureLoader.resources[wallMaterialInfo.textureId + '_HabboRoomContent_wall_texture_64_' + wallMaterialInfo.colorable + '_wall_' + wallMaterialInfo.textureName].url);
 
-        let right = new PIXI.Graphics()
-            .beginFill("0xFFFFFF")
-            .moveTo(this.fourth.x, this.fourth.y)
-            .lineTo(this.thikness.third.x, this.thikness.third.y)
-            .lineTo(this.thikness.fourth.x, this.thikness.fourth.y)
-            .lineTo(this.third.x, this.third.y)
-            .lineTo(this.fourth.x, this.fourth.y)
-            .endFill();
+            let top = new PIXI.Graphics()
+                .beginFill("0xFFFFFF")
+                .moveTo(this.first.x, this.first.y)
+                .lineTo(this.second.x, this.second.y)
+                .lineTo(this.third.x, this.third.y)
+                .lineTo(this.fourth.x, this.fourth.y)
+                .lineTo(this.first.x, this.first.y)
+                .endFill();
 
-        // Todo: wall color system
+            top.tint = PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.61);
+            wall.addChild(top);
 
-        top.tint = PIXI.utils.premultiplyTint(color, 0.61);
-        left.tint = PIXI.utils.premultiplyTint(color, 0.9999);
-        right.tint = PIXI.utils.premultiplyTint(color, 0.8);
+            let left = new PIXI.Graphics();
+            if(this.direction === 'r') {
+                left.beginTextureFill({ texture: wallMaterial, color: PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.9999), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x + this.wallThickness, this.coords.y - (123 + this.zMax * 32 - this.tileHeight * 32) + this.wallThickness / 2)})
+            } else {
+                left.beginFill("0xFFFFFF")
+                left.tint = PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.9999);
+            }
+            left.moveTo(this.thikness.first.x, this.thikness.first.y)
+            left.lineTo(this.thikness.second.x, this.thikness.second.y)
+            left.lineTo(this.thikness.third.x, this.thikness.third.y)
+            left.lineTo(this.fourth.x, this.fourth.y)
+            left.endFill();
 
-        wall.addChild(top);
-        if(this.sideMap === 'x' && this.direction === 'r' || this.direction === 'l') {
+            if(this.sideMap === 'x' && this.direction === 'l' || this.direction === 'r') {
+                wall.addChild(left);
+            }
+
+            let right = new PIXI.Graphics();
+            if(this.direction === 'l') {
+                right.beginTextureFill({ texture: wallMaterial, color: PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.8), matrix: new PIXI.Matrix(1, 0.5, 0, 1, this.coords.x, this.coords.y - (123 + this.zMax * 32 - this.tileHeight * 32))})
+            } else {
+                right.beginFill("0xFFFFFF")
+                right.tint = PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.8);
+            }
+            right.moveTo(this.fourth.x, this.fourth.y)
+            right.lineTo(this.thikness.third.x, this.thikness.third.y)
+            right.lineTo(this.thikness.fourth.x, this.thikness.fourth.y)
+            right.lineTo(this.third.x, this.third.y)
+            right.lineTo(this.fourth.x, this.fourth.y)
+            right.endFill();
+
             wall.addChild(right);
-        }
-        if(this.sideMap === 'x' && this.direction === 'l' || this.direction === 'r') {
-            wall.addChild(left);
+
+        });
+
+        if(this.textureLoader.textureLoader.loading) {
+            this.textureLoader.textureLoader.onComplete.add((loader, res) => {
+                drawWall();
+            });
+        } else {
+            drawWall();
         }
 
         this.container.addChild(wall);
     }
+
+
 }
