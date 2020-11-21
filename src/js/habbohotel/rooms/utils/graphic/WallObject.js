@@ -83,7 +83,7 @@ export class WallObject extends PIXI.Graphics {
 
             let left = new PIXI.Graphics();
             if(this.direction === 'r') {
-                left.beginTextureFill({ texture: wallMaterial, color: PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.9999), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x + this.wallThickness, this.coords.y - (123 + this.zMax * 32 - this.tileHeight * 32) + this.wallThickness / 2)})
+                left.beginTextureFill({ texture: wallMaterial, color: PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.9999), matrix: new PIXI.Matrix(1, 0.5, 0, 1, this.coords.x, this.coords.y - (123 + this.zMax * 32 - this.tileHeight * 32))})
             } else {
                 left.beginFill("0xFFFFFF")
                 left.tint = PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.9999);
@@ -100,7 +100,7 @@ export class WallObject extends PIXI.Graphics {
 
             let right = new PIXI.Graphics();
             if(this.direction === 'l') {
-                right.beginTextureFill({ texture: wallMaterial, color: PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.8), matrix: new PIXI.Matrix(1, 0.5, 0, 1, this.coords.x, this.coords.y - (123 + this.zMax * 32 - this.tileHeight * 32))})
+                right.beginTextureFill({ texture: wallMaterial, color: PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.8), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x + this.wallThickness, this.coords.y - (123 + this.zMax * 32 - this.tileHeight * 32) + this.wallThickness / 2)})
             } else {
                 right.beginFill("0xFFFFFF")
                 right.tint = PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.8);

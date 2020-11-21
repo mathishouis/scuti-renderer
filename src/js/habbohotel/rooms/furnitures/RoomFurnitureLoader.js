@@ -14,7 +14,8 @@ export class RoomFurnitureLoader extends PIXI.Graphics {
     }
 
     loadFurni(furniName) {
-        this.furnitureLoader.add(furniName, furniName+'/'+furniName+'.json');
+            this.furnitureLoader.add(furniName, furniName+'/'+furniName+'.json');
+
 
     }
 
@@ -36,5 +37,21 @@ export class RoomFurnitureLoader extends PIXI.Graphics {
 
     getProperty(furniName) {
         return this.getFurni(furniName).data.furniProperty
+    }
+
+    containColor(furniName) {
+        return furniName.includes("*");
+    }
+
+    splitColorName(furniName) {
+        let colorId = 0;
+        if(this.containColor(furniName)) {
+            let completeFurniName = furniName.split("*");
+            furniName = completeFurniName[0];
+            colorId = completeFurniName[1];
+            return { furniName, colorId };
+        }
+        return { furniName };
+
     }
 }

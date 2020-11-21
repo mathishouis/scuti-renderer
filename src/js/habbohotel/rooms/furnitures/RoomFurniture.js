@@ -24,7 +24,7 @@ export class RoomFurniture extends PIXI.Graphics {
 
     addFurni() {
 
-        let furniName = this.furniData.floorItems[this.baseId].className
+        let furniName = this.furniLoader.splitColorName(this.furniData.floorItems[this.baseId].className).furniName
 
         // Furni loader
         if(!this.furniLoader.isLoaded(furniName)) {
@@ -41,7 +41,7 @@ export class RoomFurniture extends PIXI.Graphics {
         // Load furni
         this.furniLoader.furnitureLoader.load(() => {
 
-            let furniName = this.furniData.floorItems[this.baseId].className
+            let furniName = this.furniLoader.splitColorName(this.furniData.floorItems[this.baseId].className).furniName;
             let furniProperty = this.furniLoader.getProperty(furniName);
             let furniContainer = new PIXI.Container();
             let zIndex = (this.positions.x + this.positions.y + this.positions.z)*100;
@@ -50,27 +50,40 @@ export class RoomFurniture extends PIXI.Graphics {
             let layerLetters = "abcdefghijklmnopqrstuvwzyx";
 
             for(let i = 0; i < layerCount; i++) {
-                let layer = furniProperty.visualization.layers[i];
+                let layer = 0;
+                if(furniProperty.visualization.layers[i]) {
+                    layer = furniProperty.visualization.layers[i];
+                }
                 let sprite = new PIXI.Sprite(this.furniLoader.getFurni(furniName).textures[furniName+'_'+furniName+'_64_' + layerLetters[i] + '_'+this.direction+'_'+this.state]);
 
+                sprite.interactive = true;
+                sprite.buttonMode = true
+
+                sprite.on('mouseover',function(data){
+                    sprite.alpha = 0.5
+                });
+                sprite.on('mouseout',function(data){
+                    sprite.alpha = 1
+                });
+
+
+                if(this.furniLoader.splitColorName(this.furniData.floorItems[this.baseId].className).colorId) {
+                    let colorId = this.furniLoader.splitColorName(this.furniData.floorItems[this.baseId].className).colorId
+
+                    if(furniProperty.visualization.colors[colorId][i]) {
+                        let color = furniProperty.visualization.colors[colorId][i];
+                        sprite.tint = PIXI.utils.premultiplyTint("0x" + color, 0.9999);
+                        console.log(furniName);
+                    }
+
+                }
                 // To complete
                 if (layer !== undefined && layer.ink !== undefined) {
                     sprite.blendMode = PIXI.BLEND_MODES.ADD;
                 }
                 if (layer !== undefined && layer.ignoreMouse !== undefined) {
                     if(layer.ignoreMouse == false) {
-                        furniContainer.interactive = true;
 
-                        furniContainer.on("mousedown", (event) => {
-                            console.log("IS BACK TOUBI: ")
-                            store.state.visibility.furniviewer = true;
-                            if(furniContainer.alpha == 0.7) {
-                                furniContainer.alpha = 1.0
-                            } else {
-                                furniContainer.alpha = 0.7
-                            }
-                            this.container.updateTransform();
-                        });
                     }
                 }
 
@@ -84,7 +97,7 @@ export class RoomFurniture extends PIXI.Graphics {
 
 
             furniContainer.x = 32 + 32 * this.positions.x - 32 * this.positions.y;
-            furniContainer.y = 63 + 16 * this.positions.x + 16 * this.positions.y - 32 - this.positions.z * 32;
+            furniContainer.y = 32 + 16 * this.positions.x + 16 * this.positions.y - 32 - this.positions.z * 32;
 
             furniContainer.zIndex = zIndex;
             furniContainer.buttonMode = true;
@@ -128,4 +141,5 @@ export class RoomFurniture extends PIXI.Graphics {
         //    this.container.addChild(furniContainer);
         //});
     }
+
 }

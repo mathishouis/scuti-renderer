@@ -25,7 +25,6 @@ export class TileCursor extends PIXI.Graphics {
         this.cursorLoader.load(() => {
             console.log(this.cursorLoader.resources['TileCursor']);
             this.cursor = new PIXI.Sprite(this.cursorLoader.resources['TileCursor'].texture);
-            this.cursor.zIndex = 800
             this.cursor.alpha = 0
 
 
@@ -38,6 +37,7 @@ export class TileCursor extends PIXI.Graphics {
     set(positions) {
         this.cursor.x = positions.x;
         this.cursor.y = positions.y;
+        this.cursor.zIndex = (positions.x + positions.y)*2.4
     }
 
     visibility(state) {

@@ -119,7 +119,7 @@ export class DoorObject extends PIXI.Graphics {
             wall.addChild(top);
 
             let right = new PIXI.Graphics()
-                .beginTextureFill({ texture: wallMaterial, color: PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.8), matrix: new PIXI.Matrix(1, 0.5, 0, 1, this.coords.x, this.coords.y - (123 + this.zMax * 32 - this.tileHeight * 32))})
+                .beginTextureFill({ texture: wallMaterial, color: PIXI.utils.premultiplyTint(wallMaterialInfo.textureColor, 0.8), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x  + this.wallThickness, this.coords.y - (123 + this.zMax * 32 - this.tileHeight * 32) + this.wallThickness / 2)})
                 .moveTo(this.fourth.x, this.fourth.y)
                 .lineTo(this.thikness.third.x, this.thikness.third.y)
                 .lineTo(this.thikness.fourth.x, this.thikness.fourth.y)

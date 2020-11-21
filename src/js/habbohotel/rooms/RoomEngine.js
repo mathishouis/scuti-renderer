@@ -60,26 +60,26 @@ export class RoomEngine {
                 if(x > 0 && y > 0) {
                     if(this.floorGeometry.valid(x,y)) {
                         if(this.doorGeometry.valid(x,y)) {
-                            new DoorObject(this.container, coords).drawTile(102);
-                            new DoorObject(this.container, coords).drawWall(8, this.tileThickness, this.map[y][x], this.zMax, 108);
+                            new DoorObject(this.container, coords).drawTile(307);
+                            new DoorObject(this.container, coords).drawWall(8, this.tileThickness, this.map[y][x], this.zMax, 1201);
                         } else {
                             // Walls
                             if(this.wallGeometry.corner(x,y)) {
-                                new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'c', this.map[y][x], this.zMax, this.map[y][x], 108).draw();
+                                new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'c', this.map[y][x], this.zMax, this.map[y][x], 1201).draw();
                             }
                             if(this.wallGeometry.left(x,y)) {
-                                new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'l', this.map[y][x], this.zMax, this.map[y + 1][x], 108).draw();
+                                new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'l', this.map[y][x], this.zMax, this.map[y + 1][x], 1201).draw();
                             }
                             if(this.wallGeometry.right(x,y)) {
-                                new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'r', this.map[y][x], this.zMax, this.map[y][x + 1], 108).draw();
+                                new WallObject(this.container, {x: coords.x, y: coords.y}, this.tileThickness, 8, this.wallHeight, 'r', this.map[y][x], this.zMax, this.map[y][x + 1], 1201).draw();
                             }
                             // Stairs
                             if (this.map[y][x - 1] == parseInt(this.map[y][x]) + 1) {
-                                new StairObject(this.container, {x: coords.x - 8, y: coords.y - 36}, this.tileThickness, 'r', 102).draw();
+                                new StairObject(this.container, {x: coords.x - 8, y: coords.y - 36}, this.tileThickness, 'r', 307).draw();
                             } else if (this.map[y - 1][x] == parseInt(this.map[y][x]) + 1) {
-                                new StairObject(this.container, {x: coords.x + 32, y: coords.y - 48}, this.tileThickness, 'b', 102).draw();
+                                new StairObject(this.container, {x: coords.x + 32, y: coords.y - 48}, this.tileThickness, 'b', 307).draw();
                             } else {
-                                new TileObject(this.container, coords, this.tileThickness, {current: this.map[y][x],x: this.map[y][x + 1],y: this.map[y + 1][x]}, 102).draw();
+                                new TileObject(this.container, coords, this.tileThickness, {current: this.map[y][x],x: this.map[y][x + 1],y: this.map[y + 1][x]}, 307).draw();
                             }
                         }
                     }
@@ -168,3 +168,4 @@ export class RoomEngine {
 
 
 }
+

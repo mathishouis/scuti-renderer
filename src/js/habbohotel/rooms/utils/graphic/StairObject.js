@@ -74,7 +74,7 @@ export class StairObject extends PIXI.Graphics {
 
 
                             let right = new PIXI.Graphics()
-                                .beginTextureFill({ texture: floorMaterial, color: PIXI.utils.premultiplyTint(floorMaterialInfo.textureColor, 0.61), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x + 8, this.coords.y + 4)})
+                                .beginTextureFill({ texture: floorMaterial, color: PIXI.utils.premultiplyTint(floorMaterialInfo.textureColor, 0.71), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x + 8, this.coords.y + 4)})
                                 .moveTo(this.fourth.x, this.fourth.y)
                                 .lineTo(this.thikness.third.x, this.thikness.third.y)
                                 .lineTo(this.thikness.fourth.x, this.thikness.fourth.y)
@@ -160,7 +160,7 @@ export class StairObject extends PIXI.Graphics {
 
 
                         let right = new PIXI.Graphics()
-                            .beginTextureFill({ texture: floorMaterial, color: PIXI.utils.premultiplyTint(floorMaterialInfo.textureColor, 0.61), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x + 8, this.coords.y + 4)})
+                            .beginTextureFill({ texture: floorMaterial, color: PIXI.utils.premultiplyTint(floorMaterialInfo.textureColor, 0.71), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x + 8, this.coords.y + 4)})
                             .moveTo(this.fourth.x, this.fourth.y)
                             .lineTo(this.thikness.third.x, this.thikness.third.y)
                             .lineTo(this.thikness.fourth.x, this.thikness.fourth.y)

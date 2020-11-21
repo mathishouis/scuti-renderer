@@ -62,7 +62,7 @@ export class TileObject {
 
             if(this.sideMap.current !== this.sideMap.x) {
                 let right = new PIXI.Graphics()
-                    .beginTextureFill({ texture: floorMaterial, color: PIXI.utils.premultiplyTint(floorMaterialInfo.textureColor, 0.61), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x + 32, this.coords.y + 16)})
+                    .beginTextureFill({ texture: floorMaterial, color: PIXI.utils.premultiplyTint(floorMaterialInfo.textureColor, 0.71), matrix: new PIXI.Matrix(1, -0.5, 0, 1, this.coords.x + 32, this.coords.y + 16)})
                     .moveTo(this.fourth.x, this.fourth.y)
                     .lineTo(this.thikness.third.x, this.thikness.third.y)
                     .lineTo(this.thikness.fourth.x, this.thikness.fourth.y)
