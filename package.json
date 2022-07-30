@@ -17,6 +17,10 @@
   "devDependencies": {
     "@parcel/transformer-typescript-tsc": "^2.6.2",
     "parcel": "^2.6.2",
+    "querystring-es3": "^0.2.1",
     "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "pixi.js": "^6.5.1"
   }
 }
