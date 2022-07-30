@@ -6,3 +6,4 @@ yarn.lock
 
 .cache/*
 dist/*
+.parcel-cache/*
