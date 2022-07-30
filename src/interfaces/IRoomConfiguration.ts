@@ -1,3 +1,5 @@
 export interface IRoomConfiguration {
-    tilemap: string
+    tilemap: string,
+    wallColor: number,
+    tileColor: number
 }

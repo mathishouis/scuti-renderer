@@ -9,4 +9,10 @@ let scuti = new Scuti({
     height: window.innerHeight
 });
 
-let room = new Room(scuti,{ tilemap: "00000" });
+let room = new Room(scuti,{ tilemap: "xxxxxx\n" +
+    "x0000x\n" +
+    "x0000x\n" +
+    "00000x\n" +
+    "x0000x\n" +
+    "x0000x\n" +
+    "xxxxxx\n", tileColor: 0xFFFFFF, wallColor: 0xFFFFFF });

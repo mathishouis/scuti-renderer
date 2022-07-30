@@ -3,9 +3,6 @@ import { Texture, Container, Graphics, Matrix, utils } from 'pixi.js';
 
 export class Tile extends Container {
 
-    private _x: number;
-    private _y: number;
-    private _z: number;
     private _tileThickness: number;
     private _color: number;
     private _texture?: Texture;
@@ -14,9 +11,6 @@ export class Tile extends Container {
     constructor(props: ITileProps) {
         super();
 
-        this._x = props.x;
-        this._y = props.z;
-        this._z = props.z;
         this._tileThickness = props.tileThickness;
         this._color = props.color;
         this._texture = props.texture;
