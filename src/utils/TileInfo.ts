@@ -63,13 +63,13 @@ export function getWalls(tiles: [][], x: number, y: number): { type: WallType } 
     const botTile = getTile(tiles, x, y + 1);
     const botRightTile = getTile(tiles, x + 1, y + 1);
 
-    if(!isTile(topLeftTile) && !isTile(topTile) && !isTile(midLeftTile)) {
+    if(!isTile(topLeftTile) && !isTile(topTile) && !isTile(midLeftTile) && isTile(midTile)) {
         return { type: "corner" };
     }
-    if(!isTile(midLeftTile)) {
+    if(!isTile(midLeftTile) && isTile(midTile)) {
         return { type: "left" };
     }
-    if(!isTile(topTile)) {
+    if(!isTile(topTile) && isTile(midTile)) {
         return { type: "right" };
     }
 

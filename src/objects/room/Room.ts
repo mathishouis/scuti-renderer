@@ -45,19 +45,7 @@ export class Room {
 
         for (let y = 0; y < this._parsedTileMap.length; y++) {
             for (let x = 0; x < this._parsedTileMap[y].length; x++) {
-                if(this._parsedTileMap[y][x].type === "tile") {
-                    this._createTile(x, y, this._parsedTileMap[y][x].z);
-                } else if(this._parsedTileMap[y][x].type === "door") {
-                    this._createDoor(x, y, this._parsedTileMap[y][x].z);
-                } else if(this._parsedTileMap[y][x].type === "stair") {
-                    if(this._parsedTileMap[y][x].direction % 2 === 0) {
-                        this._createStair(x, y, this._parsedTileMap[y][x].z, this._parsedTileMap[y][x].direction);
-                    } else {
-                        this._createStairCorner(x, y, this._parsedTileMap[y][x].z, this._parsedTileMap[y][x].direction, this._parsedTileMap[y][x].shape);
-                    }
-                }
-
-                if(this._parsedTileMap[y][x].wall) {
+                if(this._parsedTileMap[y][x].wall || this._parsedTileMap[y][x].type === "door") {
                     if(this._parsedTileMap[y][x].wall === "corner") {
                         this._createWall(x, y, this._parsedTileMap[y][x].z, "corner");
                         this._createWall(x, y, this._parsedTileMap[y][x].z, "left");
@@ -73,6 +61,17 @@ export class Room {
                         this._createWall(x, y, this._parsedTileMap[y][x].z, "left", true);
                     }
                 }
+                if(this._parsedTileMap[y][x].type === "tile") {
+                    this._createTile(x, y, this._parsedTileMap[y][x].z);
+                } else if(this._parsedTileMap[y][x].type === "door") {
+                    this._createDoor(x, y, this._parsedTileMap[y][x].z);
+                } else if(this._parsedTileMap[y][x].type === "stair") {
+                    if(this._parsedTileMap[y][x].direction % 2 === 0) {
+                        this._createStair(x, y, this._parsedTileMap[y][x].z, this._parsedTileMap[y][x].direction);
+                    } else {
+                        this._createStairCorner(x, y, this._parsedTileMap[y][x].z, this._parsedTileMap[y][x].direction, this._parsedTileMap[y][x].shape);
+                    }
+                }
             }
         }
 
@@ -82,7 +81,7 @@ export class Room {
 
     private _createWall(x: number, y: number, z: number, type: WallType, door?: boolean): void {
 
-        const wall = new Wall({ color: this._wallColor, thickness: 8, door: door });
+        const wall = new Wall({ color: this._wallColor, thickness: 8, door: door, tileThickness: 8, type: type, maxZ: 0, roomZ: z });
         const position = Room._getPosition(x, y, z);
 
         wall.x = position.x;
