@@ -27,14 +27,23 @@ export function parse(tiles: string) {
         for (let x = 0; x < matrix[y].length; x++) {
 
             const tileInfo = getTileInfo(matrix, x, y);
-            if(tileInfo.walls !== null) {
+            if(tileInfo.walls !== null && !tileInfo.door) {
                 if(tileInfo.walls.type === "right" && hasWall(matrix, x, y).y) {
                     tileInfo.walls = null;
                 }
             }
-            if(tileInfo.walls !== null) {
+            if(tileInfo.walls !== null && !tileInfo.door) {
                 if (tileInfo.walls.type === "left" && hasWall(matrix, x, y).x) {
                     tileInfo.walls = null;
+                }
+            }
+            if(tileInfo.walls !== null && !tileInfo.door) {
+                if (tileInfo.walls.type === "corner" && hasWall(matrix, x, y).x && hasWall(matrix, x, y).y) {
+                    tileInfo.walls = null;
+                } else if (tileInfo.walls.type === "corner" && hasWall(matrix, x, y).x) {
+                    tileInfo.walls.type = "right";
+                } else if (tileInfo.walls.type === "corner" && hasWall(matrix, x, y).y) {
+                    tileInfo.walls.type = "left";
                 }
             }
             if(!tileInfo.door || door) {

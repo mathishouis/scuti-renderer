@@ -65,6 +65,106 @@ let tilemap2 =
     "xxxxxx000000000000xxxxx\n" +
     "xxxxxx000000000000xxxxx\n";
 
-let room = new Room(scuti,{ tilemap: tilemap2
+let tilemap3 =
+    "xxxxxxxxxxx\n" +
+    "xxxxxxx00xx\n" +
+    "xxxxxxx0000\n" +
+    "xxx00000000\n" +
+    "xx000000000\n" +
+    "xxx00000000\n" +
+    "xxx00000000\n" +
+    "x0000000000\n" +
+    "x0000000000\n" +
+    "xx000000000\n" +
+    "xx000000000\n";
+
+let tilemap4 =
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
+    "x2222xx1111111111xx11111111\n" +
+    "x2222xx1111111111xx11111111\n" +
+    "222222111111111111111111111\n" +
+    "x22222111111111111111111111\n" +
+    "x22222111111111111111111111\n" +
+    "x22222111111111111111111111\n" +
+    "x2222xx1111111111xx11111111\n" +
+    "x2222xx1111111111xx11111111\n" +
+    "x2222xx1111111111xxxx1111xx\n" +
+    "x2222xx1111111111xxxx0000xx\n" +
+    "xxxxxxx1111111111xx00000000\n" +
+    "xxxxxxx1111111111xx00000000\n" +
+    "x22222111111111111000000000\n" +
+    "x22222111111111111000000000\n" +
+    "x22222111111111111000000000\n" +
+    "x22222111111111111000000000\n" +
+    "x2222xx1111111111xx00000000\n" +
+    "x2222xx1111111111xx00000000\n" +
+    "x2222xxxx1111xxxxxxxxxxxxxx\n" +
+    "x2222xxxx0000xxxxxxxxxxxxxx\n" +
+    "x2222x0000000000xxxxxxxxxxx\n" +
+    "x2222x0000000000xxxxxxxxxxx\n" +
+    "x2222x0000000000xxxxxxxxxxx\n" +
+    "x2222x0000000000xxxxxxxxxxx\n" +
+    "x2222x0000000000xxxxxxxxxxx\n" +
+    "x2222x0000000000xxxxxxxxxxx\n";
+
+let tilemap5 =
+    "xxxxxxxxxxxxxxxxxxxx\n" +
+    "x222221111111111111x\n" +
+    "x222221111111111111x\n" +
+    "2222221111111111111x\n" +
+    "x222221111111111111x\n" +
+    "x222221111111111111x\n" +
+    "x222221111111111111x\n" +
+    "xxxxxxxx1111xxxxxxxx\n" +
+    "xxxxxxxx0000xxxxxxxx\n" +
+    "x000000x0000x000000x\n" +
+    "x000000x0000x000000x\n" +
+    "x00000000000x000000x\n" +
+    "x00000000000x000000x\n" +
+    "x000000000000000000x\n" +
+    "x000000000000000000x\n" +
+    "xxxxxxxx00000000000x\n" +
+    "x000000x00000000000x\n" +
+    "x000000x0000xxxxxxxx\n" +
+    "x00000000000x000000x\n" +
+    "x00000000000x000000x\n" +
+    "x00000000000x000000x\n" +
+    "x00000000000x000000x\n" +
+    "xxxxxxxx0000x000000x\n" +
+    "x000000x0000x000000x\n" +
+    "x000000x0000x000000x\n" +
+    "x000000000000000000x\n" +
+    "x000000000000000000x\n" +
+    "x000000000000000000x\n" +
+    "x000000000000000000x\n" +
+    "xxxxxxxxxxxxxxxxxxxx\n";
+
+let tilemap6 =
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
+    "x00000000xx0000000000xx0000x\n" +
+    "x00000000xx0000000000xx0000x\n" +
+    "000000000xx0000000000xx0000x\n" +
+    "x00000000xx0000000000xx0000x\n" +
+    "x00000000xx0000xx0000xx0000x\n" +
+    "x00000000xx0000xx0000xx0000x\n" +
+    "x00000000xx0000xx0000000000x\n" +
+    "x00000000xx0000xx0000000000x\n" +
+    "xxxxx0000xx0000xx0000000000x\n" +
+    "xxxxx0000xx0000xx0000000000x\n" +
+    "xxxxx0000xx0000xxxxxxxxxxxxx\n" +
+    "xxxxx0000xx0000xxxxxxxxxxxxx\n" +
+    "x00000000xx0000000000000000x\n" +
+    "x00000000xx0000000000000000x\n" +
+    "x00000000xx0000000000000000x\n" +
+    "x00000000xx0000000000000000x\n" +
+    "x0000xxxxxxxxxxxxxxxxxx0000x\n" +
+    "x0000xxxxxxxxxxxxxxxxxx0000x\n" +
+    "x00000000000000000000000000x\n" +
+    "x00000000000000000000000000x\n" +
+    "x00000000000000000000000000x\n" +
+    "x00000000000000000000000000x\n" +
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+
+let room = new Room(scuti,{ tilemap: tilemap5
 
     , tileColor: 0x989865, wallColor: 0xB6B8C7 });

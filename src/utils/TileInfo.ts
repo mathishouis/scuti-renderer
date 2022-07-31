@@ -64,6 +64,9 @@ export function getWalls(tiles: [][], x: number, y: number): { type: WallType } 
     const botTile = getTile(tiles, x, y + 1);
     const botRightTile = getTile(tiles, x + 1, y + 1);
 
+    const isDoor = !isTile(topTile) && !isTile(topLeftTile) && !isTile(midLeftTile) && !isTile(botLeftTile) && !isTile(botTile) && isTile(midTile);
+    if(isDoor) return null;
+
     if(!isTile(topLeftTile) && !isTile(topTile) && !isTile(midLeftTile) && isTile(midTile)) {
         return { type: "corner" };
     }
@@ -175,16 +178,32 @@ export function hasWall(tiles: [][], x: number, y: number): { x: boolean, y: boo
     for (let i = y - 1; i >= 0; i--) {
         let wall = getWalls(tiles, x, i);
         if(wall !== null) {
-            if(wall.type === "right") {
+            if(wall.type === "right" || wall.type === "corner") {
                 wallY = true;
+            }
+        }
+        for (let j = x - 1; j >= 0; j--) {
+            let wall2 = getWalls(tiles, j, i);
+            if(wall2 !== null) {
+                if(wall2.type === "left" || wall2.type === "corner") {
+                    wallY = true;
+                }
             }
         }
     }
     for (let i = x - 1; i >= 0; i--) {
         let wall = getWalls(tiles, i, y);
         if(wall !== null) {
-            if(wall.type === "left") {
+            if(wall.type === "left" || wall.type === "corner") {
                 wallX = true;
+            }
+        }
+        for (let j = y - 1; j >= 0; j--) {
+            let wall2 = getWalls(tiles, i, j);
+            if(wall2 !== null) {
+                if(wall2.type === "right" || wall2.type === "corner") {
+                    wallX = true;
+                }
             }
         }
     }
