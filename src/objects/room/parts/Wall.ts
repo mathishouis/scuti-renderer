@@ -1,19 +1,21 @@
-import {ITileProps} from "../../../interfaces/ITileProps";
 import { Texture, Container, Graphics, Matrix, utils } from 'pixi.js';
+import { IWallProps } from "../../../interfaces/IWallProps";
 
-export class Tile extends Container {
+export class Wall extends Container {
 
-    private _thickness: number;
+    private _tileThickness: number;
     private _color: number;
     private _texture?: Texture;
     private _container?: Container;
+    private _door?: boolean;
 
-    constructor(props: ITileProps) {
+    constructor(props: IWallProps) {
         super();
 
-        this._thickness = props.thickness;
+        this._tileThickness = props.thickness;
         this._color = props.color;
         this._texture = props.texture;
+        this._door = props.door;
 
         this._draw();
     }
@@ -43,8 +45,8 @@ export class Tile extends Container {
                 matrix: new Matrix(1, 0.5, 0, 1, 0, 0)
             })
             .moveTo(0, 0)
-            .lineTo(0, this._thickness)
-            .lineTo(32, 16 + this._thickness)
+            .lineTo(0, this._tileThickness)
+            .lineTo(32, 16 + this._tileThickness)
             .lineTo(32, 16)
             .endFill();
 
@@ -55,8 +57,8 @@ export class Tile extends Container {
                 matrix: new Matrix(1, -0.5, 0, 1, 0, 0)
             })
             .moveTo(32, 16)
-            .lineTo(32, 16 + this._thickness)
-            .lineTo(64, this._thickness)
+            .lineTo(32, 16 + this._tileThickness)
+            .lineTo(64, this._tileThickness)
             .lineTo(64, 0)
             .lineTo(32, 16)
             .endFill();

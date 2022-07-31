@@ -1,7 +1,8 @@
 import { Texture } from 'pixi.js';
 
-export interface ITileProps {
+export interface IWallProps {
     color: number,
     thickness: number,
-    texture?: Texture
+    texture?: Texture,
+    door?: boolean
 }

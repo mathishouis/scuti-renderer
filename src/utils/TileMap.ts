@@ -1,5 +1,6 @@
 import { getTileInfo } from "./TileInfo";
 import {StairType} from "../types/StairType";
+import {WallType} from "../types/WallType";
 
 export function isTile(tile: string | undefined) {
     return tile !== 'x';
@@ -19,7 +20,7 @@ export function parse(tiles: string) {
         }
     }
 
-    let parsedTileMap: { type: string; z: number; direction?: number, shape?: StairType }[][] = [];
+    let parsedTileMap: { type: string; z: number; direction?: number, shape?: StairType, wall: WallType }[][] = [];
 
     for (let y = 0; y < matrix.length; y++) {
         parsedTileMap[y] = []
@@ -31,26 +32,30 @@ export function parse(tiles: string) {
                 if(isTile(matrix[y][x]) && tileInfo.stairs === null) {
                     parsedTileMap[y][x] = {
                         type: "tile",
-                        z: tileInfo.height
+                        z: tileInfo.height,
+                        wall: tileInfo.walls?.type,
                     }
                 } else if(isTile(matrix[y][x]) && tileInfo.stairs !== null) {
                     parsedTileMap[y][x] = {
                         type: "stair",
                         z: tileInfo.height,
                         direction: tileInfo.stairs.direction,
-                        shape: tileInfo.stairs.type
+                        shape: tileInfo.stairs.type,
+                        wall: tileInfo.walls?.type,
                     }
                 }  else {
                     parsedTileMap[y][x] = {
                         type: "hidden",
-                        z: tileInfo.height
+                        z: tileInfo.height,
+                        wall: tileInfo.walls?.type,
                     }
                 }
             } else {
                 door = true;
                 parsedTileMap[y][x] = {
                     type: "door",
-                    z: tileInfo.height
+                    z: tileInfo.height,
+                    wall: undefined
                 }
             }
         }

@@ -1,6 +1,7 @@
 import { isTile } from "./TileMap";
 import {StairType} from "../types/StairType";
 import {StairCorner} from "../objects/room/parts/StairCorner";
+import {WallType} from "../types/WallType";
 
 export function getTileNumber(tileCode: string): number {
     const number = Number(tileCode);
@@ -18,7 +19,7 @@ export function getTile(tiles: [][], x: number, y: number) {
     return tiles[y][x];
 }
 
-export function getTileInfo(tiles: [][], x: number, y: number): { door: boolean, leftEdge: boolean, rightEdge: boolean, height: number, stairs: { direction: number, type: StairType } | null } {
+export function getTileInfo(tiles: [][], x: number, y: number): { door: boolean, leftEdge: boolean, rightEdge: boolean, height: number, stairs: { direction: number, type: StairType } | null, walls: { type: WallType } | null } {
     // Top
     const topLeftTile = getTile(tiles, x - 1, y - 1);
     const topTile = getTile(tiles, x, y - 1);
@@ -36,14 +37,43 @@ export function getTileInfo(tiles: [][], x: number, y: number): { door: boolean,
     const leftEdge = !isTile(botTile) && !isTile(midTile);
     const rightEdge = !isTile(midRightTile) && !isTile(midTile);
     const stairs = getStairs(tiles, x, y);
+    const walls = getWalls(tiles, x, y);
 
     return {
         door: isDoor,
         leftEdge: leftEdge,
         rightEdge: rightEdge,
         height: getTileNumber(midTile),
-        stairs: stairs
+        stairs: stairs,
+        walls: walls
     }
+}
+
+export function getWalls(tiles: [][], x: number, y: number): { type: WallType } | null {
+    // Top
+    const topLeftTile = getTile(tiles, x - 1, y - 1);
+    const topTile = getTile(tiles, x, y - 1);
+    const topRightTile = getTile(tiles, x + 1, y - 1);
+    // Mid
+    const midLeftTile = getTile(tiles, x - 1, y);
+    const midTile = getTile(tiles, x, y);
+    const midRightTile = getTile(tiles, x + 1, y);
+    // Bot
+    const botLeftTile = getTile(tiles, x - 1, y + 1);
+    const botTile = getTile(tiles, x, y + 1);
+    const botRightTile = getTile(tiles, x + 1, y + 1);
+
+    if(!isTile(topLeftTile) && !isTile(topTile) && !isTile(midLeftTile)) {
+        return { type: "corner" };
+    }
+    if(!isTile(midLeftTile)) {
+        return { type: "left" };
+    }
+    if(!isTile(topTile)) {
+        return { type: "right" };
+    }
+
+    return null;
 }
 
 export function getStairs(tiles: [][], x: number, y: number): { direction: number, type: StairType } | null {

@@ -6,6 +6,8 @@ import { parse } from "../../utils/TileMap";
 import { Stair } from "./parts/Stair";
 import { StairCorner } from "./parts/StairCorner";
 import { StairType } from "../../types/StairType";
+import { WallType } from "../../types/WallType";
+import { Wall } from "./parts/Wall";
 
 export class Room {
 
@@ -15,9 +17,10 @@ export class Room {
     private _tileColor: number;
     private _wallColor: number;
 
-    private _parsedTileMap: { type: string, z: number, direction?: number, shape?: StairType }[][];
+    private _parsedTileMap: { type: string, z: number, direction?: number, shape?: StairType, wall: WallType }[][];
 
     private _tiles: (Tile | Stair | StairCorner)[] = [];
+    private _walls: (Wall)[] = [];
 
     constructor(engine: Scuti, configuration: IRoomConfiguration) {
         this._engine = engine;
@@ -53,6 +56,23 @@ export class Room {
                         this._createStairCorner(x, y, this._parsedTileMap[y][x].z, this._parsedTileMap[y][x].direction, this._parsedTileMap[y][x].shape);
                     }
                 }
+
+                if(this._parsedTileMap[y][x].wall) {
+                    if(this._parsedTileMap[y][x].wall === "corner") {
+                        this._createWall(x, y, this._parsedTileMap[y][x].z, "corner");
+                        this._createWall(x, y, this._parsedTileMap[y][x].z, "left");
+                        this._createWall(x, y, this._parsedTileMap[y][x].z, "right");
+                    }
+                    if(this._parsedTileMap[y][x].wall === "left") {
+                        this._createWall(x, y, this._parsedTileMap[y][x].z, "left");
+                    }
+                    if(this._parsedTileMap[y][x].wall === "right") {
+                        this._createWall(x, y, this._parsedTileMap[y][x].z, "right");
+                    }
+                    if(this._parsedTileMap[y][x].type === "door") {
+                        this._createWall(x, y, this._parsedTileMap[y][x].z, "left", true);
+                    }
+                }
             }
         }
 
@@ -60,9 +80,21 @@ export class Room {
 
     }
 
+    private _createWall(x: number, y: number, z: number, type: WallType, door?: boolean): void {
+
+        const wall = new Wall({ color: this._wallColor, thickness: 8, door: door });
+        const position = Room._getPosition(x, y, z);
+
+        wall.x = position.x;
+        wall.y = position.y;
+
+        this._walls.push(wall);
+        this._modelContainer?.addChild(wall);
+    }
+
     private _createDoor(x: number, y: number, z: number): void {
 
-        const tile = new Tile({ color: this._tileColor, tileThickness: 0 });
+        const tile = new Tile({ color: this._tileColor, thickness: 0 });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;
@@ -74,7 +106,7 @@ export class Room {
 
     private _createTile(x: number, y: number, z: number): void {
 
-        const tile = new Tile({ color: this._tileColor, tileThickness: 8 });
+        const tile = new Tile({ color: this._tileColor, thickness: 8 });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;
