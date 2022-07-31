@@ -1,6 +1,6 @@
 import { Texture, Container, Graphics, Matrix, utils } from 'pixi.js';
 import { IStairProps } from "../../../interfaces/IStairProps";
-import {StairType} from "../../../types/StairCornerType";
+import { StairType } from "../../../types/StairType";
 
 export class StairCorner extends Container {
 
@@ -33,107 +33,154 @@ export class StairCorner extends Container {
         this._container = new Container();
         this._container.sortableChildren = true;
 
-        switch (this._direction) {
-            case 3:
-                DRAW_POINTS = [
-                    { x: 0, y: 0 },
-                    { x: 8, y: -4 },
-                    { x: 16, y: 0 },
-                    { x: 8, y: 4 },
-                ];
-                DRAW_POINTS_OFFSETS = [
-                    { x: 0, y: 0 },
-                    { x: 0, y: 0 },
-                    { x: 8, y: 4 },
-                    { x: 8, y: 4 },
-                ];
-                OFFSETS = [
-                    { x: 0, y: 0 },
-                    { x: -8, y: 4 },
-                    { x: 24, y: -12 },
-                    { x: 0, y: 0 },
-                ];
-                break;
-            case 5:
-                DRAW_POINTS = [
-                    { x: 0, y: 0 },
-                    { x: 8, y: -4 },
-                    { x: 16, y: 0 },
-                    { x: 8, y: 4 },
-                ];
-                DRAW_POINTS_OFFSETS = [
-                    { x: 0, y: 0 },
-                    { x: 0, y: 0 },
-                    { x: 8, y: 4 },
-                    { x: 8, y: 4 },
-                ];
-                OFFSETS = [
-                    { x: -8, y: -4 },
-                    { x: 16, y: 16 },
-                    { x: 24, y: -12 },
-                    { x: -16, y: -8 },
-                ];
-                break;
-            case 1:
-                DRAW_POINTS = [
-                    { x: 0, y: 0 },
-                    { x: 8, y: -4 },
-                    { x: 16, y: 0 },
-                    { x: 8, y: 4 },
-                ];
-                DRAW_POINTS_OFFSETS = [
-                    { x: 0, y: 0 },
-                    { x: 0, y: 0 },
-                    { x: 8, y: 4 },
-                    { x: 8, y: 4 },
-                ];
-                OFFSETS = [
-                    { x: 16, y: -8 },
-                    { x: 24, y: -12 },
-                    { x: 0, y: 0 },
-                    { x: 8, y: -4 },
-                ];
-                break;
-            case 7:
-                DRAW_POINTS = [
-                    { x: 0, y: 0 },
-                    { x: 8, y: -4 },
-                    { x: 16, y: 0 },
-                    { x: 8, y: 4 },
-                ];
-                DRAW_POINTS_OFFSETS = [
-                    { x: 0, y: 0 },
-                    { x: 0, y: 0 },
-                    { x: 8, y: 4 },
-                    { x: 8, y: 4 },
-                ];
-                OFFSETS = [
-                    { x: 8, y: -12 },
-                    { x: 48, y: 0 },
-                    { x: 0, y: 0 },
-                    { x: -8, y: -12 },
-                ];
-                break;
-            default:
-                DRAW_POINTS = [
-                    { x: 0, y: 0 },
-                    { x: 8, y: -4 },
-                    { x: 16, y: 0 },
-                    { x: 8, y: 4 },
-                ];
-                DRAW_POINTS_OFFSETS = [
-                    { x: 0, y: 0 },
-                    { x: 0, y: 0 },
-                    { x: 8, y: 4 },
-                    { x: 8, y: 4 },
-                ];
-                OFFSETS = [
-                    { x: 8, y: -12 },
-                    { x: 0, y: 0 },
-                    { x: 0, y: 0 },
-                    { x: 8, y: -12 },
-                ];
-                break;
+        if(this._type === "outerCorner") {
+            switch (this._direction) {
+                case 1:
+                    DRAW_POINTS = [
+                        {x: 0, y: 0},
+                        {x: 8, y: -4},
+                        {x: 16, y: 0},
+                        {x: 8, y: 4},
+                    ];
+                    DRAW_POINTS_OFFSETS = [
+                        {x: 0, y: 0},
+                        {x: 0, y: 0},
+                        {x: 8, y: 4},
+                        {x: 8, y: 4},
+                    ];
+                    OFFSETS = [
+                        {x: 16, y: -8},
+                        {x: 24, y: -12},
+                        {x: 0, y: 0},
+                        {x: 8, y: -4},
+                    ];
+                    break;
+                case 3:
+                    DRAW_POINTS = [
+                        {x: 0, y: 0},
+                        {x: 8, y: -4},
+                        {x: 16, y: 0},
+                        {x: 8, y: 4},
+                    ];
+                    DRAW_POINTS_OFFSETS = [
+                        {x: 0, y: 0},
+                        {x: 0, y: 0},
+                        {x: 8, y: 4},
+                        {x: 8, y: 4},
+                    ];
+                    OFFSETS = [
+                        {x: 0, y: 0},
+                        {x: -8, y: 4},
+                        {x: 24, y: -12},
+                        {x: 0, y: 0},
+                    ];
+                    break;
+                case 5:
+                    DRAW_POINTS = [
+                        {x: 0, y: 0},
+                        {x: 8, y: -4},
+                        {x: 16, y: 0},
+                        {x: 8, y: 4},
+                    ];
+                    DRAW_POINTS_OFFSETS = [
+                        {x: 0, y: 0},
+                        {x: 0, y: 0},
+                        {x: 8, y: 4},
+                        {x: 8, y: 4},
+                    ];
+                    OFFSETS = [
+                        {x: -8, y: -4},
+                        {x: 16, y: 16},
+                        {x: 24, y: -12},
+                        {x: -16, y: -8},
+                    ];
+                    break;
+                case 7:
+                    DRAW_POINTS = [
+                        {x: 0, y: 0},
+                        {x: 8, y: -4},
+                        {x: 16, y: 0},
+                        {x: 8, y: 4},
+                    ];
+                    DRAW_POINTS_OFFSETS = [
+                        {x: 0, y: 0},
+                        {x: 0, y: 0},
+                        {x: 8, y: 4},
+                        {x: 8, y: 4},
+                    ];
+                    OFFSETS = [
+                        {x: 8, y: -12},
+                        {x: 48, y: 0},
+                        {x: 0, y: 0},
+                        {x: -8, y: -12},
+                    ];
+                    break;
+            }
+        } else {
+            switch (this._direction) {
+                case 1:
+                    DRAW_POINTS = [
+                        {x: 0, y: 0},
+                        {x: 8, y: -4},
+                        {x: 16, y: 0},
+                        {x: 8, y: 4},
+                    ];
+                    DRAW_POINTS_OFFSETS = [
+                        {x: 0, y: 0},
+                        {x: 0, y: 0},
+                        {x: 8, y: 4},
+                        {x: 8, y: 4},
+                    ];
+                    OFFSETS = [
+                        {x: -8, y: 12},
+                        {x: 16, y: 16},
+                        {x: 24, y: -36},
+                        {x: -16, y: 8},
+                    ];
+                    break;
+                case 3:
+                    return;
+                case 5:
+                    DRAW_POINTS = [
+                        {x: 0, y: 0},
+                        {x: 8, y: -4},
+                        {x: 16, y: 0},
+                        {x: 8, y: 4},
+                    ];
+                    DRAW_POINTS_OFFSETS = [
+                        {x: 0, y: 0},
+                        {x: 0, y: 0},
+                        {x: 8, y: 4},
+                        {x: 8, y: 4},
+                    ];
+                    OFFSETS = [
+                        {x: 16, y: 8},
+                        {x: 24, y: -12},
+                        {x: 0, y: -24},
+                        {x: 8, y: 12},
+                    ];
+                    break;
+                case 7:
+                    DRAW_POINTS = [
+                        {x: 0, y: 0},
+                        {x: 8, y: -4},
+                        {x: 16, y: 0},
+                        {x: 8, y: 4},
+                    ];
+                    DRAW_POINTS_OFFSETS = [
+                        {x: 0, y: 0},
+                        {x: 0, y: 0},
+                        {x: 8, y: 4},
+                        {x: 8, y: 4},
+                    ];
+                    OFFSETS = [
+                        {x: 0, y: 16},
+                        {x: -8, y: 4},
+                        {x: 24, y: -36},
+                        {x: 0, y: 16},
+                    ];
+                    break;
+            }
         }
         for (let i = 0; i < 3; i++) {
             let stepContainer = new Container();
@@ -182,7 +229,10 @@ export class StairCorner extends Container {
 
             stepContainer.x = OFFSETS[3].x * i + OFFSETS[1].x;
             stepContainer.y = OFFSETS[3].y * i + OFFSETS[1].y;
-            stepContainer.zIndex = 0;
+
+            if(this._type === "innerCorner") {
+                stepContainer.zIndex = 3-i;
+            }
 
             this._container.addChild(stepContainer);
             this._container.x = OFFSETS[2].x;
@@ -236,7 +286,11 @@ export class StairCorner extends Container {
 
             stepContainer.x = OFFSETS[0].x * i;
             stepContainer.y = OFFSETS[0].y * i;
-            stepContainer.zIndex = 1;
+
+            if(this._type === "innerCorner") {
+                stepContainer.zIndex = 3 - i;
+            }
+
 
             this._container.addChild(stepContainer);
             this._container.x = OFFSETS[2].x;
