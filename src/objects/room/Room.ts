@@ -3,6 +3,7 @@ import { IRoomConfiguration } from "../../interfaces/IRoomConfiguration";
 import { Container } from 'pixi.js';
 import { Tile } from "./parts/Tile";
 import { parse } from "../../utils/TileMap";
+import { Stair } from "./parts/Stair";
 
 export class Room {
 
@@ -14,7 +15,7 @@ export class Room {
 
     private _parsedTileMap: { type: string, z: number, direction?: number }[][];
 
-    private _tiles: Tile[] = [];
+    private _tiles: (Tile | Stair)[] = [];
 
     constructor(engine: Scuti, configuration: IRoomConfiguration) {
         this._engine = engine;
@@ -43,8 +44,12 @@ export class Room {
                     this._createTile(x, y, this._parsedTileMap[y][x].z);
                 } else if(this._parsedTileMap[y][x].type === "door") {
                     this._createDoor(x, y, this._parsedTileMap[y][x].z);
-                } else if(this._parsedTileMap[y][x].type === "stairs") {
-                    this._createStairs(x, y, this._parsedTileMap[y][x].z, this._parsedTileMap[y][x].direction);
+                } else if(this._parsedTileMap[y][x].type === "stair") {
+                    if(this._parsedTileMap[y][x].direction % 2 === 0) {
+                        this._createStair(x, y, this._parsedTileMap[y][x].z, this._parsedTileMap[y][x].direction);
+                    } else {
+                        // TODO: Stair corner
+                    }
                 }
             }
         }
@@ -77,9 +82,9 @@ export class Room {
         this._modelContainer?.addChild(tile);
     }
 
-    private _createStairs(x: number, y: number, z: number, direction: number): void {
+    private _createStair(x: number, y: number, z: number, direction: number): void {
 
-        const tile = new Tile({ color: this._tileColor, tileThickness: 30 });
+        const tile = new Stair({ color: this._tileColor, tileThickness: 8, direction: direction });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;

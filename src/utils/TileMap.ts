@@ -35,7 +35,7 @@ export function parse(tiles: string) {
                     }
                 } else if(isTile(matrix[y][x]) && tileInfo.stairs !== null) {
                     parsedTileMap[y][x] = {
-                        type: "stairs",
+                        type: "stair",
                         z: tileInfo.height,
                         direction: tileInfo.stairs.direction
                     }
