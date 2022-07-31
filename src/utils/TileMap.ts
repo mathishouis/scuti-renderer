@@ -19,7 +19,7 @@ export function parse(tiles: string) {
         }
     }
 
-    let parsedTileMap: { type: string; z: number }[][] = [];
+    let parsedTileMap: { type: string; z: number; direction?: number }[][] = [];
 
     for (let y = 0; y < matrix.length; y++) {
         parsedTileMap[y] = []
@@ -28,12 +28,18 @@ export function parse(tiles: string) {
             const tileInfo = getTileInfo(matrix, x, y);
 
             if(!tileInfo.door) {
-                if(isTile(matrix[y][x])) {
+                if(isTile(matrix[y][x]) && tileInfo.stairs === null) {
                     parsedTileMap[y][x] = {
                         type: "tile",
                         z: tileInfo.height
                     }
-                } else {
+                } else if(isTile(matrix[y][x]) && tileInfo.stairs !== null) {
+                    parsedTileMap[y][x] = {
+                        type: "stairs",
+                        z: tileInfo.height,
+                        direction: tileInfo.stairs.direction
+                    }
+                }  else {
                     parsedTileMap[y][x] = {
                         type: "hidden",
                         z: tileInfo.height
