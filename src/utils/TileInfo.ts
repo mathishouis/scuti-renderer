@@ -1,4 +1,6 @@
 import { isTile } from "./TileMap";
+import {StairType} from "../types/StairType";
+import {StairCorner} from "../objects/room/parts/StairCorner";
 
 export function getTileNumber(tileCode: string): number {
     const number = Number(tileCode);
@@ -16,7 +18,7 @@ export function getTile(tiles: [][], x: number, y: number) {
     return tiles[y][x];
 }
 
-export function getTileInfo(tiles: [][], x: number, y: number): { door: boolean, leftEdge: boolean, rightEdge: boolean, height: number, stairs: { direction: number } | null } {
+export function getTileInfo(tiles: [][], x: number, y: number): { door: boolean, leftEdge: boolean, rightEdge: boolean, height: number, stairs: { direction: number, type: StairType } | null } {
     // Top
     const topLeftTile = getTile(tiles, x - 1, y - 1);
     const topTile = getTile(tiles, x, y - 1);
@@ -44,7 +46,7 @@ export function getTileInfo(tiles: [][], x: number, y: number): { door: boolean,
     }
 }
 
-export function getStairs(tiles: [][], x: number, y: number): { direction: number } | null {
+export function getStairs(tiles: [][], x: number, y: number): { direction: number, type: StairType } | null {
     // Top
     const topLeftTile = getTile(tiles, x - 1, y - 1);
     const topTile = getTile(tiles, x, y - 1);
@@ -58,53 +60,80 @@ export function getStairs(tiles: [][], x: number, y: number): { direction: numbe
     const botTile = getTile(tiles, x, y + 1);
     const botRightTile = getTile(tiles, x + 1, y + 1);
 
+    // Inner Corner
+    // 0F1
+    // 0xF
+    // 000
+    if(isTile(midTile) && isTile(topRightTile) && getTileDiff(topRightTile, midTile) === 1 && getTileDiff(midRightTile, midTile) === 1 && getTileDiff(topTile, midTile) === 1) {
+        return { direction: 1, type: "innerCorner" };
+    }
+    // 000
+    // 0xF
+    // 0F1
+    if(isTile(midTile) && isTile(botRightTile) && getTileDiff(botRightTile, midTile) === 1 && getTileDiff(midRightTile, midTile) === 1 && getTileDiff(botTile, midTile) === 1) {
+        return { direction: 3, type: "innerCorner" };
+    }
+    // 000
+    // Fx0
+    // 1F0
+    if(isTile(midTile) && isTile(botLeftTile) && getTileDiff(botLeftTile, midTile) === 1 && getTileDiff(midLeftTile, midTile) === 1 && getTileDiff(botTile, midTile) === 1) {
+        return { direction: 5, type: "innerCorner" };
+    }
+    // 1F0
+    // Fx0
+    // 000
+    if(isTile(midTile) && isTile(topLeftTile) && getTileDiff(topLeftTile, midTile) === 1 && getTileDiff(midLeftTile, midTile) === 1 && getTileDiff(topTile, midTile) === 1) {
+        return { direction: 7, type: "innerCorner" };
+    }
+
+
     // 010
     // 0x0
     // 000
     if(isTile(midTile) && isTile(topTile) && getTileDiff(topTile, midTile) === 1) {
-        return { direction: 0 };
+        return { direction: 0, type: "normal" };
     }
-    // 001
-    // 0x0
+    // 0N1
+    // 0xN
     // 000
-    if(isTile(midTile) && isTile(topRightTile) && getTileDiff(topRightTile, midTile) === 1) {
-        return { direction: 1 };
+    if(isTile(midTile) && isTile(topRightTile) && getTileDiff(topRightTile, midTile) === 1 && getTileDiff(midRightTile, midTile) === 0 && getTileDiff(topTile, midTile) === 0) {
+        return { direction: 1, type: "outerCorner" };
     }
     // 000
     // 0x1
     // 000
     if(isTile(midTile) && isTile(midRightTile) && getTileDiff(midRightTile, midTile) === 1) {
-        return { direction: 2 };
+        return { direction: 2, type: "normal" };
     }
     // 000
-    // 0x0
-    // 001
-    if(isTile(midTile) && isTile(botRightTile) && getTileDiff(botRightTile, midTile) === 1) {
-        return { direction: 3 };
+    // 0xN
+    // 0N1
+    if(isTile(midTile) && isTile(botRightTile) && getTileDiff(botRightTile, midTile) === 1 && getTileDiff(midRightTile, midTile) === 0 && getTileDiff(botTile, midTile) === 0) {
+        return { direction: 3, type: "outerCorner" };
     }
     // 000
     // 0x0
     // 010
     if(isTile(midTile) && isTile(botTile) && getTileDiff(botTile, midTile) === 1) {
-        return { direction: 4 };
+        return { direction: 4, type: "normal" };
     }
     // 000
-    // 0x0
-    // 100
-    if(isTile(midTile) && isTile(botLeftTile) && getTileDiff(botLeftTile, midTile) === 1) {
-        return { direction: 5 };
+    // Nx0
+    // 1N0
+    if(isTile(midTile) && isTile(botLeftTile) && getTileDiff(botLeftTile, midTile) === 1 && getTileDiff(midLeftTile, midTile) === 0 && getTileDiff(botTile, midTile) === 0) {
+        return { direction: 5, type: "outerCorner" };
     }
     // 000
     // 1x0
     // 000
     if(isTile(midTile) && isTile(midLeftTile) && getTileDiff(midLeftTile, midTile) === 1) {
-        return { direction: 6 };
+        return { direction: 6, type: "normal" };
     }
-    // 100
-    // 0x0
+    // 1N0
+    // Nx0
     // 000
-    if(isTile(midTile) && isTile(topLeftTile) && getTileDiff(topLeftTile, midTile) === 1) {
-        return { direction: 7 };
+    if(isTile(midTile) && isTile(topLeftTile) && getTileDiff(topLeftTile, midTile) === 1 && getTileDiff(midLeftTile, midTile) === 0 && getTileDiff(topTile, midTile) === 0) {
+        return { direction: 7, type: "outerCorner" };
     }
     return null;
 }

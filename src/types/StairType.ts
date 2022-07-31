@@ -1,0 +1,1 @@
+export type StairType = "innerCorner" | "outerCorner" | "normal";

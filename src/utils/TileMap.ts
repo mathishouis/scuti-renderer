@@ -1,5 +1,5 @@
-import { getTileNumber } from "./TileInfo";
 import { getTileInfo } from "./TileInfo";
+import {StairType} from "../types/StairType";
 
 export function isTile(tile: string | undefined) {
     return tile !== 'x';
@@ -19,7 +19,7 @@ export function parse(tiles: string) {
         }
     }
 
-    let parsedTileMap: { type: string; z: number; direction?: number }[][] = [];
+    let parsedTileMap: { type: string; z: number; direction?: number, shape?: StairType }[][] = [];
 
     for (let y = 0; y < matrix.length; y++) {
         parsedTileMap[y] = []
@@ -27,7 +27,7 @@ export function parse(tiles: string) {
 
             const tileInfo = getTileInfo(matrix, x, y);
 
-            if(!tileInfo.door) {
+            if(!tileInfo.door || door) {
                 if(isTile(matrix[y][x]) && tileInfo.stairs === null) {
                     parsedTileMap[y][x] = {
                         type: "tile",
@@ -37,7 +37,8 @@ export function parse(tiles: string) {
                     parsedTileMap[y][x] = {
                         type: "stair",
                         z: tileInfo.height,
-                        direction: tileInfo.stairs.direction
+                        direction: tileInfo.stairs.direction,
+                        shape: tileInfo.stairs.type
                     }
                 }  else {
                     parsedTileMap[y][x] = {
