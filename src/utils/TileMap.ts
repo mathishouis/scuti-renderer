@@ -1,32 +1,49 @@
+import { getTileNumber } from "./TileInfo";
+import { getTileInfo } from "./TileInfo";
+
 export function isTile(tile: string | undefined) {
     return tile !== 'x';
 }
 
-export function parse(tilemap: string) {
+export function parse(tiles: string) {
+    let door: boolean = false;
     let lines: number = 0;
     let matrix: [[]] = [[]];
-    for(let i = 0; i < tilemap.length; i++) {
-        if(tilemap[i] === "\n" || tilemap[i] === "\r") {
+    for(let i = 0; i < tiles.length; i++) {
+        if(tiles[i] === "\n" || tiles[i] === "\r") {
             matrix.push([]);
             lines++;
         } else {
             // @ts-ignore
-            matrix[lines].push(tilemap[i]);
+            matrix[lines].push(tiles[i]);
         }
     }
 
-    let parsedTileMap: { type: string; }[][] = [];
+    let parsedTileMap: { type: string; z: number }[][] = [];
 
     for (let y = 0; y < matrix.length; y++) {
         parsedTileMap[y] = []
         for (let x = 0; x < matrix[y].length; x++) {
-            if(isTile(matrix[y][x])) {
-                parsedTileMap[y][x] = {
-                    type: "tile"
+
+            const tileInfo = getTileInfo(matrix, x, y);
+
+            if(!tileInfo.door) {
+                if(isTile(matrix[y][x])) {
+                    parsedTileMap[y][x] = {
+                        type: "tile",
+                        z: tileInfo.height
+                    }
+                } else {
+                    parsedTileMap[y][x] = {
+                        type: "hidden",
+                        z: tileInfo.height
+                    }
                 }
             } else {
+                door = true;
                 parsedTileMap[y][x] = {
-                    type: "hidden"
+                    type: "door",
+                    z: tileInfo.height
                 }
             }
         }

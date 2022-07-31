@@ -12,7 +12,7 @@ export class Room {
     private _tileColor: number;
     private _wallColor: number;
 
-    private _parsedTileMap: { type: string }[][];
+    private _parsedTileMap: { type: string, z: number }[][];
 
     private _tiles: Tile[] = [];
 
@@ -40,7 +40,9 @@ export class Room {
         for (let y = 0; y < this._parsedTileMap.length; y++) {
             for (let x = 0; x < this._parsedTileMap[y].length; x++) {
                 if(this._parsedTileMap[y][x].type === "tile") {
-                    this._createTile(x, y, 0);
+                    this._createTile(x, y, this._parsedTileMap[y][x].z);
+                } else if(this._parsedTileMap[y][x].type === "door") {
+                    this._createDoor(x, y, this._parsedTileMap[y][x].z);
                 }
             }
         }
@@ -49,9 +51,21 @@ export class Room {
 
     }
 
+    private _createDoor(x: number, y: number, z: number): void {
+
+        const tile = new Tile({ color: this._tileColor, tileThickness: 0 });
+        const position = Room._getPosition(x, y, z);
+
+        tile.x = position.x;
+        tile.y = position.y;
+
+        this._tiles.push(tile);
+        this._modelContainer?.addChild(tile);
+    }
+
     private _createTile(x: number, y: number, z: number): void {
 
-        const tile = new Tile({ color: 0xFFFFFF, tileThickness: 8 });
+        const tile = new Tile({ color: this._tileColor, tileThickness: 8 });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;

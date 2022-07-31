@@ -10,9 +10,9 @@ let scuti = new Scuti({
 });
 
 let room = new Room(scuti,{ tilemap: "xxxxxx\n" +
-    "x0000x\n" +
+    "x1000x\n" +
     "x0000x\n" +
     "00000x\n" +
     "x0000x\n" +
     "x0000x\n" +
-    "xxxxxx\n", tileColor: 0xFFFFFF, wallColor: 0xFFFFFF });
+    "xxxxxx\n", tileColor: 0x989865, wallColor: 0xB6B8C7 });
