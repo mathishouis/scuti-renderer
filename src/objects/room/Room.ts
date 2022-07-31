@@ -2,7 +2,7 @@ import { Scuti } from "../../Scuti";
 import { IRoomConfiguration } from "../../interfaces/IRoomConfiguration";
 import { Container } from 'pixi.js';
 import { Tile } from "./parts/Tile";
-import { parse } from "../../utils/TileMap";
+import {getMaxZ, parse} from "../../utils/TileMap";
 import { Stair } from "./parts/Stair";
 import { StairCorner } from "./parts/StairCorner";
 import { StairType } from "../../types/StairType";
@@ -22,6 +22,8 @@ export class Room {
     private _tiles: (Tile | Stair | StairCorner)[] = [];
     private _walls: (Wall)[] = [];
 
+    private _maxZ: number = 0;
+
     constructor(engine: Scuti, configuration: IRoomConfiguration) {
         this._engine = engine;
 
@@ -29,6 +31,8 @@ export class Room {
         this._wallColor = configuration.wallColor;
 
         this._parsedTileMap = parse(configuration.tilemap);
+
+        this._maxZ = getMaxZ(this._parsedTileMap);
 
         this._updateHeightmap();
     }
@@ -40,8 +44,6 @@ export class Room {
 
         this._modelContainer.x = window.innerWidth / 2;
         this._modelContainer.y = window.innerHeight / 6;
-
-
 
         for (let y = 0; y < this._parsedTileMap.length; y++) {
             for (let x = 0; x < this._parsedTileMap[y].length; x++) {
@@ -81,7 +83,7 @@ export class Room {
 
     private _createWall(x: number, y: number, z: number, type: WallType, door?: boolean): void {
 
-        const wall = new Wall({ color: this._wallColor, thickness: 8, door: door, tileThickness: 8, type: type, maxZ: 0, roomZ: z });
+        const wall = new Wall({ color: this._wallColor, thickness: 8, door: door, tileThickness: 8, type: type, maxZ: this._maxZ, roomZ: z });
         const position = Room._getPosition(x, y, z);
 
         wall.x = position.x;

@@ -1,4 +1,4 @@
-import { getTileInfo } from "./TileInfo";
+import { getTileInfo, getTileNumber, hasWall } from "./TileInfo";
 import {StairType} from "../types/StairType";
 import {WallType} from "../types/WallType";
 
@@ -27,7 +27,16 @@ export function parse(tiles: string) {
         for (let x = 0; x < matrix[y].length; x++) {
 
             const tileInfo = getTileInfo(matrix, x, y);
-
+            if(tileInfo.walls !== null) {
+                if(tileInfo.walls.type === "right" && hasWall(matrix, x, y).y) {
+                    tileInfo.walls = null;
+                }
+            }
+            if(tileInfo.walls !== null) {
+                if (tileInfo.walls.type === "left" && hasWall(matrix, x, y).x) {
+                    tileInfo.walls = null;
+                }
+            }
             if(!tileInfo.door || door) {
                 if(isTile(matrix[y][x]) && tileInfo.stairs === null) {
                     parsedTileMap[y][x] = {
@@ -64,10 +73,20 @@ export function parse(tiles: string) {
     return parsedTileMap;
 }
 
-export function getTile(tilemap: [[]], x: number, y: number) {
+export function getTile(tiles: [[]], x: number, y: number) {
     if(x < 0) return 'x';
     if(y < 0) return 'x';
-    if(tilemap[y] === undefined) return 'x';
-    if(tilemap[y][x] === undefined) return 'x';
-    return tilemap[y][x]
+    if(tiles[y] === undefined) return 'x';
+    if(tiles[y][x] === undefined) return 'x';
+    return tiles[y][x]
+}
+
+export function getMaxZ(tilemap: { type: string, z: number, direction?: number, shape?: StairType, wall: WallType }[][]): number {
+    let z = 0;
+    for(let y = 0; y < tilemap.length; y++) {
+        for (let x = 0; x < tilemap[y].length; x++) {
+            if(tilemap[y][x].z > z) z = tilemap[y][x].z;
+        }
+    }
+    return z;
 }

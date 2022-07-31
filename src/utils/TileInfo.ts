@@ -4,6 +4,7 @@ import {StairCorner} from "../objects/room/parts/StairCorner";
 import {WallType} from "../types/WallType";
 
 export function getTileNumber(tileCode: string): number {
+    if(tileCode === 'x') return -1;
     const number = Number(tileCode);
     if(isNaN(number)) {
         return tileCode.charCodeAt(0) - 96 + 9;
@@ -166,6 +167,28 @@ export function getStairs(tiles: [][], x: number, y: number): { direction: numbe
         return { direction: 7, type: "outerCorner" };
     }
     return null;
+}
+
+export function hasWall(tiles: [][], x: number, y: number): { x: boolean, y: boolean } {
+    let wallX = false;
+    let wallY = false;
+    for (let i = y - 1; i >= 0; i--) {
+        let wall = getWalls(tiles, x, i);
+        if(wall !== null) {
+            if(wall.type === "right") {
+                wallY = true;
+            }
+        }
+    }
+    for (let i = x - 1; i >= 0; i--) {
+        let wall = getWalls(tiles, i, y);
+        if(wall !== null) {
+            if(wall.type === "left") {
+                wallX = true;
+            }
+        }
+    }
+    return { x: wallX, y: wallY };
 }
 
 export function getTileDiff(tile1: string, tile2: string): number {
