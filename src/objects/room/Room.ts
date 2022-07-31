@@ -36,7 +36,7 @@ export class Room {
         this._modelContainer = new Container();
 
         this._modelContainer.x = window.innerWidth / 2;
-        this._modelContainer.y = window.innerHeight / 2;
+        this._modelContainer.y = window.innerHeight / 6;
 
 
 

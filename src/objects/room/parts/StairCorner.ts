@@ -231,7 +231,9 @@ export class StairCorner extends Container {
             stepContainer.y = OFFSETS[3].y * i + OFFSETS[1].y;
 
             if(this._type === "innerCorner") {
-                stepContainer.zIndex = 3-i;
+                stepContainer.zIndex = 3-i + 10;
+            } else if(this._direction === 5) {
+                stepContainer.zIndex = i + 10;
             }
 
             this._container.addChild(stepContainer);
