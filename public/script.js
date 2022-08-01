@@ -199,7 +199,7 @@ async function load() {
         "xxxxxxxxxxxxxxxxxxx\n";
 
     let room = new Room(scuti, {
-        tilemap: tilemap5
+        tilemap: tilemap2
 
         , floorMaterial: 102, wallMaterial: 1901
     });

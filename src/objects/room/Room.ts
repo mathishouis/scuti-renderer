@@ -74,8 +74,6 @@ export class Room {
         this._modelContainer.x = window.innerWidth / 2;
         this._modelContainer.y = window.innerHeight / 6;
 
-        this._createTileCursor(2, 2, 2);
-
         for (let y = 0; y < this._parsedTileMap.length; y++) {
             for (let x = 0; x < this._parsedTileMap[y].length; x++) {
                 if(this._parsedTileMap[y][x].wall || this._parsedTileMap[y][x].type === "door") {
@@ -178,7 +176,10 @@ export class Room {
 
     private _createStair(x: number, y: number, z: number, direction: number): void {
 
-        const tile = new Stair({ color: this.floorMaterial.color, tileThickness: 8, direction: direction, texture: this.floorMaterial.texture });
+        const tile = new Stair({ color: this.floorMaterial.color, tileThickness: 8, direction: direction, texture: this.floorMaterial.texture },
+            () => { this._tileClick(x, y, z); },
+            () => { this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
+            () => { this._tileOut(x, y, z); this._hideTileCursor(); });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;
@@ -190,7 +191,10 @@ export class Room {
 
     private _createStairCorner(x: number, y: number, z: number, direction: number, type: StairType): void {
 
-        const tile = new StairCorner({ color: this.floorMaterial.color, tileThickness: 8, direction: direction, type: type, texture: this.floorMaterial.texture });
+        const tile = new StairCorner({ color: this.floorMaterial.color, tileThickness: 8, direction: direction, type: type, texture: this.floorMaterial.texture },
+            () => { this._tileClick(x, y, z); },
+            () => { this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
+            () => { this._tileOut(x, y, z); this._hideTileCursor(); });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;

@@ -25,7 +25,6 @@ export class TileCursor extends Container {
 
         let sprite = new Sprite(this._texture);
         sprite.y = -20;
-        this.zIndex = 2;
         this.addChild(sprite);
 
     }

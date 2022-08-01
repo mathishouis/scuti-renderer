@@ -1,5 +1,6 @@
 import { Texture, Container, Graphics, Matrix, utils } from 'pixi.js';
 import { IStairProps } from "../../../interfaces/IStairProps";
+import {ITileProps} from "../../../interfaces/ITileProps";
 
 export class Stair extends Container {
 
@@ -9,7 +10,10 @@ export class Stair extends Container {
     private _container?: Container;
     private _direction: number;
 
-    constructor(props: IStairProps) {
+    constructor(props: IStairProps,
+                private onClick: (x: number, y: number, z: number) => void,
+                private onOver: (x: number, y: number, z: number) => void,
+                private onOut: (x: number, y: number, z: number) => void) {
         super();
 
         this._tileThickness = props.tileThickness;
@@ -131,8 +135,22 @@ export class Stair extends Container {
             this._container.y = OFFSETS[1].y;
         }
 
+        this.interactive = true;
+
         this.addChild(this._container);
 
+    }
+
+    click() {
+        this.onClick(0, 0, 0);
+    }
+
+    mouseover() {
+        this.onOver(0, 0, 0);
+    }
+
+    mouseout() {
+        this.onOut(0, 0, 0);
     }
 
 }

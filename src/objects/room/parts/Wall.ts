@@ -123,8 +123,7 @@ export class Wall extends Container {
         let tileTop = new Graphics()
             .beginTextureFill({
                 texture: Texture.WHITE,
-                color: utils.premultiplyTint(this._color, 0.61),
-                matrix: new Matrix(1, 0.5, 1, -0.5, 0, 0)
+                color: utils.premultiplyTint(this._color, 0.61)
             })
             .moveTo(DRAW_POINTS[0].x, DRAW_POINTS[0].y)
             .lineTo(DRAW_POINTS[1].x, DRAW_POINTS[1].y)
@@ -137,7 +136,7 @@ export class Wall extends Container {
             .beginTextureFill({
                 texture: this._type === "right" ? (this._texture ?? Texture.WHITE) : Texture.WHITE,
                 color: utils.premultiplyTint(this._color, 0.99999),
-                matrix: new Matrix(1, 0.5, 0, 1, 0, 0)
+                matrix: new Matrix(1, 0.5, 0, 1, DRAW_POINTS[0].x, DRAW_POINTS[0].y)
             })
             .moveTo(DRAW_POINTS[0].x, DRAW_POINTS[0].y)
             .lineTo(DRAW_POINTS[0].x, DRAW_POINTS[0].y + 123 + this._tileThickness + this._maxZ * 32 - this._roomZ * 32)
@@ -149,7 +148,7 @@ export class Wall extends Container {
             .beginTextureFill({
                 texture: this._type === "left" ? (this._texture ?? Texture.WHITE) : Texture.WHITE,
                 color: utils.premultiplyTint(this._color, 0.8),
-                matrix: new Matrix(1, -0.5, 0, 1, 0, 0)
+                matrix: new Matrix(1, -0.5, 0, 1, DRAW_POINTS[0].x + this._thickness, DRAW_POINTS[0].y + 2)
             })
             .moveTo(DRAW_POINTS[3].x, DRAW_POINTS[3].y);
 
