@@ -7,3 +7,4 @@ yarn.lock
 .cache/*
 dist/*
 .parcel-cache/*
+.proxyrc.js

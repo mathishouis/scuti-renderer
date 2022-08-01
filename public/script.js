@@ -4,7 +4,8 @@ import { Room } from "../src/objects/room/Room";
 let scuti = new Scuti({
     canvas: document.getElementById("app"),
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
+    resources: "https://scuti-resources.netlify.app/"
 });
 
 let tilemap1 = "xxxxxx\n" +
@@ -165,6 +166,34 @@ let tilemap6 =
     "x00000000000000000000000000x\n" +
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
 
-let room = new Room(scuti,{ tilemap: tilemap5
+let tilemap7 =
+    "xxxxxxxxxxxxxxxxxxx\n" +
+    "xxxxxxxxxxx22222222\n" +
+    "xxxxxxxxxxx22222222\n" +
+    "xxxxxxxxxxx22222222\n" +
+    "xxxxxxxxxx222222222\n" +
+    "xxxxxxxxxxx22222222\n" +
+    "xxxxxxxxxxx22222222\n" +
+    "x222222222222222222\n" +
+    "x222222222222222222\n" +
+    "x222222222222222222\n" +
+    "x222222222222222222\n" +
+    "x222222222222222222\n" +
+    "x222222222222222222\n" +
+    "x2222xxxxxxxxxxxxxx\n" +
+    "x2222xxxxxxxxxxxxxx\n" +
+    "x2222211111xx000000\n" +
+    "x222221111110000000\n" +
+    "x222221111110000000\n" +
+    "x2222211111xx000000\n" +
+    "xx22xxx1111xxxxxxxx\n" +
+    "xx11xxx1111xxxxxxxx\n" +
+    "x1111xx1111xx000000\n" +
+    "x1111xx111110000000\n" +
+    "x1111xx111110000000\n" +
+    "x1111xx1111xx000000\n" +
+    "xxxxxxxxxxxxxxxxxxx\n";
+
+let room = new Room(scuti,{ tilemap: tilemap4
 
     , tileColor: 0x989865, wallColor: 0xB6B8C7 });

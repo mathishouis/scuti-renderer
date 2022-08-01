@@ -122,7 +122,7 @@ export class Wall extends Container {
 
         let tileTop = new Graphics()
             .beginTextureFill({
-                texture: this._texture ?? Texture.WHITE,
+                texture: Texture.WHITE,
                 color: utils.premultiplyTint(this._color, 0.61),
                 matrix: new Matrix(1, 0.5, 1, -0.5, 0, 0)
             })

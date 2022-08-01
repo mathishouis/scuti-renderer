@@ -1,5 +1,5 @@
 import { IEngineConfiguration } from "./interfaces/IEngineConfiguration";
-import { Application } from 'pixi.js';
+import { Application, settings, SCALE_MODES } from 'pixi.js';
 import { ResourceManager } from "./resources/ResourceManager";
 
 export class Scuti {
@@ -10,15 +10,7 @@ export class Scuti {
 
     constructor(private configuration: IEngineConfiguration) {
 
-        this._initManagers();
-
-        this._canvas = configuration.canvas;
-        this._application = new Application({
-            width: configuration.width,
-            height: configuration.height,
-            backgroundColor: 0x000000,
-        });
-        this._canvas.appendChild(this._application.view);
+        this.initialise(configuration);
 
     }
 
@@ -26,12 +18,22 @@ export class Scuti {
         return this._application;
     }
 
-    private _initManagers(): void {
-        this._resourceManager = new ResourceManager();
-    }
-
     public get resources(): ResourceManager {
         return this._resourceManager;
+    }
+
+    public async initialise(configuration: IEngineConfiguration): Promise<void> {
+        this._resourceManager = new ResourceManager(configuration.resources);
+
+        this._canvas = configuration.canvas;
+        settings.SCALE_MODE = SCALE_MODES.NEAREST;
+        this._application = new Application({
+            width: configuration.width,
+            height: configuration.height,
+            backgroundColor: 0x000000,
+            antialias: false,
+        });
+        this._canvas.appendChild(this._application.view);
     }
 
 }
