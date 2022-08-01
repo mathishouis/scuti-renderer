@@ -3,6 +3,7 @@ import { Application, settings, SCALE_MODES } from 'pixi.js';
 import { ResourceManager } from "./resources/ResourceManager";
 import { RoomMaterialManager } from "./objects/room/RoomMaterialManager";
 import {EventManager} from "./objects/events/EventManager";
+import {FurnitureManager} from "./objects/furniture/FurnitureManager";
 
 export class Scuti {
 
@@ -12,6 +13,7 @@ export class Scuti {
     private _resourceManager: ResourceManager;
     private _roomMaterialManager: RoomMaterialManager;
     private _eventManager: EventManager;
+    private _furnitureManager: FurnitureManager;
 
     private _configuration: IEngineConfiguration;
 
@@ -31,6 +33,10 @@ export class Scuti {
 
     public get materials(): RoomMaterialManager {
         return this._roomMaterialManager;
+    }
+
+    public get furnitures(): FurnitureManager {
+        return this._furnitureManager;
     }
 
     public get events(): EventManager {
@@ -53,9 +59,11 @@ export class Scuti {
             this._resourceManager = new ResourceManager(this._configuration.resources);
             this._roomMaterialManager = new RoomMaterialManager(this);
             this._eventManager = new EventManager();
+            this._furnitureManager = new FurnitureManager(this);
             await this._resourceManager.initialise();
             await this._roomMaterialManager.initialise();
             await this._eventManager.initialise();
+            await this._furnitureManager.initialise();
             resolve();
         });
     }

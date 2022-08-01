@@ -15,9 +15,13 @@ export class ResourceManager {
             this.add('room', 'generic/room/room.json');
             this.add('room_data', 'generic/room/room_data.json');
             this.add('tile_cursor', 'generic/tile_cursor/tile_cursor.json');
+            this.add('place_holder_furniture', 'generic/place_holder/place_holder_furniture.json');
+            this.add('furnidata', 'gamedata/furnidata.json');
             await this.load('room');
             await this.load('room_data');
             await this.load('tile_cursor');
+            await this.load('place_holder_furniture');
+            await this.load('furnidata');
             resolve();
         });
     }

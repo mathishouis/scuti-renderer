@@ -1,16 +1,15 @@
 import { Scuti } from "../src/Scuti";
 import { Room } from "../src/objects/room/Room";
+import {FloorFurniture} from "../src/objects/furniture/FloorFurniture";
 
 async function load() {
     let scuti = new Scuti({
         canvas: document.getElementById("app"),
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: 1920,
+        height: 955,
         resources: "http://localhost:8081/"
     });
     await scuti.initialise();
-
-    console.log("loaded");
 
     let tilemap1 = "xxxxxx\n" +
         "x4444432110011111x\n" +
@@ -198,13 +197,28 @@ async function load() {
         "x1111xx1111xx000000\n" +
         "xxxxxxxxxxxxxxxxxxx\n";
 
+    let tilemap8 =
+        "0000\n" +
+        "0000\n" +
+        "0000\n" +
+        "0000";
+
     let room = new Room(scuti, {
-        tilemap: tilemap2
+        tilemap: tilemap5
 
         , floorMaterial: 102, wallMaterial: 1901
     });
+
     room.tileClick = (x, y, z) => {
         console.log("click", x, y, z);
+        let furni = new FloorFurniture(scuti, {
+            x: x,
+            y: y,
+            z: z,
+            direction: 2,
+            id: 1620,
+        });
+        room.addRoomObject(furni);
     }
     room.tileOver = (x, y, z) => {
         console.log("over", x, y, z);

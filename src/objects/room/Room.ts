@@ -10,10 +10,12 @@ import { WallType } from "../../types/WallType";
 import { Wall } from "./parts/Wall";
 import { RoomMaterial } from "./RoomMaterial";
 import { TileCursor } from "./parts/TileCursor";
+import {RoomObject} from "./RoomObject";
 
 export class Room {
 
-    private _modelContainer?: Container;
+    private _modelContainer?: Container = new Container();
+    private _roomObjectContainer?: Container = new Container();
     private _engine: Scuti;
 
     private _floorMaterial: RoomMaterial;
@@ -25,6 +27,7 @@ export class Room {
 
     private _tiles: (Tile | Stair | StairCorner)[] = [];
     private _walls: (Wall)[] = [];
+    private _roomObjects: Set<RoomObject> = new Set();
 
     private _maxZ: number = 0;
 
@@ -42,6 +45,8 @@ export class Room {
 
         this._floorMaterial = this._engine.materials.getFloorMaterial(configuration.floorMaterial);
         this._wallMaterial = this._engine.materials.getWallMaterial(configuration.wallMaterial);
+
+        this._engine.application.stage.addChild(this._roomObjectContainer);
 
         this._updateHeightmap();
 
@@ -73,6 +78,14 @@ export class Room {
 
         this._modelContainer.x = window.innerWidth / 2;
         this._modelContainer.y = window.innerHeight / 6;
+
+        // TODO: Clean this part.
+
+        this._roomObjectContainer.sortableChildren = true;
+        this._roomObjectContainer.zIndex = 10;
+        this._engine.application.stage.sortableChildren = true;
+        this._roomObjectContainer.x = window.innerWidth / 2;
+        this._roomObjectContainer.y = window.innerHeight / 6;
 
         for (let y = 0; y < this._parsedTileMap.length; y++) {
             for (let x = 0; x < this._parsedTileMap[y].length; x++) {
@@ -129,6 +142,11 @@ export class Room {
     private _hideTileCursor() {
         this._modelContainer.removeChild(this._tileCursor);
         this._tileCursor?.destroy();
+    }
+
+    public addRoomObject(object: RoomObject): void {
+        this._roomObjects.add(object);
+        this._roomObjectContainer.addChild(object);
     }
 
     private _createWall(x: number, y: number, z: number, type: WallType, door?: boolean): void {
