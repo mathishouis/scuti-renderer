@@ -44,28 +44,43 @@ export class FloorFurniture extends RoomObject {
         this._container?.destroy();
         this._container = new Container();
 
+        this._container.sortableChildren = true;
+
         let furnitureData = this._engine.resources.get('furni/' + this._id);
         let visualization = furnitureData.data.furniProperty.visualization;
 
         for(let layerCount = 0; layerCount < visualization.layerCount; layerCount++) {
-            let name = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_' + String.fromCharCode(97 + layerCount) + '_' + this._direction + '_' + 0;
+            let layerName = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_' + String.fromCharCode(97 + layerCount) + '_' + this._direction + '_' + 0;
             let layer = new FurnitureLayer({
-                texture: furnitureData.textures[name],
-                name: name,
+                texture: furnitureData.textures[layerName],
+                name: layerName,
                 alpha: 1,
-                tint: visualization.colors[this._engine.furnitures.splitColorName(this._name).colorId][layerCount] !== undefined ? (('0x' + visualization.colors[this._engine.furnitures.splitColorName(this._name).colorId][layerCount])) : undefined,
+                tint: this._engine.furnitures.splitColorName(this._name).colorId ? visualization.colors[this._engine.furnitures.splitColorName(this._name).colorId][layerCount] !== undefined ? (('0x' + visualization.colors[this._engine.furnitures.splitColorName(this._name).colorId][layerCount])) : undefined : undefined,
                 z: visualization.layers[layerCount] ? visualization.layers[layerCount].z ?? 0 : 0,
                 blendMode: visualization.layers[layerCount] ? BLEND_MODES[visualization.layers[layerCount].ink] ?? BLEND_MODES.NORMAL : BLEND_MODES.NORMAL
 
             });
-            this._layers.set(name, layer);
+            this._layers.set(layerName, layer);
             this._container.addChild(layer);
-            this.x = 32 + 32 * this._x - 32 * this._y;
-            this.y = 16 * this._x + 16 * this._y - 32 * this._z;
-
         }
 
+        let shadowName = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_sd_' + this._direction + '_' + 0;
+        let shadow = new FurnitureLayer({
+            texture: furnitureData.textures[shadowName],
+            name: shadowName,
+            alpha: 0.19,
+            tint: undefined,
+            z: -1,
+            blendMode: BLEND_MODES.ADD
+
+        });
+
+        this._layers.set(shadowName, shadow);
+        this._container.addChild(shadow);
+
         this.addChild(this._container);
+        this.x = 32 + 32 * this._x - 32 * this._y;
+        this.y = 16 * this._x + 16 * this._y - 32 * this._z;
 
     }
 

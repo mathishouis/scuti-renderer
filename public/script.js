@@ -206,7 +206,7 @@ async function load() {
     let room = new Room(scuti, {
         tilemap: tilemap2
 
-        , floorMaterial: 102, wallMaterial: 1901
+        , floorMaterial: 111, wallMaterial: 1901
     });
 
     room.tileClick = (x, y, z) => {
@@ -215,8 +215,8 @@ async function load() {
             x: x,
             y: y,
             z: z,
-            direction: 2,
-            id: 1620,
+            direction: 0,
+            id: 13,
         });
         room.addRoomObject(furni);
     }

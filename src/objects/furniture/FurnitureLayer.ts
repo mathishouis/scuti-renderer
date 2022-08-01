@@ -1,4 +1,4 @@
-import { Sprite, BLEND_MODES, Texture, utils } from "pixi.js";
+import { Sprite, BLEND_MODES, Texture, utils, filters } from "pixi.js";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
 
 export class FurnitureLayer extends Sprite {
@@ -29,6 +29,7 @@ export class FurnitureLayer extends Sprite {
         this._tint ? this.tint = utils.premultiplyTint(this._tint, 0.999) : null;
         this.blendMode = this._blendMode;
         this._z ? this.zIndex = this._z : null;
+        this.filters = [new filters.AlphaFilter(this._alpha)];
 
     }
 
