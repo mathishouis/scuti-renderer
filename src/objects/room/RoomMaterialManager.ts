@@ -60,6 +60,7 @@ export class RoomMaterialManager {
         const finalTexture = this._engine.application.renderer.generateTexture(sprite);
         const image = this._engine.application.renderer.plugins.extract.image(finalTexture)
         finalTexture.baseTexture.resource = new BaseImageResource(image);
+        sprite.destroy();
         return new Texture(finalTexture);
     }
 
