@@ -2,7 +2,7 @@ import { BaseImageResource, Sprite, Texture } from 'pixi.js';
 import { Scuti } from "../../Scuti";
 import { RoomMaterial } from "./RoomMaterial";
 
-export class RoomMaterials {
+export class RoomMaterialManager {
 
     private _engine: Scuti;
 
@@ -46,11 +46,11 @@ export class RoomMaterials {
 
     }
 
-    public getFloorMaterial(id: number) {
+    public getFloorMaterial(id: number): RoomMaterial {
         return this._floorMaterials.get(id);
     }
 
-    public getWallMaterial(id: number) {
+    public getWallMaterial(id: number): RoomMaterial {
         return this._wallMaterials.get(id);
     }
 

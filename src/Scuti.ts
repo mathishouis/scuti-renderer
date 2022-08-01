@@ -1,14 +1,18 @@
 import { IEngineConfiguration } from "./interfaces/IEngineConfiguration";
 import { Application, settings, SCALE_MODES } from 'pixi.js';
 import { ResourceManager } from "./resources/ResourceManager";
-import {RoomMaterials} from "./objects/room/RoomMaterials";
+import { RoomMaterialManager } from "./objects/room/RoomMaterialManager";
+import {EventManager} from "./objects/events/EventManager";
 
 export class Scuti {
 
     private _canvas: HTMLElement;
     private _application: Application;
+
     private _resourceManager: ResourceManager;
-    private _roomMaterials: RoomMaterials;
+    private _roomMaterialManager: RoomMaterialManager;
+    private _eventManager: EventManager;
+
     private _configuration: IEngineConfiguration;
 
     constructor(private configuration: IEngineConfiguration) {
@@ -25,8 +29,12 @@ export class Scuti {
         return this._resourceManager;
     }
 
-    public get materials(): RoomMaterials {
-        return this._roomMaterials;
+    public get materials(): RoomMaterialManager {
+        return this._roomMaterialManager;
+    }
+
+    public get events(): EventManager {
+        return this._eventManager;
     }
 
     public async initialise(): Promise<void> {
@@ -43,10 +51,11 @@ export class Scuti {
             this._canvas.appendChild(this._application.view);
 
             this._resourceManager = new ResourceManager(this._configuration.resources);
-            this._roomMaterials = new RoomMaterials(this);
+            this._roomMaterialManager = new RoomMaterialManager(this);
+            this._eventManager = new EventManager();
             await this._resourceManager.initialise();
-            console.log("Resources Manager initialised");
-            await this._roomMaterials.initialise();
+            await this._roomMaterialManager.initialise();
+            await this._eventManager.initialise();
             resolve();
         });
     }

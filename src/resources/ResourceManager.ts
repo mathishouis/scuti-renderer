@@ -14,8 +14,10 @@ export class ResourceManager {
         return new Promise(async (resolve, reject) => {
             this.add('room', 'generic/room/room.json');
             this.add('room_data', 'generic/room/room_data.json');
+            this.add('tile_cursor', 'generic/tile_cursor/tile_cursor.json');
             await this.load('room');
             await this.load('room_data');
+            await this.load('tile_cursor');
             resolve();
         });
     }

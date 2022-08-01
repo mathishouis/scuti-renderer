@@ -199,9 +199,18 @@ async function load() {
         "xxxxxxxxxxxxxxxxxxx\n";
 
     let room = new Room(scuti, {
-        tilemap: tilemap4
+        tilemap: tilemap5
 
         , floorMaterial: 102, wallMaterial: 1901
     });
+    room.tileClick = (x, y, z) => {
+        console.log("click", x, y, z);
+    }
+    room.tileOver = (x, y, z) => {
+        console.log("over", x, y, z);
+    }
+    room.tileOut = (x, y, z) => {
+        console.log("out", x, y, z);
+    }
 }
 load();

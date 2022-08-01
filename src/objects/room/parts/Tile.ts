@@ -1,5 +1,6 @@
 import {ITileProps} from "../../../interfaces/ITileProps";
 import { Texture, Container, Graphics, Matrix, utils } from 'pixi.js';
+import {ITileCursorProps} from "../../../interfaces/ITileCursorProps";
 
 export class Tile extends Container {
 
@@ -8,7 +9,10 @@ export class Tile extends Container {
     private _texture?: Texture;
     private _container?: Container;
 
-    constructor(props: ITileProps) {
+    constructor(props: ITileProps,
+                private onClick: (x: number, y: number, z: number) => void,
+                private onOver: (x: number, y: number, z: number) => void,
+                private onOut: (x: number, y: number, z: number) => void) {
         super();
 
         this._thickness = props.thickness;
@@ -65,8 +69,22 @@ export class Tile extends Container {
         this._container.addChild(tileLeft);
         this._container.addChild(tileRight);
 
+        this.interactive = true;
+
         this.addChild(this._container);
 
+    }
+
+    click() {
+        this.onClick(0, 0, 0);
+    }
+
+    mouseover() {
+        this.onOver(0, 0, 0);
+    }
+
+    mouseout() {
+        this.onOut(0, 0, 0);
     }
 
 }

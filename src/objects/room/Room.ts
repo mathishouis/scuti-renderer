@@ -9,20 +9,17 @@ import { StairType } from "../../types/StairType";
 import { WallType } from "../../types/WallType";
 import { Wall } from "./parts/Wall";
 import { RoomMaterial } from "./RoomMaterial";
+import { TileCursor } from "./parts/TileCursor";
 
 export class Room {
 
     private _modelContainer?: Container;
     private _engine: Scuti;
 
-    /*private _tileColor: number;
-    private _wallColor: number;
-
-    private _wallTexture: Texture | undefined;
-    private _floorTexture: Texture | undefined;*/
-
     private _floorMaterial: RoomMaterial;
     private _wallMaterial: RoomMaterial;
+
+    private _tileCursor: TileCursor;
 
     private _parsedTileMap: { type: string, z: number, direction?: number, shape?: StairType, wall: WallType }[][];
 
@@ -31,11 +28,13 @@ export class Room {
 
     private _maxZ: number = 0;
 
-    constructor(engine: Scuti, configuration: IRoomConfiguration) {
-        this._engine = engine;
+    private _tileClick: (x: number, y: number, z: number) => void;
+    private _tileOver: (x: number, y: number, z: number) => void;
+    private _tileOut: (x: number, y: number, z: number) => void;
 
-        /*this._tileColor = configuration.tileColor;
-        this._wallColor = configuration.wallColor;*/
+    constructor(engine: Scuti, configuration: IRoomConfiguration) {
+
+        this._engine = engine;
 
         this._parsedTileMap = parse(configuration.tilemap);
 
@@ -44,31 +43,8 @@ export class Room {
         this._floorMaterial = this._engine.materials.getFloorMaterial(configuration.floorMaterial);
         this._wallMaterial = this._engine.materials.getWallMaterial(configuration.wallMaterial);
 
-        console.log(this._floorMaterial.texture)
-
         this._updateHeightmap();
 
-        /*this._engine.resources.get('room2', 'generic/room/room_data.json').then((value) => {
-            this._engine.resources.get('room', 'generic/room/room.json').then((value2) => {
-                let texture = value2.textures['room_wall_texture_64_3_wall_color_brick2.png'];
-                let sprite = new Sprite(texture);
-                let texture2 = this._engine.application.renderer.generateTexture(sprite);
-                let image = this._engine.application.renderer.plugins.extract.image(texture2)
-                texture2.baseTexture.resource = new BaseImageResource(image);
-                this.floorTexture = new Texture(texture2);
-                console.log(value2);
-            });
-        });
-        this._engine.resources.get('room', 'generic/room/room.json').then((value) => {
-            this.wallTexture = value.textures['room_floor_texture_64_0_floor_basic.png'];
-        });*/
-        /*console.log(this._engine.resources.get('room_data'));
-        let texture = this._engine.resources.get('room').textures['room_wall_texture_64_3_wall_color_brick2.png'];
-        let sprite = new Sprite(texture);
-        let texture2 = this._engine.application.renderer.generateTexture(sprite);
-        let image = this._engine.application.renderer.plugins.extract.image(texture2)
-        texture2.baseTexture.resource = new BaseImageResource(image);
-        this.floorTexture = new Texture(texture2);*/
     }
 
     public set floorMaterial(material: RoomMaterial) {
@@ -93,9 +69,12 @@ export class Room {
 
         this._modelContainer?.destroy();
         this._modelContainer = new Container();
+        this._modelContainer.sortableChildren = true;
 
         this._modelContainer.x = window.innerWidth / 2;
         this._modelContainer.y = window.innerHeight / 6;
+
+        this._createTileCursor(2, 2, 2);
 
         for (let y = 0; y < this._parsedTileMap.length; y++) {
             for (let x = 0; x < this._parsedTileMap[y].length; x++) {
@@ -133,6 +112,27 @@ export class Room {
 
     }
 
+    private _createTileCursor(x: number, y: number, z: number): void {
+
+        const tilecursor = new TileCursor({ x: x, y: y, z: z, texture: this._engine.resources.get('tile_cursor').textures['tile_cursor_64_a_0_0.png'] });
+
+        const position = Room._getPosition(x, y, z);
+
+        tilecursor.x = position.x;
+        tilecursor.y = position.y;
+
+        this._modelContainer.removeChild(this._tileCursor);
+        this._tileCursor?.destroy();
+        this._tileCursor = tilecursor;
+        this._modelContainer.addChild(tilecursor);
+
+    }
+
+    private _hideTileCursor() {
+        this._modelContainer.removeChild(this._tileCursor);
+        this._tileCursor?.destroy();
+    }
+
     private _createWall(x: number, y: number, z: number, type: WallType, door?: boolean): void {
 
         const wall = new Wall({ color: this.wallMaterial.color, thickness: 8, door: door, tileThickness: 8, type: type, maxZ: this._maxZ, roomZ: z, texture: this.wallMaterial.texture });
@@ -147,7 +147,10 @@ export class Room {
 
     private _createDoor(x: number, y: number, z: number): void {
 
-        const tile = new Tile({ color: this.floorMaterial.color, thickness: 0, texture: this.floorMaterial.texture });
+        const tile = new Tile({ color: this.floorMaterial.color, thickness: 0, texture: this.floorMaterial.texture },
+            () => { this._tileClick(x, y, z); },
+            () => { this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
+            () => { this._tileOut(x, y, z); this._hideTileCursor(); });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;
@@ -159,7 +162,10 @@ export class Room {
 
     private _createTile(x: number, y: number, z: number): void {
 
-        const tile = new Tile({ color: this.floorMaterial.color, thickness: 8, texture: this.floorMaterial.texture });
+        const tile = new Tile({ color: this.floorMaterial.color, thickness: 8, texture: this.floorMaterial.texture },
+            () => { this._tileClick(x, y, z); },
+            () => { this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
+            () => { this._tileOut(x, y, z); this._hideTileCursor(); });
 
         const position = Room._getPosition(x, y, z);
 
@@ -196,6 +202,30 @@ export class Room {
 
     private static _getPosition(x: number, y: number, z: number): { x: number, y: number } {
         return { x: 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z };
+    }
+
+    public get tileClick() {
+        return this._tileClick;
+    }
+
+    public set tileClick(value) {
+        this._tileClick = value;
+    }
+
+    public get tileOver() {
+        return this._tileOver;
+    }
+
+    public set tileOver(value) {
+        this._tileOver = value;
+    }
+
+    public get tileOut() {
+        return this._tileOut;
+    }
+
+    public set tileOut(value) {
+        this._tileOut = value;
     }
 
 }
