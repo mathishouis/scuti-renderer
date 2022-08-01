@@ -2,12 +2,22 @@ import { Assets } from '@pixi/assets';
 
 export class ResourceManager {
 
-    private _resourceUrl: string;
+    private readonly _resourceUrl: string;
 
     constructor(resourcesUrl: string) {
 
         this._resourceUrl = resourcesUrl;
 
+    }
+
+    public async initialise(): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            this.add('room', 'generic/room/room.json');
+            this.add('room_data', 'generic/room/room_data.json');
+            await this.load('room');
+            await this.load('room_data');
+            resolve();
+        });
     }
 
     public add(name: string, url: string): void {
@@ -29,7 +39,7 @@ export class ResourceManager {
         return false;
     }
 
-    public async get(name: string, url: string): Promise<any> {
+    /*public async get(name: string, url: string): Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.has(name)) {
                 resolve(Assets.get(name));
@@ -40,6 +50,9 @@ export class ResourceManager {
                 });
             }
         });
+    }*/
+    public get(name: string) {
+        return Assets.get(name);
     }
 
 

@@ -2,25 +2,27 @@ import { Scuti } from "../../Scuti";
 import { IRoomConfiguration } from "../../interfaces/IRoomConfiguration";
 import { Container } from 'pixi.js';
 import { Tile } from "./parts/Tile";
-import {getMaxZ, parse} from "../../utils/TileMap";
+import { getMaxZ, parse } from "../../utils/TileMap";
 import { Stair } from "./parts/Stair";
 import { StairCorner } from "./parts/StairCorner";
 import { StairType } from "../../types/StairType";
 import { WallType } from "../../types/WallType";
 import { Wall } from "./parts/Wall";
-import { Assets } from '@pixi/assets';
-import { Texture } from 'pixi.js';
+import { RoomMaterial } from "./RoomMaterial";
 
 export class Room {
 
     private _modelContainer?: Container;
     private _engine: Scuti;
 
-    private _tileColor: number;
+    /*private _tileColor: number;
     private _wallColor: number;
 
     private _wallTexture: Texture | undefined;
-    private _floorTexture: Texture | undefined;
+    private _floorTexture: Texture | undefined;*/
+
+    private _floorMaterial: RoomMaterial;
+    private _wallMaterial: RoomMaterial;
 
     private _parsedTileMap: { type: string, z: number, direction?: number, shape?: StairType, wall: WallType }[][];
 
@@ -32,38 +34,59 @@ export class Room {
     constructor(engine: Scuti, configuration: IRoomConfiguration) {
         this._engine = engine;
 
-        this._tileColor = configuration.tileColor;
-        this._wallColor = configuration.wallColor;
+        /*this._tileColor = configuration.tileColor;
+        this._wallColor = configuration.wallColor;*/
 
         this._parsedTileMap = parse(configuration.tilemap);
 
         this._maxZ = getMaxZ(this._parsedTileMap);
 
-        this._engine.resources.get('room', 'generic/room/room.json').then((value) => {
-            this.floorTexture = value.textures['room_floor_texture_64_0_floor_basic.png'];
-            console.log(value);
+        this._floorMaterial = this._engine.materials.getFloorMaterial(configuration.floorMaterial);
+        this._wallMaterial = this._engine.materials.getWallMaterial(configuration.wallMaterial);
+
+        console.log(this._floorMaterial.texture)
+
+        this._updateHeightmap();
+
+        /*this._engine.resources.get('room2', 'generic/room/room_data.json').then((value) => {
+            this._engine.resources.get('room', 'generic/room/room.json').then((value2) => {
+                let texture = value2.textures['room_wall_texture_64_3_wall_color_brick2.png'];
+                let sprite = new Sprite(texture);
+                let texture2 = this._engine.application.renderer.generateTexture(sprite);
+                let image = this._engine.application.renderer.plugins.extract.image(texture2)
+                texture2.baseTexture.resource = new BaseImageResource(image);
+                this.floorTexture = new Texture(texture2);
+                console.log(value2);
+            });
         });
         this._engine.resources.get('room', 'generic/room/room.json').then((value) => {
-            this.wallTexture = value.textures['room_wall_texture_64_3_wall_color_brick2.png'];
-        });
+            this.wallTexture = value.textures['room_floor_texture_64_0_floor_basic.png'];
+        });*/
+        /*console.log(this._engine.resources.get('room_data'));
+        let texture = this._engine.resources.get('room').textures['room_wall_texture_64_3_wall_color_brick2.png'];
+        let sprite = new Sprite(texture);
+        let texture2 = this._engine.application.renderer.generateTexture(sprite);
+        let image = this._engine.application.renderer.plugins.extract.image(texture2)
+        texture2.baseTexture.resource = new BaseImageResource(image);
+        this.floorTexture = new Texture(texture2);*/
     }
 
-    public set wallTexture(texture: Texture) {
-        this._wallTexture = texture;
+    public set floorMaterial(material: RoomMaterial) {
+        this._floorMaterial = material;
         this._updateHeightmap();
     }
 
-    public get wallTexture(): Texture {
-        return this._wallTexture;
+    public get floorMaterial(): RoomMaterial {
+        return this._floorMaterial;
     }
 
-    public set floorTexture(texture: Texture) {
-        this._floorTexture = texture;
+    public set wallMaterial(material: RoomMaterial) {
+        this._wallMaterial = material;
         this._updateHeightmap();
     }
 
-    public get floorTexture(): Texture {
-        return this._floorTexture;
+    public get wallMaterial(): RoomMaterial {
+        return this._wallMaterial;
     }
 
     private _updateHeightmap(): void {
@@ -112,7 +135,7 @@ export class Room {
 
     private _createWall(x: number, y: number, z: number, type: WallType, door?: boolean): void {
 
-        const wall = new Wall({ color: this._wallColor, thickness: 8, door: door, tileThickness: 8, type: type, maxZ: this._maxZ, roomZ: z, texture: this.wallTexture });
+        const wall = new Wall({ color: this.wallMaterial.color, thickness: 8, door: door, tileThickness: 8, type: type, maxZ: this._maxZ, roomZ: z, texture: this.wallMaterial.texture });
         const position = Room._getPosition(x, y, z);
 
         wall.x = position.x;
@@ -124,7 +147,7 @@ export class Room {
 
     private _createDoor(x: number, y: number, z: number): void {
 
-        const tile = new Tile({ color: this._tileColor, thickness: 0, texture: this.floorTexture });
+        const tile = new Tile({ color: this.floorMaterial.color, thickness: 0, texture: this.floorMaterial.texture });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;
@@ -136,7 +159,7 @@ export class Room {
 
     private _createTile(x: number, y: number, z: number): void {
 
-        const tile = new Tile({ color: this._tileColor, thickness: 8, texture: this.floorTexture });
+        const tile = new Tile({ color: this.floorMaterial.color, thickness: 8, texture: this.floorMaterial.texture });
 
         const position = Room._getPosition(x, y, z);
 
@@ -149,7 +172,7 @@ export class Room {
 
     private _createStair(x: number, y: number, z: number, direction: number): void {
 
-        const tile = new Stair({ color: this._tileColor, tileThickness: 8, direction: direction, texture: this.floorTexture });
+        const tile = new Stair({ color: this.floorMaterial.color, tileThickness: 8, direction: direction, texture: this.floorMaterial.texture });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;
@@ -161,7 +184,7 @@ export class Room {
 
     private _createStairCorner(x: number, y: number, z: number, direction: number, type: StairType): void {
 
-        const tile = new StairCorner({ color: this._tileColor, tileThickness: 8, direction: direction, type: type, texture: this._floorTexture });
+        const tile = new StairCorner({ color: this.floorMaterial.color, tileThickness: 8, direction: direction, type: type, texture: this.floorMaterial.texture });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;
