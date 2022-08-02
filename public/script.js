@@ -209,7 +209,10 @@ async function load() {
         , floorMaterial: 110, wallMaterial: 1901
     });
 
-    let furniId = [1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1619];
+    //let furniId = [1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1619, 3901, 13];
+    //let furniId = [3886];
+    let furniId = [3901, 3902, 3903, 3904, 3898, 3899, 3900, 3896, 3895, 3892, 3891, 3890, 3889, 3888, 3887, 3886, 3893, 3894]
+    //let furniId = [3890];
 
     room.tileClick = (x, y, z) => {
         console.log("click", x, y, z);
@@ -219,7 +222,7 @@ async function load() {
             z: z,
             direction: 2,
             id: furniId[Math.floor(Math.random() * furniId.length)],
-            state: 1,
+            state: 0,
         });
         room.addRoomObject(furni);
     }

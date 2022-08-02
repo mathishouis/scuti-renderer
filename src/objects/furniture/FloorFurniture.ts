@@ -1,8 +1,8 @@
-import {RoomObject} from "../room/RoomObject";
-import {IFloorFurnitureProps} from "../../interfaces/IFloorFurnitureProps";
-import {BLEND_MODES, Container, Sprite, utils, Ticker} from "pixi.js";
-import {FurnitureLayer} from "./FurnitureLayer";
-import {Scuti} from "../../Scuti";
+import { RoomObject } from "../room/RoomObject";
+import { IFloorFurnitureProps } from "../../interfaces/IFloorFurnitureProps";
+import { BLEND_MODES, Container, Sprite, utils, Ticker } from "pixi.js";
+import { FurnitureLayer } from "./FurnitureLayer";
+import { Scuti } from "../../Scuti";
 
 export class FloorFurniture extends RoomObject {
 
@@ -41,7 +41,7 @@ export class FloorFurniture extends RoomObject {
 
     private async _draw(): Promise<void> {
 
-        if(!this._loaded) {
+        if (!this._loaded) {
             this._createPlaceholder();
             await this._engine.furnitures.loadFurni(this._id).then((name: string) => {
                 this._name = name;
@@ -57,21 +57,23 @@ export class FloorFurniture extends RoomObject {
         let furnitureData = this._engine.resources.get('furni/' + this._id);
         let visualization = furnitureData.data.furniProperty.visualization;
 
-        for(let layerCount = 0; layerCount < visualization.layerCount; layerCount++) {
-            let currentFrame = 0;
-            if(visualization.animation[this._state][layerCount] !== undefined && visualization.animation[this._state][layerCount].frameSequence.length > 1) {
-                if (this._layersFrame.has(layerCount)) {
-                    currentFrame = visualization.animation[this._state][layerCount] !== undefined ? visualization.animation[this._state][layerCount].frameSequence[this._layersFrame.get(layerCount)] : 0;
-                    this._layersFrame.set(layerCount, currentFrame);
-                } else {
-                    currentFrame = visualization.animation[this._state][layerCount].frameSequence[0];
-                    this._layersFrame.set(layerCount, currentFrame);
-                }
-            } else if(visualization.animation[this._state][layerCount] !== undefined) {
-                currentFrame = visualization.animation[this._state][layerCount].frameSequence[0];
+
+        for (let layerCount = 0; layerCount < visualization.layerCount; layerCount++) {
+            if (visualization.directions.indexOf(this._direction) === -1) {
+                this._direction = visualization.directions[0];
             }
 
-            let layerName = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_' + String.fromCharCode(97 + Number(layerCount)) + '_' + this._direction + '_' + (visualization.animation[this._state][layerCount] !== undefined ? currentFrame : 0);
+            let currentFrame = 0;
+            if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layerCount] !== undefined && visualization.animation[this._state][layerCount].frameSequence.length > 1) {
+                if (this._layersFrame.has(layerCount)) {
+                    currentFrame = this._layersFrame.get(layerCount);
+                } else {
+                    this._layersFrame.set(layerCount, 0);
+                }
+            }
+
+            let layerName = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_' + String.fromCharCode(97 + Number(layerCount)) + '_' + this._direction + '_' + (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layerCount] !== undefined ? visualization.animation[this._state][layerCount].frameSequence[currentFrame] ?? 0 : 0);
+
 
             let layer = new FurnitureLayer({
                 frame: currentFrame,
@@ -85,23 +87,26 @@ export class FloorFurniture extends RoomObject {
             });
             this._layers.set(layerName, layer);
             this._container.addChild(layer);
+
         }
 
+
         let shadowName = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_sd_' + this._direction + '_' + 0;
-        let shadow = new FurnitureLayer({
-            frame: 0,
-            texture: furnitureData.textures[shadowName],
-            name: shadowName,
-            alpha: 0.19,
-            tint: undefined,
-            z: -1,
-            blendMode: BLEND_MODES.ADD
+        if (furnitureData.textures[shadowName] !== undefined) {
+            let shadow = new FurnitureLayer({
+                frame: 0,
+                texture: furnitureData.textures[shadowName],
+                name: shadowName,
+                alpha: 0.19,
+                tint: undefined,
+                z: -1,
+                blendMode: BLEND_MODES.NORMAL
 
-        });
+            });
 
-        this._layers.set(shadowName, shadow);
-        this._container.addChild(shadow);
-
+            this._layers.set(shadowName, shadow);
+            this._container.addChild(shadow);
+        }
         this.addChild(this._container);
         this.x = 32 + 32 * this._x - 32 * this._y;
         this.y = 16 * this._x + 16 * this._y - 32 * this._z;
@@ -129,10 +134,12 @@ export class FloorFurniture extends RoomObject {
         this._layersFrame.forEach((frame: number, layer: number) => {
             let furnitureData = this._engine.resources.get('furni/' + this._id);
             let visualization = furnitureData.data.furniProperty.visualization;
-            if(visualization.animation[this._state][layer] !== undefined) {
+            if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layer] !== undefined) {
                 let frameSequence = visualization.animation[this._state][layer].frameSequence;
                 let currentFrame = frame;
-                if ((frameSequence.length - 1) < currentFrame)  {
+                if ((frameSequence.length - 1) > currentFrame) {
+                    this._layersFrame.set(layer, currentFrame + 1);
+                } else {
                     this._layersFrame.set(layer, 0);
                 }
                 this._draw();
