@@ -27,9 +27,9 @@ export class FurnitureLayer extends Sprite {
     private _draw(): void {
 
         this._tint ? this.tint = utils.premultiplyTint(this._tint, 0.999) : null;
-        this.blendMode = this._blendMode;
         this._z ? this.zIndex = this._z : null;
-        this.filters = [new filters.AlphaFilter(this._alpha)];
+        this._alpha ? this.filters = [new filters.AlphaFilter(this._alpha)] : null;
+        this.blendMode = this._blendMode;
 
     }
 

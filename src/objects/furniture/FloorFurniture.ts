@@ -17,6 +17,7 @@ export class FloorFurniture extends RoomObject {
     private _name: string;
     private _layers: Map<string, FurnitureLayer> = new Map();
     private _container?: Container;
+    private _state: number = 1;
 
     constructor(engine: Scuti, props: IFloorFurnitureProps) {
         super();
@@ -50,11 +51,12 @@ export class FloorFurniture extends RoomObject {
         let visualization = furnitureData.data.furniProperty.visualization;
 
         for(let layerCount = 0; layerCount < visualization.layerCount; layerCount++) {
-            let layerName = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_' + String.fromCharCode(97 + layerCount) + '_' + this._direction + '_' + 0;
+        //Object.keys(visualization.animation[this._state]).forEach((layerCount) => {
+            let layerName = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_' + String.fromCharCode(97 + Number(layerCount)) + '_' + this._direction + '_' + (visualization.animation[this._state][layerCount] !== undefined ? visualization.animation[this._state][layerCount].frameSequence[0] : 0);
             let layer = new FurnitureLayer({
                 texture: furnitureData.textures[layerName],
                 name: layerName,
-                alpha: 1,
+                alpha: visualization.layers[layerCount] ? visualization.layers[layerCount].alpha ? (visualization.layers[layerCount].alpha / 255) : undefined : undefined,
                 tint: this._engine.furnitures.splitColorName(this._name).colorId ? visualization.colors[this._engine.furnitures.splitColorName(this._name).colorId][layerCount] !== undefined ? (('0x' + visualization.colors[this._engine.furnitures.splitColorName(this._name).colorId][layerCount])) : undefined : undefined,
                 z: visualization.layers[layerCount] ? visualization.layers[layerCount].z ?? 0 : 0,
                 blendMode: visualization.layers[layerCount] ? BLEND_MODES[visualization.layers[layerCount].ink] ?? BLEND_MODES.NORMAL : BLEND_MODES.NORMAL
