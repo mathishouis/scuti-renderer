@@ -1,8 +1,9 @@
-import { RoomObject } from "../room/RoomObject";
-import { IFloorFurnitureProps } from "../../interfaces/IFloorFurnitureProps";
-import { BLEND_MODES, Container, Sprite, utils, Ticker } from "pixi.js";
-import { FurnitureLayer } from "./FurnitureLayer";
-import { Scuti } from "../../Scuti";
+import {RoomObject} from "../room/RoomObject";
+import {IFloorFurnitureProps} from "../../interfaces/IFloorFurnitureProps";
+import {BLEND_MODES, Container, Sprite} from "pixi.js";
+import {FurnitureLayer} from "./FurnitureLayer";
+import {Scuti} from "../../Scuti";
+import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
 
 export class FloorFurniture extends RoomObject {
 
@@ -34,9 +35,6 @@ export class FloorFurniture extends RoomObject {
 
         this._draw();
 
-        /*setInterval(() => {
-            this._nextFrame();
-        }, 76.66);*/
     }
 
     private async _draw(): Promise<void> {
@@ -51,62 +49,14 @@ export class FloorFurniture extends RoomObject {
 
         this._container?.destroy();
         this._container = new Container();
-
         this._container.sortableChildren = true;
 
-        let furnitureData = this._engine.resources.get('furni/' + this._id);
-        let visualization = furnitureData.data.furniProperty.visualization;
+        this._getLayers().forEach((layer: IFurnitureLayerProps) => {
+            let furnitureLayer = new FurnitureLayer(layer);
+            this._layers.set(layer.name, furnitureLayer);
+            this._container.addChild(furnitureLayer);
+        })
 
-
-        for (let layerCount = 0; layerCount < visualization.layerCount; layerCount++) {
-            if (visualization.directions.indexOf(this._direction) === -1) {
-                this._direction = visualization.directions[0];
-            }
-
-            let currentFrame = 0;
-            if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layerCount] !== undefined && visualization.animation[this._state][layerCount].frameSequence.length > 1) {
-                if (this._layersFrame.has(layerCount)) {
-                    currentFrame = this._layersFrame.get(layerCount);
-                } else {
-                    this._layersFrame.set(layerCount, 0);
-                }
-            }
-
-            let layerName = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_' + String.fromCharCode(97 + Number(layerCount)) + '_' + this._direction + '_' + (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layerCount] !== undefined ? visualization.animation[this._state][layerCount].frameSequence[currentFrame] ?? 0 : 0);
-
-
-            let layer = new FurnitureLayer({
-                frame: currentFrame,
-                texture: furnitureData.textures[layerName],
-                name: layerName,
-                alpha: visualization.layers[layerCount] ? visualization.layers[layerCount].alpha ? (visualization.layers[layerCount].alpha / 255) : undefined : undefined,
-                tint: this._engine.furnitures.splitColorName(this._name).colorId ? visualization.colors[this._engine.furnitures.splitColorName(this._name).colorId][layerCount] !== undefined ? (('0x' + visualization.colors[this._engine.furnitures.splitColorName(this._name).colorId][layerCount])) : undefined : undefined,
-                z: visualization.layers[layerCount] ? visualization.layers[layerCount].z ?? 0 : 0,
-                blendMode: visualization.layers[layerCount] ? BLEND_MODES[visualization.layers[layerCount].ink] ?? BLEND_MODES.NORMAL : BLEND_MODES.NORMAL
-
-            });
-            this._layers.set(layerName, layer);
-            this._container.addChild(layer);
-
-        }
-
-
-        let shadowName = this._engine.furnitures.splitColorName(this._name).name + '_' + this._engine.furnitures.splitColorName(this._name).name + '_64_sd_' + this._direction + '_' + 0;
-        if (furnitureData.textures[shadowName] !== undefined) {
-            let shadow = new FurnitureLayer({
-                frame: 0,
-                texture: furnitureData.textures[shadowName],
-                name: shadowName,
-                alpha: 0.19,
-                tint: undefined,
-                z: -1,
-                blendMode: BLEND_MODES.NORMAL
-
-            });
-
-            this._layers.set(shadowName, shadow);
-            this._container.addChild(shadow);
-        }
         this.addChild(this._container);
         this.x = 32 + 32 * this._x - 32 * this._y;
         this.y = 16 * this._x + 16 * this._y - 32 * this._z;
@@ -132,8 +82,9 @@ export class FloorFurniture extends RoomObject {
 
     private _nextFrame(): void {
         this._layersFrame.forEach((frame: number, layer: number) => {
-            let furnitureData = this._engine.resources.get('furni/' + this._id);
-            let visualization = furnitureData.data.furniProperty.visualization;
+            let data = this._engine.resources.get('furni/' + this._id);
+            let visualization = data.data.furniProperty.visualization;
+
             if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layer] !== undefined) {
                 let frameSequence = visualization.animation[this._state][layer].frameSequence;
                 let currentFrame = frame;
@@ -149,14 +100,103 @@ export class FloorFurniture extends RoomObject {
         });
     }
 
+    private _getLayers(): IFurnitureLayerProps[] {
+        const layers: IFurnitureLayerProps[] = [];
+        const { name, colorId } = this._engine.furnitures.splitColorName(this._name);
+
+        let data = this._engine.resources.get('furni/' + this._id);
+        let visualization = data.data.furniProperty.visualization;
+
+
+        for (let i = 0; i < visualization.layerCount; i++) {
+
+            let layer: IFurnitureLayerProps = {
+                frame: 0,
+                texture: undefined,
+                name: undefined,
+                alpha: undefined,
+                tint: undefined,
+                z: 0,
+                blendMode: BLEND_MODES.NORMAL
+            }
+
+            if (visualization.directions.indexOf(this._direction) === -1) {
+                this._direction = visualization.directions[0];
+            }
+
+            if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][i] !== undefined && visualization.animation[this._state][i].frameSequence.length > 1) {
+                if (this._layersFrame.has(i)) {
+                    layer.frame = this._layersFrame.get(i);
+                } else {
+                    this._layersFrame.set(i, 0);
+                }
+            }
+
+            let frame = 0;
+            if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][i] !== undefined) {
+                frame = visualization.animation[this._state][i].frameSequence[layer.frame] ?? 0;
+            }
+
+            layer.name = name + '_' + name + '_64_' + String.fromCharCode(97 + Number(i)) + '_' + this._direction + '_' + frame;
+
+            if(data.textures[layer.name] !== undefined) {
+                layer.texture = data.textures[layer.name];
+            }
+
+            if(colorId !== undefined && visualization.colors[colorId] !== undefined && visualization.colors[colorId][i] !== undefined) {
+                layer.tint = '0x' + visualization.colors[colorId][i]
+            }
+
+            if(visualization.layers[i] !== undefined) {
+                if(visualization.layers[i].z !== undefined) {
+                    layer.z = visualization.layers[i].z;
+                }
+
+                if(visualization.layers[i].alpha !== undefined) {
+                    layer.alpha = visualization.layers[i].alpha / 255;
+                }
+
+                if(visualization.layers[i].ink !== undefined) {
+                    layer.blendMode = BLEND_MODES[visualization.layers[i].ink];
+                }
+            }
+
+            layers.push(layer);
+
+        }
+
+        let layer: IFurnitureLayerProps = {
+            frame: 0,
+            texture: undefined,
+            name: undefined,
+            alpha: 0.19,
+            tint: undefined,
+            z: -1,
+            blendMode: BLEND_MODES.NORMAL
+        }
+
+        layer.name = name + '_' + name + '_64_sd_' + this._direction + '_0';
+
+        if(data.textures[layer.name] !== undefined) {
+            layer.texture = data.textures[layer.name];
+            layers.push(layer);
+        }
+
+        return layers;
+    }
+
     private _onTick(): void {
         this._nextFrame();
     }
 
-    public animate() {
-        this.animationTicker.maxFPS = 15.666;
-        this.animationTicker.start();
+    public startAnimation(): void {
         this.animationTicker.add(() => {
+            this._onTick();
+        });
+    }
+
+    public stopAnimation(): void {
+        this.animationTicker.remove(() => {
             this._onTick();
         });
     }

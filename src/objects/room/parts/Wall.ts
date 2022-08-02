@@ -148,7 +148,7 @@ export class Wall extends Container {
             .beginTextureFill({
                 texture: this._type === "left" ? (this._texture ?? Texture.WHITE) : Texture.WHITE,
                 color: utils.premultiplyTint(this._color, 0.8),
-                matrix: new Matrix(1, -0.5, 0, 1, DRAW_POINTS[0].x + this._thickness, DRAW_POINTS[0].y + 2)
+                matrix: new Matrix(1, -0.5, 0, 1, DRAW_POINTS[0].x + this._thickness, DRAW_POINTS[0].y + 4)
             })
             .moveTo(DRAW_POINTS[3].x, DRAW_POINTS[3].y);
 

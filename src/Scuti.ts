@@ -51,7 +51,7 @@ export class Scuti {
             this._application = new Application({
                 width: this._configuration.width,
                 height: this._configuration.height,
-                backgroundColor: 0x000000,
+                backgroundColor: 0x24262A,
                 antialias: false,
             });
             this._canvas.appendChild(this._application.view);
@@ -66,6 +66,8 @@ export class Scuti {
             await this._furnitureManager.initialise();
             resolve();
         });
+
     }
+
 
 }

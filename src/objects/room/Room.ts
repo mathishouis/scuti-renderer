@@ -51,6 +51,9 @@ export class Room {
 
         this._engine.application.stage.addChild(this._roomObjectContainer);
 
+        this.animationTicker.maxFPS = 15.666;
+        this.animationTicker.start();
+
         this._updateHeightmap();
 
     }
@@ -78,6 +81,7 @@ export class Room {
         this._modelContainer?.destroy();
         this._modelContainer = new Container();
         this._modelContainer.sortableChildren = true;
+        this._modelContainer.interactive = true;
 
         this._modelContainer.x = window.innerWidth / 2;
         this._modelContainer.y = window.innerHeight / 6;
@@ -147,9 +151,9 @@ export class Room {
         this._tileCursor?.destroy();
     }
 
-    public addRoomObject(object: RoomObject): void {
+    public addRoomObject(object: FloorFurniture): void {
         object.room = this;
-        object.animate();
+        object.startAnimation();
         this._roomObjects.add(object);
         this._roomObjectContainer.addChild(object);
     }

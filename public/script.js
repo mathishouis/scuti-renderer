@@ -204,15 +204,17 @@ async function load() {
         "0000";
 
     let room = new Room(scuti, {
-        tilemap: tilemap2
+        tilemap: tilemap5
 
-        , floorMaterial: 110, wallMaterial: 1901
+        , floorMaterial: 110, wallMaterial: 1501 // 1901
     });
 
     //let furniId = [1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1619, 3901, 13];
-    //let furniId = [3886];
-    let furniId = [3901, 3902, 3903, 3904, 3898, 3899, 3900, 3896, 3895, 3892, 3891, 3890, 3889, 3888, 3887, 3886, 3893, 3894]
+    let furniId = [3886];
+    //let furniId = [3901, 3902, 3903, 3904, 3898, 3899, 3900, 3896, 3895, 3892, 3891, 3890, 3889, 3888, 3887, 3886, 3893, 3894]
+    //let furniId = [3901, 3902, 3903, 3904, 3898, 3899, 3900, 3896, 3895, 3892, 3891, 3890, 3889, 3888, 3887, 3886, 3893, 3894, 1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1619, 13]
     //let furniId = [3890];
+    let randomRotation = [0, 2, 4, 6];
 
     room.tileClick = (x, y, z) => {
         console.log("click", x, y, z);
@@ -220,17 +222,17 @@ async function load() {
             x: x,
             y: y,
             z: z,
-            direction: 2,
+            direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
             id: furniId[Math.floor(Math.random() * furniId.length)],
-            state: 0,
+            state: 1,
         });
         room.addRoomObject(furni);
     }
     room.tileOver = (x, y, z) => {
-        console.log("over", x, y, z);
+        //console.log("over", x, y, z);
     }
     room.tileOut = (x, y, z) => {
-        console.log("out", x, y, z);
+        //console.log("out", x, y, z);
     }
 }
 load();
