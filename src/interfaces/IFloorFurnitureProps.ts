@@ -3,6 +3,6 @@ export interface IFloorFurnitureProps {
     y: number,
     z: number,
     direction: number,
-    animation?: string,
+    state?: number,
     id: number
 }

@@ -209,6 +209,8 @@ async function load() {
         , floorMaterial: 110, wallMaterial: 1901
     });
 
+    let furniId = [1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1619];
+
     room.tileClick = (x, y, z) => {
         console.log("click", x, y, z);
         let furni = new FloorFurniture(scuti, {
@@ -216,7 +218,8 @@ async function load() {
             y: y,
             z: z,
             direction: 2,
-            id: 1622,
+            id: furniId[Math.floor(Math.random() * furniId.length)],
+            state: 1,
         });
         room.addRoomObject(furni);
     }

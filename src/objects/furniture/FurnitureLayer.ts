@@ -9,6 +9,7 @@ export class FurnitureLayer extends Sprite {
     private _tint: string;
     private _z: number;
     private _blendMode: BLEND_MODES;
+    private _frame: number;
 
     constructor(props: IFurnitureLayerProps) {
         super(props.texture);
@@ -19,6 +20,7 @@ export class FurnitureLayer extends Sprite {
         this._z = props.z;
         this._blendMode = props.blendMode;
         this._texture = props.texture;
+        this._frame = props.frame;
 
         this._draw();
 

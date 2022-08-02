@@ -1,6 +1,6 @@
 import { Scuti } from "../../Scuti";
 import { IRoomConfiguration } from "../../interfaces/IRoomConfiguration";
-import { Container } from 'pixi.js';
+import { Container, Ticker } from 'pixi.js';
 import { Tile } from "./parts/Tile";
 import { getMaxZ, parse } from "../../utils/TileMap";
 import { Stair } from "./parts/Stair";
@@ -11,6 +11,7 @@ import { Wall } from "./parts/Wall";
 import { RoomMaterial } from "./RoomMaterial";
 import { TileCursor } from "./parts/TileCursor";
 import {RoomObject} from "./RoomObject";
+import {FloorFurniture} from "../furniture/FloorFurniture";
 
 export class Room {
 
@@ -34,6 +35,8 @@ export class Room {
     private _tileClick: (x: number, y: number, z: number) => void;
     private _tileOver: (x: number, y: number, z: number) => void;
     private _tileOut: (x: number, y: number, z: number) => void;
+
+    private _animationTicker: Ticker = new Ticker();
 
     constructor(engine: Scuti, configuration: IRoomConfiguration) {
 
@@ -145,6 +148,8 @@ export class Room {
     }
 
     public addRoomObject(object: RoomObject): void {
+        object.room = this;
+        object.animate();
         this._roomObjects.add(object);
         this._roomObjectContainer.addChild(object);
     }
@@ -248,6 +253,10 @@ export class Room {
 
     public set tileOut(value) {
         this._tileOut = value;
+    }
+
+    public get animationTicker() {
+        return this._animationTicker;
     }
 
 }
