@@ -12,6 +12,7 @@ import { RoomMaterial } from "./RoomMaterial";
 import { TileCursor } from "./parts/TileCursor";
 import {RoomObject} from "./RoomObject";
 import {FloorFurniture} from "../furniture/FloorFurniture";
+import {Avatar} from "../avatar/Avatar";
 
 export class Room {
 
@@ -151,7 +152,7 @@ export class Room {
         this._tileCursor?.destroy();
     }
 
-    public addRoomObject(object: FloorFurniture): void {
+    public addRoomObject(object: (FloorFurniture | Avatar)): void {
         object.room = this;
         object.startAnimation();
         this._roomObjects.add(object);

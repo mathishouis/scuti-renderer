@@ -1,9 +1,15 @@
 import { IEngineConfiguration } from "./interfaces/IEngineConfiguration";
-import { Application, settings, SCALE_MODES } from 'pixi.js';
+import { Application, settings, SCALE_MODES, Graphics } from 'pixi.js';
 import { ResourceManager } from "./resources/ResourceManager";
 import { RoomMaterialManager } from "./objects/room/RoomMaterialManager";
-import {EventManager} from "./objects/events/EventManager";
-import {FurnitureManager} from "./objects/furniture/FurnitureManager";
+import { EventManager } from "./objects/events/EventManager";
+import { FurnitureManager } from "./objects/furniture/FurnitureManager";
+import { gsap } from "gsap";
+import { PixiPlugin } from "gsap/PixiPlugin";
+import { DisplayObject } from "@pixi/display";
+import { BlurFilter } from "@pixi/filter-blur";
+import { ColorMatrixFilter } from "@pixi/filter-color-matrix";
+import {AvatarManager} from "./objects/avatar/AvatarManager";
 
 export class Scuti {
 
@@ -14,6 +20,7 @@ export class Scuti {
     private _roomMaterialManager: RoomMaterialManager;
     private _eventManager: EventManager;
     private _furnitureManager: FurnitureManager;
+    private _avatarManager: AvatarManager;
 
     private _configuration: IEngineConfiguration;
 
@@ -39,12 +46,26 @@ export class Scuti {
         return this._furnitureManager;
     }
 
+    public get avatars(): AvatarManager {
+        return this._avatarManager;
+    }
+
     public get events(): EventManager {
         return this._eventManager;
     }
 
     public async initialise(): Promise<void> {
         return new Promise(async (resolve, reject) => {
+            gsap.registerPlugin(PixiPlugin);
+
+            PixiPlugin.registerPIXI({
+                DisplayObject: DisplayObject,
+                Graphics: Graphics,
+                filters: {
+                    BlurFilter: BlurFilter,
+                    ColorMatrixFilter: ColorMatrixFilter
+                }
+            });
             this._canvas = this._configuration.canvas;
             settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
@@ -60,10 +81,12 @@ export class Scuti {
             this._roomMaterialManager = new RoomMaterialManager(this);
             this._eventManager = new EventManager();
             this._furnitureManager = new FurnitureManager(this);
+            this._avatarManager = new AvatarManager(this);
             await this._resourceManager.initialise();
             await this._roomMaterialManager.initialise();
             await this._eventManager.initialise();
             await this._furnitureManager.initialise();
+            await this._avatarManager.initialise();
             resolve();
         });
 

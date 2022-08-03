@@ -1,6 +1,7 @@
 import { Scuti } from "../src/Scuti";
 import { Room } from "../src/objects/room/Room";
 import {FloorFurniture} from "../src/objects/furniture/FloorFurniture";
+import {Avatar} from "../src/objects/avatar/Avatar";
 
 async function load() {
     let scuti = new Scuti({
@@ -216,9 +217,18 @@ async function load() {
     //let furniId = [3890];
     let randomRotation = [0, 2, 4, 6];
 
+    let avatar = new Avatar(scuti, {
+        x: 5,
+        y: 5,
+        z: 2,
+        direction: 2,
+        figure: "hd-180-1.hr-100-61.ch-210-66.lg-280-110.sh-305-62"
+    });
+    room.addRoomObject(avatar);
+
     room.tileClick = (x, y, z) => {
         console.log("click", x, y, z);
-        let furni = new FloorFurniture(scuti, {
+        /*let furni = new FloorFurniture(scuti, {
             x: x,
             y: y,
             z: z,
@@ -226,8 +236,19 @@ async function load() {
             id: furniId[Math.floor(Math.random() * furniId.length)],
             state: 1,
         });
-        room.addRoomObject(furni);
+        room.addRoomObject(furni);*/
+        avatar.move(x, y, z);
     }
+
+    /*let furni = new FloorFurniture(scuti, {
+        x: 5,
+        y: 5,
+        z: 2,
+        direction: 2,
+        id: 13,
+        state: 0,
+    });
+    room.addRoomObject(furni);*/
     room.tileOver = (x, y, z) => {
         //console.log("over", x, y, z);
     }

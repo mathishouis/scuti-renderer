@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@pixi/assets": "^6.5.1",
+    "gsap": "^3.10.4",
     "pixi.js": "^6.5.1"
   },
   "bugs": {
