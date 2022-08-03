@@ -1,9 +1,5 @@
-import {BLEND_MODES, Sprite, Texture, utils, Graphics, BaseImageResource, Rectangle, RenderTexture} from "pixi.js";
+import {BLEND_MODES, Sprite, Texture, utils} from "pixi.js";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
-import {Scuti} from "../../Scuti";
-import {HMap} from "./HMap";
-
-const tempPoint = {x : 0, y : 0};
 
 export class FurnitureLayer extends Sprite {
 

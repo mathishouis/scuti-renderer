@@ -1,4 +1,5 @@
 import {Scuti} from "../../Scuti";
+import {Log} from "../../utils/Logger";
 
 export class AvatarManager {
 
@@ -17,9 +18,18 @@ export class AvatarManager {
     public async initialise(): Promise<void> {
 
         return new Promise(async (resolve, reject) => {
+            const startDate: Date = new Date();
+            this._engine.resources.add('figuredata', 'gamedata/figuredata.json');
+            this._engine.resources.add('figuremap', 'gamedata/figuremap.json');
+            this._engine.resources.add('draworder', 'gamedata/draworder.json');
+            await this._engine.resources.load('figuredata');
+            await this._engine.resources.load('figuremap');
+            await this._engine.resources.load('draworder');
             this._figuredata = this._engine.resources.get('figuredata');
             this._figuremap = this._engine.resources.get('figuremap');
             this._drawOrder = this._engine.resources.get('draworder');
+            const endDate: Date = new Date();
+            Log('Avatar Manager', 'Initialised in ' + (endDate.getTime() - startDate.getTime()) + 'ms.', 'info');
             resolve();
         });
 
@@ -37,6 +47,7 @@ export class AvatarManager {
         set.parts.forEach((part) => {
             let libId = this._figuremap.parts[part.type][String(part.id)];
             let lib = this._figuremap.libs[libId];
+            //console.log(part.type, libId);
             part.lib = lib;
             parts.push(part);
         });

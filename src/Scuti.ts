@@ -10,6 +10,7 @@ import { DisplayObject } from "@pixi/display";
 import { BlurFilter } from "@pixi/filter-blur";
 import { ColorMatrixFilter } from "@pixi/filter-color-matrix";
 import {AvatarManager} from "./objects/avatar/AvatarManager";
+import {Log} from "./utils/Logger";
 
 export class Scuti {
 
@@ -56,6 +57,8 @@ export class Scuti {
 
     public async initialise(): Promise<void> {
         return new Promise(async (resolve, reject) => {
+            Log('', '⚡ Scuti Renderer - v1.0.0');
+            const startDate: Date = new Date();
             gsap.registerPlugin(PixiPlugin);
 
             PixiPlugin.registerPIXI({
@@ -88,6 +91,8 @@ export class Scuti {
             await this._furnitureManager.initialise();
             await this._avatarManager.initialise();
             resolve();
+            const endDate: Date = new Date();
+            Log('⚡', 'Scuti Renderer started in ' + (endDate.getTime() - startDate.getTime()) + 'ms.', 'success');
         });
 
     }

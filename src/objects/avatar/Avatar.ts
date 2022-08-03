@@ -57,14 +57,20 @@ export class Avatar extends RoomObject {
             for (const part of parts) {
                 let partType = part.type;
                 let lib = part.lib.id;
-                this._engine.resources.add(lib, "figure/" + lib + "/" + lib + ".json");
-                await this._engine.resources.load(lib);
+                if(!this._engine.resources.hasInQueue(lib)) {
+                    this._engine.resources.add(lib, "figure/" + lib + "/" + lib + ".json");
+                    await this._engine.resources.load(lib);
+                } else {
+                    await this._engine.resources.waitForLoad(lib);
+                }
 
-                Object.keys(this._engine.resources.get(lib).data.partsType).forEach((k) => {
+                let libFile = this._engine.resources.get(lib);
+
+                Object.keys(libFile.data.partsType).forEach((k) => {
                     let gesture = "std";
                     let direction = this._direction;
                     let rotated = false;
-                    if(this._engine.resources.get(lib).data.partsType[k].gestures.includes(this._action)) {
+                    if(libFile.data.partsType[k].gestures.includes(this._action)) {
                         gesture = this._action
                     }
                     if(k === "hd" || k === "hr" || k === "hrb" || k === "ey" || k === "fc") {

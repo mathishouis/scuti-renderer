@@ -1,6 +1,7 @@
 import { BaseImageResource, Sprite, Texture } from 'pixi.js';
 import { Scuti } from "../../Scuti";
 import { RoomMaterial } from "./RoomMaterial";
+import {Log} from "../../utils/Logger";
 
 export class RoomMaterialManager {
 
@@ -20,6 +21,7 @@ export class RoomMaterialManager {
 
     public async initialise(): Promise<void> {
         return new Promise(async (resolve, reject) => {
+            const startDate: Date = new Date();
             const roomData = this._engine.resources.get('room_data');
 
             roomData.floorData.floors.forEach((floor: any) => {
@@ -41,6 +43,8 @@ export class RoomMaterialManager {
                 const name = texture.bitmaps[0].assetName;
                 this._wallMaterials.set(Number(wall.id), new RoomMaterial(color, this.getTexture(name)));
             });
+            const endDate: Date = new Date();
+            Log('Material Manager', 'Initialised in ' + (endDate.getTime() - startDate.getTime()) + 'ms.', 'info');
             resolve();
         });
 

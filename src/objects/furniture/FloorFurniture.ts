@@ -14,12 +14,13 @@ export class FloorFurniture extends RoomObject {
     private _z: number;
     private _direction: number;
     private _id: number;
-    private _name: string;
+    private _className: string;
     private _layers: Map<string, FurnitureLayer> = new Map();
     private _layersFrame: Map<number, number> = new Map();
     private _container?: Container;
     private _state: number;
     private _loaded: boolean = false;
+    private _visualization: string;
 
     constructor(engine: Scuti, props: IFloorFurnitureProps) {
         super();
@@ -32,6 +33,7 @@ export class FloorFurniture extends RoomObject {
         this._direction = props.direction;
         this._state = props.state ?? 0;
         this._id = props.id;
+        this._className = this._engine.furnitures.getClassName(this._id);
 
         this._draw();
 
@@ -41,11 +43,17 @@ export class FloorFurniture extends RoomObject {
 
         if (!this._loaded) {
             this._createPlaceholder();
-            await this._engine.furnitures.loadFurni(this._id).then((name: string) => {
-                this._name = name;
-                this._loaded = true;
-            });
         }
+
+        if(!this._engine.resources.hasInQueue(this._className)) {
+            this._engine.resources.add(this._className, 'furniture/' + this._engine.furnitures.splitColorName(this._className).name + '/' + this._engine.furnitures.splitColorName(this._className).name + '.json');
+            await this._engine.resources.load(this._className);
+        } else {
+            await this._engine.resources.waitForLoad(this._className);
+        }
+
+        const data = this._engine.resources.get(this._className);
+        this._visualization = data.data.furniProperty.infos.visualization;
 
         this._container?.destroy();
         this._container = new Container();
@@ -82,7 +90,7 @@ export class FloorFurniture extends RoomObject {
 
     private _nextFrame(): void {
         this._layersFrame.forEach((frame: number, layer: number) => {
-            let data = this._engine.resources.get('furni/' + this._id);
+            let data = this._engine.resources.get(this._className);
             let visualization = data.data.furniProperty.visualization;
 
             if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layer] !== undefined) {
@@ -102,9 +110,9 @@ export class FloorFurniture extends RoomObject {
 
     private _getLayers(): IFurnitureLayerProps[] {
         const layers: IFurnitureLayerProps[] = [];
-        const { name, colorId } = this._engine.furnitures.splitColorName(this._name);
+        const { name, colorId } = this._engine.furnitures.splitColorName(this._className);
 
-        let data = this._engine.resources.get('furni/' + this._id);
+        let data = this._engine.resources.get(this._className);
         let visualization = data.data.furniProperty.visualization;
 
 
@@ -186,7 +194,9 @@ export class FloorFurniture extends RoomObject {
     }
 
     private _onTick(): void {
-        this._nextFrame();
+        if(this._visualization === "furniture_animated") {
+            this._nextFrame();
+        }
     }
 
     public startAnimation(): void {

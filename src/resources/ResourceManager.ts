@@ -1,8 +1,10 @@
 import { Assets } from '@pixi/assets';
+import {Log} from "../utils/Logger";
 
 export class ResourceManager {
 
     private readonly _resourceUrl: string;
+    private _resources: string[] = [];
 
     constructor(resourcesUrl: string) {
 
@@ -12,29 +14,25 @@ export class ResourceManager {
 
     public async initialise(): Promise<void> {
         return new Promise(async (resolve, reject) => {
+            const startDate: Date = new Date();
             this.add('room', 'generic/room/room.json');
             this.add('room_data', 'generic/room/room_data.json');
             this.add('tile_cursor', 'generic/tile_cursor/tile_cursor.json');
             this.add('place_holder_furniture', 'generic/place_holder/place_holder_furniture.json');
-            this.add('furnidata', 'gamedata/furnidata.json');
             this.add('hh_human_body', 'figure/hh_human_body/hh_human_body.json');
-            this.add('figuredata', 'gamedata/figuredata.json');
-            this.add('figuremap', 'gamedata/figuremap.json');
-            this.add('draworder', 'gamedata/draworder.json');
             await this.load('room');
             await this.load('room_data');
             await this.load('tile_cursor');
             await this.load('place_holder_furniture');
-            await this.load('furnidata');
             await this.load('hh_human_body');
-            await this.load('figuredata');
-            await this.load('figuremap');
-            await this.load('draworder');
+            const endDate: Date = new Date();
+            Log('Resource Manager', 'Initialised in ' + (endDate.getTime() - startDate.getTime()) + 'ms.', 'info');
             resolve();
         });
     }
 
     public add(name: string, url: string): void {
+        this._resources.push(name);
         Assets.add(name, this._resourceUrl + url, { cors: true });
     }
 
@@ -44,6 +42,21 @@ export class ResourceManager {
                 resolve(value);
             });
         });
+    }
+
+    public waitForLoad(name: string): Promise<void> {
+        const loadStatus = resolve => {
+            if (this.has(name)) resolve();
+            else setTimeout(_ => loadStatus(resolve), 400);
+        }
+        return new Promise(loadStatus);
+    }
+
+    public hasInQueue(name: string): boolean {
+        if(this._resources.includes(name)) {
+            return true;
+        }
+        return false;
     }
 
     public has(name: string): boolean {

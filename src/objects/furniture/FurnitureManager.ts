@@ -1,4 +1,5 @@
 import {Scuti} from "../../Scuti";
+import {Log} from "../../utils/Logger";
 
 export class FurnitureManager {
 
@@ -13,32 +14,33 @@ export class FurnitureManager {
     }
 
     public async initialise(): Promise<void> {
-
         return new Promise(async (resolve, reject) => {
+            const startDate: Date = new Date();
+            this._engine.resources.add('furnidata', 'gamedata/furnidata.json');
+            await this._engine.resources.load('furnidata');
             this._furnidata = this._engine.resources.get('furnidata');
+            const endDate: Date = new Date();
+            Log('Furniture Manager', 'Initialised in ' + (endDate.getTime() - startDate.getTime()) + 'ms.', 'info');
             resolve();
         });
 
     }
 
-    public async loadFurni(id: number): Promise<string> {
+    public getClassName(id: number): string {
+        let furni = this._furnidata.floorItems.find((item) => item.id === id);
+        if (!furni) furni = this._furnidata.wallItems.find((item) => item.id === id);
+        return furni.className;
+    }
+
+    /*public async loadFurni(id: number): Promise<string> {
         return new Promise(async (resolve, reject) => {
-            let furni;
-            for (let index in this._furnidata.floorItems) {
-                if (this._furnidata.floorItems[index].id === id) {
-                    furni = this._furnidata.floorItems[index];
-                }
-            }
-            if (!furni) for (let index in this._furnidata.wallItems) {
-                if (this._furnidata.wallItems[index].id === id) {
-                    furni = this._furnidata.wallItems[index];
-                }
-            }
+            let furni = this._furnidata.floorItems.find((item) => item.id === id);
+            if (!furni) furni = this._furnidata.wallItems.find((item) => item.id === id);
             this._engine.resources.add('furni/' + furni.id, 'furniture/' + this.splitColorName(furni.className).name + '/' + this.splitColorName(furni.className).name + '.json');
             await this._engine.resources.load('furni/' + furni.id);
             resolve(furni.className);
         });
-    }
+    }*/
 
     public splitColorName(name: string): { colorId: string; name: string } {
         let colorId: string = "";

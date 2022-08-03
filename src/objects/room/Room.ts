@@ -13,6 +13,7 @@ import { TileCursor } from "./parts/TileCursor";
 import {RoomObject} from "./RoomObject";
 import {FloorFurniture} from "../furniture/FloorFurniture";
 import {Avatar} from "../avatar/Avatar";
+import {Log} from "../../utils/Logger";
 
 export class Room {
 
@@ -79,6 +80,8 @@ export class Room {
 
     private _updateHeightmap(): void {
 
+        const startDate: Date = new Date();
+
         this._modelContainer?.destroy();
         this._modelContainer = new Container();
         this._modelContainer.sortableChildren = true;
@@ -128,6 +131,9 @@ export class Room {
         }
 
         this._engine.application.stage.addChild(this._modelContainer);
+
+        const endDate: Date = new Date();
+        Log('Room Renderer', 'Took ' + (endDate.getTime() - startDate.getTime()) + 'ms to render the room.', 'info');
 
     }
 
