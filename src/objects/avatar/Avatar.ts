@@ -5,6 +5,9 @@ import {AnimatedSprite, Container, Sprite} from "pixi.js";
 import { gsap } from "gsap";
 import {IAvatarPart} from "../../interfaces/IAvatarPart";
 import {FurnitureLayer} from "../furniture/FurnitureLayer";
+import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
+import {IAvatarLayerProps} from "../../interfaces/IAvatarLayerProps";
+import {AvatarLayer} from "./AvatarLayer";
 
 export class Avatar extends RoomObject {
 
@@ -45,68 +48,19 @@ export class Avatar extends RoomObject {
             this._createPlaceholder();
         }
 
-        let figure = this._engine.avatars.splitLookFigure(this._figure);
+        let layers = await this._getLayers();
 
-        for (const figurePart of figure) {
-            let type = figurePart.type;
-            let partId = figurePart.partId;
-            let colors = figurePart.colors;
-
-            let parts = this._engine.avatars.getParts(type, partId);
-
-            for (const part of parts) {
-                let partType = part.type;
-                let lib = part.lib.id;
-                if(!this._engine.resources.hasInQueue(lib)) {
-                    this._engine.resources.add(lib, "figure/" + lib + "/" + lib + ".json");
-                    await this._engine.resources.load(lib);
-                } else {
-                    await this._engine.resources.waitForLoad(lib);
-                }
-
-                let libFile = this._engine.resources.get(lib);
-
-                Object.keys(libFile.data.partsType).forEach((k) => {
-                    let gesture = "std";
-                    let direction = this._direction;
-                    let rotated = false;
-                    if(libFile.data.partsType[k].gestures.includes(this._action)) {
-                        gesture = this._action
-                    }
-                    if(k === "hd" || k === "hr" || k === "hrb" || k === "ey" || k === "fc") {
-                        direction = this._headDirection
-                    }
-                    if([4, 5, 6, 7].includes(direction)) {
-                        rotated = true;
-                    }
-                    if(k !== "sd" && this._engine.resources.get(lib).animations[k + "_" + part.id + "_" + gesture + "_" + direction] !== undefined) {
-                        let sprite = new AnimatedSprite(this._engine.resources.get(lib).animations[k + "_" + part.id + "_" + gesture + "_" + direction]);
-                        sprite.zIndex = this._engine.avatars.getDrawOrder(k, gesture, direction);
-                        sprite.tint = this._engine.avatars.getColor(type, colors[0]);
-                        sprite.animationSpeed = 0.167;
-                        if(rotated) sprite.scale.x = -1;
-                        if(rotated) sprite.x = 64;
-                        this._layers.set(k + "_" + part.id + "_" + gesture + "_" + direction + "_" + Math.floor(Math.random() * 100), sprite);
-                    } else if(k === "sd") {
-                        let sprite = new AnimatedSprite(this._engine.resources.get(lib).animations["sd_1_" + gesture + "_0"]);
-                        sprite.alpha = 0.04;
-                        this._layers.set("sd_1_" + gesture + "_0_" + Math.floor(Math.random() * 100), sprite);
-                    }
-                });
-            }
-        }
         this._container?.destroy();
         this._container = new Container();
         this._container.sortableChildren = true;
 
-        this._layers.forEach((layer) => {
-            this._container.addChild(layer);
-            layer.play();
+        layers.forEach((layer: IAvatarLayerProps) => {
+            let avatarLayer = new AvatarLayer(layer);
+            this._layers.set(layer.name, avatarLayer);
+            this._container.addChild(avatarLayer);
         });
 
-        if (!this._loaded) {
-            this._loaded = true;
-        }
+        this._loaded = true;
 
         this.addChild(this._container);
 
@@ -164,6 +118,70 @@ export class Avatar extends RoomObject {
         this.y = 16 * this._x + 16 * this._y - 32 * this._z;
         this.zIndex = 2;
 
+    }
+
+    private async _getLayers(): Promise<IAvatarLayerProps[]> {
+        return new Promise(async (resolve, reject) => {
+            const layers: IAvatarLayerProps[] = [];
+            const figure: { partId: number; type: string; colors: number[] }[] = this._engine.avatars.splitLookFigure(this._figure);
+
+            for (const figurePart of figure) {
+                const figureType: string = figurePart.type;
+                const figurePartId: number = figurePart.partId;
+                const colors: number[] = figurePart.colors;
+
+                const parts = this._engine.avatars.getParts(figureType, figurePartId);
+
+                for (const part of parts) {
+                    const libId: string = part.lib.id;
+
+                    if (!this._engine.resources.hasInQueue(libId)) {
+                        this._engine.resources.add(libId, "figure/" + libId + "/" + libId + ".json");
+                        await this._engine.resources.load(libId);
+                    } else {
+                        await this._engine.resources.waitForLoad(libId);
+                    }
+
+                    Object.keys(this._engine.resources.get(libId).data.partsType).forEach((type) => {
+
+                        let action = "std";
+                        let direction = this._direction;
+
+                        if(this._engine.resources.get(libId).data.partsType[type].gestures.includes(this._action)) {
+                            action = this._action;
+                        }
+
+                        if(this._engine.avatars.isHeadPart(type)) {
+                            direction = this._headDirection;
+                        }
+
+                        let name = type + "_" + part.id + "_" + action + "_" + direction;
+
+                        if(type !== "sd" && this._engine.resources.get(libId).animations[name] !== undefined) {
+                            layers.push({
+                                direction: direction,
+                                textures: this._engine.resources.get(libId).animations[name],
+                                tint: this._engine.avatars.getColor(figureType, colors[0]),
+                                alpha: 1,
+                                name: name,
+                                z: this._engine.avatars.getDrawOrder(type, action, direction)
+                            });
+                        } else if(type === "sd") {
+                            layers.push({
+                                direction: direction,
+                                textures: this._engine.resources.get(libId).animations["sd_1_" + action + "_0"],
+                                tint: undefined,
+                                alpha: 0.04,
+                                name: "sd_1_" + action + "_0",
+                                z: -1
+                            });
+                        }
+
+                    });
+                }
+            }
+            return resolve(layers);
+        });
     }
 
     public move(x: number, y: number, z: number): void {

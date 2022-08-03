@@ -41,6 +41,8 @@ export class FloorFurniture extends RoomObject {
 
     private async _draw(): Promise<void> {
 
+        this._layers = new Map();
+
         if (!this._loaded) {
             this._createPlaceholder();
         }
@@ -52,8 +54,7 @@ export class FloorFurniture extends RoomObject {
             await this._engine.resources.waitForLoad(this._className);
         }
 
-        const data = this._engine.resources.get(this._className);
-        this._visualization = data.data.furniProperty.infos.visualization;
+        this._visualization = this._engine.resources.get(this._className).data.furniProperty.infos.visualization;
 
         this._container?.destroy();
         this._container = new Container();
@@ -64,6 +65,8 @@ export class FloorFurniture extends RoomObject {
             this._layers.set(layer.name, furnitureLayer);
             this._container.addChild(furnitureLayer);
         })
+
+        this._loaded = true;
 
         this.addChild(this._container);
         this.x = 32 + 32 * this._x - 32 * this._y;

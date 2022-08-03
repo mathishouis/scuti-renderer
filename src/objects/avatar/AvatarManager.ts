@@ -35,10 +35,10 @@ export class AvatarManager {
 
     }
 
-    public getColor(type: string, colorId: number): string {
+    public getColor(type: string, colorId: number): number {
         let paletteId = this._figuredata.settype[type].paletteid;
         let palette = this._figuredata.palette[String(paletteId)];
-        return '0x' + palette[String(colorId)].color;
+        return Number('0x' + palette[String(colorId)].color);
     }
 
     public getParts(type: string, setId: number) {
@@ -70,6 +70,10 @@ export class AvatarManager {
                 })
             };
         });
+    }
+
+    public isHeadPart(type: string): boolean {
+        return type === "hd" || type === "hr" || type === "hrb" || type === "ey" || type === "fc";
     }
 
 
