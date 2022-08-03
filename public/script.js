@@ -222,7 +222,9 @@ async function load() {
         y: 5,
         z: 2,
         direction: 2,
-        figure: "hd-180-1.hr-100-61.ch-210-66.lg-280-110.sh-305-62"
+        headDirection: 3,
+        figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80",
+        action: "std"
     });
     room.addRoomObject(avatar);
 

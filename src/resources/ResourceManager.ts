@@ -20,6 +20,7 @@ export class ResourceManager {
             this.add('hh_human_body', 'figure/hh_human_body/hh_human_body.json');
             this.add('figuredata', 'gamedata/figuredata.json');
             this.add('figuremap', 'gamedata/figuremap.json');
+            this.add('draworder', 'gamedata/draworder.json');
             await this.load('room');
             await this.load('room_data');
             await this.load('tile_cursor');
@@ -28,6 +29,7 @@ export class ResourceManager {
             await this.load('hh_human_body');
             await this.load('figuredata');
             await this.load('figuremap');
+            await this.load('draworder');
             resolve();
         });
     }
