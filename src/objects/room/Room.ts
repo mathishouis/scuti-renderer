@@ -180,9 +180,9 @@ export class Room {
     private _createDoor(x: number, y: number, z: number): void {
 
         const tile = new Tile({ color: this.floorMaterial.color, thickness: 0, texture: this.floorMaterial.texture },
-            () => { this._tileClick(x, y, z); },
-            () => { this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
-            () => { this._tileOut(x, y, z); this._hideTileCursor(); });
+            () => { if(this._tileClick) this._tileClick(x, y, z); },
+            () => { if(this._tileOver) this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
+            () => { if(this._tileOut) this._tileOut(x, y, z); this._hideTileCursor(); });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;
@@ -195,9 +195,9 @@ export class Room {
     private _createTile(x: number, y: number, z: number): void {
 
         const tile = new Tile({ color: this.floorMaterial.color, thickness: 8, texture: this.floorMaterial.texture },
-            () => { this._tileClick(x, y, z); },
-            () => { this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
-            () => { this._tileOut(x, y, z); this._hideTileCursor(); });
+            () => { if(this._tileClick) this._tileClick(x, y, z); },
+            () => { if(this._tileOver) this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
+            () => { if(this._tileOut) this._tileOut(x, y, z); this._hideTileCursor(); });
 
         const position = Room._getPosition(x, y, z);
 
@@ -211,9 +211,9 @@ export class Room {
     private _createStair(x: number, y: number, z: number, direction: number): void {
 
         const tile = new Stair({ color: this.floorMaterial.color, tileThickness: 8, direction: direction, texture: this.floorMaterial.texture },
-            () => { this._tileClick(x, y, z); },
-            () => { this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
-            () => { this._tileOut(x, y, z); this._hideTileCursor(); });
+            () => { if(this._tileClick) this._tileClick(x, y, z); },
+            () => { if(this._tileOver) this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
+            () => { if(this._tileOut) this._tileOut(x, y, z); this._hideTileCursor(); });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;
@@ -226,9 +226,9 @@ export class Room {
     private _createStairCorner(x: number, y: number, z: number, direction: number, type: StairType): void {
 
         const tile = new StairCorner({ color: this.floorMaterial.color, tileThickness: 8, direction: direction, type: type, texture: this.floorMaterial.texture },
-            () => { this._tileClick(x, y, z); },
-            () => { this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
-            () => { this._tileOut(x, y, z); this._hideTileCursor(); });
+            () => { if(this._tileClick) this._tileClick(x, y, z); },
+            () => { if(this._tileOver) this._tileOver(x, y, z); this._createTileCursor(x, y, z); },
+            () => { if(this._tileOut) this._tileOut(x, y, z); this._hideTileCursor(); });
         const position = Room._getPosition(x, y, z);
 
         tile.x = position.x;

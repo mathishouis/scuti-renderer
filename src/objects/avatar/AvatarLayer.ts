@@ -10,8 +10,10 @@ export class AvatarLayer extends AnimatedSprite {
         this.animationSpeed = 0.167;
         this.zIndex = props.z;
         props.tint ? this.tint = props.tint : null;
-        [4, 5, 6, 7].includes(props.direction) ? this.scale.x = -1 : null;
-        [4, 5, 6, 7].includes(props.direction) ? this.x = 64 : null;
+        if(props.flip) {
+            [4, 5, 6, 7].includes(props.direction) ? this.scale.x = -1 : null;
+            [4, 5, 6, 7].includes(props.direction) ? this.x = 64 : null;
+        }
         this.play();
 
     }

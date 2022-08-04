@@ -4,6 +4,7 @@ import {BLEND_MODES, Container, Sprite} from "pixi.js";
 import {FurnitureLayer} from "./FurnitureLayer";
 import {Scuti} from "../../Scuti";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
+import {getZOrder, getZOrderFloorItem} from "../../utils/ZOrder";
 
 export class FloorFurniture extends RoomObject {
 
@@ -67,6 +68,8 @@ export class FloorFurniture extends RoomObject {
         })
 
         this._loaded = true;
+
+        this.zIndex = getZOrder(this._x, this._y, this._z);
 
         this.addChild(this._container);
         this.x = 32 + 32 * this._x - 32 * this._y;

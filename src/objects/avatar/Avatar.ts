@@ -6,6 +6,7 @@ import {gsap} from "gsap";
 import {IAvatarLayerProps} from "../../interfaces/IAvatarLayerProps";
 import {AvatarLayer} from "./AvatarLayer";
 import {Action} from "../../enum/Action";
+import {getZOrder, getZOrderAvatar} from "../../utils/ZOrder";
 
 export class Avatar extends RoomObject {
 
@@ -66,11 +67,13 @@ export class Avatar extends RoomObject {
 
         this.x = 32 * this._x - 32 * this._y;
         this.y = 16 * this._x + 16 * this._y - 32 * this._z;
-        this.zIndex = 2;
+        this.zIndex = getZOrder(this._x, this._y, this._z);
 
     }
 
     private _createPlaceholder(): void {
+
+        // TODO: Refactor this shit
 
         this._container?.destroy();
         this._container = new Container();
@@ -116,7 +119,6 @@ export class Avatar extends RoomObject {
 
         this.x = 32 * this._x - 32 * this._y ;
         this.y = 16 * this._x + 16 * this._y - 32 * this._z;
-        this.zIndex = 2;
 
     }
 
@@ -135,11 +137,11 @@ export class Avatar extends RoomObject {
                 let action = this._actions.includes(Action.UseItem) ? Action.UseItem : Action.CarryItem;
                 let handItemId;
                 if(action === Action.CarryItem) {
-                    handItemId = this._engine.resources.get('HabboAvatarActions').CarryItem.params[String(this._handItem)];
+                    handItemId = this._engine.avatars.habboAvatarActions.CarryItem.params[String(this._handItem)];
                 } else {
-                    handItemId = this._engine.resources.get('HabboAvatarActions').UseItem.params[String(this._handItem)];
+                    handItemId = this._engine.avatars.habboAvatarActions.UseItem.params[String(this._handItem)];
                     if(handItemId === undefined) {
-                        handItemId = this._engine.resources.get('HabboAvatarActions').CarryItem.params[String(this._handItem)];
+                        handItemId = this._engine.avatars.habboAvatarActions.CarryItem.params[String(this._handItem)];
                         action = Action.CarryItem;
                     }
                 }
@@ -150,7 +152,7 @@ export class Avatar extends RoomObject {
                         tint: undefined,
                         alpha: 1,
                         name: 'ri_' + handItemId + '_' + this._engine.avatars.habboAvatarActions[action].assetpartdefinition + '_' + this._direction,
-                        z: 30
+                        z: this._engine.avatars.getDrawOrder('rh', action, this._direction)
                     });
                 }
             }
@@ -190,14 +192,15 @@ export class Avatar extends RoomObject {
                             }
                         }
 
-                        if (this._engine.avatars.isHeadPart(type)) {
+                        if (this._engine.avatars.habboAvatarPartSets.activePartSets.head.includes(type)) {
                             direction = this._headDirection;
                         }
 
                         let name = type + "_" + part.id + "_" + this._engine.avatars.habboAvatarActions[action].assetpartdefinition + "_" + direction;
 
-                        if (type !== "sd" && this._engine.resources.get(libId).animations[name] !== undefined) {
+                        if (type !== "sd" && this._engine.resources.get(libId).animations[name] !== undefined && !this._engine.resources.get(libId).animations[name].includes(undefined)) {
                             layers.push({
+                                flip: true,
                                 direction: direction,
                                 textures: this._engine.resources.get(libId).animations[name],
                                 tint: part.colorable === 1 ? this._engine.avatars.getColor(figureType, colors[part.index]) : undefined,
@@ -224,10 +227,11 @@ export class Avatar extends RoomObject {
     }
 
     public move(x: number, y: number, z: number): void {
-        this._x = x;
-        this._y = y;
-        this._z = z;
-        gsap.to(this, { x: 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z, duration: 0.5, ease: "none" });
+        gsap.to(this, { x: 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z, duration: 0.5, ease: "none" }).then(() => {
+            this._x = x;
+            this._y = y;
+            this._z = z;
+        });
     }
 
     public addAction(action: Action): void {

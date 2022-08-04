@@ -4,13 +4,23 @@ import {FloorFurniture} from "../src/objects/furniture/FloorFurniture";
 import {Avatar} from "../src/objects/avatar/Avatar";
 import {Action} from "../src/enum/Action";
 
+let action = "move";
+
 async function load() {
+    var element = document.createElement("input");
+    element.setAttribute("type", "button");
+    element.setAttribute("value", "Placer des mobis");
+    element.setAttribute("name", "button3");
+    element.setAttribute("style", "position: fixed; z-index: 100; padding: 8px 14px; margin: 10px 10px;");
+    document.getElementById("app").appendChild(element);
+
+
     let scuti = new Scuti({
         canvas: document.getElementById("app"),
         width: 1920,
         height: 955,
         //resources: "https://scuti-resources.netlify.app/"
-        resources: "http://localhost:8081/"
+        resources: "https://scuti-resources.netlify.app/"
     });
     await scuti.initialise();
 
@@ -54,6 +64,9 @@ async function load() {
         , floorMaterial: 110, wallMaterial: 1501
     });
 
+    let furniId = [3901, 3902, 3903, 3904, 3898, 3899, 3900, 3896, 3895, 3892, 3891, 3890, 3889, 3888, 3887, 3886, 3893, 3894, 1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1619, 13]
+    let randomRotation = [0, 2, 4, 6];
+
     let hd = [180, 185, 190, 195, 200, 205];
     let hr = [100, 105, 110, 115, 125, 135, 145, 155, 165, 170];
     let ch = [210, 215, 220, 225, 230, 235, 240, 245, 250, 255];
@@ -93,27 +106,37 @@ async function load() {
         figure: figure,
         actions: [ Action.Walk]
     });
-    /*setTimeout(() => {
-        avatar.addAction(Action.Wave);
-    }, 5000);
-    setTimeout(() => {
-        avatar.removeAction(Action.Walk);
-    }, 7000);*/
+
     room.addRoomObject(avatar);
     avatar.handItem = 55;
-    avatar.addAction(Action.UseItem);
+    //:avatar.addAction(Action.UseItem);
     avatar.addAction(Action.Wave);
 
     room.tileClick = (x, y, z) => {
-        avatar.move(x, y, z);
+        if(action === "move") {
+            avatar.handItem = Math.floor(Math.random() * 150);
+            avatar.move(x, y, z);
+        } else {
+            let furni = new FloorFurniture(scuti, {
+                x: x,
+                y: y,
+                z: z,
+                direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+                id: furniId[Math.floor(Math.random() * furniId.length)],
+                state: 1,
+            });
+            room.addRoomObject(furni);
+        }
     }
 
-    room.tileOut = (x, y, z) => {
-
-    }
-
-    room.tileOver = (x, y, z) => {
-
+    element.onclick = () => {
+        if(action === "place") {
+            action = "move";
+            element.value = "Placer des mobis";
+        } else {
+            action = "place";
+            element.value = "Déplacer mon personnage"
+        }
     }
 
 }

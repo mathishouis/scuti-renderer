@@ -10,6 +10,7 @@ export class AvatarManager {
     private _figuremap: any;
     private _drawOrder: any;
     private _habboAvatarActions: any;
+    private _habboAvatarPartSets: any;
 
     constructor(engine: Scuti) {
 
@@ -25,14 +26,17 @@ export class AvatarManager {
             this._engine.resources.add('figuremap', 'gamedata/figuremap.json');
             this._engine.resources.add('draworder', 'gamedata/draworder.json');
             this._engine.resources.add('HabboAvatarActions', 'generic/HabboAvatarActions.json');
+            this._engine.resources.add('HabboAvatarPartSets', 'generic/HabboAvatarPartSets.json');
             await this._engine.resources.load('figuredata');
             await this._engine.resources.load('figuremap');
             await this._engine.resources.load('draworder');
             await this._engine.resources.load('HabboAvatarActions');
+            await this._engine.resources.load('HabboAvatarPartSets');
             this._figuredata = this._engine.resources.get('figuredata');
             this._figuremap = this._engine.resources.get('figuremap');
             this._drawOrder = this._engine.resources.get('draworder');
             this._habboAvatarActions = this._engine.resources.get('HabboAvatarActions');
+            this._habboAvatarPartSets = this._engine.resources.get('HabboAvatarPartSets');
             const endDate: Date = new Date();
             Log('Avatar Manager', 'Initialised in ' + (endDate.getTime() - startDate.getTime()) + 'ms.', 'info');
             resolve();
@@ -84,12 +88,12 @@ export class AvatarManager {
         });
     }
 
-    public isHeadPart(type: string): boolean {
-        return type === "hd" || type === "hr" || type === "hrb" || type === "ey" || type === "fc";
-    }
-
     public get habboAvatarActions(): any {
         return this._habboAvatarActions;
+    }
+
+    public get habboAvatarPartSets(): any {
+        return this._habboAvatarPartSets;
     }
 
 
