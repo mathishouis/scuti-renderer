@@ -38,6 +38,7 @@ export class AvatarManager {
     public getColor(type: string, colorId: number): number {
         let paletteId = this._figuredata.settype[type].paletteid;
         let palette = this._figuredata.palette[String(paletteId)];
+        if(palette[String(colorId)] === undefined) return Number('0xFFFFFF');
         return Number('0x' + palette[String(colorId)].color);
     }
 

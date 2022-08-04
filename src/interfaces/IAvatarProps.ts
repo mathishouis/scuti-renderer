@@ -1,3 +1,5 @@
+import {Action} from "../enum/Action";
+
 export interface IAvatarProps {
     x: number,
     y: number,
@@ -5,5 +7,5 @@ export interface IAvatarProps {
     direction: number,
     headDirection?: number,
     figure: string,
-    action?: string
+    actions?: Action[]
 }

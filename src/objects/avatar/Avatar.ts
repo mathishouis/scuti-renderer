@@ -1,13 +1,11 @@
 import {RoomObject} from "../room/RoomObject";
 import {Scuti} from "../../Scuti";
 import {IAvatarProps} from "../../interfaces/IAvatarProps";
-import {AnimatedSprite, Container, Sprite} from "pixi.js";
-import { gsap } from "gsap";
-import {IAvatarPart} from "../../interfaces/IAvatarPart";
-import {FurnitureLayer} from "../furniture/FurnitureLayer";
-import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
+import {AnimatedSprite, Container} from "pixi.js";
+import {gsap} from "gsap";
 import {IAvatarLayerProps} from "../../interfaces/IAvatarLayerProps";
 import {AvatarLayer} from "./AvatarLayer";
+import {Action} from "../../enum/Action";
 
 export class Avatar extends RoomObject {
 
@@ -19,7 +17,7 @@ export class Avatar extends RoomObject {
     private _direction: number;
     private _headDirection: number;
     private _figure: string;
-    private _action: string;
+    private _actions: Action[];
     private _container?: Container;
     private _layers: Map<string, AnimatedSprite> = new Map();
     private _loaded: boolean = false;
@@ -35,7 +33,7 @@ export class Avatar extends RoomObject {
         this._direction = props.direction;
         this._headDirection = props.headDirection ?? this._direction;
         this._figure = props.figure;
-        this._action = props.action ?? 'std';
+        this._actions = props.actions ?? [Action.Stand];
 
         this._draw();
     }
@@ -82,8 +80,8 @@ export class Avatar extends RoomObject {
             let gesture = "std";
             let direction = this._direction;
             let rotated = false;
-            if (hh_human_body.data.partsType[k].gestures.includes(this._action)) {
-                gesture = this._action
+            if (hh_human_body.data.partsType[k].gestures.includes(this._actions)) {
+                gesture = this._actions
             }
             if(k === "hd" || k === "hr" || k === "hrb" || k === "ey" || k === "fc") {
                 direction = this._headDirection
@@ -144,29 +142,32 @@ export class Avatar extends RoomObject {
 
                     Object.keys(this._engine.resources.get(libId).data.partsType).forEach((type) => {
 
-                        let action = "std";
+                        let action = 'std';
                         let direction = this._direction;
 
-                        if(this._engine.resources.get(libId).data.partsType[type].gestures.includes(this._action)) {
-                            action = this._action;
+                        for (const gesture of this._engine.resources.get(libId).data.partsType[type].gestures) {
+                            if (this._actions.includes(gesture) && gesture !== 'std') {
+                                action = gesture;
+                                break;
+                            }
                         }
 
-                        if(this._engine.avatars.isHeadPart(type)) {
+                        if (this._engine.avatars.isHeadPart(type)) {
                             direction = this._headDirection;
                         }
 
                         let name = type + "_" + part.id + "_" + action + "_" + direction;
 
-                        if(type !== "sd" && this._engine.resources.get(libId).animations[name] !== undefined) {
+                        if (type !== "sd" && this._engine.resources.get(libId).animations[name] !== undefined) {
                             layers.push({
                                 direction: direction,
                                 textures: this._engine.resources.get(libId).animations[name],
-                                tint: this._engine.avatars.getColor(figureType, colors[0]),
+                                tint: this._engine.avatars.getColor(figureType, colors[part.index]),
                                 alpha: 1,
                                 name: name,
                                 z: this._engine.avatars.getDrawOrder(type, action, direction)
                             });
-                        } else if(type === "sd") {
+                        } else if (type === "sd") {
                             layers.push({
                                 direction: direction,
                                 textures: this._engine.resources.get(libId).animations["sd_1_" + action + "_0"],
@@ -189,6 +190,16 @@ export class Avatar extends RoomObject {
         this._y = y;
         this._z = z;
         gsap.to(this, { x: 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z, duration: 0.5, ease: "none" });
+    }
+
+    public addAction(action: Action): void {
+        this._actions.push(action);
+        this._draw();
+    }
+
+    public removeAction(action: Action): void {
+        this._actions = this._actions.filter((actionFilter: Action) => { return actionFilter !== action });
+        this._draw();
     }
 
     public startAnimation(): void {
