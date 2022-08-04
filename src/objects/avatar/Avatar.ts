@@ -21,6 +21,7 @@ export class Avatar extends RoomObject {
     private _container?: Container;
     private _layers: Map<string, AnimatedSprite> = new Map();
     private _loaded: boolean = false;
+    private _handItem: number;
 
     constructor(engine: Scuti, props: IAvatarProps) {
         super();
@@ -34,6 +35,7 @@ export class Avatar extends RoomObject {
         this._headDirection = props.headDirection ?? this._direction;
         this._figure = props.figure;
         this._actions = props.actions ?? [Action.Stand];
+        this._handItem = props.handItem ?? 0;
 
         this._draw();
     }
@@ -123,6 +125,36 @@ export class Avatar extends RoomObject {
             const layers: IAvatarLayerProps[] = [];
             const figure: { partId: number; type: string; colors: number[] }[] = this._engine.avatars.splitLookFigure(this._figure);
 
+            if(this._handItem !== 0 && (this._actions.includes(Action.CarryItem) || this._actions.includes(Action.UseItem))) {
+                if (!this._engine.resources.hasInQueue('hh_human_item')) {
+                    this._engine.resources.add('hh_human_item', 'figure/hh_human_item/hh_human_item.json');
+                    await this._engine.resources.load('hh_human_item');
+                } else {
+                    await this._engine.resources.waitForLoad('hh_human_item');
+                }
+                let action = this._actions.includes(Action.UseItem) ? Action.UseItem : Action.CarryItem;
+                let handItemId;
+                if(action === Action.CarryItem) {
+                    handItemId = this._engine.resources.get('HabboAvatarActions').CarryItem.params[String(this._handItem)];
+                } else {
+                    handItemId = this._engine.resources.get('HabboAvatarActions').UseItem.params[String(this._handItem)];
+                    if(handItemId === undefined) {
+                        handItemId = this._engine.resources.get('HabboAvatarActions').CarryItem.params[String(this._handItem)];
+                        action = Action.CarryItem;
+                    }
+                }
+                if(handItemId !== undefined) {
+                    layers.push({
+                        direction: this._direction,
+                        textures: this._engine.resources.get('hh_human_item').animations['ri_' + handItemId + '_' + this._engine.avatars.habboAvatarActions[action].assetpartdefinition + '_' + this._direction],
+                        tint: undefined,
+                        alpha: 1,
+                        name: 'ri_' + handItemId + '_' + this._engine.avatars.habboAvatarActions[action].assetpartdefinition + '_' + this._direction,
+                        z: 30
+                    });
+                }
+            }
+
             for (const figurePart of figure) {
                 const figureType: string = figurePart.type;
                 const figurePartId: number = figurePart.partId;
@@ -140,15 +172,21 @@ export class Avatar extends RoomObject {
                         await this._engine.resources.waitForLoad(libId);
                     }
 
-                    Object.keys(this._engine.resources.get(libId).data.partsType).forEach((type) => {
+                    Object.keys(this._engine.resources.get(libId).data.partsType).forEach((type: string) => {
 
-                        let action = 'std';
+                        let action = Action.Default;
+                        let actionPrecedence = Number(this._engine.avatars.habboAvatarActions[action].precedence);
                         let direction = this._direction;
 
                         for (const gesture of this._engine.resources.get(libId).data.partsType[type].gestures) {
-                            if (this._actions.includes(gesture) && gesture !== 'std') {
-                                action = gesture;
-                                break;
+                            if (this._actions.some(r=>this._engine.avatars.getAction(gesture).includes(r)) && !this._engine.avatars.getAction(gesture).includes(Action.Default)) {
+                                let actions = this._actions.filter((f: Action) => this._engine.avatars.getAction(gesture).includes(f));
+                                actions.forEach((a: Action) => {
+                                    if(Number(this._engine.avatars.habboAvatarActions[a].precedence) < actionPrecedence) {
+                                        action = a;
+                                        actionPrecedence = this._engine.avatars.habboAvatarActions[a].precedence;
+                                    }
+                                });
                             }
                         }
 
@@ -156,13 +194,13 @@ export class Avatar extends RoomObject {
                             direction = this._headDirection;
                         }
 
-                        let name = type + "_" + part.id + "_" + action + "_" + direction;
+                        let name = type + "_" + part.id + "_" + this._engine.avatars.habboAvatarActions[action].assetpartdefinition + "_" + direction;
 
                         if (type !== "sd" && this._engine.resources.get(libId).animations[name] !== undefined) {
                             layers.push({
                                 direction: direction,
                                 textures: this._engine.resources.get(libId).animations[name],
-                                tint: this._engine.avatars.getColor(figureType, colors[part.index]),
+                                tint: part.colorable === 1 ? this._engine.avatars.getColor(figureType, colors[part.index]) : undefined,
                                 alpha: 1,
                                 name: name,
                                 z: this._engine.avatars.getDrawOrder(type, action, direction)
@@ -170,10 +208,10 @@ export class Avatar extends RoomObject {
                         } else if (type === "sd") {
                             layers.push({
                                 direction: direction,
-                                textures: this._engine.resources.get(libId).animations["sd_1_" + action + "_0"],
+                                textures: this._engine.resources.get(libId).animations["sd_1_std_0"],
                                 tint: undefined,
                                 alpha: 0.04,
-                                name: "sd_1_" + action + "_0",
+                                name: "sd_1_std_0",
                                 z: -1
                             });
                         }
@@ -200,6 +238,33 @@ export class Avatar extends RoomObject {
     public removeAction(action: Action): void {
         this._actions = this._actions.filter((actionFilter: Action) => { return actionFilter !== action });
         this._draw();
+    }
+
+    public get direction(): number {
+        return this._direction;
+    }
+
+    public set direction(direction: number) {
+        this._direction = direction;
+        this._draw();
+    }
+
+    public get headDirection(): number {
+        return this._headDirection;
+    }
+
+    public set headDirection(direction: number) {
+        this._headDirection = direction;
+        this._draw();
+    }
+
+    public get handItem(): number {
+        return this._handItem;
+    }
+
+    public set handItem(item: number) {
+        this._handItem = item;
+        this.addAction(Action.CarryItem);
     }
 
     public startAnimation(): void {

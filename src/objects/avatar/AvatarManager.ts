@@ -1,5 +1,6 @@
 import {Scuti} from "../../Scuti";
 import {Log} from "../../utils/Logger";
+import {Action} from "../../enum/Action";
 
 export class AvatarManager {
 
@@ -8,6 +9,7 @@ export class AvatarManager {
     private _figuredata: any;
     private _figuremap: any;
     private _drawOrder: any;
+    private _habboAvatarActions: any;
 
     constructor(engine: Scuti) {
 
@@ -22,12 +24,15 @@ export class AvatarManager {
             this._engine.resources.add('figuredata', 'gamedata/figuredata.json');
             this._engine.resources.add('figuremap', 'gamedata/figuremap.json');
             this._engine.resources.add('draworder', 'gamedata/draworder.json');
+            this._engine.resources.add('HabboAvatarActions', 'generic/HabboAvatarActions.json');
             await this._engine.resources.load('figuredata');
             await this._engine.resources.load('figuremap');
             await this._engine.resources.load('draworder');
+            await this._engine.resources.load('HabboAvatarActions');
             this._figuredata = this._engine.resources.get('figuredata');
             this._figuremap = this._engine.resources.get('figuremap');
             this._drawOrder = this._engine.resources.get('draworder');
+            this._habboAvatarActions = this._engine.resources.get('HabboAvatarActions');
             const endDate: Date = new Date();
             Log('Avatar Manager', 'Initialised in ' + (endDate.getTime() - startDate.getTime()) + 'ms.', 'info');
             resolve();
@@ -55,6 +60,12 @@ export class AvatarManager {
         return parts;
     }
 
+    public getAction(action: string): Action[] {
+        let item = Object.keys(this._habboAvatarActions).filter((item) => this._habboAvatarActions[item].assetpartdefinition === action);
+        if(item === undefined) return [Action.Default];
+        return item;
+    }
+
     public getDrawOrder(type: string, action: string, direction: number) {
         if(this._drawOrder[action] === undefined) action = "std";
         return Number(Object.entries(this._drawOrder[action][direction]).find(entry => entry[1] === type)[0]);
@@ -75,6 +86,10 @@ export class AvatarManager {
 
     public isHeadPart(type: string): boolean {
         return type === "hd" || type === "hr" || type === "hrb" || type === "ey" || type === "fc";
+    }
+
+    public get habboAvatarActions(): any {
+        return this._habboAvatarActions;
     }
 
 

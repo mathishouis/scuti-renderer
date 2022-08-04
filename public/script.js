@@ -9,7 +9,8 @@ async function load() {
         canvas: document.getElementById("app"),
         width: 1920,
         height: 955,
-        resources: "https://scuti-resources.netlify.app/"
+        //resources: "https://scuti-resources.netlify.app/"
+        resources: "http://localhost:8081/"
     });
     await scuti.initialise();
 
@@ -90,15 +91,18 @@ async function load() {
         direction: 2,
         headDirection: 2,
         figure: figure,
-        actions: [Action.Smile, Action.Walk]
+        actions: [ Action.Walk]
     });
-    setTimeout(() => {
+    /*setTimeout(() => {
         avatar.addAction(Action.Wave);
     }, 5000);
     setTimeout(() => {
         avatar.removeAction(Action.Walk);
-    }, 7000);
+    }, 7000);*/
     room.addRoomObject(avatar);
+    avatar.handItem = 55;
+    avatar.addAction(Action.UseItem);
+    avatar.addAction(Action.Wave);
 
     room.tileClick = (x, y, z) => {
         avatar.move(x, y, z);

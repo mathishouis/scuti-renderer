@@ -7,5 +7,6 @@ export interface IAvatarProps {
     direction: number,
     headDirection?: number,
     figure: string,
-    actions?: Action[]
+    actions?: Action[],
+    handItem?: number,
 }
