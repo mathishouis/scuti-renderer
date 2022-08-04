@@ -1,6 +1,5 @@
 import { Texture, Container, Graphics, Matrix, utils } from 'pixi.js';
 import { IStairProps } from "../../../interfaces/IStairProps";
-import {ITileProps} from "../../../interfaces/ITileProps";
 
 export class Stair extends Container {
 
@@ -135,7 +134,7 @@ export class Stair extends Container {
             this._container.y = OFFSETS[1].y;
         }
 
-        this.interactive = true;
+        this["interactive"] = true;
 
         this.addChild(this._container);
 

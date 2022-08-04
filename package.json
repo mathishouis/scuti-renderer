@@ -1,19 +1,21 @@
 {
-  "name": "scuti-client",
+  "name": "scuti-renderer",
   "version": "1.0.0",
-  "description": "An opensource Habbo client written in JavaScript compatible with [scuti-java](https://github.com/Tiig3r/scuti-java) only.",
+  "description": "An opensource Habbo renderer written in TypeScript",
+  "main": "dist/Scuti.js",
   "source": "src/Scuti.ts",
   "scripts": {
     "start": "parcel public/index.html --no-cache",
-    "build": "parcel build public/index.html"
+    "build": "parcel build public/index.html",
+    "tsc-build": "rm -rf dist && tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kozennnn/scuti-client.git"
+    "url": "git+https://github.com/kozennnn/scuti-renderer.git"
   },
   "keywords": [],
   "author": "Kozen",
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@babel/core": "^7.18.9",
     "@parcel/transformer-typescript-tsc": "^2.6.2",
@@ -30,5 +32,11 @@
   "bugs": {
     "url": "https://github.com/kozennnn/scuti-client/issues"
   },
-  "homepage": "https://github.com/kozennnn/scuti-client#readme"
+  "homepage": "https://github.com/kozennnn/scuti-client#readme",
+  "files": [
+    "/dist"
+  ],
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  }
 }

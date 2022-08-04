@@ -1,7 +1,7 @@
 import { BaseImageResource, Sprite, Texture } from 'pixi.js';
 import { Scuti } from "../../Scuti";
 import { RoomMaterial } from "./RoomMaterial";
-import {Log} from "../../utils/Logger";
+import { Log } from "../../utils/Logger";
 
 export class RoomMaterialManager {
 
@@ -65,7 +65,7 @@ export class RoomMaterialManager {
         const image = this._engine.application.renderer.plugins.extract.image(finalTexture)
         finalTexture.baseTexture.resource = new BaseImageResource(image);
         sprite.destroy();
-        return new Texture(finalTexture);
+        return new Texture(finalTexture.baseTexture);
     }
 
 

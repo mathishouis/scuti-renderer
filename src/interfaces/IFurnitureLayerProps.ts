@@ -4,7 +4,7 @@ export interface IFurnitureLayerProps {
     texture: Texture,
     name: string,
     alpha: number,
-    tint?: string,
+    tint?: number,
     z: number,
     blendMode: BLEND_MODES,
     frame: number

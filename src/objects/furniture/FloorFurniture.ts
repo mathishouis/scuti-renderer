@@ -158,7 +158,7 @@ export class FloorFurniture extends RoomObject {
             }
 
             if(colorId !== undefined && visualization.colors[colorId] !== undefined && visualization.colors[colorId][i] !== undefined) {
-                layer.tint = '0x' + visualization.colors[colorId][i]
+                layer.tint = Number('0x' + visualization.colors[colorId][i]);
             }
 
             if(visualization.layers[i] !== undefined) {
@@ -171,7 +171,8 @@ export class FloorFurniture extends RoomObject {
                 }
 
                 if(visualization.layers[i].ink !== undefined) {
-                    layer.blendMode = BLEND_MODES[visualization.layers[i].ink];
+                    //layer.blendMode = BLEND_MODES[visualization.layers[i].ink];
+                    layer.blendMode = BLEND_MODES.ADD;
                 }
             }
 

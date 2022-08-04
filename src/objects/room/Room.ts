@@ -10,10 +10,10 @@ import { WallType } from "../../types/WallType";
 import { Wall } from "./parts/Wall";
 import { RoomMaterial } from "./RoomMaterial";
 import { TileCursor } from "./parts/TileCursor";
-import {RoomObject} from "./RoomObject";
-import {FloorFurniture} from "../furniture/FloorFurniture";
-import {Avatar} from "../avatar/Avatar";
-import {Log} from "../../utils/Logger";
+import { RoomObject } from "./RoomObject";
+import { FloorFurniture } from "../furniture/FloorFurniture";
+import { Avatar } from "../avatar/Avatar";
+import { Log } from "../../utils/Logger";
 
 export class Room {
 
@@ -85,7 +85,6 @@ export class Room {
         this._modelContainer?.destroy();
         this._modelContainer = new Container();
         this._modelContainer.sortableChildren = true;
-        this._modelContainer.interactive = true;
 
         this._modelContainer.x = window.innerWidth / 2;
         this._modelContainer.y = window.innerHeight / 6;

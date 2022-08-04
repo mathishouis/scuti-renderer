@@ -23,6 +23,7 @@ export class Avatar extends RoomObject {
     private _layers: Map<string, AnimatedSprite> = new Map();
     private _loaded: boolean = false;
     private _handItem: number;
+    private _moving: boolean = false;
 
     constructor(engine: Scuti, props: IAvatarProps) {
         super();
@@ -35,7 +36,7 @@ export class Avatar extends RoomObject {
         this._direction = props.direction;
         this._headDirection = props.headDirection ?? this._direction;
         this._figure = props.figure;
-        this._actions = props.actions ?? [Action.Stand];
+        this._actions = props.actions ?? [Action.Default];
         this._handItem = props.handItem ?? 0;
 
         this._draw();
@@ -65,9 +66,11 @@ export class Avatar extends RoomObject {
 
         this.addChild(this._container);
 
-        this.x = 32 * this._x - 32 * this._y;
-        this.y = 16 * this._x + 16 * this._y - 32 * this._z;
-        this.zIndex = getZOrder(this._x, this._y, this._z);
+        if(!this._moving) {
+            this.x = 32 * this._x - 32 * this._y;
+            this.y = 16 * this._x + 16 * this._y - 32 * this._z;
+            this.zIndex = getZOrder(this._x, this._y, this._z);
+        }
 
     }
 
@@ -85,9 +88,9 @@ export class Avatar extends RoomObject {
             let gesture = "std";
             let direction = this._direction;
             let rotated = false;
-            if (hh_human_body.data.partsType[k].gestures.includes(this._actions)) {
+            /*if (hh_human_body.data.partsType[k].gestures.includes(this._actions)) {
                 gesture = this._actions
-            }
+            }*/
             if(k === "hd" || k === "hr" || k === "hrb" || k === "ey" || k === "fc") {
                 direction = this._headDirection
             }
@@ -227,10 +230,13 @@ export class Avatar extends RoomObject {
     }
 
     public move(x: number, y: number, z: number): void {
+        this._moving = true;
         gsap.to(this, { x: 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z, duration: 0.5, ease: "none" }).then(() => {
             this._x = x;
             this._y = y;
             this._z = z;
+            this.zIndex = getZOrder(this._x, this._y, this._z);
+            this._moving = false;
         });
     }
 

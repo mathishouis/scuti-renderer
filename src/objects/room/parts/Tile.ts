@@ -1,6 +1,5 @@
-import {ITileProps} from "../../../interfaces/ITileProps";
+import { ITileProps } from "../../../interfaces/ITileProps";
 import { Texture, Container, Graphics, Matrix, utils } from 'pixi.js';
-import {ITileCursorProps} from "../../../interfaces/ITileCursorProps";
 
 export class Tile extends Container {
 
@@ -69,7 +68,7 @@ export class Tile extends Container {
         this._container.addChild(tileLeft);
         this._container.addChild(tileRight);
 
-        this.interactive = true;
+        this["interactive"] = true;
 
         this.addChild(this._container);
 

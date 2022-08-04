@@ -302,7 +302,7 @@ export class StairCorner extends Container {
             this._container.y = OFFSETS[2].y;
         }
 
-        this.interactive = true;
+        this["interactive"] = true;
 
         this.addChild(this._container);
 

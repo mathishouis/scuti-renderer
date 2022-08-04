@@ -65,9 +65,9 @@ export class AvatarManager {
     }
 
     public getAction(action: string): Action[] {
-        let item = Object.keys(this._habboAvatarActions).filter((item) => this._habboAvatarActions[item].assetpartdefinition === action);
-        if(item === undefined) return [Action.Default];
-        return item;
+        const actions: Action[] = Object.keys(this._habboAvatarActions).filter((item: Action) => this._habboAvatarActions[item].assetpartdefinition === action) as Action[];
+        if(actions === undefined) return [Action.Default];
+        return actions;
     }
 
     public getDrawOrder(type: string, action: string, direction: number) {
