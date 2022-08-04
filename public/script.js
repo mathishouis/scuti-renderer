@@ -9,7 +9,7 @@ async function load() {
         canvas: document.getElementById("app"),
         width: 1920,
         height: 955,
-        resources: "http://localhost:8081/"
+        resources: "https://scuti-resources.netlify.app/"
     });
     await scuti.initialise();
 

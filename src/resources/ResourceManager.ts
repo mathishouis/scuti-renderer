@@ -33,7 +33,7 @@ export class ResourceManager {
 
     public add(name: string, url: string): void {
         this._resources.push(name);
-        Assets.add(name, this._resourceUrl + url, { cors: true });
+        Assets.add(name, this._resourceUrl + url);
     }
 
     public async load(name: string): Promise<void> {
