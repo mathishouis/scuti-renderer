@@ -19,7 +19,8 @@ async function load() {
         canvas: document.getElementById("app"),
         width: 1920,
         height: 955,
-        resources: "https://scuti-resources.netlify.app/"
+        resources: "https://scuti-resources.netlify.app/",
+        background: 0x000000
         //resources: "http://localhost:8081/"
     });
     await scuti.initialise();

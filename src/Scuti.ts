@@ -75,7 +75,7 @@ export class Scuti {
             this._application = new Application({
                 width: this._configuration.width,
                 height: this._configuration.height,
-                backgroundColor: 0x24262A,
+                backgroundColor: this._configuration.background,
                 antialias: false,
             });
             this._canvas.appendChild(this._application.view);
