@@ -23,6 +23,9 @@ async function load() {
         background: 0x000000
         //resources: "http://localhost:8081/"
     });
+    scuti.onEvent = (event) => {
+        console.log(event);
+    }
     await scuti.initialise();
 
     let tilemap =

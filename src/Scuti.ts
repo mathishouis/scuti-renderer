@@ -1,16 +1,17 @@
-import { IEngineConfiguration } from "./interfaces/IEngineConfiguration";
-import { Application, settings, SCALE_MODES, Graphics } from 'pixi.js';
-import { ResourceManager } from "./resources/ResourceManager";
-import { RoomMaterialManager } from "./objects/room/RoomMaterialManager";
-import { EventManager } from "./objects/events/EventManager";
-import { FurnitureManager } from "./objects/furniture/FurnitureManager";
-import { gsap } from "gsap";
-import { PixiPlugin } from "gsap/PixiPlugin";
-import { DisplayObject } from "@pixi/display";
-import { BlurFilter } from "@pixi/filter-blur";
-import { ColorMatrixFilter } from "@pixi/filter-color-matrix";
+import {IEngineConfiguration} from "./interfaces/IEngineConfiguration";
+import {Application, Graphics, SCALE_MODES, settings} from 'pixi.js';
+import {ResourceManager} from "./resources/ResourceManager";
+import {RoomMaterialManager} from "./objects/room/RoomMaterialManager";
+import {EventManager} from "./objects/events/EventManager";
+import {FurnitureManager} from "./objects/furniture/FurnitureManager";
+import {gsap} from "gsap";
+import {PixiPlugin} from "gsap/PixiPlugin";
+import {DisplayObject} from "@pixi/display";
+import {BlurFilter} from "@pixi/filter-blur";
+import {ColorMatrixFilter} from "@pixi/filter-color-matrix";
 import {AvatarManager} from "./objects/avatar/AvatarManager";
 import {Log} from "./utils/Logger";
+import {Event} from "./enum/Event";
 
 export class Scuti {
 
@@ -24,6 +25,8 @@ export class Scuti {
     private _avatarManager: AvatarManager;
 
     private _configuration: IEngineConfiguration;
+
+    private _onEvent: (state: Event) => void;
 
     constructor(private configuration: IEngineConfiguration) {
 
@@ -86,15 +89,28 @@ export class Scuti {
             this._furnitureManager = new FurnitureManager(this);
             this._avatarManager = new AvatarManager(this);
             await this._resourceManager.initialise();
+            if(this._onEvent) this._onEvent(Event.RESOURCE_MANAGER_LOADED);
             await this._roomMaterialManager.initialise();
+            if(this._onEvent) this._onEvent(Event.MATERIAL_MANAGER_LOADED);
             await this._eventManager.initialise();
+            if(this._onEvent) this._onEvent(Event.EVENT_MANAGER_LOADED);
             await this._furnitureManager.initialise();
+            if(this._onEvent) this._onEvent(Event.FURNITURE_MANAGER_LOADED);
             await this._avatarManager.initialise();
+            if(this._onEvent) this._onEvent(Event.AVATAR_MANAGER_LOADED);
             resolve();
             const endDate: Date = new Date();
             Log('⚡', 'Scuti Renderer started in ' + (endDate.getTime() - startDate.getTime()) + 'ms.', 'success');
         });
 
+    }
+
+    public get onEvent() {
+        return this._onEvent;
+    }
+
+    public set onEvent(value) {
+        this._onEvent = value;
     }
 
 

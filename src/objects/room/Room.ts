@@ -26,6 +26,7 @@ export class Room {
 
     private _tileCursor: TileCursor;
 
+    private _heightmap: string;
     private _parsedTileMap: { type: string, z: number, direction?: number, shape?: StairType, wall: WallType }[][];
 
     private _tiles: (Tile | Stair | StairCorner)[] = [];
@@ -44,6 +45,7 @@ export class Room {
 
         this._engine = engine;
 
+        this._heightmap = configuration.tilemap;
         this._parsedTileMap = parse(configuration.tilemap);
 
         this._maxZ = getMaxZ(this._parsedTileMap);
@@ -58,6 +60,16 @@ export class Room {
 
         this._updateHeightmap();
 
+    }
+
+    public set heightmap(heightmap: string) {
+        this._heightmap = heightmap;
+        this._parsedTileMap = parse(heightmap);
+        this._updateHeightmap();
+    }
+
+    public get heightmap(): string {
+        return this._heightmap;
     }
 
     public set floorMaterial(material: RoomMaterial) {
