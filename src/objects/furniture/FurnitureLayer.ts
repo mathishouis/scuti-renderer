@@ -18,6 +18,7 @@ export class FurnitureLayer extends Sprite {
         props.z ? this.zIndex = Number(props.z) : null;
         this.blendMode = props.blendMode;
         props.alpha ? this.alpha = props.alpha : null;
+        props.flip ? this.scale.x = -1 : null;
 
     }
 

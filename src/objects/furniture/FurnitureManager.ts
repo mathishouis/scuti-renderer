@@ -26,9 +26,16 @@ export class FurnitureManager {
 
     }
 
-    public getClassName(id: number): string {
+    /*public getClassName(id: number): string {
         let furni = this._furnidata.floorItems.find((item) => item.id === id);
         if (!furni) furni = this._furnidata.wallItems.find((item) => item.id === id);
+        return furni.className;
+    }*/
+
+    getClassName(id: number, type: ("floorItem" | "wallItem")): string {
+        let furni: {};
+        if(type === "floorItem") furni = this._furnidata.floorItems.find((item) => item.id === id);
+        if(type === "wallItem") furni = this._furnidata.wallItems.find((item) => item.id === id);
         return furni.className;
     }
 

@@ -7,5 +7,6 @@ export interface IFurnitureLayerProps {
     tint?: number,
     z: number,
     blendMode: BLEND_MODES,
-    frame: number
+    frame: number,
+    flip?: boolean
 }

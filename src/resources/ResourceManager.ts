@@ -19,11 +19,13 @@ export class ResourceManager {
             this.add('room_data', 'generic/room/room_data.json');
             this.add('tile_cursor', 'generic/tile_cursor/tile_cursor.json');
             this.add('place_holder_furniture', 'generic/place_holder/place_holder_furniture.json');
+            this.add('place_holder_wall_item', 'generic/place_holder/place_holder_wall_item.json');
             this.add('hh_human_body', 'figure/hh_human_body/hh_human_body.json');
             await this.load('room');
             await this.load('room_data');
             await this.load('tile_cursor');
             await this.load('place_holder_furniture');
+            await this.load('place_holder_wall_item');
             await this.load('hh_human_body');
             const endDate: Date = new Date();
             Log('Resource Manager', 'Initialised in ' + (endDate.getTime() - startDate.getTime()) + 'ms.', 'info');

@@ -14,6 +14,7 @@ import { RoomObject } from "./RoomObject";
 import { FloorFurniture } from "../furniture/FloorFurniture";
 import { Avatar } from "../avatar/Avatar";
 import { Log } from "../../utils/Logger";
+import {WallFurniture} from "../furniture/WallFurniture";
 
 export class Room {
 
@@ -65,6 +66,7 @@ export class Room {
     public set heightmap(heightmap: string) {
         this._heightmap = heightmap;
         this._parsedTileMap = parse(heightmap);
+        this._maxZ = getMaxZ(this._parsedTileMap);
         this._updateHeightmap();
     }
 
@@ -169,7 +171,7 @@ export class Room {
         this._tileCursor?.destroy();
     }
 
-    public addRoomObject(object: (FloorFurniture | Avatar)): void {
+    public addRoomObject(object: (FloorFurniture | WallFurniture | Avatar)): void {
         object.room = this;
         object.startAnimation();
         this._roomObjects.add(object);

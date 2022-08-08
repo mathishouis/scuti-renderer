@@ -3,6 +3,7 @@ import { Room } from "../src/objects/room/Room";
 import {FloorFurniture} from "../src/objects/furniture/FloorFurniture";
 import {Avatar} from "../src/objects/avatar/Avatar";
 import {Action} from "../src/enum/Action";
+import {WallFurniture} from "../src/objects/furniture/WallFurniture";
 
 let action = "move";
 
@@ -19,9 +20,9 @@ async function load() {
         canvas: document.getElementById("app"),
         width: 1920,
         height: 955,
-        resources: "https://scuti-resources.netlify.app/",
-        background: 0x000000
-        //resources: "http://localhost:8081/"
+        //resources: "https://scuti-resources.netlify.app/",
+        background: 0x000000,
+        resources: "http://localhost:8081/"
     });
     scuti.onEvent = (event) => {
         console.log(event);
@@ -60,6 +61,23 @@ async function load() {
         "x000000000000000000x\n" +
         "xxxxxxxxxxxxxxxxxxxx\n";
 
+    let tilemap2 ="xxxxxxxxxxxx\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxx000000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxxxxxxxxxx\n" +
+        "xxxxxxxxxxxx\n"
+
 
 
     let room = new Room(scuti, {
@@ -67,6 +85,8 @@ async function load() {
 
         , floorMaterial: 110, wallMaterial: 1501
     });
+
+    room.heightmap = tilemap2;
 
     let furniId = [3901, 3902, 3903, 3904, 3898, 3899, 3900, 3896, 3895, 3892, 3891, 3890, 3889, 3888, 3887, 3886, 3893, 3894, 1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1619, 13]
     let randomRotation = [0, 2, 4, 6];
@@ -116,9 +136,111 @@ async function load() {
     //:avatar.addAction(Action.UseItem);
     avatar.addAction(Action.Wave);
 
+    let wallFurniture = new WallFurniture(scuti, {
+        /*x: 6,
+        y: 0,
+        offsetX: 6,
+        offsetY: 35,*/
+        x: 3,
+        y: 7,
+        offsetX: 8,
+        offsetY: 36,
+        id: 4625,
+        direction: 2,
+    });
+    room.addRoomObject(wallFurniture);
+    let wallFurniture2 = new WallFurniture(scuti, {
+        /*x: 6,
+        y: 0,
+        offsetX: 6,
+        offsetY: 35,*/
+        x: 3,
+        y: 8,
+        offsetX: 8,
+        offsetY: 36,
+        id: 4625,
+        direction: 2,
+    });
+    room.addRoomObject(wallFurniture2);
+
+    let wallFurniture3 = new WallFurniture(scuti, {
+        /*x: 6,
+        y: 0,
+        offsetX: 6,
+        offsetY: 35,*/
+        x: 4,
+        y: 0,
+        offsetX: 14,
+        offsetY: 41,
+        id: 4066,
+        direction: 4,
+        state: 3,
+    });
+    room.addRoomObject(wallFurniture3);
+
+    let wallFurniture4 = new WallFurniture(scuti, {
+        /*x: 6,
+        y: 0,
+        offsetX: 6,
+        offsetY: 35,*/
+        x: 3,
+        y: 10,
+        offsetX: 5,
+        offsetY: 48,
+        id: 4075,
+        direction: 2,
+        state: 1
+    });
+    room.addRoomObject(wallFurniture4);
+
+    let wallFurniture5 = new WallFurniture(scuti, {
+        /*x: 6,
+        y: 0,
+        offsetX: 6,
+        offsetY: 35,*/
+        x: 3,
+        y: 5,
+        offsetX: 13,
+        offsetY: 12,
+        id: 4071,
+        direction: 2,
+        state: 1
+    });
+    room.addRoomObject(wallFurniture5);
+
+    let wallFurniture6 = new WallFurniture(scuti, {
+        /*x: 6,
+        y: 0,
+        offsetX: 6,
+        offsetY: 35,*/
+        x: 3,
+        y: 2,
+        offsetX: 9,
+        offsetY: 47,
+        id: 4333,
+        direction: 2,
+        state: 0
+    });
+    room.addRoomObject(wallFurniture6);
+
+    let wallFurniture7 = new WallFurniture(scuti, {
+        /*x: 6,
+        y: 0,
+        offsetX: 6,
+        offsetY: 35,*/
+        x: 8,
+        y: 0,
+        offsetX: 1,
+        offsetY: 10,
+        id: 4333,
+        direction: 4,
+        state: 0
+    });
+    room.addRoomObject(wallFurniture7);
+
     room.tileClick = (x, y, z) => {
         if(action === "move") {
-            avatar.handItem = Math.floor(Math.random() * 150);
+            //avatar.handItem = Math.floor(Math.random() * 150);
             avatar.move(x, y, z);
         } else {
             let furni = new FloorFurniture(scuti, {

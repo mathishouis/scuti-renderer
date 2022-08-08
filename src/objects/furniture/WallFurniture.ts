@@ -1,18 +1,18 @@
 import {RoomObject} from "../room/RoomObject";
-import {IFloorFurnitureProps} from "../../interfaces/IFloorFurnitureProps";
 import {BLEND_MODES, Container, Sprite} from "pixi.js";
 import {FurnitureLayer} from "./FurnitureLayer";
 import {Scuti} from "../../Scuti";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
-import {getZOrder, getZOrderFloorItem} from "../../utils/ZOrder";
+import {IWallFurnitureProps} from "../../interfaces/IWallFurnitureProps";
 
-export class FloorFurniture extends RoomObject {
+export class WallFurniture extends RoomObject {
 
     private _engine: Scuti;
 
     private _x: number;
     private _y: number;
-    private _z: number;
+    private _offsetX: number;
+    private _offsetY: number;
     private _direction: number;
     private _id: number;
     private _className: string;
@@ -23,18 +23,19 @@ export class FloorFurniture extends RoomObject {
     private _loaded: boolean = false;
     private _visualization: string;
 
-    constructor(engine: Scuti, props: IFloorFurnitureProps) {
+    constructor(engine: Scuti, props: IWallFurnitureProps) {
         super();
 
         this._engine = engine;
 
         this._x = props.x;
         this._y = props.y;
-        this._z = props.z;
+        this._offsetX = props.offsetX;
+        this._offsetY = props.offsetY;
         this._direction = props.direction;
         this._state = props.state ?? 0;
         this._id = props.id;
-        this._className = this._engine.furnitures.getClassName(this._id, "floorItem");
+        this._className = this._engine.furnitures.getClassName(this._id, "wallItem");
 
         this._draw();
 
@@ -69,11 +70,19 @@ export class FloorFurniture extends RoomObject {
 
         this._loaded = true;
 
-        this.zIndex = getZOrder(this._x, this._y, this._z);
+        this.zIndex = 2;
 
         this.addChild(this._container);
+
         this.x = 32 + 32 * this._x - 32 * this._y;
-        this.y = 16 * this._x + 16 * this._y - 32 * this._z;
+        this.y = 16 * this._x + 16 * this._y - 32;
+        if(this._direction === 2) {
+            this.x = this.x + this._offsetX * 2;
+            this.y = this.y + this._offsetX / 2 + this._offsetY * (2 + 2 / 32) - 90;
+        } else {
+            this.x = this.x + this._offsetX * 2 - 33;
+            this.y = this.y + this._offsetX / 2 + this._offsetY * (2 + 2 / 32) - 94;
+        }
 
     }
 
@@ -82,14 +91,25 @@ export class FloorFurniture extends RoomObject {
         this._container?.destroy();
         this._container = new Container();
 
-        let placeholder = new Sprite(this._engine.resources.get('place_holder_furniture').textures['place_holder_furniture_64.png'])
+        let placeholder = new Sprite(this._engine.resources.get('place_holder_wall_item').textures['place_holder_wall_item_64.png']);
+
+        if(this._direction === 4) {
+            placeholder.scale.x = -1;
+        }
 
         this._container.addChild(placeholder);
 
         this.addChild(this._container);
 
-        this.x = 32 * this._x - 32 * this._y - 1;
-        this.y = 16 * this._x + 16 * this._y - 32 * this._z - 50;
+        this.x = 32 + 32 * this._x - 32 * this._y;
+        this.y = 16 * this._x + 16 * this._y - 32;
+        if(this._direction === 2) {
+            this.x = this.x + this._offsetX * 2;
+            this.y = this.y + this._offsetX / 2 + this._offsetY * (2 + 2 / 32) - 110;
+        } else {
+            this.x = this.x + this._offsetX * 2 - 33;
+            this.y = this.y + this._offsetX / 2 + this._offsetY * (2 + 2 / 32) - 114;
+        }
         this.zIndex = 2;
 
     }
@@ -131,7 +151,8 @@ export class FloorFurniture extends RoomObject {
                 alpha: undefined,
                 tint: undefined,
                 z: 0,
-                blendMode: BLEND_MODES.NORMAL
+                blendMode: BLEND_MODES.NORMAL,
+                flip: false,
             }
 
             if (visualization.directions.indexOf(this._direction) === -1) {
@@ -151,10 +172,16 @@ export class FloorFurniture extends RoomObject {
                 frame = visualization.animation[this._state][i].frameSequence[layer.frame] ?? 0;
             }
 
-            layer.name = name + '_' + name + '_64_' + String.fromCharCode(97 + Number(i)) + '_' + this._direction + '_' + frame;
+            layer.name = name + '_64_' + String.fromCharCode(97 + Number(i)) + '_' + this._direction + '_' + frame;
+
+            if(data.data.frames[layer.name] !== undefined) {
+                layer.flip = data.data.frames[layer.name].flipH;
+            }
 
             if(data.textures[layer.name] !== undefined) {
                 layer.texture = data.textures[layer.name];
+            } else {
+                continue;
             }
 
             if(colorId !== undefined && visualization.colors[colorId] !== undefined && visualization.colors[colorId][i] !== undefined) {
@@ -190,7 +217,11 @@ export class FloorFurniture extends RoomObject {
             blendMode: BLEND_MODES.NORMAL
         }
 
-        layer.name = name + '_' + name + '_64_sd_' + this._direction + '_0';
+        layer.name = name + '_64_sd_' + this._direction + '_0';
+
+        if(this._direction === 4) {
+            layer.flip = true;
+        }
 
         if(data.textures[layer.name] !== undefined) {
             layer.texture = data.textures[layer.name];
