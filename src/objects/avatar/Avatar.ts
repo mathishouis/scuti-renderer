@@ -206,7 +206,7 @@ export class Avatar extends RoomObject {
                                 flip: true,
                                 direction: direction,
                                 textures: this._engine.resources.get(libId).animations[name],
-                                tint: part.colorable === 1 ? this._engine.avatars.getColor(figureType, colors[part.index]) : undefined,
+                                tint: part.colorable === 1 && type !== "ey" ? this._engine.avatars.getColor(figureType, colors[part.index]) : undefined,
                                 alpha: 1,
                                 name: name,
                                 z: this._engine.avatars.getDrawOrder(type, action, direction)

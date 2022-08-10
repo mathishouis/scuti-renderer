@@ -1,6 +1,6 @@
 {
   "name": "scuti-renderer",
-  "version": "1.0.15",
+  "version": "1.0.17",
   "description": "An opensource Habbo renderer written in TypeScript",
   "main": "dist/index.js",
   "source": "src/index.ts",

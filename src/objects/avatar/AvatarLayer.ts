@@ -1,4 +1,4 @@
-import {BLEND_MODES, Sprite, Texture, utils, AnimatedSprite} from "pixi.js";
+import {AnimatedSprite, BLEND_MODES} from "pixi.js";
 import {IAvatarLayerProps} from "../../interfaces/IAvatarLayerProps";
 
 export class AvatarLayer extends AnimatedSprite {
