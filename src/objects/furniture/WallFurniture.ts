@@ -4,6 +4,7 @@ import {FurnitureLayer} from "./FurnitureLayer";
 import {Scuti} from "../../Scuti";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
 import {IWallFurnitureProps} from "../../interfaces/IWallFurnitureProps";
+import {getZOrder} from "../../utils/ZOrder";
 
 export class WallFurniture extends RoomObject {
 
@@ -70,7 +71,7 @@ export class WallFurniture extends RoomObject {
 
         this._loaded = true;
 
-        this.zIndex = 2;
+        this.zIndex = getZOrder(this._x, this._y, 0);
 
         this.addChild(this._container);
 
@@ -78,10 +79,10 @@ export class WallFurniture extends RoomObject {
         this.y = 16 * this._x + 16 * this._y - 32;
         if(this._direction === 2) {
             this.x = this.x + this._offsetX * 2;
-            this.y = this.y + this._offsetX / 2 + this._offsetY * (2 + 2 / 32) - 90;
+            this.y = this.y + this._offsetY * 2 - 84;
         } else {
-            this.x = this.x + this._offsetX * 2 - 33;
-            this.y = this.y + this._offsetX / 2 + this._offsetY * (2 + 2 / 32) - 94;
+            this.x = this.x + this._offsetX * 2 - 32;
+            this.y = this.y + this._offsetY * 2 - 84;
         }
 
     }
@@ -105,12 +106,12 @@ export class WallFurniture extends RoomObject {
         this.y = 16 * this._x + 16 * this._y - 32;
         if(this._direction === 2) {
             this.x = this.x + this._offsetX * 2;
-            this.y = this.y + this._offsetX / 2 + this._offsetY * (2 + 2 / 32) - 110;
+            this.y = this.y + this._offsetY * 2 - 110;
         } else {
-            this.x = this.x + this._offsetX * 2 - 33;
-            this.y = this.y + this._offsetX / 2 + this._offsetY * (2 + 2 / 32) - 114;
+            this.x = this.x + this._offsetX * 2 - 32;
+            this.y = this.y + this._offsetY * 2 - 114;
         }
-        this.zIndex = 2;
+        this.zIndex = getZOrder(this._x, this._y, 0);
 
     }
 

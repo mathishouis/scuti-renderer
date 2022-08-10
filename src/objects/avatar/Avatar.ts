@@ -231,12 +231,12 @@ export class Avatar extends RoomObject {
 
     public move(x: number, y: number, z: number): void {
         this._moving = true;
+        this.zIndex = getZOrder(this._x, this._y, this._z);
         gsap.to(this, { x: 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z, duration: 0.5, ease: "linear", onComplete: () => {
                 this._x = x;
                 this._y = y;
                 this._z = z;
                 this._moving = false;
-                this.zIndex = getZOrder(this._x, this._y, this._z);
             } });
 
     }

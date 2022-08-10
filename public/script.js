@@ -139,10 +139,7 @@ async function load() {
     avatar.addAction(Action.Wave);
 
     let wallFurniture = new WallFurniture(scuti, {
-        /*x: 6,
-        y: 0,
-        offsetX: 6,
-        offsetY: 35,*/
+
         x: 3,
         y: 7,
         offsetX: 8,
@@ -152,10 +149,6 @@ async function load() {
     });
     room.addRoomObject(wallFurniture);
     let wallFurniture2 = new WallFurniture(scuti, {
-        /*x: 6,
-        y: 0,
-        offsetX: 6,
-        offsetY: 35,*/
         x: 3,
         y: 8,
         offsetX: 8,
@@ -166,10 +159,6 @@ async function load() {
     room.addRoomObject(wallFurniture2);
 
     let wallFurniture3 = new WallFurniture(scuti, {
-        /*x: 6,
-        y: 0,
-        offsetX: 6,
-        offsetY: 35,*/
         x: 4,
         y: 0,
         offsetX: 14,
@@ -181,10 +170,6 @@ async function load() {
     room.addRoomObject(wallFurniture3);
 
     let wallFurniture4 = new WallFurniture(scuti, {
-        /*x: 6,
-        y: 0,
-        offsetX: 6,
-        offsetY: 35,*/
         x: 3,
         y: 10,
         offsetX: 5,
@@ -196,10 +181,6 @@ async function load() {
     room.addRoomObject(wallFurniture4);
 
     let wallFurniture5 = new WallFurniture(scuti, {
-        /*x: 6,
-        y: 0,
-        offsetX: 6,
-        offsetY: 35,*/
         x: 3,
         y: 5,
         offsetX: 13,
@@ -211,10 +192,6 @@ async function load() {
     room.addRoomObject(wallFurniture5);
 
     let wallFurniture6 = new WallFurniture(scuti, {
-        /*x: 6,
-        y: 0,
-        offsetX: 6,
-        offsetY: 35,*/
         x: 3,
         y: 2,
         offsetX: 9,
@@ -226,10 +203,6 @@ async function load() {
     room.addRoomObject(wallFurniture6);
 
     let wallFurniture7 = new WallFurniture(scuti, {
-        /*x: 6,
-        y: 0,
-        offsetX: 6,
-        offsetY: 35,*/
         x: 8,
         y: 0,
         offsetX: 1,
@@ -239,6 +212,66 @@ async function load() {
         state: 0
     });
     room.addRoomObject(wallFurniture7);
+    /*let wallFurniture = new WallFurniture(scuti, {
+        x: 3,
+        y: 11,
+        offsetX: 14,
+        offsetY: 27,
+        id: 4235,
+        direction: 2,
+        state: 0
+    });
+    room.addRoomObject(wallFurniture);
+    let wallFurniture1 = new WallFurniture(scuti, {
+        x: 3,
+        y: 12,
+        offsetX: 0,
+        offsetY: 34,
+        id: 4235,
+        direction: 2,
+        state: 0
+    });
+    room.addRoomObject(wallFurniture1);
+    let wallFurniture2 = new WallFurniture(scuti, {
+        x: 3,
+        y: 3,
+        offsetX: 5,
+        offsetY: 32,
+        id: 4235,
+        direction: 2,
+        state: 0
+    });
+    room.addRoomObject(wallFurniture2);
+    let wallFurniture3 = new WallFurniture(scuti, {
+        x: 3,
+        y: 2,
+        offsetX: 15,
+        offsetY: 27,
+        id: 4235,
+        direction: 2,
+        state: 0
+    });
+    room.addRoomObject(wallFurniture3);
+    let wallFurniture4 = new WallFurniture(scuti, {
+        x: 3,
+        y: 8,
+        offsetX: 6,
+        offsetY: 31,
+        id: 4235,
+        direction: 2,
+        state: 0
+    });
+    room.addRoomObject(wallFurniture4);
+    let wallFurniture5 = new WallFurniture(scuti, {
+        x: 3,
+        y: 9,
+        offsetX: 11,
+        offsetY: 29,
+        id: 4235,
+        direction: 2,
+        state: 0
+    });
+    room.addRoomObject(wallFurniture5);*/
 
     room.tileClick = (x, y, z) => {
         if(action === "move") {
