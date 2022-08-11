@@ -5,6 +5,7 @@ import {FurnitureLayer} from "./FurnitureLayer";
 import {Scuti} from "../../Scuti";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
 import {getZOrder, getZOrderFloorItem} from "../../utils/ZOrder";
+import {gsap} from "gsap";
 
 export class FloorFurniture extends RoomObject {
 
@@ -211,6 +212,25 @@ export class FloorFurniture extends RoomObject {
     private _onTick(): void {
         if(this._visualization === "furniture_animated") {
             this._nextFrame();
+        }
+    }
+
+    public move(x: number, y: number, z: number, animate: boolean = false): void {
+        if (!animate) {
+            this._x = x;
+            this._y = y;
+            this._z = z;
+            this.zIndex = getZOrder(this._x, this._y, this._z);
+            this._draw();
+        } else {
+            this.zIndex = getZOrder(this._x, this._y, this._z);
+            gsap.to(this, {
+                x: 32 + 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z, duration: 0.5, ease: "linear", onComplete: () => {
+                    this._x = x;
+                    this._y = y;
+                    this._z = z;
+                }
+            });
         }
     }
 

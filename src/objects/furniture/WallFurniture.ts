@@ -238,6 +238,28 @@ export class WallFurniture extends RoomObject {
         }
     }
 
+    public move(x: number, y: number, offsetX: number, offsetY: number, animate: boolean = false): void {
+        if (!animate) {
+            this._x = x;
+            this._y = y;
+            this._offsetX = offsetX;
+            this._offsetY = offsetY;
+            this.zIndex = getZOrder(this._x, this._y, 0);
+            this._draw();
+        } else {
+            this.zIndex = getZOrder(this._x, this._y, 0);
+            gsap.to(this, {
+                x: this._direction === 2 ? 32 + 32 * x - 32 * y + offsetX * 2 : 32 + 32 * x - 32 * y + offsetX * 2 - 32,
+                y: 16 * x + 16 * y - 32 + offsetY * 2 - 84, duration: 0.5, ease: "linear", onComplete: () => {
+                    this._x = x;
+                    this._y = y;
+                    this._offsetX = offsetX;
+                    this._offsetY = offsetY;
+                }
+            });
+        }
+    }
+
     public startAnimation(): void {
         this.animationTicker.add(() => {
             this._onTick();

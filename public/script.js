@@ -276,20 +276,22 @@ async function load() {
     });
     room.addRoomObject(wallFurniture5);*/
 
+    let furni = new FloorFurniture(scuti, {
+        x: 0,
+        y: 0,
+        z: 0,
+        direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        id: furniId[Math.floor(Math.random() * furniId.length)],
+        state: 1,
+    });
+    room.addRoomObject(furni);
+
     room.tileClick = (x, y, z) => {
         if(action === "move") {
-            //avatar.handItem = Math.floor(Math.random() * 150);
-            avatar.move(x, y, z);
+            avatar.handItem = Math.floor(Math.random() * 150);
+            avatar.move(x, y, z, true);
         } else {
-            let furni = new FloorFurniture(scuti, {
-                x: x,
-                y: y,
-                z: z,
-                direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
-                id: furniId[Math.floor(Math.random() * furniId.length)],
-                state: 1,
-            });
-            room.addRoomObject(furni);
+            furni.move(x, y, z, true);
         }
     }
 
