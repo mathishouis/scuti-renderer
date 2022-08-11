@@ -277,4 +277,22 @@ export class WallFurniture extends RoomObject {
         this._container?.destroy();
     }
 
+    public get state(): number {
+        return this._state;
+    }
+
+    public set state(state: number) {
+        this._state = state;
+        this._draw();
+    }
+
+    public get direction(): number {
+        return this._state;
+    }
+
+    public set direction(direction: number) {
+        this._direction = direction;
+        this._draw();
+    }
+
 }

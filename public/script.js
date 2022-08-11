@@ -280,11 +280,16 @@ async function load() {
         x: 0,
         y: 0,
         z: 0,
-        direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        direction: 0,
         id: furniId[Math.floor(Math.random() * furniId.length)],
         state: 1,
     });
     room.addRoomObject(furni);
+
+    setTimeout(() => {
+        furni.rotate(2, true);
+    }, 4000);
 
     room.tileClick = (x, y, z) => {
         if(action === "move") {

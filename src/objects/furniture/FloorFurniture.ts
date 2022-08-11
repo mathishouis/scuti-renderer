@@ -238,6 +238,23 @@ export class FloorFurniture extends RoomObject {
         }
     }
 
+    public rotate(direction: number, animate: boolean = false) {
+        if (!animate) {
+            this._direction = direction;
+            this._draw();
+        } else {
+            gsap.to(this, {
+                x: 32 + 32 * this._x - 32 * this._y, y: 16 * this._x + 16 * this._y - 32 * this._z - 6.25, duration: 0.1, ease: "easeIn", onComplete: () => {
+                    this._direction = direction;
+                    gsap.to(this, {
+                        x: 32 + 32 * this._x - 32 * this._y, y: 16 * this._x + 16 * this._y - 32 * this._z, duration: 0.1, ease: "easeOut", onComplete: () => {
+                        }
+                    });
+                }
+            });
+        }
+    }
+
     public startAnimation(): void {
         this.animationTicker.add(() => {
             this._onTick();
@@ -253,6 +270,24 @@ export class FloorFurniture extends RoomObject {
     public destroy(): void {
         this.stopAnimation();
         this._container?.destroy();
+    }
+
+    public get state(): number {
+        return this._state;
+    }
+
+    public set state(state: number) {
+        this._state = state;
+        this._draw();
+    }
+
+    public get direction(): number {
+        return this._state;
+    }
+
+    public set direction(direction: number) {
+        this._direction = direction;
+        this._draw();
     }
 
 }
