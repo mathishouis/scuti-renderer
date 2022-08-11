@@ -280,7 +280,7 @@ export class FloorFurniture extends RoomObject {
     }
 
     public get direction(): number {
-        return this._state;
+        return this._direction;
     }
 
     public set direction(direction: number) {
@@ -288,8 +288,7 @@ export class FloorFurniture extends RoomObject {
         this._draw();
     }
 
-    // @ts-ignore
-    public get position(): { x: number, y: number, z: number } {
+    public get roomPosition(): { x: number, y: number, z: number } {
         return {
             x: this._x,
             y: this._y,
