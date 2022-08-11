@@ -246,10 +246,8 @@ export class FloorFurniture extends RoomObject {
             gsap.to(this, {
                 x: 32 + 32 * this._x - 32 * this._y, y: 16 * this._x + 16 * this._y - 32 * this._z - 6.25, duration: 0.1, ease: "easeIn", onComplete: () => {
                     this._direction = direction;
-                    gsap.to(this, {
-                        x: 32 + 32 * this._x - 32 * this._y, y: 16 * this._x + 16 * this._y - 32 * this._z, duration: 0.1, ease: "easeOut", onComplete: () => {
-                        }
-                    });
+                    this._draw();
+                    gsap.to(this, { x: 32 + 32 * this._x - 32 * this._y, y: 16 * this._x + 16 * this._y - 32 * this._z, duration: 0.1, ease: "easeOut" });
                 }
             });
         }
@@ -288,6 +286,15 @@ export class FloorFurniture extends RoomObject {
     public set direction(direction: number) {
         this._direction = direction;
         this._draw();
+    }
+
+    // @ts-ignore
+    public get position(): { x: number, y: number, z: number } {
+        return {
+            x: this._x,
+            y: this._y,
+            z: this._z
+        };
     }
 
 }
