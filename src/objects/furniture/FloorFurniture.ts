@@ -201,6 +201,10 @@ export class FloorFurniture extends RoomObject {
 
         layer.name = name + '_' + name + '_64_sd_' + this._direction + '_0';
 
+        if(data.data.frames[layer.name] !== undefined) {
+            layer.flip = data.data.frames[layer.name].flipH;
+        }
+
         if(data.textures[layer.name] !== undefined) {
             layer.texture = data.textures[layer.name];
             layers.push(layer);

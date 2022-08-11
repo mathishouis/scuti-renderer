@@ -220,8 +220,8 @@ export class WallFurniture extends RoomObject {
 
         layer.name = name + '_' + name + '_64_sd_' + this._direction + '_0';
 
-        if(this._direction === 4) {
-            layer.flip = true;
+        if(data.data.frames[layer.name] !== undefined) {
+            layer.flip = data.data.frames[layer.name].flipH;
         }
 
         if(data.textures[layer.name] !== undefined) {
