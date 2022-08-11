@@ -155,7 +155,7 @@ export class FloorFurniture extends RoomObject {
                 frame = visualization.animation[this._state][i].frameSequence[layer.frame] ?? 0;
             }
 
-            layer.name = name + '_64_' + String.fromCharCode(97 + Number(i)) + '_' + this._direction + '_' + frame;
+            layer.name = name + '_' + name + '_64_' + String.fromCharCode(97 + Number(i)) + '_' + this._direction + '_' + frame;
 
             if(data.data.frames[layer.name] !== undefined) {
                 layer.flip = data.data.frames[layer.name].flipH;
@@ -198,7 +198,7 @@ export class FloorFurniture extends RoomObject {
             blendMode: BLEND_MODES.NORMAL
         }
 
-        layer.name = name + '_64_sd_' + this._direction + '_0';
+        layer.name = name + '_' + name + '_64_sd_' + this._direction + '_0';
 
         if(data.textures[layer.name] !== undefined) {
             layer.texture = data.textures[layer.name];
@@ -224,6 +224,11 @@ export class FloorFurniture extends RoomObject {
         this.animationTicker.remove(() => {
             this._onTick();
         });
+    }
+
+    public destroy(): void {
+        this.stopAnimation();
+        this._container?.destroy();
     }
 
 }

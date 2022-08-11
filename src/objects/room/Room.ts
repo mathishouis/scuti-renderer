@@ -178,6 +178,12 @@ export class Room {
         this._roomObjectContainer.addChild(object);
     }
 
+    public removeRoomObject(object: (FloorFurniture | WallFurniture | Avatar)): void {
+        this._roomObjects.delete(object);
+        this._roomObjectContainer.removeChild(object);
+        object.destroy();
+    }
+
     private _createWall(x: number, y: number, z: number, type: WallType, door?: boolean): void {
 
         const wall = new Wall({ color: this.wallMaterial.color, thickness: 8, door: door, tileThickness: 8, type: type, maxZ: this._maxZ, roomZ: z, texture: this.wallMaterial.texture });

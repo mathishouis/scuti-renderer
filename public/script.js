@@ -148,6 +148,9 @@ async function load() {
         direction: 2,
     });
     room.addRoomObject(wallFurniture);
+    setTimeout(() => {
+        room.removeRoomObject(wallFurniture);
+    }, 5000);
     let wallFurniture2 = new WallFurniture(scuti, {
         x: 3,
         y: 8,

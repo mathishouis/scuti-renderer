@@ -282,4 +282,8 @@ export class Avatar extends RoomObject {
 
     }
 
+    public destroy(): void {
+        this._container?.destroy();
+    }
+
 }
