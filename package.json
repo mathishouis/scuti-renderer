@@ -1,6 +1,6 @@
 {
   "name": "scuti-renderer",
-  "version": "1.0.24",
+  "version": "1.0.66",
   "description": "An opensource Habbo renderer written in TypeScript",
   "main": "dist/index.js",
   "source": "src/index.ts",
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "^7.18.9",
     "@parcel/transformer-typescript-tsc": "^2.6.2",
+    "@types/node": "^18.7.2",
     "events": "^3.3.0",
     "parcel": "^2.6.2",
     "querystring-es3": "^0.2.1",
@@ -35,6 +36,7 @@
   "dependencies": {
     "@pixi/assets": "^6.5.1",
     "gsap": "^3.10.4",
+    "pixi-layers": "^0.3.1",
     "pixi.js": "^6.5.1"
   },
   "bugs": {

@@ -39,10 +39,12 @@ export class Avatar extends RoomObject {
         this._actions = props.actions ?? [Action.Default];
         this._handItem = props.handItem ?? 0;
 
-        this._draw();
     }
 
-    private async _draw(): Promise<void> {
+    public async draw(): Promise<void> {
+
+        // @ts-ignore
+        this.parentLayer = this.room.roomObjectLayer;
 
         this._layers = new Map();
 
@@ -69,7 +71,8 @@ export class Avatar extends RoomObject {
         if(!this._moving) {
             this.x = 32 * this._x - 32 * this._y;
             this.y = 16 * this._x + 16 * this._y - 32 * this._z;
-            this.zIndex = getZOrder(this._x, this._y, this._z);
+            // @ts-ignore
+            this.zOrder = getZOrderAvatar(this._x, this._y, this._z);
         }
 
     }
@@ -234,11 +237,11 @@ export class Avatar extends RoomObject {
             this._x = x;
             this._y = y;
             this._z = z;
-            this.zIndex = getZOrder(this._x, this._y, this._z);
-            this._draw();
+            this.draw();
         } else {
             this._moving = true;
-            this.zIndex = getZOrder(this._x, this._y, this._z);
+            // @ts-ignore
+            this.zOrder = getZOrderAvatar(x, y, z);
             gsap.to(this, {
                 x: 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z, duration: 0.5, ease: "linear", onComplete: () => {
                     this._x = x;
@@ -253,12 +256,12 @@ export class Avatar extends RoomObject {
 
     public addAction(action: Action): void {
         this._actions.push(action);
-        this._draw();
+        this.draw();
     }
 
     public removeAction(action: Action): void {
         this._actions = this._actions.filter((actionFilter: Action) => { return actionFilter !== action });
-        this._draw();
+        this.draw();
     }
 
     public get direction(): number {
@@ -267,7 +270,7 @@ export class Avatar extends RoomObject {
 
     public set direction(direction: number) {
         this._direction = direction;
-        this._draw();
+        this.draw();
     }
 
     public get headDirection(): number {
@@ -276,7 +279,7 @@ export class Avatar extends RoomObject {
 
     public set headDirection(direction: number) {
         this._headDirection = direction;
-        this._draw();
+        this.draw();
     }
 
     public get handItem(): number {

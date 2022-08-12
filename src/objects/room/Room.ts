@@ -42,6 +42,9 @@ export class Room {
 
     private _animationTicker: Ticker = new Ticker();
 
+    // @ts-ignore
+    private _roomObjectLayer: PIXI.display.Layer = new PIXI.display.Layer();
+
     constructor(engine: Scuti, configuration: IRoomConfiguration) {
 
         this._engine = engine;
@@ -55,6 +58,9 @@ export class Room {
         this._wallMaterial = this._engine.materials.getWallMaterial(configuration.wallMaterial);
 
         this._engine.application.stage.addChild(this._roomObjectContainer);
+        this._roomObjectLayer.zIndex = 10;
+        this._roomObjectLayer.group.enableSort = true;
+        this._engine.application.stage.addChild(this._roomObjectLayer);
 
         this.animationTicker.maxFPS = 15.666;
         this.animationTicker.start();
@@ -152,7 +158,7 @@ export class Room {
 
     private _createTileCursor(x: number, y: number, z: number): void {
 
-        const tilecursor = new TileCursor({ x: x, y: y, z: z, texture: this._engine.resources.get('tile_cursor').textures['tile_cursor_64_a_0_0.png'] });
+        const tilecursor = new TileCursor({ x: x, y: y, z: z, texture: this._engine.resources.get('tile_cursor').textures['tile_cursor_64_a_0_0.png'], room: this });
 
         const position = Room._getPosition(x, y, z);
 
@@ -173,6 +179,7 @@ export class Room {
 
     public addRoomObject(object: (FloorFurniture | WallFurniture | Avatar)): void {
         object.room = this;
+        object.draw();
         object.startAnimation();
         this._roomObjects.add(object);
         this._roomObjectContainer.addChild(object);
@@ -287,6 +294,10 @@ export class Room {
 
     public get animationTicker() {
         return this._animationTicker;
+    }
+
+    public get roomObjectLayer() {
+        return this._roomObjectLayer;
     }
 
 }

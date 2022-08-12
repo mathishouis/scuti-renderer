@@ -1,6 +1,6 @@
 import {RoomObject} from "../room/RoomObject";
 import {IFloorFurnitureProps} from "../../interfaces/IFloorFurnitureProps";
-import {BLEND_MODES, Container, Sprite} from "pixi.js";
+import {BLEND_MODES, Container, Sprite, Text} from "pixi.js";
 import {FurnitureLayer} from "./FurnitureLayer";
 import {Scuti} from "../../Scuti";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
@@ -37,11 +37,9 @@ export class FloorFurniture extends RoomObject {
         this._id = props.id;
         this._className = this._engine.furnitures.getClassName(this._id, "floorItem");
 
-        this._draw();
-
     }
 
-    private async _draw(): Promise<void> {
+    public async draw(): Promise<void> {
 
         this._layers = new Map();
 
@@ -74,8 +72,6 @@ export class FloorFurniture extends RoomObject {
 
         this._loaded = true;
 
-        this.zIndex = getZOrder(this._x, this._y, this._z);
-
         this.addChild(this._container);
         this.x = 32 + 32 * this._x - 32 * this._y;
         this.y = 16 * this._x + 16 * this._y - 32 * this._z;
@@ -95,7 +91,6 @@ export class FloorFurniture extends RoomObject {
 
         this.x = 32 * this._x - 32 * this._y - 1;
         this.y = 16 * this._x + 16 * this._y - 32 * this._z - 50;
-        this.zIndex = 2;
 
     }
 
@@ -112,7 +107,7 @@ export class FloorFurniture extends RoomObject {
                 } else {
                     this._layersFrame.set(layer, 0);
                 }
-                this._draw();
+                this.draw();
 
             }
 
@@ -136,7 +131,9 @@ export class FloorFurniture extends RoomObject {
                 alpha: undefined,
                 tint: undefined,
                 z: 0,
-                blendMode: BLEND_MODES.NORMAL
+                blendMode: BLEND_MODES.NORMAL,
+                room: this.room,
+                layerZ: 0,
             }
 
             if (visualization.directions.indexOf(this._direction) === -1) {
@@ -172,7 +169,11 @@ export class FloorFurniture extends RoomObject {
 
             if(visualization.layers[i] !== undefined) {
                 if(visualization.layers[i].z !== undefined) {
-                    layer.z = visualization.layers[i].z;
+                    layer.layerZ = visualization.layers[i].z;
+                    layer.z = getZOrderFloorItem(this._x, this._y, this._z, visualization.layers[i].z);
+                } else {
+                    layer.layerZ = 0;
+                    layer.z = getZOrderFloorItem(this._x, this._y, this._z, 0);
                 }
 
                 if(visualization.layers[i].alpha !== undefined) {
@@ -183,6 +184,9 @@ export class FloorFurniture extends RoomObject {
                     //layer.blendMode = BLEND_MODES[visualization.layers[i].ink];
                     layer.blendMode = BLEND_MODES.ADD;
                 }
+            } else {
+                layer.layerZ = 0;
+                layer.z = getZOrderFloorItem(this._x, this._y, this._z, 0);
             }
 
             layers.push(layer);
@@ -195,8 +199,10 @@ export class FloorFurniture extends RoomObject {
             name: undefined,
             alpha: 0.19,
             tint: undefined,
-            z: -1,
-            blendMode: BLEND_MODES.NORMAL
+            z: getZOrderFloorItem(this._x, this._y, this._z, -100),
+            blendMode: BLEND_MODES.NORMAL,
+            room: this.room,
+            layerZ: -100,
         }
 
         layer.name = name + '_' + name + '_64_sd_' + this._direction + '_0';
@@ -224,10 +230,12 @@ export class FloorFurniture extends RoomObject {
             this._x = x;
             this._y = y;
             this._z = z;
-            this.zIndex = getZOrder(this._x, this._y, this._z);
-            this._draw();
+            this.draw();
         } else {
-            this.zIndex = getZOrder(this._x, this._y, this._z);
+            this._layers.forEach(layer => {
+                // @ts-ignore
+                layer.zOrder = getZOrderFloorItem(x, y, z, layer.layerZ);
+            });
             gsap.to(this, {
                 x: 32 + 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z, duration: 0.5, ease: "linear", onComplete: () => {
                     this._x = x;
@@ -241,12 +249,12 @@ export class FloorFurniture extends RoomObject {
     public rotate(direction: number, animate: boolean = false) {
         if (!animate) {
             this._direction = direction;
-            this._draw();
+            this.draw();
         } else {
             gsap.to(this, {
                 x: 32 + 32 * this._x - 32 * this._y, y: 16 * this._x + 16 * this._y - 32 * this._z - 6.25, duration: 0.1, ease: "easeIn", onComplete: () => {
                     this._direction = direction;
-                    this._draw();
+                    this.draw();
                     gsap.to(this, { x: 32 + 32 * this._x - 32 * this._y, y: 16 * this._x + 16 * this._y - 32 * this._z, duration: 0.1, ease: "easeOut" });
                 }
             });
@@ -276,7 +284,7 @@ export class FloorFurniture extends RoomObject {
 
     public set state(state: number) {
         this._state = state;
-        this._draw();
+        this.draw();
     }
 
     public get direction(): number {
@@ -285,7 +293,7 @@ export class FloorFurniture extends RoomObject {
 
     public set direction(direction: number) {
         this._direction = direction;
-        this._draw();
+        this.draw();
     }
 
     public get roomPosition(): { x: number, y: number, z: number } {

@@ -13,6 +13,11 @@ import {AvatarManager} from "./objects/avatar/AvatarManager";
 import {Log} from "./utils/Logger";
 import {Event} from "./enum/Event";
 
+import * as PIXI from "pixi.js";
+// @ts-ignore
+window.PIXI = PIXI;
+require("pixi-layers")
+
 export class Scuti {
 
     private _canvas: HTMLElement;
@@ -81,6 +86,8 @@ export class Scuti {
                 backgroundColor: this._configuration.background,
                 antialias: false,
             });
+            // @ts-ignore
+            this._application.stage = new PIXI.display.Stage();
             this._canvas.appendChild(this._application.view);
 
             this._resourceManager = new ResourceManager(this._configuration.resources);

@@ -53,8 +53,9 @@ export class AvatarManager {
 
     public getParts(type: string, setId: number) {
         let parts = [];
-        let set = this._figuredata.settype[type].set[setId];
-        set.parts.forEach((part) => {
+        console.log(type, setId, this._figuredata);
+        let set = this._figuredata.settype[type]?.set[setId];
+        set?.parts.forEach((part) => {
             let libId = this._figuremap.parts[part.type][String(part.id)];
             let lib = this._figuremap.libs[libId];
             //console.log(part.type, libId);

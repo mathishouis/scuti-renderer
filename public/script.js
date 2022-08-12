@@ -126,8 +126,8 @@ async function load() {
         x: 5,
         y: 5,
         z: 2,
-        direction: 2,
-        headDirection: 2,
+        direction: 4,
+        headDirection: 4,
         //figure: figure,
         figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80",
         actions: [ Action.Walk]
@@ -136,7 +136,7 @@ async function load() {
     room.addRoomObject(avatar);
     avatar.handItem = 55;
     //:avatar.addAction(Action.UseItem);
-    avatar.addAction(Action.Wave);
+    avatar.addAction(Action.Sit);
 
     let wallFurniture = new WallFurniture(scuti, {
 
@@ -277,23 +277,62 @@ async function load() {
     room.addRoomObject(wallFurniture5);*/
 
     let furni = new FloorFurniture(scuti, {
-        x: 0,
-        y: 0,
+        x: 5,
+        y: 5,
         z: 0,
         //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
         direction: 0,
-        id: furniId[Math.floor(Math.random() * furniId.length)],
+        //id: furniId[Math.floor(Math.random() * furniId.length)],
+        id: 8911,
         state: 1,
     });
     room.addRoomObject(furni);
+    let furni2 = new FloorFurniture(scuti, {
+        x: 5,
+        y: 7,
+        z: 0,
+        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        direction: 0,
+        //id: furniId[Math.floor(Math.random() * furniId.length)],
+        id: 8911,
+        state: 1,
+    });
+    room.addRoomObject(furni2);
 
-    setTimeout(() => {
+    let furni3 = new FloorFurniture(scuti, {
+        x: 6,
+        y: 7,
+        z: 0,
+        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        direction: 0,
+        //id: furniId[Math.floor(Math.random() * furniId.length)],
+        id: 449,
+        state: 1,
+    });
+    room.addRoomObject(furni3);
+    let furni4 = new FloorFurniture(scuti, {
+        x: 6,
+        y: 8,
+        z: 0,
+        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        direction: 4,
+        //id: furniId[Math.floor(Math.random() * furniId.length)],
+        id: 230,
+        state: 1,
+    });
+    room.addRoomObject(furni4);
+
+    /*setTimeout(() => {
         furni.rotate(2, true);
-    }, 4000);
+    }, 4000);*/
+
+    /*setTimeout(() => {
+        furni.destroy();
+    }, 8000);*/
 
     room.tileClick = (x, y, z) => {
         if(action === "move") {
-            avatar.handItem = Math.floor(Math.random() * 150);
+            //avatar.handItem = Math.floor(Math.random() * 150);
             avatar.move(x, y, z, true);
         } else {
             furni.move(x, y, z, true);
