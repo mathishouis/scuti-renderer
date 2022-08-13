@@ -12,6 +12,7 @@ import {ColorMatrixFilter} from "@pixi/filter-color-matrix";
 import {AvatarManager} from "./objects/avatar/AvatarManager";
 import {Log} from "./utils/Logger";
 import {Event} from "./enum/Event";
+import "./utils/pixi/DoubleClick";
 
 import * as PIXI from "pixi.js";
 // @ts-ignore

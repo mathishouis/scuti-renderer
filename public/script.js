@@ -56,7 +56,7 @@ async function load() {
     });
     room.addRoomObject(furni5);
     this.timeout = undefined;
-    furni5.click = (event) => {
+    furni5.doubleClick = (event) => {
         console.log(event);
         if(furni5.logic === "furniture_dice") {
             console.log("clicked furni5", event);
@@ -66,6 +66,9 @@ async function load() {
                 this.timeout = setTimeout(() => {
                     furni5.state = Math.floor(Math.random() * 6) + 1;
                 }, 1000);
+                /*setTimeout(() => {
+                    furni5.state = 0
+                }, 2000);*/
             } else {
                 clearTimeout(this.timeout);
                 furni5.state = 0;

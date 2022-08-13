@@ -26,6 +26,7 @@ export class FloorFurniture extends RoomObject {
     private _logic: string;
 
     private _click: (event: any) => void;
+    private _doubleClick: (event: any) => void;
 
     constructor(engine: Scuti, props: IFloorFurnitureProps) {
         super();
@@ -72,6 +73,11 @@ export class FloorFurniture extends RoomObject {
                 let furnitureLayer = new FurnitureLayer(layer);
                 furnitureLayer.click = () => {
                     if (this._click) this._click({
+                        tag: furnitureLayer.tag
+                    });
+                }
+                furnitureLayer.dblclick = () => {
+                    if (this._doubleClick) this._doubleClick({
                         tag: furnitureLayer.tag
                     });
                 }
@@ -333,9 +339,14 @@ export class FloorFurniture extends RoomObject {
     }
 
     public set click(value) {
-        console.log("SET");
         this._click = value;
-        console.log(this._click);
     }
 
+    public get doubleClick() {
+        return this._doubleClick;
+    }
+
+    public set doubleClick(value) {
+        this._doubleClick = value;
+    }
 }

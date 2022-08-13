@@ -1,4 +1,4 @@
-import {BaseImageResource, BLEND_MODES, Sprite, Texture, utils, Graphics, Rectangle} from "pixi.js";
+import {Sprite, Texture, utils} from "pixi.js";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
 import {Scuti} from "../../Scuti";
 import {Room} from "../..";
@@ -25,8 +25,9 @@ export class FurnitureLayer extends Sprite {
         this._tag = props.tag;
 
         this._layerZ = props.layerZ;
+        // @ts-ignore
         this.interactive = props.interactive;
-        this.buttonMode = props.interactive;
+        //this.buttonMode = props.interactive;
 
         this._room = props.room;
         // @ts-ignore
@@ -58,6 +59,7 @@ export class FurnitureLayer extends Sprite {
 
         const width = this._hitTexture.texture.orig.width;
         const height = this._hitTexture.texture.orig.height;
+        // @ts-ignore
         const x1 = this.getGlobalPosition().x + this.texture.trim.x;
         let y1 = 0;
 
@@ -69,6 +71,7 @@ export class FurnitureLayer extends Sprite {
 
 
         if (tempPoint.x >= x1 && tempPoint.x < x1 + width) {
+            // @ts-ignore
             y1 = this.getGlobalPosition().y + this.texture.trim.y;
 
             if (tempPoint.y >= y1 && tempPoint.y < y1 + height) {
@@ -79,6 +82,8 @@ export class FurnitureLayer extends Sprite {
         if (!flag) {
             return false
         }
+
+        console.log(this._hitTexture.hit(tempPoint.x - x1, tempPoint.y - y1, this.scale.x === -1));
 
         return this._hitTexture.hit(tempPoint.x - x1, tempPoint.y - y1, this.scale.x === -1);
     }

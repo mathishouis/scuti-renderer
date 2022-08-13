@@ -22,6 +22,7 @@ export class HitTexture {
     }
 
     private _generateHitmap(baseTexture: BaseTexture): Uint32Array {
+        // @ts-ignore
         const image: Image = baseTexture.resource['source'];
         const canvas: HTMLCanvasElement = document.createElement('canvas');
         canvas.width = image.width;
@@ -49,12 +50,15 @@ export class HitTexture {
     private _generateTexture(): Texture {
         const texture: Texture = this._sprite.texture.clone();
         const sprite: Sprite = new Sprite(texture);
+        // @ts-ignore
         sprite.x = this._sprite.getGlobalPosition().x + this._sprite.texture.trim.x;
+        // @ts-ignore
         sprite.y = this._sprite.getGlobalPosition().y + this._sprite.texture.trim.y;
         sprite.texture.trim.x = 0;
         sprite.texture.trim.y = 0;
         this._sprite.engine.application.stage.addChild(sprite);
         const renderTexture: RenderTexture = this._sprite.engine.application.renderer.generateTexture(sprite);
+        // @ts-ignore
         const image: Image = this._sprite.engine.application.renderer.plugins.extract.image(renderTexture);
         renderTexture.baseTexture.resource = new BaseImageResource(image);
         sprite.destroy();
