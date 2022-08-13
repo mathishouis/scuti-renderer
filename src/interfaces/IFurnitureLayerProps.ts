@@ -1,5 +1,5 @@
 import { BLEND_MODES, Texture } from "pixi.js";
-import {Room} from "..";
+import {Room, Scuti} from "..";
 
 export interface IFurnitureLayerProps {
     texture: Texture,
@@ -11,5 +11,8 @@ export interface IFurnitureLayerProps {
     flip?: boolean,
     z: number,
     layerZ: number,
-    room: Room
+    room: Room,
+    engine: Scuti,
+    interactive: boolean,
+    tag?: string
 }

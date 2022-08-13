@@ -1,10 +1,10 @@
 import {RoomObject} from "../room/RoomObject";
 import {IFloorFurnitureProps} from "../../interfaces/IFloorFurnitureProps";
-import {BLEND_MODES, Container, Sprite, Text} from "pixi.js";
+import {BLEND_MODES, Container, Sprite} from "pixi.js";
 import {FurnitureLayer} from "./FurnitureLayer";
 import {Scuti} from "../../Scuti";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
-import {getZOrder, getZOrderFloorItem} from "../../utils/ZOrder";
+import {getZOrderFloorItem} from "../../utils/ZOrder";
 import {gsap} from "gsap";
 
 export class FloorFurniture extends RoomObject {
@@ -23,6 +23,9 @@ export class FloorFurniture extends RoomObject {
     private _state: number;
     private _loaded: boolean = false;
     private _visualization: string;
+    private _logic: string;
+
+    private _click: (event: any) => void;
 
     constructor(engine: Scuti, props: IFloorFurnitureProps) {
         super();
@@ -41,6 +44,7 @@ export class FloorFurniture extends RoomObject {
 
     public async draw(): Promise<void> {
 
+        this._layers.forEach(layer => layer.destroy());
         this._layers = new Map();
 
         if (!this._loaded) {
@@ -55,6 +59,7 @@ export class FloorFurniture extends RoomObject {
         }
 
         this._visualization = this._engine.resources.get(this._className).data.furniProperty.infos.visualization;
+        this._logic = this._engine.resources.get(this._className).data.furniProperty.infos.logic;
 
         this._container?.destroy();
         this._container = new Container();
@@ -65,6 +70,11 @@ export class FloorFurniture extends RoomObject {
                 console.log(layer);
             } else {
                 let furnitureLayer = new FurnitureLayer(layer);
+                furnitureLayer.click = () => {
+                    if (this._click) this._click({
+                        tag: furnitureLayer.tag
+                    });
+                }
                 this._layers.set(layer.name, furnitureLayer);
                 this._container.addChild(furnitureLayer);
             }
@@ -99,8 +109,8 @@ export class FloorFurniture extends RoomObject {
             let data = this._engine.resources.get(this._className);
             let visualization = data.data.furniProperty.visualization;
 
-            if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layer] !== undefined) {
-                let frameSequence = visualization.animation[this._state][layer].frameSequence;
+            if (visualization.animation[String(this._state)] !== undefined && visualization.animation[String(this._state)][layer] !== undefined) {
+                let frameSequence = visualization.animation[String(this._state)][layer].frameSequence;
                 let currentFrame = frame;
                 if ((frameSequence.length - 1) > currentFrame) {
                     this._layersFrame.set(layer, currentFrame + 1);
@@ -130,10 +140,12 @@ export class FloorFurniture extends RoomObject {
                 name: undefined,
                 alpha: undefined,
                 tint: undefined,
-                z: 0,
+                z: getZOrderFloorItem(this._x, this._y, this._z, 0),
                 blendMode: BLEND_MODES.NORMAL,
                 room: this.room,
                 layerZ: 0,
+                engine: this._engine,
+                interactive: true,
             }
 
             if (visualization.directions.indexOf(this._direction) === -1) {
@@ -171,9 +183,14 @@ export class FloorFurniture extends RoomObject {
                 if(visualization.layers[i].z !== undefined) {
                     layer.layerZ = visualization.layers[i].z;
                     layer.z = getZOrderFloorItem(this._x, this._y, this._z, visualization.layers[i].z);
-                } else {
-                    layer.layerZ = 0;
-                    layer.z = getZOrderFloorItem(this._x, this._y, this._z, 0);
+                }
+
+                if(visualization.layers[i].ignoreMouse !== undefined) {
+                    layer.interactive = !visualization.layers[i].ignoreMouse;
+                }
+
+                if(visualization.layers[i].tag !== undefined) {
+                    layer.tag = visualization.layers[i].tag;
                 }
 
                 if(visualization.layers[i].alpha !== undefined) {
@@ -184,9 +201,6 @@ export class FloorFurniture extends RoomObject {
                     //layer.blendMode = BLEND_MODES[visualization.layers[i].ink];
                     layer.blendMode = BLEND_MODES.ADD;
                 }
-            } else {
-                layer.layerZ = 0;
-                layer.z = getZOrderFloorItem(this._x, this._y, this._z, 0);
             }
 
             layers.push(layer);
@@ -203,6 +217,8 @@ export class FloorFurniture extends RoomObject {
             blendMode: BLEND_MODES.NORMAL,
             room: this.room,
             layerZ: -100,
+            engine: this._engine,
+            interactive: false,
         }
 
         layer.name = name + '_' + name + '_64_sd_' + this._direction + '_0';
@@ -302,6 +318,24 @@ export class FloorFurniture extends RoomObject {
             y: this._y,
             z: this._z
         };
+    }
+
+    public get visualization(): string {
+        return this._visualization;
+    }
+
+    public get logic(): string {
+        return this._logic;
+    }
+
+    public get click() {
+        return this._click;
+    }
+
+    public set click(value) {
+        console.log("SET");
+        this._click = value;
+        console.log(this._click);
     }
 
 }

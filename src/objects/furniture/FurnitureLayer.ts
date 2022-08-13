@@ -1,5 +1,8 @@
-import {BLEND_MODES, Sprite, Texture, utils} from "pixi.js";
+import {BaseImageResource, BLEND_MODES, Sprite, Texture, utils, Graphics, Rectangle} from "pixi.js";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
+import {Scuti} from "../../Scuti";
+import {Room} from "../..";
+import {HitTexture} from "../interactions/HitTexture";
 
 export class FurnitureLayer extends Sprite {
 
@@ -7,6 +10,10 @@ export class FurnitureLayer extends Sprite {
     private _name: string;
     private _frame: number;
     private _layerZ: number;
+    private _engine: Scuti;
+    private _room: Room;
+    private _tag: string;
+    private _hitTexture: HitTexture;
 
     constructor(props: IFurnitureLayerProps) {
         super(props.texture);
@@ -14,18 +21,24 @@ export class FurnitureLayer extends Sprite {
         this._name = props.name;
         this._texture = props.texture;
         this._frame = props.frame;
+        this._engine = props.engine;
+        this._tag = props.tag;
 
         this._layerZ = props.layerZ;
+        this.interactive = props.interactive;
+        this.buttonMode = props.interactive;
+
+        this._room = props.room;
         // @ts-ignore
         this.parentLayer = props.room.roomObjectLayer;
         // @ts-ignore
         props.z ? this.zOrder = Number(props.z) : null;
-
         props.tint ? this.tint = utils.premultiplyTint(props.tint, 0.999) : null;
-        //props.z ? this.zIndex = Number(props.z) : null;
-        this.blendMode = props.blendMode;
+        props.blendMode ? this.blendMode = props.blendMode : null;
         props.alpha ? this.alpha = props.alpha : null;
         props.flip ? this.scale.x = -1 : null;
+
+        this._hitTexture = new HitTexture(this);
 
     }
 
@@ -33,5 +46,41 @@ export class FurnitureLayer extends Sprite {
         return this._layerZ;
     }
 
+    public get tag(): string {
+        return this._tag;
+    }
+
+    public get engine(): Scuti {
+        return this._engine;
+    }
+
+    containsPoint(point) {
+
+        const width = this._hitTexture.texture.orig.width;
+        const height = this._hitTexture.texture.orig.height;
+        const x1 = this.getGlobalPosition().x + this.texture.trim.x;
+        let y1 = 0;
+
+        let flag = false;
+        const tempPoint = {
+            x: this._engine.application.renderer.plugins.interaction.mouse.global.x,
+            y: this._engine.application.renderer.plugins.interaction.mouse.global.y
+        }
+
+
+        if (tempPoint.x >= x1 && tempPoint.x < x1 + width) {
+            y1 = this.getGlobalPosition().y + this.texture.trim.y;
+
+            if (tempPoint.y >= y1 && tempPoint.y < y1 + height) {
+                flag = true;
+            }
+        }
+
+        if (!flag) {
+            return false
+        }
+
+        return this._hitTexture.hit(tempPoint.x - x1, tempPoint.y - y1, this.scale.x === -1);
+    }
 
 }

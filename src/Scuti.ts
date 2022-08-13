@@ -120,5 +120,4 @@ export class Scuti {
         this._onEvent = value;
     }
 
-
 }

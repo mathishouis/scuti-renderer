@@ -300,4 +300,8 @@ export class Room {
         return this._roomObjectLayer;
     }
 
+    public get roomObjectContainer() {
+        return this._roomObjectContainer;
+    }
+
 }

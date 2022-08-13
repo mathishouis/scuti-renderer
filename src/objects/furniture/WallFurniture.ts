@@ -151,6 +151,7 @@ export class WallFurniture extends RoomObject {
                 flip: false,
                 room: this.room,
                 layerZ: 0,
+                engine: this._engine
             }
 
             if (visualization.directions.indexOf(this._direction) === -1) {
@@ -219,6 +220,7 @@ export class WallFurniture extends RoomObject {
             blendMode: BLEND_MODES.NORMAL,
             room: this.room,
             layerZ: -100,
+            engine: this._engine
         }
 
         layer.name = name + '_' + name + '_64_sd_' + this._direction + '_0';
