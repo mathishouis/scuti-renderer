@@ -5,6 +5,7 @@ import {Scuti} from "../../Scuti";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
 import {IWallFurnitureProps} from "../../interfaces/IWallFurnitureProps";
 import {getZOrder, getZOrderFloorItem} from "../../utils/ZOrder";
+import {IFurniData} from "../../interfaces/IFurniData";
 
 export class WallFurniture extends RoomObject {
 
@@ -16,13 +17,14 @@ export class WallFurniture extends RoomObject {
     private _offsetY: number;
     private _direction: number;
     private _id: number;
-    private _className: string;
     private _layers: Map<string, FurnitureLayer> = new Map();
     private _layersFrame: Map<number, number> = new Map();
     private _container?: Container;
     private _state: number;
     private _loaded: boolean = false;
     private _visualization: string;
+    private _logic: string;
+    private _furniData: IFurniData;
 
     constructor(engine: Scuti, props: IWallFurnitureProps) {
         super();
@@ -36,7 +38,7 @@ export class WallFurniture extends RoomObject {
         this._direction = props.direction;
         this._state = props.state ?? 0;
         this._id = props.id;
-        this._className = this._engine.furnitures.getClassName(this._id, "wallItem");
+        this._furniData = this._engine.furnitures.getFurniData(this._id, "wallItem");
 
     }
 
@@ -48,14 +50,15 @@ export class WallFurniture extends RoomObject {
             this._createPlaceholder();
         }
 
-        if(!this._engine.resources.hasInQueue(this._className)) {
-            this._engine.resources.add(this._className, 'furniture/' + this._engine.furnitures.splitColorName(this._className).name + '/' + this._engine.furnitures.splitColorName(this._className).name + '.json');
-            await this._engine.resources.load(this._className);
+        if(!this._engine.resources.hasInQueue(this._furniData.className)) {
+            this._engine.resources.add(this._furniData.className, 'furniture/' + this._engine.furnitures.splitColorName(this._furniData.className).name + '/' + this._engine.furnitures.splitColorName(this._furniData.className).name + '.json');
+            await this._engine.resources.load(this._furniData.className);
         } else {
-            await this._engine.resources.waitForLoad(this._className);
+            await this._engine.resources.waitForLoad(this._furniData.className);
         }
 
-        this._visualization = this._engine.resources.get(this._className).data.furniProperty.infos.visualization;
+        this._visualization = this._engine.resources.get(this._furniData.className).data.furniProperty.infos.visualization;
+        this._logic = this._engine.resources.get(this._furniData.className).data.furniProperty.infos.logic;
 
         this._container?.destroy();
         this._container = new Container();
@@ -112,7 +115,7 @@ export class WallFurniture extends RoomObject {
 
     private _nextFrame(): void {
         this._layersFrame.forEach((frame: number, layer: number) => {
-            let data = this._engine.resources.get(this._className);
+            let data = this._engine.resources.get(this._furniData.className);
             let visualization = data.data.furniProperty.visualization;
 
             if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layer] !== undefined) {
@@ -132,9 +135,9 @@ export class WallFurniture extends RoomObject {
 
     private _getLayers(): IFurnitureLayerProps[] {
         const layers: IFurnitureLayerProps[] = [];
-        const { name, colorId } = this._engine.furnitures.splitColorName(this._className);
+        const { name, colorId } = this._engine.furnitures.splitColorName(this._furniData.className);
 
-        let data = this._engine.resources.get(this._className);
+        let data = this._engine.resources.get(this._furniData.className);
         let visualization = data.data.furniProperty.visualization;
 
 
@@ -298,6 +301,18 @@ export class WallFurniture extends RoomObject {
     public set direction(direction: number) {
         this._direction = direction;
         this.draw();
+    }
+
+    public get visualization(): string {
+        return this._visualization;
+    }
+
+    public get logic(): string {
+        return this._logic;
+    }
+
+    public get furnidata(): IFurniData {
+        return this._furniData;
     }
 
 }

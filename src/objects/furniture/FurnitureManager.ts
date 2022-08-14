@@ -1,5 +1,6 @@
 import {Scuti} from "../../Scuti";
 import {Log} from "../../utils/Logger";
+import {IFurniData} from "../../interfaces/IFurniData";
 
 export class FurnitureManager {
 
@@ -32,11 +33,11 @@ export class FurnitureManager {
         return furni.className;
     }*/
 
-    getClassName(id: number, type: ("floorItem" | "wallItem")): string {
+    getFurniData(id: number, type: ("floorItem" | "wallItem")): IFurniData {
         let furni: { className: string };
         if(type === "floorItem") furni = this._furnidata.floorItems.find((item) => item.id === id);
         if(type === "wallItem") furni = this._furnidata.wallItems.find((item) => item.id === id);
-        return furni.className;
+        return <IFurniData>furni;
     }
 
     /*public async loadFurni(id: number): Promise<string> {
