@@ -58,11 +58,13 @@ export class HitTexture {
         sprite.texture.trim.y = 0;
         this._sprite.engine.application.stage.addChild(sprite);
         const renderTexture: RenderTexture = this._sprite.engine.application.renderer.generateTexture(sprite);
+        sprite.destroy();
         // @ts-ignore
         const image: Image = this._sprite.engine.application.renderer.plugins.extract.image(renderTexture);
         renderTexture.baseTexture.resource = new BaseImageResource(image);
-        sprite.destroy();
         const baseTexture: BaseTexture = renderTexture.baseTexture;
+        renderTexture.destroy();
+        texture.destroy();
         return new Texture(baseTexture);
     }
 
@@ -78,5 +80,11 @@ export class HitTexture {
 
     public get texture(): Texture {
         return this._texture;
+    }
+
+    public destroy(): void {
+        this._cachedHitmap = undefined;
+        this._texture.destroy();
+        //this._sprite.destroy();
     }
 }

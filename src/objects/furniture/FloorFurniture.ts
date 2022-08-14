@@ -17,7 +17,7 @@ export class FloorFurniture extends RoomObject {
     private _direction: number;
     private _id: number;
     private _className: string;
-    private _layers: Map<string, FurnitureLayer> = new Map();
+    private _layers: Map<IFurnitureLayerProps, FurnitureLayer> = new Map();
     private _layersFrame: Map<number, number> = new Map();
     private _container?: Container;
     private _state: number;
@@ -45,9 +45,6 @@ export class FloorFurniture extends RoomObject {
 
     public async draw(): Promise<void> {
 
-        this._layers.forEach(layer => layer.destroy());
-        this._layers = new Map();
-
         if (!this._loaded) {
             this._createPlaceholder();
         }
@@ -59,30 +56,50 @@ export class FloorFurniture extends RoomObject {
             await this._engine.resources.waitForLoad(this._className);
         }
 
+        if(!this._loaded) {
+            this._container?.destroy();
+            this._container = new Container();
+            this._container.sortableChildren = true;
+        }
+
+        let layers = this._getLayers();
+
+        this._layers.forEach((layer, index) => {
+            if(!layers.includes(index)) {
+                layer.hitTexture.destroy();
+                layer.destroy();
+                this._layers.delete(index);
+            }
+        });
+
         this._visualization = this._engine.resources.get(this._className).data.furniProperty.infos.visualization;
         this._logic = this._engine.resources.get(this._className).data.furniProperty.infos.logic;
 
-        this._container?.destroy();
+        /*this._container?.destroy();
         this._container = new Container();
-        this._container.sortableChildren = true;
+        this._container.sortableChildren = true;*/
 
-        this._getLayers().forEach((layer: IFurnitureLayerProps) => {
+        layers.forEach((layer: IFurnitureLayerProps) => {
             if(layer.texture === undefined) {
                 console.log(layer);
             } else {
-                let furnitureLayer = new FurnitureLayer(layer);
-                furnitureLayer.click = () => {
-                    if (this._click) this._click({
-                        tag: furnitureLayer.tag
-                    });
+                if(!this._layers.has(layer)) {
+                    let furnitureLayer = new FurnitureLayer(layer);
+                    // @ts-ignore
+                    furnitureLayer.click = () => {
+                        if (this._click) this._click({
+                            tag: furnitureLayer.tag
+                        });
+                    }
+                    // @ts-ignore
+                    furnitureLayer.dblclick = () => {
+                        if (this._doubleClick) this._doubleClick({
+                            tag: furnitureLayer.tag
+                        });
+                    }
+                    this._layers.set(layer, furnitureLayer);
+                    this._container.addChild(furnitureLayer);
                 }
-                furnitureLayer.dblclick = () => {
-                    if (this._doubleClick) this._doubleClick({
-                        tag: furnitureLayer.tag
-                    });
-                }
-                this._layers.set(layer.name, furnitureLayer);
-                this._container.addChild(furnitureLayer);
             }
         })
 
@@ -118,12 +135,14 @@ export class FloorFurniture extends RoomObject {
             if (visualization.animation[String(this._state)] !== undefined && visualization.animation[String(this._state)][layer] !== undefined) {
                 let frameSequence = visualization.animation[String(this._state)][layer].frameSequence;
                 let currentFrame = frame;
-                if ((frameSequence.length - 1) > currentFrame) {
-                    this._layersFrame.set(layer, currentFrame + 1);
-                } else {
-                    this._layersFrame.set(layer, 0);
+                if(frameSequence.length > 1)  {
+                    if ((frameSequence.length - 1) > currentFrame) {
+                        this._layersFrame.set(layer, currentFrame + 1);
+                    } else {
+                        this._layersFrame.set(layer, 0);
+                    }
+                    this.draw();
                 }
-                this.draw();
 
             }
 

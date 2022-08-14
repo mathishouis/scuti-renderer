@@ -13,11 +13,12 @@ import {AvatarManager} from "./objects/avatar/AvatarManager";
 import {Log} from "./utils/Logger";
 import {Event} from "./enum/Event";
 import "./utils/pixi/DoubleClick";
+import {recursiveFindHit, TreeSearch} from "./utils/pixi/MultipleInteraction";
 
 import * as PIXI from "pixi.js";
 // @ts-ignore
 window.PIXI = PIXI;
-require("pixi-layers")
+require("@kozennnn/pixi-layers")
 
 export class Scuti {
 
@@ -87,6 +88,9 @@ export class Scuti {
                 backgroundColor: this._configuration.background,
                 antialias: false,
             });
+            console.log(this._application.renderer.plugins.interaction);
+            //this._application.renderer.plugins.interaction.search = new TreeSearch();
+            //console.log(this._application.renderer.plugins.interaction.search);
             // @ts-ignore
             this._application.stage = new PIXI.display.Stage();
             this._canvas.appendChild(this._application.view);

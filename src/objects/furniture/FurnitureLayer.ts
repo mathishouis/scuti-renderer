@@ -55,6 +55,10 @@ export class FurnitureLayer extends Sprite {
         return this._engine;
     }
 
+    public get hitTexture(): HitTexture {
+        return this._hitTexture;
+    }
+
     containsPoint(point) {
 
         const width = this._hitTexture.texture.orig.width;
@@ -82,8 +86,6 @@ export class FurnitureLayer extends Sprite {
         if (!flag) {
             return false
         }
-
-        console.log(this._hitTexture.hit(tempPoint.x - x1, tempPoint.y - y1, this.scale.x === -1));
 
         return this._hitTexture.hit(tempPoint.x - x1, tempPoint.y - y1, this.scale.x === -1);
     }
