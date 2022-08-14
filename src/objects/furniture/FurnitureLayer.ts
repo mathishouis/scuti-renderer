@@ -39,8 +39,6 @@ export class FurnitureLayer extends Sprite {
         props.alpha ? this.alpha = props.alpha : null;
         props.flip ? this.scale.x = -1 : null;
 
-        this._hitTexture = new HitTexture(this);
-
     }
 
     public get layerZ(): number {
@@ -61,8 +59,8 @@ export class FurnitureLayer extends Sprite {
 
     containsPoint(point) {
 
-        const width = this._hitTexture.texture.orig.width;
-        const height = this._hitTexture.texture.orig.height;
+        const width = this.texture.orig.width;
+        const height = this.texture.orig.height;
         // @ts-ignore
         const x1 = this.getGlobalPosition().x + this.texture.trim.x;
         let y1 = 0;
@@ -85,6 +83,10 @@ export class FurnitureLayer extends Sprite {
 
         if (!flag) {
             return false
+        }
+
+        if(!this._hitTexture) {
+            this._hitTexture = new HitTexture(this);
         }
 
         return this._hitTexture.hit(tempPoint.x - x1, tempPoint.y - y1, this.scale.x === -1);

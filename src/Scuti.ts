@@ -13,7 +13,6 @@ import {AvatarManager} from "./objects/avatar/AvatarManager";
 import {Log} from "./utils/Logger";
 import {Event} from "./enum/Event";
 import "./utils/pixi/DoubleClick";
-import {recursiveFindHit, TreeSearch} from "./utils/pixi/MultipleInteraction";
 
 import * as PIXI from "pixi.js";
 // @ts-ignore

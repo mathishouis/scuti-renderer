@@ -66,7 +66,9 @@ export class FloorFurniture extends RoomObject {
 
         this._layers.forEach((layer, index) => {
             if(!layers.includes(index)) {
-                layer.hitTexture.destroy();
+                if(layer.hitTexture) {
+                    layer.hitTexture.destroy();
+                }
                 layer.destroy();
                 this._layers.delete(index);
             }
