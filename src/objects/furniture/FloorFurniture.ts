@@ -1,6 +1,6 @@
 import {RoomObject} from "../room/RoomObject";
 import {IFloorFurnitureProps} from "../../interfaces/IFloorFurnitureProps";
-import {BLEND_MODES, Container, Sprite} from "pixi.js";
+import {BLEND_MODES, Container, RenderTexture, Sprite} from "pixi.js";
 import {FurnitureLayer} from "./FurnitureLayer";
 import {Scuti} from "../../Scuti";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
@@ -22,8 +22,8 @@ export class FloorFurniture extends RoomObject {
     private _container?: Container;
     private _state: number;
     private _loaded: boolean = false;
-    private _visualization: string;
-    private _logic: string;
+    private _infos: { visualization: string, logic: string };
+    private _visualization: {};
     private _furniData: IFurniData;
 
     private _click: (event: any) => void;
@@ -44,7 +44,7 @@ export class FloorFurniture extends RoomObject {
 
     }
 
-    public async draw(): Promise<void> {
+    public async draw(redrawAll: boolean = false): Promise<void> {
 
         if (!this._loaded) {
             this._createPlaceholder();
@@ -66,7 +66,7 @@ export class FloorFurniture extends RoomObject {
         let layers = this._getLayers();
 
         this._layers.forEach((layer, index) => {
-            if(!layers.includes(index)) {
+            if(!layers.includes(index) || redrawAll) {
                 if(layer.hitTexture) {
                     layer.hitTexture.destroy();
                 }
@@ -75,8 +75,8 @@ export class FloorFurniture extends RoomObject {
             }
         });
 
-        this._visualization = this._engine.resources.get(this._furniData.className).data.furniProperty.infos.visualization;
-        this._logic = this._engine.resources.get(this._furniData.className).data.furniProperty.infos.logic;
+        this._infos = this._engine.resources.get(this._furniData.className).data.furniProperty.infos;
+        this._visualization = this._engine.resources.get(this._furniData.className).data.furniProperty.visualization;
 
         /*this._container?.destroy();
         this._container = new Container();
@@ -86,7 +86,7 @@ export class FloorFurniture extends RoomObject {
             if(layer.texture === undefined) {
                 console.log(layer);
             } else {
-                if(!this._layers.has(layer)) {
+                if(!this._layers.has(layer) || redrawAll) {
                     let furnitureLayer = new FurnitureLayer(layer);
                     // @ts-ignore
                     furnitureLayer.click = () => {
@@ -264,7 +264,7 @@ export class FloorFurniture extends RoomObject {
     }
 
     private _onTick(): void {
-        if(this._visualization === "furniture_animated") {
+        if(this._infos.visualization === "furniture_animated") {
             this._nextFrame();
         }
     }
@@ -348,16 +348,31 @@ export class FloorFurniture extends RoomObject {
         };
     }
 
-    public get visualization(): string {
-        return this._visualization;
+    public get infos(): { visualization: string, logic: string } {
+        return this._infos;
     }
 
-    public get logic(): string {
-        return this._logic;
+    public get visualization(): {} {
+        return this._visualization;
     }
 
     public get furnidata(): IFurniData {
         return this._furniData;
+    }
+
+    public async image(direction: number, state: number): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            const tempDirection: number = this._direction;
+            const tempState: number = this._state;
+            this._direction = direction;
+            this._state = state;
+            await this.draw();
+            this._direction = tempDirection;
+            this._state = tempState;
+            const renderTexture: RenderTexture = this._engine.application.renderer.generateTexture(this);
+            resolve(this._engine.application.renderer.plugins.extract.base64(renderTexture, "image/png", 1));
+            this.draw(true);
+        });
     }
 
     public get click() {

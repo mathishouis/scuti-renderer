@@ -31,7 +31,7 @@ export class FurnitureLayer extends Sprite {
 
         this._room = props.room;
         // @ts-ignore
-        this.parentLayer = props.room.roomObjectLayer;
+        this.parentLayer = props.room?.roomObjectLayer;
         // @ts-ignore
         props.z ? this.zOrder = Number(props.z) : null;
         props.tint ? this.tint = utils.premultiplyTint(props.tint, 0.999) : null;

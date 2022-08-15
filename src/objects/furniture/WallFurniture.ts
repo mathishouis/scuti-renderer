@@ -1,5 +1,5 @@
 import {RoomObject} from "../room/RoomObject";
-import {BLEND_MODES, Container, Sprite} from "pixi.js";
+import {BLEND_MODES, Container, RenderTexture, Sprite} from "pixi.js";
 import {FurnitureLayer} from "./FurnitureLayer";
 import {Scuti} from "../../Scuti";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
@@ -22,8 +22,8 @@ export class WallFurniture extends RoomObject {
     private _container?: Container;
     private _state: number;
     private _loaded: boolean = false;
-    private _visualization: string;
-    private _logic: string;
+    private _infos: { visualization: string, logic: string };
+    private _visualization: {};
     private _furniData: IFurniData;
 
     constructor(engine: Scuti, props: IWallFurnitureProps) {
@@ -57,8 +57,8 @@ export class WallFurniture extends RoomObject {
             await this._engine.resources.waitForLoad(this._furniData.className);
         }
 
-        this._visualization = this._engine.resources.get(this._furniData.className).data.furniProperty.infos.visualization;
-        this._logic = this._engine.resources.get(this._furniData.className).data.furniProperty.infos.logic;
+        this._infos = this._engine.resources.get(this._furniData.className).data.furniProperty.infos;
+        this._visualization = this._engine.resources.get(this._furniData.className).data.furniProperty.visualization;
 
         this._container?.destroy();
         this._container = new Container();
@@ -243,7 +243,7 @@ export class WallFurniture extends RoomObject {
     }
 
     private _onTick(): void {
-        if(this._visualization === "furniture_animated") {
+        if(this._infos.visualization === "furniture_animated") {
             this._nextFrame();
         }
     }
@@ -303,16 +303,21 @@ export class WallFurniture extends RoomObject {
         this.draw();
     }
 
-    public get visualization(): string {
-        return this._visualization;
+    public get infos(): { visualization: string, logic: string } {
+        return this._infos;
     }
 
-    public get logic(): string {
-        return this._logic;
+    public get visualization(): {} {
+        return this._visualization;
     }
 
     public get furnidata(): IFurniData {
         return this._furniData;
+    }
+
+    public get image(): string {
+        const renderTexture: RenderTexture = this._engine.application.renderer.generateTexture(this);
+        return this._engine.application.renderer.plugins.extract.base64(renderTexture, "image/png", 1);
     }
 
 }
