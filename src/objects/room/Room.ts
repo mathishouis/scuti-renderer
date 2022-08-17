@@ -177,12 +177,12 @@ export class Room {
         this._tileCursor?.destroy();
     }
 
-    public async addRoomObject(object: (FloorFurniture | WallFurniture | Avatar)): void {
+    public async addRoomObject(object: (FloorFurniture | WallFurniture | Avatar)): Promise<void> {
         object.room = this;
-        await object.draw();
-        object.startAnimation();
         this._roomObjects.add(object);
         this._roomObjectContainer.addChild(object);
+        await object.draw();
+        object.startAnimation();
     }
 
     public removeRoomObject(object: (FloorFurniture | WallFurniture | Avatar)): void {

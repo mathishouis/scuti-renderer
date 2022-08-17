@@ -15,7 +15,7 @@ import {Event} from "./enum/Event";
 import "./utils/pixi/DoubleClick";
 
 import * as PIXI from "pixi.js";
-import {handleClick, handleMouseMove} from "./objects/interactions/HitInteraction";
+import {handleClick, handleDoubleClick, handleMouseMove} from "./objects/interactions/HitInteraction";
 // @ts-ignore
 window.PIXI = PIXI;
 require("@kozennnn/pixi-layers")
@@ -90,16 +90,12 @@ export class Scuti {
                 transparent: this._configuration.transparent
             });
             console.log(this._application.renderer.plugins.interaction);
-            // @ts-ignore
-            this._application.stage = new PIXI.display.Stage();
-            // @ts-ignore
-            this._application.stage.hitArea = new PIXI.Rectangle(0, 0, this._configuration.width, this._configuration.height);
-            // @ts-ignore
-            this._application.stage.interactive = true;
-            // @ts-ignore
-            this._application.stage.click = (event) => handleClick(this._application.stage, event);
-            // @ts-ignore
-            this._application.stage.mousemove = (event) => handleMouseMove(this._application.stage, event);
+            this._application.stage = new PIXI['display'].Stage();
+            this._application.stage['hitArea'] = new PIXI.Rectangle(0, 0, this._configuration.width, this._configuration.height);
+            this._application.stage['interactive'] = true;
+            this._application.stage['click'] = (event) => handleClick(this._application.stage, event);
+            this._application.stage['dblclick'] = (event) => handleDoubleClick(this._application.stage, event);
+            this._application.stage['mousemove'] = (event) => handleMouseMove(this._application.stage, event);
             this._canvas.appendChild(this._application.view);
 
             this._resourceManager = new ResourceManager(this._configuration.resources);

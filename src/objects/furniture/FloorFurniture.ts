@@ -88,16 +88,12 @@ export class FloorFurniture extends RoomObject {
             } else {
                 if(!this._layers.has(layer) || redrawAll) {
                     let furnitureLayer = new FurnitureLayer(layer);
-                    // @ts-ignore
-                    furnitureLayer.click = () => {
-                        console.log("CLIIIIIIIIIIICK");
+                    furnitureLayer['click'] = () => {
                         if (this._click) this._click({
                             tag: furnitureLayer.tag
                         });
                     }
-                    // @ts-ignore
-                    furnitureLayer.dblclick = () => {
-                        console.log("DOUBLECLIIIIIIIIIIICK");
+                    furnitureLayer['dblclick'] = () => {
                         if (this._doubleClick) this._doubleClick({
                             tag: furnitureLayer.tag
                         });

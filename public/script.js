@@ -109,7 +109,7 @@ async function load() {
     room.addRoomObject(new FloorFurniture(scuti, {x: 15, y: 20, z: 0, direction: 2, id: 12, state: 2}));
     room.addRoomObject(new Avatar(scuti, {x: 9, y: 5, z: 2, direction: 4, headDirection: 4, figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80", actions: [ Action.Walk]}))
     let dragon = new FloorFurniture(scuti, {x: 5, y: 7, z: 0, direction: 2, id: 1620, state: 1});
-    dragon.click = (event) => {
+    dragon.doubleClick = (event) => {
         if(dragon.state === 1) {
             dragon.state = 0;
         } else {
