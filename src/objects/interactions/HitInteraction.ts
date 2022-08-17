@@ -31,6 +31,7 @@ export const handleClick = (stage: Container, event): void => {
 
 export const handleMouseMove = (stage: Container, event): void => {
     stage.children.forEach((container: Container) => {
+        let hoveredTile;
         container.children.forEach((object: Container) => {
             let highestSprite;
             // @ts-ignore
@@ -49,6 +50,7 @@ export const handleMouseMove = (stage: Container, event): void => {
                 if(sprite instanceof Graphics) {
                     if(sprite.containsPoint(new Point(event.data.global.x, event.data.global.y))) {
                         // @ts-ignore
+                        hoveredTile = object;
                         object.mouseover();
                     }
                 }

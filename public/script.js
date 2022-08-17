@@ -68,50 +68,10 @@ async function load() {
         console.log("cc");
     }
 
-    let furni6 = new FloorFurniture(scuti, {
-        x: 5,
-        y: 8,
-        z: 0,
-        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
-        direction: 0,
-        //id: furniId[Math.floor(Math.random() * furniId.length)],
-        id: 12,
-        state: 1,
-    });
-    room.addRoomObject(furni6);
-    let furni7 = new FloorFurniture(scuti, {
-        x: 5,
-        y: 12,
-        z: 0,
-        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
-        direction: 0,
-        //id: furniId[Math.floor(Math.random() * furniId.length)],
-        id: 12,
-        state: 1,
-    });
-    room.addRoomObject(furni7);
-    let furni8 = new FloorFurniture(scuti, {
-        x: 5,
-        y: 16,
-        z: 0,
-        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
-        direction: 0,
-        //id: furniId[Math.floor(Math.random() * furniId.length)],
-        id: 12,
-        state: 2,
-    });
-    room.addRoomObject(furni8);
-    let furni9 = new FloorFurniture(scuti, {
-        x: 5,
-        y: 20,
-        z: 0,
-        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
-        direction: 0,
-        //id: furniId[Math.floor(Math.random() * furniId.length)],
-        id: 12,
-        state: 0,
-    });
-    room.addRoomObject(furni9);
+    room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: 8, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: 12, z: 0, direction: 0, id: 12, state: 1,}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: 16, z: 0, direction: 0, id: 12, state: 2,}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: 20, z: 0, direction: 0, id: 12, state: 0,}));
     room.addRoomObject(new FloorFurniture(scuti, {x: 1, y: 20, z: 0, direction: 2, id: 12, state: 2}));
     room.addRoomObject(new FloorFurniture(scuti, {x: -3, y: 20, z: 0, direction: 2, id: 12, state: 1}));
     room.addRoomObject(new FloorFurniture(scuti, {x: -7, y: 20, z: 0, direction: 2, id: 12, state: 1}));

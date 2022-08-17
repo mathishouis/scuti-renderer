@@ -177,9 +177,9 @@ export class Room {
         this._tileCursor?.destroy();
     }
 
-    public addRoomObject(object: (FloorFurniture | WallFurniture | Avatar)): void {
+    public async addRoomObject(object: (FloorFurniture | WallFurniture | Avatar)): void {
         object.room = this;
-        object.draw();
+        await object.draw();
         object.startAnimation();
         this._roomObjects.add(object);
         this._roomObjectContainer.addChild(object);
