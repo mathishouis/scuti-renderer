@@ -68,7 +68,7 @@ export class Tile extends Container {
         this._container.addChild(tileLeft);
         this._container.addChild(tileRight);
 
-        this["interactive"] = true;
+        //this["interactive"] = true;
 
         this.addChild(this._container);
 

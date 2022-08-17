@@ -174,4 +174,16 @@ export class Wall extends Container {
 
     }
 
+    click() {
+
+    }
+
+    mouseover() {
+
+    }
+
+    mouseout() {
+
+    }
+
 }

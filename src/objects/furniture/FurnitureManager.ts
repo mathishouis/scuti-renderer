@@ -27,28 +27,12 @@ export class FurnitureManager {
 
     }
 
-    /*public getClassName(id: number): string {
-        let furni = this._furnidata.floorItems.find((item) => item.id === id);
-        if (!furni) furni = this._furnidata.wallItems.find((item) => item.id === id);
-        return furni.className;
-    }*/
-
     getFurniData(id: number, type: ("floorItem" | "wallItem")): IFurniData {
         let furni: { className: string };
         if(type === "floorItem") furni = this._furnidata.floorItems.find((item) => item.id === id);
         if(type === "wallItem") furni = this._furnidata.wallItems.find((item) => item.id === id);
         return <IFurniData>furni;
     }
-
-    /*public async loadFurni(id: number): Promise<string> {
-        return new Promise(async (resolve, reject) => {
-            let furni = this._furnidata.floorItems.find((item) => item.id === id);
-            if (!furni) furni = this._furnidata.wallItems.find((item) => item.id === id);
-            this._engine.resources.add('furni/' + furni.id, 'furniture/' + this.splitColorName(furni.className).name + '/' + this.splitColorName(furni.className).name + '.json');
-            await this._engine.resources.load('furni/' + furni.id);
-            resolve(furni.className);
-        });
-    }*/
 
     public splitColorName(name: string): { colorId: string; name: string } {
         let colorId: string = "";

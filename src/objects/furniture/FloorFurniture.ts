@@ -90,12 +90,14 @@ export class FloorFurniture extends RoomObject {
                     let furnitureLayer = new FurnitureLayer(layer);
                     // @ts-ignore
                     furnitureLayer.click = () => {
+                        console.log("CLIIIIIIIIIIICK");
                         if (this._click) this._click({
                             tag: furnitureLayer.tag
                         });
                     }
                     // @ts-ignore
                     furnitureLayer.dblclick = () => {
+                        console.log("DOUBLECLIIIIIIIIIIICK");
                         if (this._doubleClick) this._doubleClick({
                             tag: furnitureLayer.tag
                         });

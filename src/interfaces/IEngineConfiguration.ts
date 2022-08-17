@@ -3,5 +3,6 @@ export interface IEngineConfiguration {
     width: number,
     height: number,
     resources: string,
-    background: number
+    background: number,
+    transparent: boolean
 }

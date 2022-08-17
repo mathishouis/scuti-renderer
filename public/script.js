@@ -1,6 +1,8 @@
 import { Scuti } from "../src/Scuti";
 import { Room } from "../src/objects/room/Room";
 import {FloorFurniture} from "../src/objects/furniture/FloorFurniture";
+import {Avatar} from "../src/objects/avatar/Avatar";
+import {Action} from "../src";
 
 
 async function load() {
@@ -11,7 +13,8 @@ async function load() {
         height: 955,
         //resources: "https://scuti-resources.netlify.app/",
         background: 0x000000,
-        resources: "http://localhost:8081/"
+        resources: "http://localhost:8081/",
+        transparent: false
     });
     scuti.onEvent = (event) => {
         console.log(event);
@@ -33,6 +36,17 @@ async function load() {
         "xxxx00000000\n" +
         "xxxx00000000\n" +
         "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
+        "xxxx00000000\n" +
         "xxxxxxxxxxxx\n" +
         "xxxxxxxxxxxx\n"
 
@@ -45,15 +59,104 @@ async function load() {
     });
 
     dice(scuti, room, 5, 5, 0);
-    dice(scuti, room, 6, 5, 0);
+    /*dice(scuti, room, 6, 5, 0);
     dice(scuti, room, 7, 5, 0);
     dice(scuti, room, 7, 6, 0);
-    dice(scuti, room, 5, 6, 0);
+    dice(scuti, room, 5, 6, 0);*/
 
     room.tileClick = (x, y, z) => {
         console.log("cc");
     }
 
+    let furni6 = new FloorFurniture(scuti, {
+        x: 5,
+        y: 8,
+        z: 0,
+        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        direction: 0,
+        //id: furniId[Math.floor(Math.random() * furniId.length)],
+        id: 12,
+        state: 1,
+    });
+    room.addRoomObject(furni6);
+    let furni7 = new FloorFurniture(scuti, {
+        x: 5,
+        y: 12,
+        z: 0,
+        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        direction: 0,
+        //id: furniId[Math.floor(Math.random() * furniId.length)],
+        id: 12,
+        state: 1,
+    });
+    room.addRoomObject(furni7);
+    let furni8 = new FloorFurniture(scuti, {
+        x: 5,
+        y: 16,
+        z: 0,
+        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        direction: 0,
+        //id: furniId[Math.floor(Math.random() * furniId.length)],
+        id: 12,
+        state: 2,
+    });
+    room.addRoomObject(furni8);
+    let furni9 = new FloorFurniture(scuti, {
+        x: 5,
+        y: 20,
+        z: 0,
+        //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
+        direction: 0,
+        //id: furniId[Math.floor(Math.random() * furniId.length)],
+        id: 12,
+        state: 0,
+    });
+    room.addRoomObject(furni9);
+    room.addRoomObject(new FloorFurniture(scuti, {x: 1, y: 20, z: 0, direction: 2, id: 12, state: 2}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: -3, y: 20, z: 0, direction: 2, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: -7, y: 20, z: 0, direction: 2, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: -11, y: 20, z: 0, direction: 2, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: 20, z: 0, direction: 2, id: 12, state: 0}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: 16, z: 0, direction: 0, id: 12, state: 2}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: 12, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: 8, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 19, y: 20, z: 0, direction: 2, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 23, y: 20, z: 0, direction: 2, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 27, y: 20, z: 0, direction: 2, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 9, y: 8, z: 0, direction: 0, id: 11, state: 4}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 9, y: 12, z: 0, direction: 0, id: 11, state: 4}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 9, y: 16, z: 0, direction: 0, id: 11, state: 3}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 9, y: 20, z: 0, direction: 0, id: 11, state: 0}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 9, y: 4, z: 0, direction: 0, id: 11, state: 4}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 9, y: 0, z: 0, direction: 0, id: 11, state: 5}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: 4, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: 0, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: 4, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: 0, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: -4, z: 0, direction: 0, id: 12, state: 0}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 15, y: -4, z: 0, direction: 2, id: 12, state: 2}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 19, y: -4, z: 0, direction: 0, id: 12, state: 0}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: -4, z: 0, direction: 0, id: 12, state: 0}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 1, y: -4, z: 0, direction: 2, id: 12, state: 2}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: -3, y: -4, z: 0, direction: 0, id: 12, state: 0}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 9, y: -4, z: 0, direction: 0, id: 11, state: 0}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 9, y: -8, z: 0, direction: 0, id: 11, state: 6}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 9, y: -12, z: 0, direction: 0, id: 11, state: 4}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: -8, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: -12, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: -8, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: -12, z: 0, direction: 0, id: 12, state: 1}));
+    room.addRoomObject(new FloorFurniture(scuti, {x: 15, y: 20, z: 0, direction: 2, id: 12, state: 2}));
+    room.addRoomObject(new Avatar(scuti, {x: 9, y: 5, z: 2, direction: 4, headDirection: 4, figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80", actions: [ Action.Walk]}))
+    let dragon = new FloorFurniture(scuti, {x: 5, y: 7, z: 0, direction: 2, id: 1620, state: 1});
+    dragon.click = (event) => {
+        if(dragon.state === 1) {
+            dragon.state = 0;
+        } else {
+            dragon.state = 1;
+        }
+    }
+    room.addRoomObject(dragon);
 
 }
 
@@ -70,9 +173,9 @@ function dice(scuti, room, x, y, z) {
     });
     room.addRoomObject(furni5);
     let timeout = undefined;
-    furni5.doubleClick = (event) => {
+    furni5.click = (event) => {
         console.log(event);
-        if(furni5.logic === "furniture_dice") {
+        if(furni5.infos.logic === "furniture_dice") {
             console.log("clicked furni5", event);
             if(event.tag === "activate") {
                 clearTimeout(timeout);

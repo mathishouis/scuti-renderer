@@ -26,7 +26,7 @@ export class FurnitureLayer extends Sprite {
 
         this._layerZ = props.layerZ;
         // @ts-ignore
-        this.interactive = props.interactive;
+        //this.interactive = props.interactive;
         //this.buttonMode = props.interactive;
 
         this._room = props.room;

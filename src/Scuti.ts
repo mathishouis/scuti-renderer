@@ -1,5 +1,5 @@
 import {IEngineConfiguration} from "./interfaces/IEngineConfiguration";
-import {Application, Graphics, SCALE_MODES, settings} from 'pixi.js';
+import {Application, Graphics, SCALE_MODES, settings, Point} from 'pixi.js';
 import {ResourceManager} from "./resources/ResourceManager";
 import {RoomMaterialManager} from "./objects/room/RoomMaterialManager";
 import {EventManager} from "./objects/events/EventManager";
@@ -15,6 +15,7 @@ import {Event} from "./enum/Event";
 import "./utils/pixi/DoubleClick";
 
 import * as PIXI from "pixi.js";
+import {handleClick, handleMouseMove} from "./objects/interactions/HitInteraction";
 // @ts-ignore
 window.PIXI = PIXI;
 require("@kozennnn/pixi-layers")
@@ -86,12 +87,19 @@ export class Scuti {
                 height: this._configuration.height,
                 backgroundColor: this._configuration.background,
                 antialias: false,
+                transparent: this._configuration.transparent
             });
             console.log(this._application.renderer.plugins.interaction);
-            //this._application.renderer.plugins.interaction.search = new TreeSearch();
-            //console.log(this._application.renderer.plugins.interaction.search);
             // @ts-ignore
             this._application.stage = new PIXI.display.Stage();
+            // @ts-ignore
+            this._application.stage.hitArea = new PIXI.Rectangle(0, 0, this._configuration.width, this._configuration.height);
+            // @ts-ignore
+            this._application.stage.interactive = true;
+            // @ts-ignore
+            this._application.stage.click = (event) => handleClick(this._application.stage, event);
+            // @ts-ignore
+            this._application.stage.mousemove = (event) => handleMouseMove(this._application.stage, event);
             this._canvas.appendChild(this._application.view);
 
             this._resourceManager = new ResourceManager(this._configuration.resources);
