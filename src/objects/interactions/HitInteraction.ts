@@ -78,8 +78,8 @@ export const handleMouseMove = (stage: Container, event): void => {
                 }
                 if(sprite instanceof Graphics) {
                     if(sprite.containsPoint(new Point(event.data.global.x, event.data.global.y))) {
-                        // @ts-ignore
                         hoveredTile = object;
+                        // @ts-ignore
                         object.mouseover();
                     }
                 }

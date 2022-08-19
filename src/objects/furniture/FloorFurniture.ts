@@ -283,6 +283,10 @@ export class FloorFurniture extends RoomObject {
                     this._x = x;
                     this._y = y;
                     this._z = z;
+                    this._layers.forEach(layer => {
+                        // @ts-ignore
+                        layer.zOrder = getZOrderFloorItem(x, y, z, layer.layerZ);
+                    });
                 }
             });
         }
