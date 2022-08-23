@@ -1,9 +1,9 @@
 import {Container, Graphics, Point} from "pixi.js"
 
 export const handleClick = (stage: Container, event): void => {
+    let highestSprite;
     stage.children.forEach((container: Container) => {
         container.children.forEach((object: Container) => {
-            let highestSprite;
             // @ts-ignore
             object.children[0].children.forEach((sprite) => {
                 if(sprite.isSprite && (sprite as any).containsPoint) {
@@ -11,7 +11,7 @@ export const handleClick = (stage: Container, event): void => {
                         if(!highestSprite) {
                             highestSprite = sprite;
                         } else {
-                            if(sprite.zOrder > highestSprite.zOrder) {
+                            if(sprite.zOrder >= highestSprite.zOrder) {
                                 highestSprite = sprite;
                             }
                         }
@@ -24,15 +24,15 @@ export const handleClick = (stage: Container, event): void => {
                     }
                 }
             });
-            if(highestSprite) highestSprite.click();
         });
     });
+    if(highestSprite) highestSprite.click();
 }
 
 export const handleDoubleClick = (stage: Container, event): void => {
+    let highestSprite;
     stage.children.forEach((container: Container) => {
         container.children.forEach((object: Container) => {
-            let highestSprite;
             // @ts-ignore
             object.children[0].children.forEach((sprite) => {
                 if(sprite.isSprite && (sprite as any).containsPoint) {
@@ -40,7 +40,7 @@ export const handleDoubleClick = (stage: Container, event): void => {
                         if(!highestSprite) {
                             highestSprite = sprite;
                         } else {
-                            if(sprite.zOrder > highestSprite.zOrder) {
+                            if(sprite.zOrder >= highestSprite.zOrder) {
                                 highestSprite = sprite;
                             }
                         }
@@ -53,16 +53,16 @@ export const handleDoubleClick = (stage: Container, event): void => {
                     }
                 }
             });
-            if(highestSprite) highestSprite.dblclick();
         });
     });
+    if(highestSprite) highestSprite.dblclick();
 }
 
 export const handleMouseMove = (stage: Container, event): void => {
+    let highestSprite;
     stage.children.forEach((container: Container) => {
         let hoveredTile;
         container.children.forEach((object: Container) => {
-            let highestSprite;
             // @ts-ignore
             object.children[0].children.forEach((sprite) => {
                 if(sprite.isSprite && (sprite as any).containsPoint) {
@@ -70,7 +70,7 @@ export const handleMouseMove = (stage: Container, event): void => {
                         if(!highestSprite) {
                             highestSprite = sprite;
                         } else {
-                            if(sprite.zOrder > highestSprite.zOrder) {
+                            if(sprite.zOrder >= highestSprite.zOrder) {
                                 highestSprite = sprite;
                             }
                         }

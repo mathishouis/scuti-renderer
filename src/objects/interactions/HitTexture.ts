@@ -1,4 +1,4 @@
-import {Texture, BaseTexture, Sprite, BaseImageResource, RenderTexture} from "pixi.js";
+import {Texture, BaseTexture, Sprite, BaseImageResource, RenderTexture, Graphics} from "pixi.js";
 import {FurnitureLayer} from "../furniture/FurnitureLayer";
 
 export class HitTexture {

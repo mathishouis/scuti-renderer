@@ -1,4 +1,4 @@
-import {Sprite, Texture, utils} from "pixi.js";
+import {Graphics, Sprite, Texture, utils} from "pixi.js";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
 import {Scuti} from "../../Scuti";
 import {Room} from "../..";
@@ -14,6 +14,7 @@ export class FurnitureLayer extends Sprite {
     private _room: Room;
     private _tag: string;
     private _hitTexture: HitTexture;
+    private _ignoreMouse: boolean;
 
     constructor(props: IFurnitureLayerProps) {
         super(props.texture);
@@ -26,7 +27,7 @@ export class FurnitureLayer extends Sprite {
 
         this._layerZ = props.layerZ;
         // @ts-ignore
-        //this.interactive = props.interactive;
+        this._ignoreMouse = !props.interactive;
         //this.buttonMode = props.interactive;
 
         this._room = props.room;
@@ -58,6 +59,8 @@ export class FurnitureLayer extends Sprite {
     }
 
     containsPoint(point) {
+
+        if(this._ignoreMouse) return false;
 
         const width = this.texture.orig.width;
         const height = this.texture.orig.height;
