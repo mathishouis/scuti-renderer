@@ -102,7 +102,7 @@ export class FloorFurniture extends RoomObject {
                     this._container.addChild(furnitureLayer);
                 }
             }
-        })
+        });
 
         this._loaded = true;
 

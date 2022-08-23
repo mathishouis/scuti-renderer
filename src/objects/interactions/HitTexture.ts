@@ -1,14 +1,15 @@
 import {Texture, BaseTexture, Sprite, BaseImageResource, RenderTexture, Graphics} from "pixi.js";
 import {FurnitureLayer} from "../furniture/FurnitureLayer";
+import {AvatarLayer} from "../avatar/AvatarLayer";
 
 export class HitTexture {
 
-    private readonly _sprite: FurnitureLayer;
+    private readonly _sprite: FurnitureLayer | AvatarLayer;
 
     private readonly _texture: Texture;
     private _cachedHitmap: Uint32Array = undefined;
 
-    constructor(sprite: FurnitureLayer) {
+    constructor(sprite: FurnitureLayer | AvatarLayer) {
         this._sprite = sprite;
 
         this._texture = this._generateTexture();

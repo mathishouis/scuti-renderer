@@ -1,5 +1,5 @@
 import { BLEND_MODES, Texture } from "pixi.js";
-import {Room} from "..";
+import {Room, Scuti} from "..";
 
 export interface IAvatarLayerProps {
     flip?: boolean,
@@ -9,6 +9,8 @@ export interface IAvatarLayerProps {
     alpha: number,
     name: string,
     z: number,
+    engine: Scuti,
+    room: Room
     /*layerZ: number,
     room: Room*/
 }

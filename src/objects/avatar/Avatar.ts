@@ -7,6 +7,8 @@ import {IAvatarLayerProps} from "../../interfaces/IAvatarLayerProps";
 import {AvatarLayer} from "./AvatarLayer";
 import {Action} from "../../enum/Action";
 import {getZOrder, getZOrderAvatar} from "../../utils/ZOrder";
+import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
+import {FurnitureLayer} from "../furniture/FurnitureLayer";
 
 export class Avatar extends RoomObject {
 
@@ -20,10 +22,13 @@ export class Avatar extends RoomObject {
     private _figure: string;
     private _actions: Action[];
     private _container?: Container;
-    private _layers: Map<string, AnimatedSprite> = new Map();
+    private _layers: Map<IAvatarLayerProps, AvatarLayer> = new Map();
     private _loaded: boolean = false;
     private _handItem: number;
     private _moving: boolean = false;
+
+    private _click: (event: any) => void;
+    private _doubleClick: (event: any) => void;
 
     constructor(engine: Scuti, props: IAvatarProps) {
         super();
@@ -41,7 +46,7 @@ export class Avatar extends RoomObject {
 
     }
 
-    public async draw(): Promise<void> {
+    public async draw(redrawAll: boolean = false): Promise<void> {
 
         // @ts-ignore
         this.parentLayer = this.room.roomObjectLayer;
@@ -58,11 +63,35 @@ export class Avatar extends RoomObject {
         this._container = new Container();
         this._container.sortableChildren = true;
 
-        layers.forEach((layer: IAvatarLayerProps) => {
+        /*layers.forEach((layer: IAvatarLayerProps) => {
             let avatarLayer = new AvatarLayer(layer);
             this._layers.set(layer.name, avatarLayer);
             this._container.addChild(avatarLayer);
+        });*/
+
+        this._layers.forEach((layer, index) => {
+            if (!layers.includes(index) || redrawAll) {
+                if (layer.hitTexture) {
+                    layer.hitTexture.destroy();
+                }
+                layer.destroy();
+                this._layers.delete(index);
+            }
         });
+
+        layers.forEach((layer: IAvatarLayerProps) => {
+            if(!this._layers.has(layer) || redrawAll) {
+                let avatarLayer = new AvatarLayer(layer);
+                avatarLayer['click'] = () => {
+                    if (this._click) this._click({});
+                }
+                avatarLayer['dblclick'] = () => {
+                    if (this._doubleClick) this._doubleClick({});
+                }
+                this._layers.set(layer, avatarLayer);
+                this._container.addChild(avatarLayer);
+            }
+        })
 
         this._loaded = true;
 
@@ -72,7 +101,7 @@ export class Avatar extends RoomObject {
             this.x = 32 * this._x - 32 * this._y;
             this.y = 16 * this._x + 16 * this._y - 32 * this._z;
             // @ts-ignore
-            this.zOrder = getZOrderAvatar(this._x, this._y, this._z);
+            //this.zOrder = getZOrderAvatar(this._x, this._y, this._z);
         }
 
     }
@@ -158,7 +187,9 @@ export class Avatar extends RoomObject {
                         tint: undefined,
                         alpha: 1,
                         name: 'ri_' + handItemId + '_' + this._engine.avatars.habboAvatarActions[action].assetpartdefinition + '_' + this._direction,
-                        z: this._engine.avatars.getDrawOrder('rh', action, this._direction)
+                        z: getZOrderAvatar(this._x, this._y, this._z) + this._engine.avatars.getDrawOrder('rh', action, this._direction),
+                        engine: this._engine,
+                        room: this.room
                     });
                 }
             }
@@ -212,7 +243,9 @@ export class Avatar extends RoomObject {
                                 tint: part.colorable === 1 && type !== "ey" ? this._engine.avatars.getColor(figureType, colors[part.index]) : undefined,
                                 alpha: 1,
                                 name: name,
-                                z: this._engine.avatars.getDrawOrder(type, action, direction)
+                                z: getZOrderAvatar(this._x, this._y, this._z) + this._engine.avatars.getDrawOrder(type, action, direction),
+                                engine: this._engine,
+                                room: this.room
                             });
                         } else if (type === "sd") {
                             layers.push({
@@ -221,7 +254,9 @@ export class Avatar extends RoomObject {
                                 tint: undefined,
                                 alpha: 0.04,
                                 name: "sd_1_std_0",
-                                z: -1
+                                z: getZOrderAvatar(this._x, this._y, this._z) - 1,
+                                engine: this._engine,
+                                room: this.room
                             });
                         }
 
@@ -241,7 +276,7 @@ export class Avatar extends RoomObject {
         } else {
             this._moving = true;
             // @ts-ignore
-            this.zOrder = getZOrderAvatar(x, y, z);
+            //this.zOrder = getZOrderAvatar(x, y, z);
             gsap.to(this, {
                 x: 32 * x - 32 * y, y: 16 * x + 16 * y - 32 * z, duration: 0.5, ease: "linear", onComplete: () => {
                     this._x = x;
@@ -297,6 +332,22 @@ export class Avatar extends RoomObject {
 
     public destroy(): void {
         this._container?.destroy();
+    }
+
+    public get click() {
+        return this._click;
+    }
+
+    public set click(value) {
+        this._click = value;
+    }
+
+    public get doubleClick() {
+        return this._doubleClick;
+    }
+
+    public set doubleClick(value) {
+        this._doubleClick = value;
     }
 
 }
