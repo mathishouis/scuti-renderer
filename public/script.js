@@ -3,6 +3,7 @@ import { Room } from "../src/objects/room/Room";
 import {FloorFurniture} from "../src/objects/furniture/FloorFurniture";
 import {Avatar} from "../src/objects/avatar/Avatar";
 import {Action} from "../src";
+import {AvatarEffect} from "../src/objects/avatar/AvatarEffect";
 
 
 async function load() {
@@ -64,10 +65,6 @@ async function load() {
     dice(scuti, room, 7, 6, 0);
     dice(scuti, room, 5, 6, 0);*/
 
-    room.tileClick = (x, y, z) => {
-        console.log("cc");
-    }
-
     room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: 8, z: 0, direction: 0, id: 12, state: 1}));
     room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: 12, z: 0, direction: 0, id: 12, state: 1,}));
     room.addRoomObject(new FloorFurniture(scuti, {x: 5, y: 16, z: 0, direction: 0, id: 12, state: 2,}));
@@ -107,9 +104,14 @@ async function load() {
     room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: -8, z: 0, direction: 0, id: 12, state: 1}));
     room.addRoomObject(new FloorFurniture(scuti, {x: 11, y: -12, z: 0, direction: 0, id: 12, state: 1}));
     room.addRoomObject(new FloorFurniture(scuti, {x: 15, y: 20, z: 0, direction: 2, id: 12, state: 2}));
-    let avatar = new Avatar(scuti, {x: 7, y: 5, z: 2, direction: 4, headDirection: 4, figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80", actions: [ Action.Walk]});
+    let avatar = new Avatar(scuti, {x: 7, y: 5, z: 2, direction: 2, headDirection: 2, figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80", actions: [ Action.Walk]});
+
+    avatar.effect = new AvatarEffect(scuti, { id: 17});
     avatar.doubleClick = (event) => {
         console.log("Avatar double click!")
+    }
+    room.tileClick = (x, y, z) => {
+        avatar.move(x, y, z, true);
     }
     room.addRoomObject(avatar);
     let dragon = new FloorFurniture(scuti, {x: 4, y: 4, z: 0, direction: 2, id: 1620, state: 1});

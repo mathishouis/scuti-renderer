@@ -8,6 +8,7 @@ export class AvatarManager {
 
     private _figuredata: any;
     private _figuremap: any;
+    private _effectmap: any;
     private _drawOrder: any;
     private _habboAvatarActions: any;
     private _habboAvatarPartSets: any;
@@ -24,16 +25,19 @@ export class AvatarManager {
             const startDate: Date = new Date();
             this._engine.resources.add('figuredata', 'gamedata/figuredata.json');
             this._engine.resources.add('figuremap', 'gamedata/figuremap.json');
+            this._engine.resources.add('effectmap', 'gamedata/effectmap.json');
             this._engine.resources.add('draworder', 'gamedata/draworder.json');
             this._engine.resources.add('HabboAvatarActions', 'generic/HabboAvatarActions.json');
             this._engine.resources.add('HabboAvatarPartSets', 'generic/HabboAvatarPartSets.json');
             await this._engine.resources.load('figuredata');
             await this._engine.resources.load('figuremap');
+            await this._engine.resources.load('effectmap');
             await this._engine.resources.load('draworder');
             await this._engine.resources.load('HabboAvatarActions');
             await this._engine.resources.load('HabboAvatarPartSets');
             this._figuredata = this._engine.resources.get('figuredata');
             this._figuremap = this._engine.resources.get('figuremap');
+            this._effectmap = this._engine.resources.get('effectmap');
             this._drawOrder = this._engine.resources.get('draworder');
             this._habboAvatarActions = this._engine.resources.get('HabboAvatarActions');
             this._habboAvatarPartSets = this._engine.resources.get('HabboAvatarPartSets');
@@ -74,6 +78,10 @@ export class AvatarManager {
     public getDrawOrder(type: string, action: string, direction: number) {
         if(this._drawOrder[action] === undefined) action = "std";
         return Number(Object.entries(this._drawOrder[action][direction]).find(entry => entry[1] === type)[0]);
+    }
+
+    public getEffect(type: string, id: number) {
+        return this._effectmap[type][String(id)];
     }
 
     public splitLookFigure(figure: string): { partId: number; type: string; colors: number[] }[] {

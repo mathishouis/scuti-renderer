@@ -9,6 +9,7 @@ import {Action} from "../../enum/Action";
 import {getZOrder, getZOrderAvatar} from "../../utils/ZOrder";
 import {IFurnitureLayerProps} from "../../interfaces/IFurnitureLayerProps";
 import {FurnitureLayer} from "../furniture/FurnitureLayer";
+import {AvatarEffect} from "./AvatarEffect";
 
 export class Avatar extends RoomObject {
 
@@ -26,6 +27,7 @@ export class Avatar extends RoomObject {
     private _loaded: boolean = false;
     private _handItem: number;
     private _moving: boolean = false;
+    private _effect: AvatarEffect;
 
     private _click: (event: any) => void;
     private _doubleClick: (event: any) => void;
@@ -57,11 +59,15 @@ export class Avatar extends RoomObject {
             this._createPlaceholder();
         }
 
-        let layers = await this._getLayers();
+        //let layers = await this._getLayers();
 
         this._container?.destroy();
         this._container = new Container();
         this._container.sortableChildren = true;
+
+        await this._effect.draw(true);
+
+        let layers = await this._getLayers();
 
         /*layers.forEach((layer: IAvatarLayerProps) => {
             let avatarLayer = new AvatarLayer(layer);
@@ -91,7 +97,7 @@ export class Avatar extends RoomObject {
                 this._layers.set(layer, avatarLayer);
                 this._container.addChild(avatarLayer);
             }
-        })
+        });
 
         this._loaded = true;
 
@@ -227,6 +233,18 @@ export class Avatar extends RoomObject {
                                     }
                                 });
                             }
+                            console.log(type, "gesture");
+                            if(this._effect) {
+                                if(Object.keys(this._engine.resources.get(this._effect._name).data.animations["fx." + this._effect._id].frames[0]["bodypart"]).includes("leftarm") && ['li','ls','lh','lc'].includes(type)) {
+                                    action = this._engine.resources.get(this._effect._name).data.animations["fx." + this._effect._id].frames[0]["bodypart"]["leftarm"].action;
+                                }
+                                if(Object.keys(this._engine.resources.get(this._effect._name).data.animations["fx." + this._effect._id].frames[0]["bodypart"]).includes("rightarm") && ['ri','rs','rh','rc'].includes(type)) {
+                                    action = this._engine.resources.get(this._effect._name).data.animations["fx." + this._effect._id].frames[0]["bodypart"]["rightarm"].action;
+                                }
+                                if(Object.keys(this._engine.resources.get(this._effect._name).data.animations["fx." + this._effect._id].frames[0]["bodypart"]).includes("torso") && ['lg','sh','bd'].includes(type)) {
+                                    action = this._engine.resources.get(this._effect._name).data.animations["fx." + this._effect._id].frames[0]["bodypart"]["torso"].action;
+                                }
+                            }
                         }
 
                         if (this._engine.avatars.habboAvatarPartSets.activePartSets.head.includes(type)) {
@@ -324,6 +342,16 @@ export class Avatar extends RoomObject {
     public set handItem(item: number) {
         this._handItem = item;
         this.addAction(Action.CarryItem);
+    }
+
+    public get effect() {
+        return this._effect;
+    }
+
+    public set effect(value: AvatarEffect) {
+        this._effect = value;
+        this._effect.avatar = this;
+        this.draw(true);
     }
 
     public startAnimation(): void {
