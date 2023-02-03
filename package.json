@@ -1,0 +1,24 @@
+{
+  "name": "scuti-renderer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "source": "src/index.ts",
+  "scripts": {
+    "start": "parcel public/index.html --no-cache",
+    "build": "parcel build public/index.html",
+    "tsc-build": "rm -rf dist && tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pixi.js": "^7.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "parcel": "^2.8.3",
+    "punycode": "^1.4.1",
+    "querystring-es3": "^0.2.1"
+  }
+}
