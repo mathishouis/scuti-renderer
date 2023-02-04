@@ -1,7 +1,7 @@
-import {Position2D, TileInfo} from "../../interfaces/Room.interface";
-import {WallType} from "../../types/WallType";
-import {StairType} from "../../types/StairType";
-import {Direction} from "../../types/Direction";
+import { Position2D, TileInfo } from "../../interfaces/Room.interface";
+import { WallType } from "../../types/WallType";
+import { StairType } from "../../types/StairType";
+import { Direction } from "../../types/Direction";
 
 export class RoomTileMap {
 

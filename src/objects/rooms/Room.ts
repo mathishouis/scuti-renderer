@@ -1,9 +1,11 @@
 import { Scuti } from "../../Scuti";
-import {Container, Texture} from "pixi.js";
+import { Container } from "pixi.js";
 import { RoomConfiguration } from "../../interfaces/Room.interface";
 import { RoomVisualization } from "./RoomVisualization";
 import { RoomTileMap } from "./RoomTileMap";
-import { RoomMaterial } from "./RoomMaterial";
+import { Material } from "./materials/Material";
+import { WallMaterial } from "./materials/WallMaterial";
+import { FloorMaterial } from "./materials/FloorMaterial";
 
 export class Room extends Container {
 
@@ -23,13 +25,13 @@ export class Room extends Container {
      * The room wall material
      * @private
      */
-    private _wallMaterial: RoomMaterial; // TODO: Replace material with an object
+    private _wallMaterial: Material; // TODO: Replace material with an object
 
     /**
      * The room floor material
      * @private
      */
-    private _floorMaterial: RoomMaterial; // TODO: Replace material with an object
+    private _floorMaterial: Material; // TODO: Replace material with an object
 
     /**
      * The room wall thickness
@@ -66,8 +68,9 @@ export class Room extends Container {
     ) {
         super();
 
-        this._wallMaterial = configuration.wallMaterial?? new RoomMaterial(0xA5A8B6, Texture.WHITE);
-        this._floorMaterial = configuration.floorMaterial ?? new RoomMaterial(0x979764, Texture.WHITE);
+        this._engine = engine;
+        this._wallMaterial = configuration.wallMaterial ?? new WallMaterial(this._engine, 112);
+        this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(this._engine, 111);
         this._wallThickness = configuration.wallThickness ?? 8;
         this._floorThickness = configuration.floorThickness ?? 8;
         this._wallHeight = configuration.wallHeight;
@@ -80,6 +83,13 @@ export class Room extends Container {
         this._visualization.y = window.innerHeight / 3;
 
         engine.application.stage.addChild(this._visualization);
+    }
+
+    /**
+     * Return the engine instance
+     */
+    public get engine(): Scuti {
+        return this._engine;
     }
 
     /**
@@ -97,41 +107,72 @@ export class Room extends Container {
         this._visualization = visualization;
     }
 
+    /**
+     * Return the room tilemap
+     */
     public get tileMap(): RoomTileMap {
         return this._tileMap;
     }
 
-    public get wallMaterial(): RoomMaterial {
+    /**
+     * Return the wall material
+     */
+    public get wallMaterial(): Material {
         return this._wallMaterial;
     }
 
-    public set wallMaterial(material: RoomMaterial) {
+    /**
+     * Update the wall material
+     * @param material
+     */
+    public set wallMaterial(material: Material) {
         this._wallMaterial = material;
         // TODO: Rerender room visualization
     }
 
-    public get floorMaterial(): RoomMaterial {
+    /**
+     * Return the floor material
+     */
+    public get floorMaterial(): Material {
         return this._floorMaterial;
     }
 
-    public set floorMaterial(material: RoomMaterial) {
+    /**
+     * Update the floor material
+     * @param material
+     */
+    public set floorMaterial(material: Material) {
         this._floorMaterial = material;
         // TODO: Rerender room visualization
     }
 
+    /**
+     * Return the wall thickness
+     */
     public get wallThickness(): number {
         return this._wallThickness;
     }
 
+    /**
+     * Update the wall thickness
+     * @param thickness
+     */
     public set wallThickness(thickness: number) {
         this._wallThickness = thickness;
         // TODO: Rerender room visualization
     }
 
+    /**
+     * Return the floor thickness
+     */
     public get floorThickness(): number {
         return this._floorThickness;
     }
 
+    /**
+     * Update the floor thickness
+     * @param thickness
+     */
     public set floorThickness(thickness: number) {
         this._floorThickness = thickness;
         // TODO: Rerender room visualization

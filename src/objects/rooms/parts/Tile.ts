@@ -1,7 +1,8 @@
 import { Room } from "../Room";
 import { Position, TileConfiguration } from "../../../interfaces/Room.interface";
-import { Container, Graphics, Matrix, Texture, utils } from "pixi.js";
-import { RoomMaterial } from "../RoomMaterial";
+import { Container, Graphics, Matrix, utils } from "pixi.js";
+import { Material } from "../materials/Material";
+import { FloorMaterial } from "../materials/FloorMaterial";
 
 export class Tile extends Container {
 
@@ -21,7 +22,7 @@ export class Tile extends Container {
      * The tile material
      * @private
      */
-    private _material: RoomMaterial;
+    private _material: Material;
 
     /**
      * The tile position
@@ -43,7 +44,7 @@ export class Tile extends Container {
         this._room = room;
         this._position = configuration.position;
         this._thickness = configuration.thickness ?? 8;
-        this._material = configuration.material ?? new RoomMaterial(0xFFFFFF, Texture.WHITE);
+        this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
 
         // TODO: Make the method public and use it when adding it to a room, not when instancing the class
         this._draw();
@@ -57,7 +58,8 @@ export class Tile extends Container {
             .beginTextureFill({
                 texture: this._material.texture,
                 color: utils.premultiplyTint(this._material.color, 1),
-                matrix: new Matrix(1, 0.5, 1, -0.5, 0, 0)
+                //matrix: new Matrix(1, 0.5, 1, -0.5, (this._position.x % 2 === 0 || this._position.y % 2 === 0) && !(this._position.x % 2 === 0 && this._position.y % 2 === 0) ? 32 : 0, (this._position.x % 2 === 0 || this._position.y % 2 === 0) && !(this._position.x % 2 === 0 && this._position.y % 2 === 0) ? 16 : 0)
+                matrix: new Matrix(1, 0.5, 1, -0.5, (this._position.y % 2 === 0) ? 32 : 64, (this._position.y % 2 === 0) ? 16 : 0)
             })
             .moveTo(0, 0)
             .lineTo(32, -16)
@@ -115,7 +117,7 @@ export class Tile extends Container {
     /**
      * Return the tile material
      */
-    public get material(): RoomMaterial {
+    public get material(): Material {
         return this._material;
     }
 
@@ -123,7 +125,7 @@ export class Tile extends Container {
      * Set the tile material
      * @param material
      */
-    public set material(material: RoomMaterial) {
+    public set material(material: Material) {
         this._material = material;
         this._draw(); // We rerender the tile to apply the changes
     }

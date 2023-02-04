@@ -1,6 +1,6 @@
 import { Texture } from "pixi.js";
 
-export class RoomMaterial {
+export class Material {
 
     /**
      * The material color
@@ -15,7 +15,7 @@ export class RoomMaterial {
     private _texture: Texture;
 
     /**
-     * RoomMaterial class
+     * Material class
      * @param color - The material color
      * @param texture - The material texture
      */
@@ -32,10 +32,26 @@ export class RoomMaterial {
     }
 
     /**
+     * Set the material color
+     * @param color
+     */
+    public set color(color: number) {
+        this._color = color;
+    }
+
+    /**
      * Return the material texture
      */
     public get texture(): Texture {
         return this._texture;
+    }
+
+    /**
+     * Set the material texture
+     * @param texture
+     */
+    public set texture(texture: Texture) {
+        this._texture = texture;
     }
 
 }

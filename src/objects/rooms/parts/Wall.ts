@@ -1,23 +1,53 @@
-import {Room} from "../Room";
-import {Position, Position2D, WallConfiguration} from "../../../interfaces/Room.interface";
-import {Container, Graphics, Matrix, Texture, utils} from "pixi.js";
-import {RoomMaterial} from "../RoomMaterial";
-import {WallType} from "../../../types/WallType";
+import { Room } from "../Room";
+import { Position, Position2D, WallConfiguration } from "../../../interfaces/Room.interface";
+import { Container, Graphics, Matrix, Texture, utils } from "pixi.js";
+import { Material } from "../materials/Material";
+import { WallType } from "../../../types/WallType";
+import { WallMaterial } from "../materials/WallMaterial";
 
 export class Wall extends Container {
 
+    /**
+     * The room instance
+     * @private
+     */
     private _room: Room;
 
+    /**
+     * The wall thickness
+     * @private
+     */
     private _thickness: number;
 
-    private _material: RoomMaterial;
+    /**
+     * The wall material
+     * @private
+     */
+    private _material: Material;
 
+    /**
+     * The wall height
+     * @private
+     */
     private _height: number;
 
+    /**
+     * The wall position
+     * @private
+     */
     private _position: Position;
 
+    /**
+     * The wall type
+     * @private
+     */
     private _type: WallType;
 
+    /**
+     *
+     * @param room - The room instance
+     * @param configuration - The wall configuration
+     */
     constructor(
         room: Room,
         configuration: WallConfiguration
@@ -27,7 +57,7 @@ export class Wall extends Container {
         this._room = room;
         this._position = configuration.position;
         this._thickness = configuration.thickness ?? 8;
-        this._material = configuration.material ?? new RoomMaterial(0xFFFFFF, Texture.WHITE);
+        this._material = configuration.material ?? new WallMaterial(this._room.engine, 112);
         // TODO: Implement wall height
         this._height = configuration.height ?? 1;
         this._type = configuration.type;
@@ -35,6 +65,10 @@ export class Wall extends Container {
         this._draw();
     }
 
+    /**
+     * Select which wall should be drawn
+     * @private
+     */
     private _draw(): void {
         if(this._type === WallType.LEFT_WALL) {
             this._drawWall([
@@ -115,10 +149,15 @@ export class Wall extends Container {
         }
     }
 
+    /**
+     * Draw the wall
+     * @param points
+     * @private
+     */
     private _drawWall(points: Position2D[]): void {
         const top: Graphics = new Graphics()
             .beginTextureFill({
-                texture: this._material.texture,
+                texture: Texture.WHITE,
                 color: utils.premultiplyTint(this._material.color, 0.61)
             })
             .moveTo(points[0].x, points[0].y)

@@ -1,4 +1,4 @@
-import {Application} from "pixi.js";
+import {Application, Assets} from "pixi.js";
 import {RendererConfiguration} from "./interfaces/Configuration.interface";
 import {Logger} from "./utilities/Logger";
 
@@ -40,6 +40,16 @@ export class Scuti {
     }
 
     /**
+     * Load all the needed ressources
+     */
+    public async loadResources(): Promise<void> {
+        Assets.add('room/materials', 'http://127.0.0.1:8081/generic/room/room_data.json');
+        Assets.add('room/room', 'http://127.0.0.1:8081/generic/room/room.json');
+        await Assets.load('room/materials');
+        await Assets.load('room/room');
+    }
+
+    /**
      * Return the PIXI.js application
      * @public
      */
@@ -47,6 +57,9 @@ export class Scuti {
         return this._application;
     }
 
+    /**
+     * Return the renderer logger
+     */
     public get logger(): Logger {
         return this._logger;
     }

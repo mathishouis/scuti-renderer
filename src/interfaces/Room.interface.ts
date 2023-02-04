@@ -1,33 +1,33 @@
 import {StairType} from "../types/StairType";
 import {Direction} from "../types/Direction";
 import {WallType} from "../types/WallType";
-import {RoomMaterial} from "../objects/rooms/RoomMaterial";
+import {Material} from "../objects/rooms/materials/Material";
 
 export interface RoomConfiguration {
     tileMap: string,
-    floorMaterial?: RoomMaterial,
+    floorMaterial?: Material,
     floorThickness?: number,
-    wallMaterial?: RoomMaterial,
+    wallMaterial?: Material,
     wallHeight?: number,
     wallThickness?: number
 }
 
 export interface TileConfiguration {
-    material?: RoomMaterial,
+    material?: Material,
     thickness?: number,
     position: Position
 }
 
 // TODO: Replace with FloorConfiguration?
 export interface StairConfiguration {
-    material?: RoomMaterial,
+    material?: Material,
     thickness?: number,
     type: StairType,
     position: Position
 }
 
 export interface WallConfiguration {
-    material?: RoomMaterial,
+    material?: Material,
     thickness?: number,
     height?: number,
     position: Position,

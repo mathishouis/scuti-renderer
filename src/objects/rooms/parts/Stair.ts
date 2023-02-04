@@ -1,22 +1,48 @@
-import {Room} from "../Room";
-import {Position, Position2D, StairConfiguration} from "../../../interfaces/Room.interface";
-import {Container, Graphics, Matrix, Texture, utils} from "pixi.js";
-import {RoomMaterial} from "../RoomMaterial";
-import {StairType} from "../../../types/StairType";
-import {Direction} from "../../../types/Direction";
+import { Room } from "../Room";
+import { Position, Position2D, StairConfiguration } from "../../../interfaces/Room.interface";
+import { Container, Graphics, Matrix, Texture, utils } from "pixi.js";
+import { Material } from "../materials/Material";
+import { StairType } from "../../../types/StairType";
+import { Direction } from "../../../types/Direction";
+import { FloorMaterial } from "../materials/FloorMaterial";
 
 export class Stair extends Container {
 
+    /**
+     * The room instance
+     * @private
+     */
     private _room: Room;
 
+    /**
+     * The stair thickness
+     * @private
+     */
     private _thickness: number;
 
-    private _material: RoomMaterial;
+    /**
+     * The stair material
+     * @private
+     */
+    private _material: Material;
 
+    /**
+     * The stair position
+     * @private
+     */
     private _position: Position;
 
+    /**
+     * The stair type
+     * @private
+     */
     private _type: StairType;
 
+    /**
+     * Stair class
+     * @param room - The room instance
+     * @param configuration - The stair configuration
+     */
     constructor(
         room: Room,
         configuration: StairConfiguration
@@ -26,12 +52,16 @@ export class Stair extends Container {
         this._room = room;
         this._position = configuration.position;
         this._thickness = configuration.thickness ?? 8;
-        this._material = configuration.material ?? new RoomMaterial(0xFFFFFF, Texture.WHITE);
+        this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
         this._type = configuration.type;
 
         this._draw();
     }
 
+    /**
+     * Select which stair should be drawn
+     * @private
+     */
     private _draw(): void {
         if(this._type === StairType.STAIR) {
             switch (this._position.direction) {
@@ -217,6 +247,12 @@ export class Stair extends Container {
         }
     }
 
+    /**
+     * Draw a normal stair
+     * @param points
+     * @param offsets
+     * @private
+     */
     private _drawStair(
         points: Position2D[],
         offsets: Position2D[]
@@ -227,7 +263,7 @@ export class Stair extends Container {
                 .beginTextureFill({
                     texture: this._material.texture,
                     color: utils.premultiplyTint(this._material.color, 1),
-                    matrix: new Matrix(1, 0.5, 1, -0.5, 0, 0)
+                    matrix: new Matrix(1, 0.5, 1, -0.5, (this._position.y % 2 === 0) ? 32 : 64, (this._position.y % 2 === 0) ? 16 : 0)
                 })
                 .moveTo(points[0].x, points[0].y)
                 .lineTo(points[1].x, points[1].y)
@@ -273,6 +309,13 @@ export class Stair extends Container {
         this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z + offsets[1].y;
     }
 
+    /**
+     * Draw a corner stair
+     * @param points
+     * @param pointsOffsets
+     * @param offsets
+     * @private
+     */
     private _drawCornerStair(
         points: Position2D[],
         pointsOffsets: Position2D[],
@@ -284,7 +327,7 @@ export class Stair extends Container {
                 .beginTextureFill({
                     texture: this._material.texture,
                     color: utils.premultiplyTint(this._material.color, 1),
-                    matrix: new Matrix(1, 0.5, 1, -0.5, 0, 0)
+                    matrix: new Matrix(1, 0.5, 1, -0.5, (this._position.y % 2 === 0) ? 32 : 64, (this._position.y % 2 === 0) ? 16 : 0)
                 })
                 .moveTo(points[0].x + (-pointsOffsets[2].x * (2 - i)), points[0].y + (pointsOffsets[2].y * (2 - i)))
                 .lineTo(points[1].x + (pointsOffsets[1].x * (2 - i)), points[1].y + (pointsOffsets[1].y * (2 - i)))
