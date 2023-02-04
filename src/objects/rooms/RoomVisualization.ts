@@ -102,6 +102,10 @@ export class RoomVisualization extends Container {
                 this._createWall(position, WallType.CORNER_WALL);
                 this._createWall(position, WallType.LEFT_WALL);
                 this._createWall(position, WallType.RIGHT_WALL);
+            } else if(tileInfo.wallType === WallType.CORNER_WALL && !this._room.tileMap.hasWall(position).x) {
+                this._createWall(position, WallType.LEFT_WALL);
+            } else if(tileInfo.wallType === WallType.CORNER_WALL && !this._room.tileMap.hasWall(position).y) {
+                this._createWall(position, WallType.RIGHT_WALL);
             }
             if(tileInfo.wallType === WallType.LEFT_WALL && !this._room.tileMap.hasWall(position).x) this._createWall(position, WallType.LEFT_WALL);
             if(tileInfo.wallType === WallType.RIGHT_WALL && !this._room.tileMap.hasWall(position).y) this._createWall(position, WallType.RIGHT_WALL);
