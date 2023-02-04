@@ -73,7 +73,7 @@ export class Room extends Container {
         this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(this._engine, 111);
         this._wallThickness = configuration.wallThickness ?? 8;
         this._floorThickness = configuration.floorThickness ?? 8;
-        this._wallHeight = configuration.wallHeight;
+        this._wallHeight = configuration.wallHeight ?? 1;
 
         this._tileMap = new RoomTileMap(configuration.tileMap);
         this._visualization = new RoomVisualization(this);
@@ -176,6 +176,21 @@ export class Room extends Container {
     public set floorThickness(thickness: number) {
         this._floorThickness = thickness;
         // TODO: Rerender room visualization
+    }
+
+    /**
+     * Return the wall height
+     */
+    public get wallHeight(): number {
+        return this._wallHeight;
+    }
+
+    /**
+     * Update the wall height
+     * @param height
+     */
+    public set wallHeight(height: number) {
+        this._wallHeight = height;
     }
 
 }

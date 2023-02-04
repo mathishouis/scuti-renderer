@@ -170,6 +170,7 @@ export class RoomVisualization extends Container {
             position: position,
             material: this._room.wallMaterial,
             thickness: this._room.wallThickness,
+            height: this._room.wallHeight,
             type: type
         });
         this._wallLayer.addChild(wall);
