@@ -1,4 +1,4 @@
-import {Application, Assets} from "pixi.js";
+import {Application, Assets, MIPMAP_MODES, SCALE_MODES, settings} from "pixi.js";
 import {RendererConfiguration} from "./interfaces/Configuration.interface";
 import {Logger} from "./utilities/Logger";
 
@@ -30,9 +30,13 @@ export class Scuti {
         private configuration: RendererConfiguration
     ) {
         this._logger.info("⚡ Scuti Renderer - v1.0.0");
+        settings.RESOLUTION = 1;
+        settings.SCALE_MODE = SCALE_MODES.NEAREST;
         this._application = new Application({
             width: configuration.width,
-            height: configuration.height
+            height: configuration.height,
+            resolution: 1,
+            antialias: false,
         });
         this._canvas = configuration.canvas;
         // @ts-ignore

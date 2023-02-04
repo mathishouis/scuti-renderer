@@ -74,76 +74,76 @@ export class Wall extends Container {
             this._drawWall([
                 {
                     x: - this._thickness,
-                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123
+                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115
                 },
                 {
                     x: - this._thickness + 32,
-                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 139
+                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 131
                 },
                 {
                     x: - this._thickness + 32 + this._thickness,
-                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 139 + this._thickness / 2
+                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 131 + this._thickness / 2
                 },
                 {
                     x: - this._thickness + this._thickness,
-                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123 + this._thickness / 2
+                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 + this._thickness / 2
                 },
             ]);
         } else if(this._type === WallType.RIGHT_WALL) {
             this._drawWall([
                 {
                     x: 32,
-                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123
+                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115
                 },
                 {
                     x: 32 + this._thickness,
-                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123 - this._thickness / 2
+                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._thickness / 2
                 },
                 {
                     x: 64 + this._thickness,
-                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 107 - this._thickness / 2
+                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 99 - this._thickness / 2
                 },
                 {
                     x: 64,
-                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 107
+                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 99
                 },
             ]);
         } else if(this._type === WallType.CORNER_WALL) {
             this._drawWall([
                 {
                     x: 32 - this._thickness,
-                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123 - this._thickness / 2
+                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._thickness / 2
                 },
                 {
                     x: 32,
-                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123 - 2 * (this._thickness / 2)
+                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - 2 * (this._thickness / 2)
                 },
                 {
                     x: 32 + this._thickness,
-                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123 - this._thickness / 2
+                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._thickness / 2
                 },
                 {
                     x: 32,
-                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123
+                    y: - 16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115
                 },
             ]);
         } else if(this._type === WallType.DOOR_WALL) {
             this._drawWall([
                 {
                     x: - this._thickness + 32,
-                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 107
+                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 99
                 },
                 {
                     x: - this._thickness + 64,
-                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123
+                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115
                 },
                 {
                     x: - this._thickness + 64 + this._thickness,
-                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 123 + this._thickness / 2
+                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 + this._thickness / 2
                 },
                 {
                     x: - this._thickness + 32 + this._thickness,
-                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 107 + this._thickness / 2
+                    y: - this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 99 + this._thickness / 2
                 },
             ]);
         }
@@ -173,8 +173,8 @@ export class Wall extends Container {
                 matrix: new Matrix(1, 0.5, 0, 1, points[0].x, points[0].y)
             })
             .moveTo(points[0].x, points[0].y)
-            .lineTo(points[0].x, points[0].y + 123 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32)
-            .lineTo(points[3].x, points[3].y + 123 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32)
+            .lineTo(points[0].x, points[0].y + 115 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32)
+            .lineTo(points[3].x, points[3].y + 115 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32)
             .lineTo(points[3].x, points[3].y)
             .endFill();
         const right: Graphics = new Graphics()
@@ -187,12 +187,12 @@ export class Wall extends Container {
 
         if(this._type === WallType.DOOR_WALL) {
             right
-                .lineTo(points[3].x, points[3].y + 37 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32)
-                .lineTo(points[2].x, points[2].y + 37 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32);
+                .lineTo(points[3].x, points[3].y + 22 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32)
+                .lineTo(points[2].x, points[2].y + 22 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32);
         } else {
             right
-                .lineTo(points[3].x, points[3].y + 123 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32)
-                .lineTo(points[2].x, points[2].y + 123 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32);
+                .lineTo(points[3].x, points[3].y + 115 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32)
+                .lineTo(points[2].x, points[2].y + 115 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32);
         }
         right
             .lineTo(points[2].x, points[2].y)

@@ -73,8 +73,19 @@ import {WallMaterial} from "../src/objects/rooms/materials/WallMaterial";
         "x00000000000xxxxxx\n" +
         "x00000000000xxxxxx\n";
 
+    const tileMap2 = "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "00000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n";
+
     const room = new Room(renderer, {
-        tileMap: tileMap1,
+        tileMap: tileMap2,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         floorMaterial: new FloorMaterial(renderer, 307),
