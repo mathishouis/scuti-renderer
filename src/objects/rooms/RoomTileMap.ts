@@ -1,7 +1,7 @@
-import { Position2D, TileInfo } from "../../interfaces/Room.interface";
-import { WallType } from "../../types/WallType";
-import { StairType } from "../../types/StairType";
-import { Direction } from "../../types/Direction";
+import {Position2D, TileInfo} from "../../interfaces/Room.interface";
+import {WallType} from "../../types/WallType";
+import {StairType} from "../../types/StairType";
+import {Direction} from "../../types/Direction";
 
 export class RoomTileMap {
 
@@ -179,6 +179,45 @@ export class RoomTileMap {
             }
         }
         return z;
+    }
+
+    // TODO: Integrate it in _getWallType()
+    public hasWall(position: Position2D): { x: boolean, y: boolean } {
+        let wallX: boolean = false;
+        let wallY: boolean = false;
+        for (let i: number = position.y - 1; i >= 0; i--) {
+            const wall: WallType = this._getWallType({ x: position.x, y: i });
+            if(wall !== null) {
+                if(wall === WallType.RIGHT_WALL || wall === WallType.CORNER_WALL) {
+                    wallY = true;
+                }
+            }
+            for (let j: number = position.x - 1; j >= 0; j--) {
+                const wall: WallType = this._getWallType({ x: j, y: i });
+                if(wall !== null) {
+                    if(wall === WallType.LEFT_WALL || wall === WallType.CORNER_WALL) {
+                        wallY = true;
+                    }
+                }
+            }
+        }
+        for (let i: number = position.x - 1; i >= 0; i--) {
+            const wall: WallType = this._getWallType({ x: i, y: position.y });
+            if(wall !== null) {
+                if(wall === WallType.LEFT_WALL || wall === WallType.CORNER_WALL) {
+                    wallX = true;
+                }
+            }
+            for (let j: number = position.y - 1; j >= 0; j--) {
+                const wall: WallType = this._getWallType({ x: i, y: j });
+                if(wall !== null) {
+                    if(wall === WallType.RIGHT_WALL || wall === WallType.CORNER_WALL) {
+                        wallX = true;
+                    }
+                }
+            }
+        }
+        return { x: wallX, y: wallY };
     }
 
 

@@ -66,8 +66,8 @@ export class Room extends Container {
     ) {
         super();
 
-        this._wallMaterial = configuration.wallMaterial?? new RoomMaterial(0xFFFFFF, Texture.WHITE);
-        this._floorMaterial = configuration.floorMaterial ?? new RoomMaterial(0xFFFFFF, Texture.WHITE);
+        this._wallMaterial = configuration.wallMaterial?? new RoomMaterial(0xA5A8B6, Texture.WHITE);
+        this._floorMaterial = configuration.floorMaterial ?? new RoomMaterial(0x979764, Texture.WHITE);
         this._wallThickness = configuration.wallThickness ?? 8;
         this._floorThickness = configuration.floorThickness ?? 8;
         this._wallHeight = configuration.wallHeight;

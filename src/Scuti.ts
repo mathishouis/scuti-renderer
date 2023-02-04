@@ -1,5 +1,6 @@
 import {Application} from "pixi.js";
 import {RendererConfiguration} from "./interfaces/Configuration.interface";
+import {Logger} from "./utilities/Logger";
 
 export class Scuti {
 
@@ -16,12 +17,19 @@ export class Scuti {
     private _application: Application;
 
     /**
+     * The renderer logger
+     * @private
+     */
+    private _logger: Logger = new Logger("Scuti");
+
+    /**
      * Game engine main class.
      * @param configuration - The game engine configuration.
      */
     constructor(
         private configuration: RendererConfiguration
     ) {
+        this._logger.info("⚡ Scuti Renderer - v1.0.0");
         this._application = new Application({
             width: configuration.width,
             height: configuration.height
@@ -37,6 +45,10 @@ export class Scuti {
      */
     public get application(): Application {
         return this._application;
+    }
+
+    public get logger(): Logger {
+        return this._logger;
     }
 
 

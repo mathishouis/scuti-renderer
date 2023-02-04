@@ -47,8 +47,9 @@ export class RoomVisualization extends Container {
         super();
 
         this._room = room;
-        this.addChild(this._tileLayer);
+
         this.addChild(this._wallLayer);
+        this.addChild(this._tileLayer);
 
         this._draw();
     }
@@ -97,13 +98,13 @@ export class RoomVisualization extends Container {
         position: Position
     ): void {
         if(tileInfo.wallType !== null || tileInfo.door) {
-            if(tileInfo.wallType === WallType.CORNER_WALL) {
+            if(tileInfo.wallType === WallType.CORNER_WALL && !this._room.tileMap.hasWall(position).x && !this._room.tileMap.hasWall(position).y) {
                 this._createWall(position, WallType.CORNER_WALL);
                 this._createWall(position, WallType.LEFT_WALL);
                 this._createWall(position, WallType.RIGHT_WALL);
             }
-            if(tileInfo.wallType === WallType.LEFT_WALL) this._createWall(position, WallType.LEFT_WALL);
-            if(tileInfo.wallType === WallType.RIGHT_WALL) this._createWall(position, WallType.RIGHT_WALL);
+            if(tileInfo.wallType === WallType.LEFT_WALL && !this._room.tileMap.hasWall(position).x) this._createWall(position, WallType.LEFT_WALL);
+            if(tileInfo.wallType === WallType.RIGHT_WALL && !this._room.tileMap.hasWall(position).y) this._createWall(position, WallType.RIGHT_WALL);
             if(tileInfo.door) this._createWall(position, WallType.DOOR_WALL);
         }
         if(tileInfo.stairType !== null) {
