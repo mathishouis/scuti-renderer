@@ -77,7 +77,7 @@ import {WallMaterial} from "../src/objects/rooms/materials/WallMaterial";
         tileMap: tileMap1,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
-        floorMaterial: new FloorMaterial(renderer, 301),
-        wallMaterial: new WallMaterial(renderer, 112)
+        floorMaterial: new FloorMaterial(renderer, 307),
+        wallMaterial: new WallMaterial(renderer, 1501)
     });
 })();

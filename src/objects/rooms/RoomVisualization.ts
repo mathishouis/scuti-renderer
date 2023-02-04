@@ -111,7 +111,7 @@ export class RoomVisualization extends Container {
             position.direction = tileInfo.stairType.direction;
             this._createStair(position, tileInfo.stairType.type);
         } else if(tileInfo.door) {
-            this._createTile(position); // TODO: Door tile
+            this._createDoor(position);
         } else if(tileInfo.tile) {
             this._createTile(position);
         }
@@ -129,6 +129,23 @@ export class RoomVisualization extends Container {
             position: position,
             material: this._room.floorMaterial,
             thickness: this._room.floorThickness
+        });
+        this._tileLayer.addChild(tile);
+        this._tiles.push(tile);
+    }
+
+    /**
+     * Create a door
+     * @param position
+     * @private
+     */
+    private _createDoor(
+        position: Position
+    ): void {
+        const tile = new Tile(this._room, {
+            position: position,
+            material: this._room.floorMaterial,
+            thickness: 0
         });
         this._tileLayer.addChild(tile);
         this._tiles.push(tile);
