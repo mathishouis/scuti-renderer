@@ -212,4 +212,18 @@ export class RoomVisualization extends Container {
         this._room = room;
     }
 
+    /**
+     * Return the tile layer
+     */
+    public get tileLayer(): Container {
+        return this._tileLayer;
+    }
+
+    /**
+     * Return the wall layer
+     */
+    public get wallLayer(): Container {
+        return this._wallLayer;
+    }
+
 }

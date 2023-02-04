@@ -85,7 +85,7 @@ import {WallMaterial} from "../src/objects/rooms/materials/WallMaterial";
         "x0000000000000000x\n";
 
     const room = new Room(renderer, {
-        tileMap: tileMap,
+        tileMap: tileMap2,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         floorMaterial: new FloorMaterial(renderer, 307),

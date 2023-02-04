@@ -6,6 +6,7 @@ import { RoomTileMap } from "./RoomTileMap";
 import { Material } from "./materials/Material";
 import { WallMaterial } from "./materials/WallMaterial";
 import { FloorMaterial } from "./materials/FloorMaterial";
+import { RoomCamera } from "./RoomCamera";
 
 export class Room extends Container {
 
@@ -25,13 +26,13 @@ export class Room extends Container {
      * The room wall material
      * @private
      */
-    private _wallMaterial: Material; // TODO: Replace material with an object
+    private _wallMaterial: Material;
 
     /**
      * The room floor material
      * @private
      */
-    private _floorMaterial: Material; // TODO: Replace material with an object
+    private _floorMaterial: Material;
 
     /**
      * The room wall thickness
@@ -58,6 +59,12 @@ export class Room extends Container {
     private _visualization: RoomVisualization;
 
     /**
+     * The room camera that manage dragging, ...
+     * @private
+     */
+    private _camera: RoomCamera;
+
+    /**
      * Room class.
      * @param engine - The game engine instance.
      * @param configuration - The room configuration
@@ -77,12 +84,10 @@ export class Room extends Container {
 
         this._tileMap = new RoomTileMap(configuration.tileMap);
         this._visualization = new RoomVisualization(this);
+        this._camera = new RoomCamera(this);
 
-        // TODO: Remove this shit
-        this._visualization.x = window.innerWidth / 1.7;
-        this._visualization.y = window.innerHeight / 3;
-
-        engine.application.stage.addChild(this._visualization);
+        this.addChild(this._visualization);
+        engine.application.stage.addChild(this._camera);
     }
 
     /**
