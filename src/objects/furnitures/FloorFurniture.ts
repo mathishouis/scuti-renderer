@@ -9,6 +9,7 @@ import { Direction } from "../../types/Direction";
 import { FurnitureData } from "./FurnitureData";
 import { FurnitureLayer } from "./FurnitureLayer";
 import { RoomObject } from "../rooms/RoomObject";
+import { gsap } from "gsap";
 
 export class FloorFurniture extends RoomObject {
 
@@ -230,6 +231,45 @@ export class FloorFurniture extends RoomObject {
      */
     public get direction(): Direction {
         return this._direction;
+    }
+
+    /**
+     * Update the furniture direction
+     * @param direction
+     */
+    public set direction(direction: Direction) {
+        gsap.to(this, {
+            x: 32 + 32 * this._position.x - 32 * this._position.y,
+            y: 16 * this._position.x + 16 * this._position.y - 32 * this._position.z - 64 - 6.25,
+            duration: 0.1,
+            ease: "easeIn",
+            onComplete: () => {
+                this._direction = direction;
+                this._draw();
+                gsap.to(this, {
+                    x: 32 + 32 * this._position.x - 32 * this._position.y,
+                    y: 16 * this._position.x + 16 * this._position.y - 32 * this._position.z - 64,
+                    duration: 0.1,
+                    ease: "easeOut"
+                });
+            }
+        });
+    }
+
+    /**
+     * Return the furniture state
+     */
+    public get state(): number {
+        return this._state;
+    }
+
+    /**
+     * Update the furniture state
+     * @param state
+     */
+    public set state(state: number) {
+        this._state = state;
+        this._draw();
     }
 
 }

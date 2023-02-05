@@ -121,16 +121,7 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
         floorMaterial: new FloorMaterial(renderer, 307),
         wallMaterial: new WallMaterial(renderer, 1501)
     });
-    room.visualization.onTileClick = (position) => {
-        console.log("click", position);
-    }
-    room.visualization.onTileOver = (position) => {
-        console.log("over", position);
-    }
-    room.visualization.onTileOut = (position) => {
-        console.log("out", position);
-    }
-    room.addRoomObject(new FloorFurniture({
+    const furniture = new FloorFurniture({
         id: 1619,
         position: {
             x: 1,
@@ -139,5 +130,20 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
         },
         direction: 2,
         state: 1
-    }))
+    });
+    room.visualization.onTileClick = (position) => {
+        console.log("click", position);
+        if(furniture.direction === 4) {
+            furniture.direction = 2
+        } else {
+            furniture.direction = 4;
+        }
+    }
+    room.visualization.onTileOver = (position) => {
+        console.log("over", position);
+    }
+    room.visualization.onTileOut = (position) => {
+        console.log("out", position);
+    }
+    room.addRoomObject(furniture)
 })();
