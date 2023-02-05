@@ -1,6 +1,5 @@
-import {Direction} from "../types/Direction";
-import {FloorFurniture} from "../objects/furnitures/FloorFurniture";
-import {BLEND_MODES} from "pixi.js";
+import { Direction } from "../types/Direction";
+import { BLEND_MODES } from "pixi.js";
 
 export interface FloorPosition {
     x: number,
@@ -16,6 +15,10 @@ export interface FloorFurnitureConfiguration {
 }
 
 export type FurnitureId = number;
+
+export type FurnitureFrameId = number;
+
+export type FurnitureLayerId = number;
 
 export interface FurnitureData {
     id: number,
@@ -48,11 +51,14 @@ export interface FurnitureVisualization {
         tag: string,
         alpha: number,
         ink: string
-    }[]
+    }[],
+    animation: {
+        frameSequence: []
+    }[][]
 }
 
 export interface FurnitureLayerConfiguration {
-    layer: number,
+    layer: FurnitureLayerId,
     alpha: number,
     tint: number,
     z: number,

@@ -130,13 +130,14 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
     room.visualization.onTileOut = (position) => {
         console.log("out", position);
     }
-    room.addChild(new FloorFurniture(room, {
+    room.addRoomObject(new FloorFurniture({
         id: 1619,
         position: {
             x: 1,
             y: 1,
             z: 0
         },
-        direction: 2
+        direction: 2,
+        state: 1
     }))
 })();

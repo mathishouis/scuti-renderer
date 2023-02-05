@@ -7,6 +7,7 @@ import { Material } from "./materials/Material";
 import { WallMaterial } from "./materials/WallMaterial";
 import { FloorMaterial } from "./materials/FloorMaterial";
 import { RoomCamera } from "./RoomCamera";
+import { RoomObject } from "./RoomObject";
 
 export class Room extends Container {
 
@@ -108,7 +109,9 @@ export class Room extends Container {
      * Change the room visualization
      * @param visualization
      */
-    public set visualization(visualization: RoomVisualization) {
+    public set visualization(
+        visualization: RoomVisualization
+    ) {
         this._visualization = visualization;
     }
 
@@ -130,7 +133,9 @@ export class Room extends Container {
      * Update the wall material
      * @param material
      */
-    public set wallMaterial(material: Material) {
+    public set wallMaterial(
+        material: Material
+    ) {
         this._wallMaterial = material;
         // TODO: Rerender room visualization
     }
@@ -146,7 +151,9 @@ export class Room extends Container {
      * Update the floor material
      * @param material
      */
-    public set floorMaterial(material: Material) {
+    public set floorMaterial(
+        material: Material
+    ) {
         this._floorMaterial = material;
         // TODO: Rerender room visualization
     }
@@ -162,7 +169,9 @@ export class Room extends Container {
      * Update the wall thickness
      * @param thickness
      */
-    public set wallThickness(thickness: number) {
+    public set wallThickness(
+        thickness: number
+    ) {
         this._wallThickness = thickness;
         // TODO: Rerender room visualization
     }
@@ -178,7 +187,9 @@ export class Room extends Container {
      * Update the floor thickness
      * @param thickness
      */
-    public set floorThickness(thickness: number) {
+    public set floorThickness(
+        thickness: number
+    ) {
         this._floorThickness = thickness;
         // TODO: Rerender room visualization
     }
@@ -196,6 +207,16 @@ export class Room extends Container {
      */
     public set wallHeight(height: number) {
         this._wallHeight = height;
+    }
+
+    /**
+     * Add a room object to the room
+     * @param object
+     */
+    public addRoomObject(
+        object: RoomObject
+    ) {
+        this._visualization.addRoomObject(object);
     }
 
 }

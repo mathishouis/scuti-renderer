@@ -1,5 +1,5 @@
 import { Room } from "./Room";
-import { Container } from "pixi.js";
+import { Container, Ticker } from "pixi.js";
 import { Position, TileInfo } from "../../interfaces/Room.interface";
 import { Tile } from "./parts/Tile";
 import { Wall } from "./parts/Wall";
@@ -7,6 +7,7 @@ import { Stair } from "./parts/Stair";
 import { WallType } from "../../types/WallType";
 import { StairType } from "../../types/StairType";
 import { Cursor } from "./parts/Cursor";
+import { RoomObject } from "./RoomObject";
 
 export class RoomVisualization extends Container {
 
@@ -52,6 +53,12 @@ export class RoomVisualization extends Container {
      */
     private _cursor: Cursor;
 
+    /**
+     * The room animation ticker
+     * @private
+     */
+    private _animationTicker: Ticker = new Ticker();
+
     private _onTileClick: (position: Position) => void;
     private _onTileOver: (position: Position) => void;
     private _onTileOut: (position: Position) => void;
@@ -60,7 +67,9 @@ export class RoomVisualization extends Container {
      * RoomVisualization class
      * @param room - The room instance
      */
-    constructor(room: Room) {
+    constructor(
+        room: Room
+    ) {
         super();
 
         this._room = room;
@@ -68,6 +77,9 @@ export class RoomVisualization extends Container {
         this.addChild(this._wallLayer);
         this.addChild(this._tileLayer);
         this.addChild(this._objectLayer);
+
+        this._animationTicker.maxFPS = 15.666;
+        this._animationTicker.start();
 
         this._draw();
     }
@@ -281,7 +293,9 @@ export class RoomVisualization extends Container {
      * Update the onTileClick event
      * @param event
      */
-    public set onTileClick(event: (position: Position) => void) {
+    public set onTileClick(
+        event: (position: Position) => void
+    ) {
         this._onTileClick = event;
     }
 
@@ -296,7 +310,9 @@ export class RoomVisualization extends Container {
      * Update the onTileClick event
      * @param event
      */
-    public set onTileOver(event: (position: Position) => void) {
+    public set onTileOver(
+        event: (position: Position) => void
+    ) {
         this._onTileOver = event;
     }
 
@@ -311,8 +327,29 @@ export class RoomVisualization extends Container {
      * Update the onTileOutEvent
      * @param event
      */
-    public set onTileOut(event: (position: Position) => void) {
+    public set onTileOut(
+        event: (position: Position) => void
+    ) {
         this._onTileOut = event;
+    }
+
+    /**
+     * Return the room animation ticker
+     */
+    public get animationTicker(): Ticker {
+        return this._animationTicker;
+    }
+
+    /**
+     * Add a room object in the object layer
+     * @param object
+     */
+    public addRoomObject(
+        object: RoomObject
+    ) {
+        object.room = this._room;
+        object.startAnimation();
+        this._objectLayer.addChild(object);
     }
 
 }
