@@ -14,6 +14,20 @@ export interface FloorFurnitureConfiguration {
     state?: number
 }
 
+export interface WallPosition {
+    x: number,
+    y: number,
+    offsetX: number,
+    offsetY: number
+}
+
+export interface WallFurnitureConfiguration {
+    id: number,
+    position: WallPosition,
+    direction: Direction,
+    state?: number
+}
+
 export type FurnitureId = number;
 
 export type FurnitureFrameId = number;
@@ -63,6 +77,7 @@ export interface FurnitureLayerConfiguration {
     tint: number,
     z: number,
     blendMode: BLEND_MODES,
-    flip: boolean;
-    frame: number;
+    flip: boolean,
+    frame: number,
+    ignoreMouse: boolean
 }

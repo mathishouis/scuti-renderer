@@ -3,6 +3,8 @@ import {Room} from "../src/objects/rooms/Room";
 import {FloorMaterial} from "../src/objects/rooms/materials/FloorMaterial";
 import {WallMaterial} from "../src/objects/rooms/materials/WallMaterial";
 import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
+import {WallFurniture} from "../src/objects/furnitures/WallFurniture";
+import {random} from "gsap/gsap-core";
 
 (async ()=>{
     const renderer = new Scuti({
@@ -168,8 +170,9 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
         tileMap: tileMap2,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
-        floorMaterial: new FloorMaterial(renderer, 307),
-        wallMaterial: new WallMaterial(renderer, 1501)
+        //floorMaterial: new FloorMaterial(renderer, 307),
+        floorMaterial: new FloorMaterial(renderer, 110),
+        wallMaterial: new WallMaterial(renderer, 1601)
     });
     const furniture = new FloorFurniture({
         id: 1619,
@@ -180,6 +183,39 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
         },
         direction: 4,
         state: 1
+    });
+    const wallFurniture = new WallFurniture({
+        position: {
+            x: 1,
+            y: 0,
+            offsetX: 8,
+            offsetY: 36,
+        },
+        state: 0,
+        id: 4625,
+        direction: 2,
+    });
+    const wallFurniture2 = new WallFurniture({
+        position: {
+            x: 1,
+            y: 3,
+            offsetX: 8,
+            offsetY: 36,
+        },
+        state: 0,
+        id: 4625,
+        direction: 2,
+    });
+    const wallFurniture3 = new WallFurniture({
+        position: {
+            x: 4,
+            y: 0,
+            offsetX: 14,
+            offsetY: 41,
+        },
+        id: 4066,
+        direction: 4,
+        state: 3,
     });
     room.visualization.onTileClick = (position) => {
         console.log("click", position);
@@ -193,6 +229,12 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
             y: position.y,
             z: position.z,
         }
+        wallFurniture.pos = {
+            x: 1,
+            y: Math.floor(Math.random() * (10 - 1 + 1) + 1),
+            offsetX: 8,
+            offsetY: 36
+        }
     }
     room.visualization.onTileOver = (position) => {
         console.log("over", position);
@@ -200,5 +242,8 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
     room.visualization.onTileOut = (position) => {
         console.log("out", position);
     }
-    room.addRoomObject(furniture)
+    room.addRoomObject(furniture);
+    room.addRoomObject(wallFurniture);
+    room.addRoomObject(wallFurniture2);
+    room.addRoomObject(wallFurniture3);
 })();

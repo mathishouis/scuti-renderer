@@ -1,6 +1,7 @@
 import { Assets} from "pixi.js";
 import { FurnitureData } from "../../interfaces/Furniture.interface";
 import { FloorFurniture } from "./FloorFurniture";
+import {WallFurniture} from "./WallFurniture";
 
 export class FurnitureData {
 
@@ -8,7 +9,7 @@ export class FurnitureData {
      * The furniture instance
      * @private
      */
-    private readonly _furniture: FloorFurniture;
+    private readonly _furniture: FloorFurniture | WallFurniture;
 
     /**
      * The furniture data
@@ -20,7 +21,7 @@ export class FurnitureData {
      * FurnitureData class
      * @param furniture
      */
-    constructor(furniture: FloorFurniture) {
+    constructor(furniture: FloorFurniture | WallFurniture) {
         this._furniture = furniture;
 
         this._load();
@@ -33,7 +34,9 @@ export class FurnitureData {
     private _load(): void {
         if(this._furniture instanceof  FloorFurniture) {
             this._data = Assets.get('furnitures/furnidata').floorItems.find(item => item.id === this._furniture.id);
-        } // TODO: Add wall furniture
+        } else if(this._furniture instanceof  WallFurniture) {
+            this._data = Assets.get('furnitures/furnidata').wallItems.find(item => item.id === this._furniture.id);
+        }
     }
 
     /**

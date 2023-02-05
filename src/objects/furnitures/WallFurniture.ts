@@ -1,9 +1,10 @@
 import { Assets, BLEND_MODES, Sprite, Spritesheet } from "pixi.js";
 import {
-    FloorFurnitureConfiguration,
-    FloorPosition, FurnitureFrameId,
+    FurnitureFrameId,
     FurnitureLayerId,
-    FurnitureVisualization
+    FurnitureVisualization,
+    WallFurnitureConfiguration,
+    WallPosition
 } from "../../interfaces/Furniture.interface";
 import { Direction } from "../../types/Direction";
 import { FurnitureData } from "./FurnitureData";
@@ -11,7 +12,7 @@ import { FurnitureLayer } from "./FurnitureLayer";
 import { RoomObject } from "../rooms/RoomObject";
 import { gsap } from "gsap";
 
-export class FloorFurniture extends RoomObject {
+export class WallFurniture extends RoomObject {
 
     /**
      * The furniture id
@@ -23,7 +24,7 @@ export class FloorFurniture extends RoomObject {
      * The furniture position
      * @private
      */
-    private _position: FloorPosition;
+    private _position: WallPosition;
 
     /**
      * The furniture direction
@@ -54,7 +55,7 @@ export class FloorFurniture extends RoomObject {
      * @param configuration = The furniture configuration
      */
     constructor(
-        configuration: FloorFurnitureConfiguration
+        configuration: WallFurnitureConfiguration
     ) {
         super();
 
@@ -83,7 +84,14 @@ export class FloorFurniture extends RoomObject {
         }
 
         this.x = 32 + 32 * this._position.x - 32 * this._position.y;
-        this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
+        this.y = 16 * this._position.x + 16 * this._position.y - 32;
+        if(this._direction === 2) {
+            this.x = this.x + this._position.offsetX * 2;
+            this.y = this.y + this._position.offsetY * 2 - 84;
+        } else {
+            this.x = this.x + this._position.offsetX * 2 - 32;
+            this.y = this.y + this._position.offsetY * 2 - 84;
+        }
     }
 
     /**
@@ -232,7 +240,7 @@ export class FloorFurniture extends RoomObject {
     /**
      * Get the furniture position
      */
-    public get pos(): FloorPosition {
+    public get pos(): WallPosition {
         return this._position;
     }
 
@@ -240,12 +248,28 @@ export class FloorFurniture extends RoomObject {
      * Update the furniture position
      * @param position
      */
-    public set pos(position: FloorPosition) {
-        gsap.to(this, {
-            x: 32 + 32 * position.x - 32 * position.y, y: 16 * position.x + 16 * position.y - 32 * position.z, duration: 0.5, ease: "linear", onComplete: () => {
-                this._position = position;
-            }
-        });
+    public set pos(position: WallPosition) {
+        if(this._direction === 2) {
+            gsap.to(this, {
+                x: 32 + 32 * this._position.x - 32 * this._position.y + this._position.offsetX * 2,
+                y: 16 * this._position.x + 16 * this._position.y - 32 + this._position.offsetY * 2 - 84,
+                duration: 0.5,
+                ease: "linear",
+                onComplete: () => {
+                    this._position = position;
+                }
+            });
+        } else {
+            gsap.to(this, {
+                x: 32 + 32 * this._position.x - 32 * this._position.y + this._position.offsetX * 2 - 32,
+                y: 16 * this._position.x + 16 * this._position.y - 32 + this._position.offsetY * 2 - 84,
+                duration: 0.5,
+                ease: "linear",
+                onComplete: () => {
+                    this._position = position;
+                }
+            });
+        }
     }
 
     /**
@@ -260,22 +284,8 @@ export class FloorFurniture extends RoomObject {
      * @param direction
      */
     public set direction(direction: Direction) {
-        gsap.to(this, {
-            x: 32 + 32 * this._position.x - 32 * this._position.y,
-            y: 16 * this._position.x + 16 * this._position.y - 32 * this._position.z - 64 - 6.25,
-            duration: 0.1,
-            ease: "easeIn",
-            onComplete: () => {
-                this._direction = direction;
-                this._draw();
-                gsap.to(this, {
-                    x: 32 + 32 * this._position.x - 32 * this._position.y,
-                    y: 16 * this._position.x + 16 * this._position.y - 32 * this._position.z - 64,
-                    duration: 0.1,
-                    ease: "easeOut"
-                });
-            }
-        });
+        this._direction = direction;
+        this._draw();
     }
 
     /**

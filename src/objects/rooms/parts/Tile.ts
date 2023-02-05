@@ -152,5 +152,4 @@ export class Tile extends Container {
     public set onOut(event: (position: Position) => void) {
         this._onOut = event;
     }
-
 }

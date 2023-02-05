@@ -2,6 +2,7 @@ import { Assets, BLEND_MODES, Container, utils } from "pixi.js";
 import { FloorFurniture } from "./FloorFurniture";
 import { FurnitureFrameId, FurnitureLayerConfiguration, FurnitureLayerId } from "../../interfaces/Furniture.interface";
 import { HitSprite } from "../interactions/HitSprite";
+import {WallFurniture} from "./WallFurniture";
 
 export class FurnitureLayer extends Container {
 
@@ -9,7 +10,7 @@ export class FurnitureLayer extends Container {
      * The furniture instance
      * @private
      */
-    private readonly _furniture: FloorFurniture;
+    private readonly _furniture: FloorFurniture | WallFurniture;
 
     /**
      * The layer id
@@ -55,12 +56,18 @@ export class FurnitureLayer extends Container {
     private _frame: FurnitureFrameId;
 
     /**
+     * Ignore mouse
+     * @private
+     */
+    private _ignoreMouse: boolean;
+
+    /**
      * FurnitureLayer class
      * @param furniture - The furniture instance
      * @param configuration - The layer configuration
      */
     constructor(
-        furniture: FloorFurniture,
+        furniture: FloorFurniture | WallFurniture,
         configuration: FurnitureLayerConfiguration
     ) {
         super();
@@ -73,6 +80,7 @@ export class FurnitureLayer extends Container {
         this._blendMode = configuration.blendMode;
         this._flip = configuration.flip;
         this._frame = configuration.frame;
+        this._ignoreMouse = configuration.ignoreMouse;
 
         this._draw();
     }
@@ -87,7 +95,7 @@ export class FurnitureLayer extends Container {
         if(this._blendMode !== undefined) sprite.blendMode = this._blendMode;
         if(this._alpha !== undefined) sprite.alpha = this._alpha;
         if(this._flip) sprite.scale.x = -1;
-        sprite.interactive = true; // TODO: Set interactivity from the layer data
+        if(this._ignoreMouse !== null && !this._ignoreMouse) sprite.interactive = true;
         sprite.on("pointerdown", () => console.log("XDDDD"));
         this.addChild(sprite);
     }
