@@ -2,6 +2,7 @@ import { Scuti } from "../src/Scuti";
 import {Room} from "../src/objects/rooms/Room";
 import {FloorMaterial} from "../src/objects/rooms/materials/FloorMaterial";
 import {WallMaterial} from "../src/objects/rooms/materials/WallMaterial";
+import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
 
 (async ()=>{
     const renderer = new Scuti({
@@ -129,4 +130,13 @@ import {WallMaterial} from "../src/objects/rooms/materials/WallMaterial";
     room.visualization.onTileOut = (position) => {
         console.log("out", position);
     }
+    room.addChild(new FloorFurniture(room, {
+        id: 1619,
+        position: {
+            x: 1,
+            y: 1,
+            z: 0
+        },
+        direction: 2
+    }))
 })();

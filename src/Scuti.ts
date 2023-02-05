@@ -47,12 +47,16 @@ export class Scuti {
      * Load all the needed ressources
      */
     public async loadResources(): Promise<void> {
-        Assets.add('room/materials', 'http://127.0.0.1:8081/generic/room/room_data.json');
-        Assets.add('room/room', 'http://127.0.0.1:8081/generic/room/room.json');
-        Assets.add('room/cursors', 'http://127.0.0.1:8081/generic/tile_cursor/tile_cursor.json');
-        await Assets.load('room/materials');
-        await Assets.load('room/room');
-        await Assets.load('room/cursors');
+        Assets.add("room/materials", "http://127.0.0.1:8081/generic/room/room_data.json");
+        Assets.add("room/room", "http://127.0.0.1:8081/generic/room/room.json");
+        Assets.add("room/cursors", "http://127.0.0.1:8081/generic/tile_cursor/tile_cursor.json");
+        Assets.add("furnitures/floor/placeholder", "http://127.0.0.1:8081/generic/place_holder/place_holder_furniture.json");
+        Assets.add("furnitures/furnidata", "http://127.0.0.1:8081/gamedata/furnidata.json");
+        await Assets.load("room/materials");
+        await Assets.load("room/room");
+        await Assets.load("room/cursors");
+        await Assets.load("furnitures/floor/placeholder");
+        await Assets.load("furnitures/furnidata");
     }
 
     /**

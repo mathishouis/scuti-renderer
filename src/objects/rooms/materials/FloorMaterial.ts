@@ -8,13 +8,13 @@ export class FloorMaterial extends Material {
      * The engine instance
      * @private
      */
-    private _engine: Scuti;
+    private readonly _engine: Scuti;
 
     /**
      * The material id
      * @private
      */
-    private _id: number;
+    private readonly _id: number;
 
     /**
      * WallMaterial class

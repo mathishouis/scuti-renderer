@@ -14,7 +14,7 @@ export class RoomVisualization extends Container {
      * The room that is being rendered
      * @private
      */
-    private _room: Room;
+    private readonly _room: Room;
 
     /**
      * The pixi container that contain all the walls parts
@@ -205,7 +205,6 @@ export class RoomVisualization extends Container {
      * Create a wall
      * @param position
      * @param type
-     * @param door
      * @private
      */
     private _createWall(
@@ -251,14 +250,6 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Change the room
-     * @param room
-     */
-    public set room(room: Room) {
-        this._room = room;
-    }
-
-    /**
      * Return the tile layer
      */
     public get tileLayer(): Container {
@@ -270,6 +261,13 @@ export class RoomVisualization extends Container {
      */
     public get wallLayer(): Container {
         return this._wallLayer;
+    }
+
+    /**
+     * Return the object layer
+     */
+    public get objectLayer(): Container {
+        return this._objectLayer;
     }
 
     /**

@@ -8,7 +8,7 @@ export class RoomCamera extends Container {
      * The room instance
      * @private
      */
-    private _room: Room;
+    private readonly _room: Room;
 
     /**
      * If the client is dragging the room.
@@ -20,13 +20,13 @@ export class RoomCamera extends Container {
      * The view container
      * @private
      */
-    private _viewContainer: Container;
+    private readonly _viewContainer: Container;
 
     /**
      * The room container
      * @private
      */
-    private _roomContainer: Container;
+    private readonly _roomContainer: Container;
 
     /**
      * RoomCamera class
