@@ -229,7 +229,7 @@ export class FloorFurniture extends RoomObject {
     /**
      * Get the furniture position
      */
-    public get position(): FloorPosition {
+    public get pos(): FloorPosition {
         return this._position;
     }
 
@@ -237,7 +237,7 @@ export class FloorFurniture extends RoomObject {
      * Update the furniture position
      * @param position
      */
-    public set position(position: FloorPosition) {
+    public set pos(position: FloorPosition) {
         gsap.to(this, {
             x: 32 + 32 * position.x - 32 * position.y, y: 16 * position.x + 16 * position.y - 32 * position.z, duration: 0.5, ease: "linear", onComplete: () => {
                 this._position = position;

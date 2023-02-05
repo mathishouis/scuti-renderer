@@ -114,8 +114,58 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
         "x222222222222222222222222222x\n" +
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
+    const tileMap4 = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
+        "xeeeeeeeeeeeeeeeedcba9888888888888\n" +
+        "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
+        "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
+        "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
+        "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
+        "xdxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "xcxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "xbxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "xaxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "aaaaaaaaaaaaaaaaaxxxxxxxxxxxxxxxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxxxxxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxxxxxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaa98766666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxx5xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxx4xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxx3xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xxxxxxxxxxxxxxxx9xxx3333333333xxxx\n" +
+        "xxxxxxxxxxxxxxxx8xxx3333333333xxxx\n" +
+        "xxxxxxxxxxxxxxxx7xxx3333333333xxxx\n" +
+        "xxx777777777xxxx6xxx3333333333xxxx\n" +
+        "xxx777777777xxxx5xxxxxxxxxxxxxxxxx\n" +
+        "xxx777777777xxxx4xxxxxxxxxxxxxxxxx\n" +
+        "xxx777777777xxxx3xxxxxxxxxxxxxxxxx\n" +
+        "xxx777777777xxxx2xxxxxxxxxxxxxxxxx\n" +
+        "xfffffffffxxxxxx1xxxxxxxxxxxxxxxxx\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xxxxxxxxxxxxxxxx111111111111111111\n" +
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+
     const room = new Room(renderer, {
-        tileMap: tileMap3,
+        tileMap: tileMap2,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         floorMaterial: new FloorMaterial(renderer, 307),
@@ -125,10 +175,10 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
         id: 1619,
         position: {
             x: 1,
-            y: 1,
+            y: 0,
             z: 0
         },
-        direction: 2,
+        direction: 4,
         state: 1
     });
     room.visualization.onTileClick = (position) => {
@@ -138,7 +188,7 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
         } else {
             furniture.direction = 4;
         }*/
-        furniture.position = {
+        furniture.pos = {
             x: position.x,
             y: position.y,
             z: position.z,

@@ -1,6 +1,7 @@
-import { Assets, BLEND_MODES, Container, Sprite, utils } from "pixi.js";
+import { Assets, BLEND_MODES, Container, utils } from "pixi.js";
 import { FloorFurniture } from "./FloorFurniture";
 import { FurnitureFrameId, FurnitureLayerConfiguration, FurnitureLayerId } from "../../interfaces/Furniture.interface";
+import { HitSprite } from "../interactions/HitSprite";
 
 export class FurnitureLayer extends Container {
 
@@ -81,12 +82,21 @@ export class FurnitureLayer extends Container {
      * @private
      */
     private _draw(): void {
-        const sprite: Sprite = new Sprite(Assets.get("furnitures/" + this._furniture.data.baseName).textures[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + String.fromCharCode(97 + Number(this._layer)) + '_' + this._furniture.direction + '_' + this._frame]);
+        const sprite: HitSprite = new HitSprite(Assets.get("furnitures/" + this._furniture.data.baseName).textures[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + String.fromCharCode(97 + Number(this._layer)) + '_' + this._furniture.direction + '_' + this._frame]);
         if(this._tint !== undefined) sprite.tint = utils.premultiplyTint(this._tint, 0.999);
         if(this._blendMode !== undefined) sprite.blendMode = this._blendMode;
         if(this._alpha !== undefined) sprite.alpha = this._alpha;
         if(this._flip) sprite.scale.x = -1;
+        sprite.interactive = true; // TODO: Set interactivity from the layer data
+        sprite.on("pointerdown", () => console.log("XDDDD"));
         this.addChild(sprite);
+    }
+
+    /**
+     * Return the furniture instance
+     */
+    public get furniture(): FloorFurniture {
+        return this._furniture;
     }
 
 }

@@ -1,6 +1,8 @@
 import {Application, Assets, BaseTexture, MIPMAP_MODES, SCALE_MODES, settings} from "pixi.js";
 import {RendererConfiguration} from "./interfaces/Configuration.interface";
 import {Logger} from "./utilities/Logger";
+import {PixiPlugin} from "gsap/PixiPlugin";
+import {gsap} from "gsap";
 
 export class Scuti {
 
@@ -32,6 +34,7 @@ export class Scuti {
         this._logger.info("⚡ Scuti Renderer - v1.0.0");
         settings.RESOLUTION = 1;
         BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
+        gsap.registerPlugin(PixiPlugin);
         this._application = new Application({
             width: configuration.width,
             height: configuration.height,
