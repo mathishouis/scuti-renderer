@@ -84,11 +84,49 @@ import {WallMaterial} from "../src/objects/rooms/materials/WallMaterial";
         "x0000000000000000x\n" +
         "x0000000000000000x\n";
 
+    const tileMap3 = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
+        "x222222222222222222222222222x\n" +
+        "x222222222222222222222222222x\n" +
+        "2222222222222222222222222222x\n" +
+        "x222222222222222222222222222x\n" +
+        "x2222xxxxxx222222xxxxxxx2222x\n" +
+        "x2222xxxxxx111111xxxxxxx2222x\n" +
+        "x2222xx111111111111111xx2222x\n" +
+        "x2222xx111111111111111xx2222x\n" +
+        "x2222xx11xxx1111xxxx11xx2222x\n" +
+        "x2222xx11xxx0000xxxx11xx2222x\n" +
+        "x22222111x00000000xx11xx2222x\n" +
+        "x22222111x00000000xx11xx2222x\n" +
+        "x22222111x00000000xx11xx2222x\n" +
+        "x22222111x00000000xx11xx2222x\n" +
+        "x22222111x00000000xx11xx2222x\n" +
+        "x22222111x00000000xx11xx2222x\n" +
+        "x2222xx11xxxxxxxxxxx11xx2222x\n" +
+        "x2222xx11xxxxxxxxxxx11xx2222x\n" +
+        "x2222xx111111111111111xx2222x\n" +
+        "x2222xx111111111111111xx2222x\n" +
+        "x2222xxxxxxxxxxxxxxxxxxx2222x\n" +
+        "x2222xxxxxxxxxxxxxxxxxxx2222x\n" +
+        "x222222222222222222222222222x\n" +
+        "x222222222222222222222222222x\n" +
+        "x222222222222222222222222222x\n" +
+        "x222222222222222222222222222x\n" +
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+
     const room = new Room(renderer, {
-        tileMap: tileMap2,
+        tileMap: tileMap3,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         floorMaterial: new FloorMaterial(renderer, 307),
         wallMaterial: new WallMaterial(renderer, 1501)
     });
+    room.visualization.onTileClick = (position) => {
+        console.log("click", position);
+    }
+    room.visualization.onTileOver = (position) => {
+        console.log("over", position);
+    }
+    room.visualization.onTileOut = (position) => {
+        console.log("out", position);
+    }
 })();

@@ -49,8 +49,10 @@ export class Scuti {
     public async loadResources(): Promise<void> {
         Assets.add('room/materials', 'http://127.0.0.1:8081/generic/room/room_data.json');
         Assets.add('room/room', 'http://127.0.0.1:8081/generic/room/room.json');
+        Assets.add('room/cursors', 'http://127.0.0.1:8081/generic/tile_cursor/tile_cursor.json');
         await Assets.load('room/materials');
         await Assets.load('room/room');
+        await Assets.load('room/cursors');
     }
 
     /**

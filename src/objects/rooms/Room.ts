@@ -80,7 +80,7 @@ export class Room extends Container {
         this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(this._engine, 111);
         this._wallThickness = configuration.wallThickness ?? 8;
         this._floorThickness = configuration.floorThickness ?? 8;
-        this._wallHeight = configuration.wallHeight ?? 1;
+        this._wallHeight = configuration.wallHeight ?? 0;
 
         this._tileMap = new RoomTileMap(configuration.tileMap);
         this._visualization = new RoomVisualization(this);

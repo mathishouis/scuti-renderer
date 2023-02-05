@@ -35,6 +35,10 @@ export interface WallConfiguration {
     door?: boolean,
 }
 
+export interface CursorConfiguration {
+    position: Position
+}
+
 export interface Position {
     x: number,
     y: number,

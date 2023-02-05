@@ -6,6 +6,7 @@ import { Wall } from "./parts/Wall";
 import { Stair } from "./parts/Stair";
 import { WallType } from "../../types/WallType";
 import { StairType } from "../../types/StairType";
+import { Cursor } from "./parts/Cursor";
 
 export class RoomVisualization extends Container {
 
@@ -28,6 +29,12 @@ export class RoomVisualization extends Container {
     private _tileLayer: Container = new Container();
 
     /**
+     * The pixi container that contain all the objects
+     * @private
+     */
+    private _objectLayer: Container = new Container();
+
+    /**
      * List containing all the walls instances
      * @private
      */
@@ -40,6 +47,16 @@ export class RoomVisualization extends Container {
     private _tiles: (Tile | Stair)[] = [];
 
     /**
+     * The room tile cursor
+     * @private
+     */
+    private _cursor: Cursor;
+
+    private _onTileClick: (position: Position) => void;
+    private _onTileOver: (position: Position) => void;
+    private _onTileOut: (position: Position) => void;
+
+    /**
      * RoomVisualization class
      * @param room - The room instance
      */
@@ -50,6 +67,7 @@ export class RoomVisualization extends Container {
 
         this.addChild(this._wallLayer);
         this.addChild(this._tileLayer);
+        this.addChild(this._objectLayer);
 
         this._draw();
     }
@@ -122,6 +140,31 @@ export class RoomVisualization extends Container {
     }
 
     /**
+     * Destroy the current cursor and draw a new one at the new position
+     * @param position
+     * @private
+     */
+    private _createCursor(
+        position: Position
+    ): void {
+        this._destroyCursor();
+        const cursor = new Cursor(this._room, {
+            position: position
+        });
+        this._objectLayer.addChild(cursor);
+        this._cursor = cursor;
+    }
+
+    /**
+     * Destroy the room cursor
+     * @private
+     */
+    private _destroyCursor(): void {
+        this._objectLayer.removeChild(this._cursor);
+        this._cursor?.destroy();
+    }
+
+    /**
      * Create a tile
      * @param position
      * @private
@@ -134,6 +177,9 @@ export class RoomVisualization extends Container {
             material: this._room.floorMaterial,
             thickness: this._room.floorThickness
         });
+        tile.onClick = (): void => { if(this._onTileClick) this._onTileClick(position) };
+        tile.onOver = (): void => { if(this._onTileOver) this._onTileOver(position); this._createCursor(position) };
+        tile.onOut = (): void => { if(this._onTileOut) this._onTileOut(position); this._destroyCursor(); };
         this._tileLayer.addChild(tile);
         this._tiles.push(tile);
     }
@@ -224,6 +270,51 @@ export class RoomVisualization extends Container {
      */
     public get wallLayer(): Container {
         return this._wallLayer;
+    }
+
+    /**
+     * Get the onTileClick event
+     */
+    public get onTileClick(): (position: Position) => void {
+        return this._onTileClick;
+    }
+
+    /**
+     * Update the onTileClick event
+     * @param event
+     */
+    public set onTileClick(event: (position: Position) => void) {
+        this._onTileClick = event;
+    }
+
+    /**
+     * Get the onTileOver event
+     */
+    public get onTileOver(): (position: Position) => void {
+        return this._onTileOver;
+    }
+
+    /**
+     * Update the onTileClick event
+     * @param event
+     */
+    public set onTileOver(event: (position: Position) => void) {
+        this._onTileOver = event;
+    }
+
+    /**
+     * Get the onTileOut event
+     */
+    public get onTileOut(): (position: Position) => void {
+        return this._onTileOut;
+    }
+
+    /**
+     * Update the onTileOutEvent
+     * @param event
+     */
+    public set onTileOut(event: (position: Position) => void) {
+        this._onTileOut = event;
     }
 
 }

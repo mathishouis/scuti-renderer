@@ -30,6 +30,12 @@ export class Tile extends Container {
      */
     private _position: Position;
 
+    private _onClick: (position: Position) => void;
+
+    private _onOver: (position: Position) => void;
+
+    private _onOut: (position: Position) => void;
+
     /**
      * Tile class
      * @param room - The room instance
@@ -45,6 +51,11 @@ export class Tile extends Container {
         this._position = configuration.position;
         this._thickness = configuration.thickness ?? 8;
         this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
+
+        this.interactive = true;
+        this.on("pointerdown", () => this._onClick(this._position));
+        this.on("pointerover", () => this._onOver(this._position));
+        this.on("pointerout", () => this._onOut(this._position));
 
         // TODO: Make the method public and use it when adding it to a room, not when instancing the class
         this._draw();
@@ -128,6 +139,18 @@ export class Tile extends Container {
     public set material(material: Material) {
         this._material = material;
         this._draw(); // We rerender the tile to apply the changes
+    }
+
+    public set onClick(event: (position: Position) => void) {
+        this._onClick = event;
+    }
+
+    public set onOver(event: (position: Position) => void) {
+        this._onOver = event;
+    }
+
+    public set onOut(event: (position: Position) => void) {
+        this._onOut = event;
     }
 
 }
