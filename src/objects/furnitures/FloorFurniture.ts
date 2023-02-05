@@ -83,7 +83,7 @@ export class FloorFurniture extends RoomObject {
         }
 
         this.x = 32 + 32 * this._position.x - 32 * this._position.y;
-        this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z - 64;
+        this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
     }
 
     /**
@@ -224,6 +224,25 @@ export class FloorFurniture extends RoomObject {
      */
     public get data(): FurnitureData {
         return this._data;
+    }
+
+    /**
+     * Get the furniture position
+     */
+    public get position(): FloorPosition {
+        return this._position;
+    }
+
+    /**
+     * Update the furniture position
+     * @param position
+     */
+    public set position(position: FloorPosition) {
+        gsap.to(this, {
+            x: 32 + 32 * position.x - 32 * position.y, y: 16 * position.x + 16 * position.y - 32 * position.z, duration: 0.5, ease: "linear", onComplete: () => {
+                this._position = position;
+            }
+        });
     }
 
     /**

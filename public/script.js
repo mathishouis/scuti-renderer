@@ -133,10 +133,15 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
     });
     room.visualization.onTileClick = (position) => {
         console.log("click", position);
-        if(furniture.direction === 4) {
+        /*if(furniture.direction === 4) {
             furniture.direction = 2
         } else {
             furniture.direction = 4;
+        }*/
+        furniture.position = {
+            x: position.x,
+            y: position.y,
+            z: position.z,
         }
     }
     room.visualization.onTileOver = (position) => {
