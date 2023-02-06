@@ -28,8 +28,6 @@ export interface WallFurnitureConfiguration {
     state?: number
 }
 
-export type FurnitureId = number;
-
 export type FurnitureFrameId = number;
 
 export type FurnitureLayerId = number;

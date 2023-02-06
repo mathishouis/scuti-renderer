@@ -55,11 +55,21 @@ export class Scuti {
         Assets.add("room/cursors", "http://127.0.0.1:8081/generic/tile_cursor/tile_cursor.json");
         Assets.add("furnitures/floor/placeholder", "http://127.0.0.1:8081/generic/place_holder/place_holder_furniture.json");
         Assets.add("furnitures/furnidata", "http://127.0.0.1:8081/gamedata/furnidata.json");
+        Assets.add("figures/figuredata", "http://127.0.0.1:8081/gamedata/figuredata.json");
+        Assets.add("figures/figuremap", "http://127.0.0.1:8081/gamedata/figuremap.json");
+        Assets.add("figures/draworder", "http://127.0.0.1:8081/gamedata/draworder.json");
+        Assets.add("figures/actions", "http://127.0.0.1:8081/generic/HabboAvatarActions.json");
+        Assets.add("figures/partsets", "http://127.0.0.1:8081/generic/HabboAvatarPartSets.json");
         await Assets.load("room/materials");
         await Assets.load("room/room");
         await Assets.load("room/cursors");
         await Assets.load("furnitures/floor/placeholder");
         await Assets.load("furnitures/furnidata");
+        await Assets.load("figures/figuredata");
+        await Assets.load("figures/figuremap");
+        await Assets.load("figures/draworder");
+        await Assets.load("figures/actions");
+        await Assets.load("figures/partsets");
     }
 
     /**

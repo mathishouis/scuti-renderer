@@ -103,7 +103,7 @@ export class FurnitureLayer extends Container {
     /**
      * Return the furniture instance
      */
-    public get furniture(): FloorFurniture {
+    public get furniture(): FloorFurniture | WallFurniture {
         return this._furniture;
     }
 

@@ -5,6 +5,10 @@ import {WallMaterial} from "../src/objects/rooms/materials/WallMaterial";
 import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
 import {WallFurniture} from "../src/objects/furnitures/WallFurniture";
 import {random} from "gsap/gsap-core";
+import {Avatar} from "../src/objects/avatars/Avatar";
+import {FloorPosition} from "../src/interfaces/Furniture.interface";
+import {Direction} from "../src/types/Direction";
+import {AvatarAction} from "../src/objects/avatars/AvatarAction";
 
 (async ()=>{
     const renderer = new Scuti({
@@ -217,6 +221,21 @@ import {random} from "gsap/gsap-core";
         direction: 4,
         state: 3,
     });
+    const avatar = new Avatar({
+        figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80",
+        position: {
+            x: 1,
+            y: 0,
+            z: 0
+        },
+        bodyDirection: 2,
+        headDirection: 2,
+        actions: [
+            AvatarAction.Swim,
+            //AvatarAction.Wave,
+        ]
+    });
+    room.addChild(avatar);
     room.visualization.onTileClick = (position) => {
         console.log("click", position);
         /*if(furniture.direction === 4) {
@@ -224,7 +243,7 @@ import {random} from "gsap/gsap-core";
         } else {
             furniture.direction = 4;
         }*/
-        furniture.pos = {
+        avatar.pos = {
             x: position.x,
             y: position.y,
             z: position.z,
@@ -242,8 +261,8 @@ import {random} from "gsap/gsap-core";
     room.visualization.onTileOut = (position) => {
         console.log("out", position);
     }
-    room.addRoomObject(furniture);
-    room.addRoomObject(wallFurniture);
-    room.addRoomObject(wallFurniture2);
-    room.addRoomObject(wallFurniture3);
+    //room.addRoomObject(furniture);
+    //room.addRoomObject(wallFurniture);
+    //room.addRoomObject(wallFurniture2);
+    //room.addRoomObject(wallFurniture3);
 })();
