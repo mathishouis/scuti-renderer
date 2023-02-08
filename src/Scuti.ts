@@ -33,6 +33,7 @@ export class Scuti {
     ) {
         this._logger.info("⚡ Scuti Renderer - v1.0.0");
         settings.RESOLUTION = 1;
+        settings.SORTABLE_CHILDREN = true;
         BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
         gsap.registerPlugin(PixiPlugin);
         this._application = new Application({
@@ -60,6 +61,7 @@ export class Scuti {
         Assets.add("figures/draworder", "http://127.0.0.1:8081/gamedata/draworder.json");
         Assets.add("figures/actions", "http://127.0.0.1:8081/generic/HabboAvatarActions.json");
         Assets.add("figures/partsets", "http://127.0.0.1:8081/generic/HabboAvatarPartSets.json");
+        Assets.add("figures/animations", "http://127.0.0.1:8081/generic/HabboAvatarAnimations.json");
         await Assets.load("room/materials");
         await Assets.load("room/room");
         await Assets.load("room/cursors");
@@ -70,6 +72,7 @@ export class Scuti {
         await Assets.load("figures/draworder");
         await Assets.load("figures/actions");
         await Assets.load("figures/partsets");
+        await Assets.load("figures/animations");
     }
 
     /**

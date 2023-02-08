@@ -109,8 +109,14 @@ export class HitTexture {
         sprite.y = this._sprite.getGlobalPosition().y + this._sprite.texture.trim.y;
         sprite.texture.trim.x = 0;
         sprite.texture.trim.y = 0;
-        this._sprite.parent.furniture.room.engine.application.stage.addChild(sprite);
-        const renderTexture: RenderTexture = this._sprite.parent.furniture.room.engine.application.renderer.generateTexture(sprite);
+        let renderTexture: RenderTexture = undefined;
+        if(this._sprite.parent.furniture !== undefined) {
+            this._sprite.parent.furniture.room.engine.application.stage.addChild(sprite);
+            renderTexture = this._sprite.parent.furniture.room.engine.application.renderer.generateTexture(sprite);
+        } else {
+            this._sprite.parent.avatar.room.engine.application.stage.addChild(sprite);
+            renderTexture = this._sprite.parent.avatar.room.engine.application.renderer.generateTexture(sprite);
+        }
         sprite.destroy();
         const image: HTMLImageElement = this._image(renderTexture);
         renderTexture.baseTexture.resource = new BaseImageResource(image);
@@ -192,7 +198,13 @@ export class HitTexture {
         const TEMP_RECT = new Rectangle();
         const BYTES_PER_PIXEL = 4;
 
-        const renderer = this._sprite.parent.furniture.room.engine.application.renderer;
+        let renderer;
+        if(this._sprite.parent.furniture !== undefined) {
+            renderer = this._sprite.parent.furniture.room.engine.application.renderer;
+        } else {
+            renderer = this._sprite.parent.avatar.room.engine.application.renderer;
+        }
+
         let resolution;
         let frame;
         let flipY = false;
@@ -207,7 +219,7 @@ export class HitTexture {
             }
             else
             {
-                renderTexture = this._sprite.parent.furniture.room.engine.application.renderer.generateTexture(target);
+                renderTexture = renderer.generateTexture(target);
                 generated = true;
             }
         }
@@ -221,13 +233,13 @@ export class HitTexture {
         }
         else
         {
-            resolution = this._sprite.parent.furniture.room.engine.application.renderer.resolution;
+            resolution = renderer.resolution;
 
             flipY = true;
 
             frame = TEMP_RECT;
-            frame.width = this._sprite.parent.furniture.room.engine.application.renderer.width;
-            frame.height = this._sprite.parent.furniture.room.engine.application.renderer.height;
+            frame.width = renderer.width;
+            frame.height = renderer.height;
 
             renderer.renderTexture.bind(null);
         }

@@ -78,7 +78,8 @@ export class RoomVisualization extends Container {
         this.addChild(this._tileLayer);
         this.addChild(this._objectLayer);
 
-        this._animationTicker.maxFPS = 15.666;
+        //this._animationTicker.maxFPS = 15.666;
+        this._animationTicker.maxFPS = 4;
         this._animationTicker.start();
 
         this._draw();

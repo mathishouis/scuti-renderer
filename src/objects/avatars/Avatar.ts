@@ -26,6 +26,8 @@ export class Avatar extends RoomObject {
 
     private _actions: AvatarAction[];
 
+    private _frames: Map<number, Map<string, { action: String, frame: number, repeat: number }>> = new Map();
+
     constructor(
         configuration: AvatarConfiguration
     ) {
@@ -58,57 +60,166 @@ export class Avatar extends RoomObject {
     }
 
     private _createLayer(part: AvatarPart, set: { set: { setId: number, colors: number[] }, type: string }): void {
+        if(!this._frames.has(part.id)) this._frames.set(part.id, new Map());
+
         const spritesheet: Spritesheet = Assets.get("figures/" + part.lib.id);
         const avatarActions: AvatarPartAction[] = Assets.get("figures/actions");
+        const avatarAnimations: [] = Assets.get("figures/animations");
         const avatarPartSets: AvatarPartSet = Assets.get("figures/partsets");
 
         Object.keys(spritesheet.data.partsType).forEach((type: string) => {
-            let action: AvatarAction = AvatarAction.Default;
-            let actionPrecedence: number = Number(avatarActions[action].precedence);
+            if(!this._frames.get(part.id).has(type)) this._frames.get(part.id).set(type, {
+                action: "Default",
+                frame: 0,
+                repeat: 0
+            });
+            //console.log(this._frames);
+            //console.log(this._frames.get(part.id).find(frame => frame.has(type)));
+            //let action: AvatarAction = AvatarAction.Default;
+            //let actionPrecedence: number = Number(avatarActions[action].precedence);
             let direction: Direction = this._bodyDirection;
 
-            spritesheet.data.partsType[type].gestures.forEach((gesture: string) => {
+            /*spritesheet.data.partsType[type].gestures.forEach((gesture: string) => {
+                if(type.includes("l")) console.log(type, gesture);
 
-                if (this._actions.some((avatarAction: AvatarAction) => AvatarUtil.getAction(gesture).includes(avatarAction)) && !AvatarUtil.getAction(gesture).includes(AvatarAction.Default)) {
-                    const actions: AvatarAction[] = this._actions.filter((avatarAction: AvatarAction) => AvatarUtil.getAction(gesture).includes(avatarAction));
-                    actions.forEach((avatarAction: AvatarAction) => {
-                        if(Number(avatarActions[avatarAction].precedence) < actionPrecedence) {
-                            action = avatarAction;
-                            actionPrecedence = avatarActions[avatarAction].precedence;
-                        }
-                    });
-                }
+                const actions: AvatarAction[] = this._actions.filter((avatarAction: AvatarAction) => AvatarUtil.getAction(gesture).includes(avatarAction));
+                actions.forEach((avatarAction: AvatarAction) => {
+                    if (Number(avatarActions[avatarAction].precedence) < actionPrecedence) {
+                        action = avatarAction;
+                        actionPrecedence = avatarActions[avatarAction].precedence;
+                        console.log(true)
+                        //                        if(type.includes("l")) console.log(type, gesture, action, actionPrecedence);
+                    }
+                });
+            });*/
 
-            });
-
+            const sortedActions: AvatarAction[] = [];
             this._actions.forEach((action: AvatarAction) => {
-                console.log(avatarActions[action]);
+                const avatarAction: AvatarPartAction = avatarActions[action];
+                if(avatarAction !== undefined) {
+                    const activePartSet: string = avatarActions[action].activepartset;
+                    if(avatarPartSets.activePartSets[activePartSet].includes(type)) {
+                        sortedActions.push(action);
+                    }
+                }
             });
-            if (avatarActions) {
-                //const actions: AvatarAction[] = this._actions.filter((avatarAction: AvatarAction) => AvatarUtil.getAction(gesture).includes(avatarAction));
-            }
+            let actionPrecedence: number = 10000;
+            let finalAction: AvatarAction = AvatarAction.Default;
+            sortedActions.forEach((action: AvatarAction) => {
+                const avatarAction: AvatarPartAction = avatarActions[action];
+                if(Number(avatarAction.precedence) < actionPrecedence) {
+                    actionPrecedence = Number(avatarAction.precedence);
+                    finalAction = action;
+                }
+            });
+            /*if(type === "hd") finalAction = AvatarAction.Default;
+            if(type === "ey") finalAction = AvatarAction.Default;
+            if(type === "rs") finalAction = AvatarAction.Default;*/
+            /*if(!spritesheet.data.partsType[type].gestures.includes(avatarActions[finalAction].assetpartdefinition)) {
+                finalAction = AvatarAction.Default;
+            }*/
 
             if (avatarPartSets.activePartSets.head.includes(type)) {
                 direction = this._headDirection;
             }
 
-            console.log(action);
-            if(action === AvatarAction.Swim) {
-                console.log(avatarPartSets.partSets[type]["swim"]);
+            const animation = avatarAnimations[finalAction];
+            let gesture: string = avatarActions[finalAction].assetpartdefinition
+            let frame: Number = 0;
+            if(animation !== undefined && animation.frames[this._frames.get(part.id).get(type).frame].bodyparts[type] !== undefined) {
+                this._frames.get(part.id).get(type).action = finalAction;
+                frame = animation.frames[this._frames.get(part.id).get(type).frame].bodyparts[type].frame;
+                gesture = animation.frames[this._frames.get(part.id).get(type).frame].bodyparts[type].assetpartdefinition
+                //console.log(frame);
             }
 
-            if (spritesheet.animations[type + "_" + part.id + "_" + avatarActions[action].assetpartdefinition + "_" + direction] !== undefined && !spritesheet.animations[type + "_" + part.id + "_" + avatarActions[action].assetpartdefinition + "_" + direction].includes(undefined)) {
+            if(spritesheet.textures[part.lib.id + "_h_" + gesture + "_" + type + "_" + part.id + "_" + direction + "_" + frame] === undefined) {
+                gesture = "std";
+                finalAction = AvatarAction.Respect;
+                this._frames.get(part.id).get(type).action = finalAction;
+            }
+
+                //console.log(action, this._frames);
+
+            //if(type === "ls" || type === "lh" || type === "lc") console.log(1, part.lib.id + "_h_" + avatarActions[finalAction].assetpartdefinition + "_" + type + "_" + part.id + "_" + direction + "_" + frame);
+            //if(type === "hr" || type === "hd") console.log(type, finalAction, gesture);
+
+            //if(spritesheet.animations[type + "_" + part.id + "_" + gesture + "_" + direction] !== undefined && !spritesheet.animations[type + "_" + part.id + "_" + gesture + "_" + direction].includes(undefined)) {
+            //if(type === "hd" || type === "ey" || type === "rs") console.log(type, finalAction, gesture, animation.frames[this._frames.get(part.id).get(type).frame].bodyparts[type]);
+
+
+            try {
                 this.addChild(new AvatarLayer(this, {
                     type: type,
                     part: part,
-                    action: action,
+                    gesture: gesture,
                     tint: part.colorable === 1 && type !== "ey" ? AvatarUtil.getColor(set.type, set.set.colors[part.index]) : undefined,
-                    z: AvatarUtil.getDrawOrder(type, action, direction),
+                    z: AvatarUtil.getDrawOrder(type, gesture, direction),
                     flip: true,
-                    direction: direction
+                    direction: direction,
+                    frame: frame
                 }));
+            } catch (e) {
+                //console.log(e);
+
             }
+            //}
         });
+    }
+
+    private _updateFrame(): void {
+        const avatarAnimations: [] = Assets.get("figures/animations");
+
+        this._frames.forEach((types: Map<string, { action: string, frame: number, repeat: number }>, partId: number ) => {
+            types.forEach((value: { action: string, frame: number, repeat: number }, type: string) => {
+                const animation = avatarAnimations[value.action];
+                //console.log(animation, value.action, avatarAnimations);
+                if(animation !== undefined && animation.frames[value.frame] !== undefined && animation.frames[value.frame].bodyparts[type] !== undefined) {
+                    if(animation.frames[value.frame].bodyparts[type].repeats !== undefined) {
+                        if(value.repeat >= Number(animation.frames[value.frame].bodyparts[type].repeats)) {
+                            this._frames.get(partId).get(type).repeat = 0;
+                            if (value.frame >= animation.frames.length - 1) {
+                                this._frames.get(partId).get(type).frame = 0;
+                            } else {
+                                this._frames.get(partId).get(type).frame += 1;
+                            }
+                        } else {
+                            this._frames.get(partId).get(type).repeat += 1;
+                        }
+                    } else {
+                        if (value.frame >= animation.frames.length - 1) {
+                            this._frames.get(partId).get(type).frame = 0;
+                        } else {
+                            this._frames.get(partId).get(type).frame += 1;
+                        }
+                    }
+                }
+            });
+        });
+
+        this._draw();
+    }
+
+    /**
+     * On each animation tick
+     * @private
+     */
+    private _onTicker(): void {
+        this._updateFrame();
+    }
+
+    /**
+     * Start the furniture animation
+     */
+    public startAnimation(): void {
+        this.animationTicker.add(() => this._onTicker());
+    }
+
+    /**
+     * Stop the furniture animation
+     */
+    public stopAnimation(): void {
+        this.animationTicker.remove(() => this._onTicker());
     }
 
     private _createPlaceholder(): void {

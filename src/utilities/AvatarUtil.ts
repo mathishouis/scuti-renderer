@@ -22,8 +22,8 @@ export class AvatarUtil {
     public static getParts(type: string, setId: number): AvatarPart[] {
         const figureData: [] = Assets.get('figures/figuredata');
         const figureMap: [] = Assets.get('figures/figuremap');
+        const hiddenLayers: [] = figureData.settype[type]?.set[setId]["hiddenLayers"];
         let parts = [];
-        console.log(type, setId, figureData, figureMap);
         let set = figureData.settype[type]?.set[setId];
         set?.parts.forEach((part) => {
             let libId = figureMap.parts[part.type][String(part.id)];
@@ -32,6 +32,9 @@ export class AvatarUtil {
             part.lib = lib;
             parts.push(part);
         });
+        if(hiddenLayers !== undefined) {
+            parts = parts.filter(part => !hiddenLayers.includes(part.type));
+        }
         return parts;
     }
 

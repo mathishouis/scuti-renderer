@@ -24,6 +24,8 @@ export class HitSprite extends Sprite {
     public containsPoint(point: IPointData): boolean {
         if(!this.interactive) return false;
 
+        if(this.texture.trim === undefined) return false;
+
         const width: number = this.texture.orig.width;
         const height: number = this.texture.orig.height;
 

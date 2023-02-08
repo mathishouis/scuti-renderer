@@ -58,11 +58,12 @@ export interface AvatarPartSet {
 export interface AvatarLayerConfiguration {
     type: string,
     part: AvatarPart,
-    action: AvatarAction,
+    gesture: string,
     tint: number,
     z: number,
     flip: boolean,
-    direction: Direction
+    direction: Direction,
+    frame: number
 }
 
 export type AvatarFrameId = number;
