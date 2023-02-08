@@ -235,7 +235,8 @@ import {AvatarAction} from "../src/objects/avatars/AvatarAction";
             //AvatarAction.Walk,
             AvatarAction.Talk,
             AvatarAction.Wave,
-            AvatarAction.Walk
+            AvatarAction.Walk,
+            AvatarAction.CarryItem,
         ]
     });
 

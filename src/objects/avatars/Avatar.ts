@@ -41,7 +41,7 @@ export class Avatar extends RoomObject {
         this._bodyDirection = configuration.bodyDirection;
         this._actions = configuration.actions;
 
-        this._draw();
+        //this._draw();
     }
 
     private _draw(): void {
@@ -51,7 +51,7 @@ export class Avatar extends RoomObject {
 
             parts.forEach((part: AvatarPart) => {
                 Assets.add("figures/" + part.lib.id, "http://localhost:8081/figure/" + part.lib.id + "/" + part.lib.id + ".json");
-                Assets.load("figures/" + part.lib.id).then(() => this._createLayer(part, { set: set, type: type }));
+                Assets.load("figures/" + part.lib.id).then(() => this._createLayer(part, {set: set, type: type}));
             });
         });
 
