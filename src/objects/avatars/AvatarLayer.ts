@@ -74,7 +74,7 @@ export class AvatarLayer extends Container {
             [4, 5, 6, 7].includes(this._direction) ? this.scale.x = -1 : null;
             [4, 5, 6, 7].includes(this._direction) ? this.x = 64 : null;
         }
-        if(this._z !== undefined) sprite.zIndex = this._z;
+        if(this._z !== undefined) this.zIndex = this._z;
         //sprite.animationSpeed = 0.167;
         //sprite.play();
         sprite.interactive = true;

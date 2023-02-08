@@ -171,7 +171,7 @@ import {AvatarAction} from "../src/objects/avatars/AvatarAction";
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
     const room = new Room(renderer, {
-        tileMap: tileMap2,
+        tileMap: tileMap4,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         //floorMaterial: new FloorMaterial(renderer, 307),
@@ -228,8 +228,8 @@ import {AvatarAction} from "../src/objects/avatars/AvatarAction";
             y: 4,
             z: 0
         },
-        bodyDirection: 2,
-        headDirection: 2,
+        bodyDirection: 1,
+        headDirection: 1,
         actions: [
             //AvatarAction.Idle,
             //AvatarAction.Walk,

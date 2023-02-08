@@ -33,15 +33,11 @@ export class Avatar extends RoomObject {
     ) {
         super();
 
-        this.sortableChildren = true;
-
         this._figure = AvatarUtil.parseFigure(configuration.figure);
         this._position = configuration.position;
         this._headDirection = configuration.headDirection;
         this._bodyDirection = configuration.bodyDirection;
         this._actions = configuration.actions;
-
-        //this._draw();
     }
 
     private _draw(): void {
@@ -133,7 +129,11 @@ export class Avatar extends RoomObject {
                 //console.log(frame);
             }
 
-            if(spritesheet.textures[part.lib.id + "_h_" + gesture + "_" + type + "_" + part.id + "_" + direction + "_" + frame] === undefined) {
+            let tempDirection: number = direction;
+            if([4, 5, 6, 7].includes(tempDirection)) {
+                tempDirection = 6 - tempDirection
+            }
+            if(spritesheet.textures[part.lib.id + "_h_" + gesture + "_" + type + "_" + part.id + "_" + tempDirection + "_" + frame] === undefined) {
                 gesture = "std";
                 finalAction = AvatarAction.Respect;
                 this._frames.get(part.id).get(type).action = finalAction;
