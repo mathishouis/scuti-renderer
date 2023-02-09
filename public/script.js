@@ -254,7 +254,7 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
     let actions = [AvatarAction.Default, AvatarAction.Walk, AvatarAction.GestureSmile, AvatarAction.Wave, AvatarAction.GestureAngry, AvatarAction.GestureSurprised, AvatarAction.Respect, AvatarAction.CarryItem, AvatarAction.UseItem]
 
     for(let y=0; y<2; y++) {
-        for(let x=0; x<1; x++) {
+        for(let x=0; x<2; x++) {
             let figure = "hr-" +
                 hr[Math.floor(Math.random() * hr.length)] + "-" + color2[Math.floor(Math.random() * color2.length)]
                 + ".hd-" +
@@ -277,8 +277,8 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
                     y: y,
                     z: 0,
                 },
-                bodyDirection: 6,
-                headDirection: 4,
+                bodyDirection: 2,
+                headDirection: 2,
                 figure: figure,
                 actions: [actions[Math.floor(Math.random() * actions.length)]]
             });

@@ -2,7 +2,7 @@ import {Avatar} from "./Avatar";
 import {
     AvatarFrameId,
     AvatarLayerConfiguration,
-    AvatarLayerId, AvatarPart,
+    AvatarLayerId, IAvatarPart,
     IActionDefinition
 } from "../../interfaces/Avatar.interface";
 import {AnimatedSprite, Assets, BLEND_MODES, Container, utils} from "pixi.js";
@@ -16,7 +16,7 @@ export class AvatarLayer extends Container {
     private _avatar: Avatar;
 
     private _type: string;
-    private _part: AvatarPart;
+    private _part: IAvatarPart;
     private _gesture: string;
 
 

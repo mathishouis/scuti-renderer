@@ -6,9 +6,7 @@ export class AvatarAnimation {
     constructor(
         private _action: AvatarAction,
         private _definition: IAnimationDefinition
-    ) {
-
-    }
+    ) {}
 
     public getFrame(frame: number, type: string): IAnimationFrameData {
         return this._definition.frames[frame].bodyparts[type];

@@ -13,7 +13,7 @@ export interface AvatarConfiguration {
 
 export type AvatarFigure = Map<string, { setId: number, colors: number[] }>;
 
-export interface AvatarPart {
+export interface IAvatarPart {
     colorable: number,
     colorindex: number
     id: number,
@@ -48,6 +48,14 @@ export interface IAnimationFrameData {
     frame: number
 }
 
+export interface IBodyPartConfiguration {
+    type: string,
+    setId: number,
+    colors: number[],
+    parts: IAvatarPart[],
+    actions: AvatarActione[]
+}
+
 export interface AvatarPartSet {
     partSets: {
 
@@ -70,7 +78,7 @@ export interface AvatarPartSet {
 
 export interface AvatarLayerConfiguration {
     type: string,
-    part: AvatarPart,
+    part: IAvatarPart,
     gesture: string,
     tint: number,
     z: number,

@@ -1,4 +1,4 @@
-import {AvatarFigure, AvatarPart, IActionDefinition} from "../interfaces/Avatar.interface";
+import {AvatarFigure, IAvatarPart, IActionDefinition} from "../interfaces/Avatar.interface";
 import {Assets} from "pixi.js";
 import {AvatarAction} from "../objects/avatars/actions/AvatarAction";
 
@@ -19,7 +19,7 @@ export class AvatarUtil {
         }));
     }
 
-    public static getParts(type: string, setId: number): AvatarPart[] {
+    public static getParts(type: string, setId: number): IAvatarPart[] {
         const figureData: [] = Assets.get('figures/figuredata');
         const figureMap: [] = Assets.get('figures/figuremap');
         const hiddenLayers: [] = figureData.settype[type]?.set[setId]["hiddenLayers"];

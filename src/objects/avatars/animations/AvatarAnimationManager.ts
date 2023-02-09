@@ -9,9 +9,6 @@ export class AvatarAnimationManager {
 
     private _avatarAnimationsLib: AvatarPartSet = Assets.get("figures/animations");
 
-    constructor() {
-    }
-
     public registerAnimation(action: AvatarAction): void {
         if(this._avatarAnimationsLib[action] === undefined) return;
         this._animations.set(action, new AvatarAnimation(action, this._avatarAnimationsLib[action]));

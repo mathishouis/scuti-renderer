@@ -10,8 +10,7 @@ export class AvatarActionManager {
 
     constructor(
         private _defaultAction: AvatarAction
-    ) {
-    }
+    ) {}
 
     public filterActions(
         actions: AvatarAction[],
