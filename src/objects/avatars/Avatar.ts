@@ -3,7 +3,7 @@ import {FloorPosition} from "../../interfaces/Furniture.interface";
 import {Direction} from "../../types/Direction";
 import {AvatarAction} from "./actions/AvatarAction";
 import {
-    AvatarConfiguration,
+    IAvatarConfiguration,
     AvatarFigure,
     IAvatarPart,
 } from "../../interfaces/Avatar.interface";
@@ -12,6 +12,8 @@ import {gsap} from "gsap";
 import {AvatarActionManager} from "./actions/AvatarActionManager";
 import {AvatarAnimationManager} from "./animations/AvatarAnimationManager";
 import {AvatarBodyPart} from "./AvatarBodyPart";
+import {AvatarLayer} from "./AvatarLayer";
+import {Assets} from "pixi.js";
 
 export class Avatar extends RoomObject {
 
@@ -25,14 +27,12 @@ export class Avatar extends RoomObject {
 
     private _actions: AvatarAction[];
 
-    private _frames: Map<number, Map<string, { action: String, frame: number, repeat: number }>> = new Map();
-
     private _actionManager: AvatarActionManager;
     private _animationManager: AvatarAnimationManager;
     private _bodyParts: AvatarBodyPart[] = [];
 
     constructor(
-        configuration: AvatarConfiguration
+        configuration: IAvatarConfiguration
     ) {
         super();
 
@@ -60,6 +60,8 @@ export class Avatar extends RoomObject {
 
     private _draw(): void {
         this._destroyParts();
+        Assets.add("figures/hh_human_body", "http://localhost:8081/figure/hh_human_body/hh_human_body.json");
+        Assets.load("figures/hh_human_body").then(() => this._createShadow());
         this._bodyParts.forEach((bodyPart: AvatarBodyPart) => bodyPart.updateParts());
 
         this.x = 32 * this._position.x - 32 * this._position.y;
@@ -90,6 +92,20 @@ export class Avatar extends RoomObject {
 
     private _createPlaceholder(): void {
 
+    }
+
+    private _createShadow(): void {
+        this.addChild(new AvatarLayer(this, {
+            type: "sd",
+            part: { id: 1, lib: { id: "hh_human_body" }},
+            gesture: "std",
+            tint: undefined,
+            z: 0,
+            flip: true,
+            direction: 0,
+            frame: 0,
+            alpha: 0.1
+        }));
     }
 
     private _destroyParts(): void {

@@ -1,8 +1,7 @@
 import {Avatar} from "./Avatar";
 import {
-    AvatarFrameId,
     AvatarLayerConfiguration,
-    AvatarLayerId, IAvatarPart,
+    IAvatarPart,
     IActionDefinition
 } from "../../interfaces/Avatar.interface";
 import {AnimatedSprite, Assets, BLEND_MODES, Container, utils} from "pixi.js";
@@ -42,6 +41,8 @@ export class AvatarLayer extends Container {
 
     private _frame: number;
 
+    private _alpha: number;
+
     constructor(
         avatar: Avatar,
         configuration: AvatarLayerConfiguration
@@ -57,6 +58,7 @@ export class AvatarLayer extends Container {
         this._flip = configuration.flip;
         this._direction = configuration.direction;
         this._frame = configuration.frame;
+        this._alpha = configuration.alpha;
 
         this._draw();
     }
@@ -75,6 +77,7 @@ export class AvatarLayer extends Container {
             [4, 5, 6, 7].includes(this._direction) ? this.x = 64 : null;
         }
         if(this._z !== undefined) this.zIndex = this._z;
+        if(this._alpha !== undefined) sprite.alpha = this._alpha;
         //sprite.animationSpeed = 0.167;
         //sprite.play();
         sprite.interactive = true;

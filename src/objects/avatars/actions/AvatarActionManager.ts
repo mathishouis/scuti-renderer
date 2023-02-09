@@ -1,12 +1,12 @@
 import {Avatar} from "../Avatar";
 import {AvatarAction} from "./AvatarAction";
-import {IActionDefinition, AvatarPartSet} from "../../../interfaces/Avatar.interface";
+import {IActionDefinition, IAvatarPartSets} from "../../../interfaces/Avatar.interface";
 import {Assets} from "pixi.js";
 
 export class AvatarActionManager {
 
     private _avatarActionsLib: IActionDefinition[] = Assets.get("figures/actions");
-    private _avatarPartSetsLib: AvatarPartSet = Assets.get("figures/partsets");
+    private _avatarPartSetsLib: IAvatarPartSets = Assets.get("figures/partsets");
 
     constructor(
         private _defaultAction: AvatarAction
@@ -52,5 +52,9 @@ export class AvatarActionManager {
 
     public get definitions(): IActionDefinition[] {
         return this._avatarActionsLib;
+    }
+
+    public get partSets(): IAvatarPartSets {
+        return this._avatarPartSetsLib;
     }
 }

@@ -1,4 +1,4 @@
-import {AvatarPartSet, IAnimationFrameData} from "../../../interfaces/Avatar.interface";
+import {IAvatarPartSets, IAnimationFrameData} from "../../../interfaces/Avatar.interface";
 import {Assets} from "pixi.js";
 import {AvatarAction} from "../actions/AvatarAction";
 import {AvatarAnimation} from "./AvatarAnimation";
@@ -7,7 +7,7 @@ export class AvatarAnimationManager {
 
     private _animations: Map<AvatarAction, AvatarAnimation> = new Map<AvatarAction, AvatarAnimation>();
 
-    private _avatarAnimationsLib: AvatarPartSet = Assets.get("figures/animations");
+    private _avatarAnimationsLib: IAvatarPartSets = Assets.get("figures/animations");
 
     public registerAnimation(action: AvatarAction): void {
         if(this._avatarAnimationsLib[action] === undefined) return;

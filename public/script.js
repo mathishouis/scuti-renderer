@@ -228,8 +228,8 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
             y: 4,
             z: 0
         },
-        bodyDirection: 4,
-        headDirection: 5,
+        bodyDirection: 2,
+        headDirection: 2,
         actions: [
             //AvatarAction.Idle,
             //AvatarAction.Walk,

@@ -1,5 +1,5 @@
 import {
-    AvatarPartSet,
+    IAvatarPartSets,
     IAnimationFrameData,
     IAvatarPart,
     IBodyPartConfiguration
@@ -37,8 +37,6 @@ export class AvatarBodyPart {
         this._colors = configuration.colors;
         this._parts = configuration.parts;
         this._actions = configuration.actions;
-
-        this._draw();
     }
 
     private _draw(): void {
@@ -54,7 +52,6 @@ export class AvatarBodyPart {
         if(!this._frames.has(part.id)) this._frames.set(part.id, new Map());
 
         const spritesheet: Spritesheet = Assets.get("figures/" + part.lib.id);
-        const avatarPartSets: AvatarPartSet = Assets.get("figures/partsets");
 
         Object.keys(spritesheet.data.partsType).forEach((type: string) => {
             // We register the part type if it's not already registered
@@ -71,9 +68,7 @@ export class AvatarBodyPart {
             let finalAction: AvatarAction = this._avatar.actionManager.sortActions(sortedActions)[0];
 
             // If this part type is in the head part set, we put the direction equal to the head direction
-            if (avatarPartSets.activePartSets.head.includes(type)) {
-                direction = this._avatar.headDirection;
-            }
+            if (this._isHeadPart(type)) direction = this._avatar.headDirection;
 
             // We get the animation gesture and frame
             const frameData: IAnimationFrameData = this._avatar.animationManager.getLayerData(finalAction, this._frames.get(part.id).get(type).frame, type)
@@ -86,9 +81,7 @@ export class AvatarBodyPart {
             }
 
             let tempDirection: number = direction;
-            if([4, 5, 6, 7].includes(tempDirection)) {
-                tempDirection = 6 - tempDirection
-            }
+            if([4, 5, 6, 7].includes(tempDirection)) tempDirection = 6 - tempDirection;
 
             // If the texture don't exist we reinitalise the gesture and the final action
             if(spritesheet.textures[part.lib.id + "_h_" + gesture + "_" + type + "_" + part.id + "_" + tempDirection + "_" + frame] === undefined) {
@@ -111,6 +104,10 @@ export class AvatarBodyPart {
                 }));
             }
         });
+    }
+
+    private _isHeadPart(type: string): boolean {
+        return this._avatar.actionManager.partSets.activePartSets.head.includes(type);
     }
 
     public updateParts(): void {

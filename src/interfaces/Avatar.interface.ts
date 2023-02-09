@@ -1,9 +1,8 @@
 import {Direction} from "../types/Direction";
-import {FloorPosition, FurnitureLayerId} from "./Furniture.interface";
+import {FloorPosition} from "./Furniture.interface";
 import {AvatarAction} from "../objects/avatars/actions/AvatarAction";
-import {BLEND_MODES} from "pixi.js";
 
-export interface AvatarConfiguration {
+export interface IAvatarConfiguration {
     figure: string,
     position: FloorPosition,
     bodyDirection: Direction,
@@ -53,10 +52,10 @@ export interface IBodyPartConfiguration {
     setId: number,
     colors: number[],
     parts: IAvatarPart[],
-    actions: AvatarActione[]
+    actions: AvatarAction[]
 }
 
-export interface AvatarPartSet {
+export interface IAvatarPartSets {
     partSets: {
 
     },
@@ -84,9 +83,7 @@ export interface AvatarLayerConfiguration {
     z: number,
     flip: boolean,
     direction: Direction,
-    frame: number
+    frame: number,
+    alpha?: number
 }
 
-export type AvatarFrameId = number;
-
-export type AvatarLayerId = number;
