@@ -75,6 +75,7 @@ export class FloorFurniture extends RoomObject {
      */
     private _draw(): void {
         this._destroyParts();
+        this._createShadow();
         const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
         const visualization: FurnitureVisualization = spritesheet.data["furniProperty"].visualization;
 
@@ -137,14 +138,15 @@ export class FloorFurniture extends RoomObject {
         }
 
         this.addChild(new FurnitureLayer(this, {
-            layer: layer,
+            layer: String.fromCharCode(97 + Number(layer)),
             alpha: alpha,
             tint: tint,
             z: z,
             blendMode: blendMode,
             flip: flip,
             frame: frame,
-            ignoreMouse: ignoreMouse
+            ignoreMouse: ignoreMouse,
+            direction: this._direction
         }));
     }
 
@@ -184,6 +186,20 @@ export class FloorFurniture extends RoomObject {
 
         placeholder.x = -32;
         placeholder.y = -50;
+    }
+
+    private _createShadow(): void {
+        this.addChild(new FurnitureLayer(this, {
+            layer: "sd",
+            alpha: 0.1,
+            tint: undefined,
+            z: 0,
+            blendMode: undefined,
+            flip: false,
+            frame: 0,
+            ignoreMouse: true,
+            direction: 0
+        }));
     }
 
     /**

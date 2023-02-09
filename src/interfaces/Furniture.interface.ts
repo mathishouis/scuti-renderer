@@ -70,12 +70,13 @@ export interface FurnitureVisualization {
 }
 
 export interface FurnitureLayerConfiguration {
-    layer: FurnitureLayerId,
+    layer: FurnitureLayerId | string,
     alpha: number,
     tint: number,
     z: number,
     blendMode: BLEND_MODES,
     flip: boolean,
     frame: number,
-    ignoreMouse: boolean
+    ignoreMouse: boolean,
+    direction: Direction
 }

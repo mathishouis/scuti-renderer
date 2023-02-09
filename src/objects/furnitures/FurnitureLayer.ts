@@ -3,6 +3,7 @@ import { FloorFurniture } from "./FloorFurniture";
 import { FurnitureFrameId, FurnitureLayerConfiguration, FurnitureLayerId } from "../../interfaces/Furniture.interface";
 import { HitSprite } from "../interactions/HitSprite";
 import {WallFurniture} from "./WallFurniture";
+import {Direction} from "../../types/Direction";
 
 export class FurnitureLayer extends Container {
 
@@ -16,7 +17,7 @@ export class FurnitureLayer extends Container {
      * The layer id
      * @private
      */
-    private _layer: FurnitureLayerId;
+    private _layer: FurnitureLayerId | string;
 
     /**
      * The layer alpha
@@ -61,6 +62,8 @@ export class FurnitureLayer extends Container {
      */
     private _ignoreMouse: boolean;
 
+    private _direction: Direction;
+
     /**
      * FurnitureLayer class
      * @param furniture - The furniture instance
@@ -81,6 +84,7 @@ export class FurnitureLayer extends Container {
         this._flip = configuration.flip;
         this._frame = configuration.frame;
         this._ignoreMouse = configuration.ignoreMouse;
+        this._direction = configuration.direction;
 
         this._draw();
     }
@@ -90,8 +94,8 @@ export class FurnitureLayer extends Container {
      * @private
      */
     private _draw(): void {
-        const sprite: HitSprite = new HitSprite(Assets.get("furnitures/" + this._furniture.data.baseName).textures[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + String.fromCharCode(97 + Number(this._layer)) + '_' + this._furniture.direction + '_' + this._frame]);
-        if(this._tint !== undefined) sprite.tint = utils.premultiplyTint(this._tint, 0.999);
+        const sprite: HitSprite = new HitSprite(Assets.get("furnitures/" + this._furniture.data.baseName).textures[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + this._layer + '_' + this._direction + '_' + this._frame]);
+        if(this._tint !== undefined) sprite.tint = utils.premultiplyTint(this._tint, 1);
         if(this._blendMode !== undefined) sprite.blendMode = this._blendMode;
         if(this._alpha !== undefined) sprite.alpha = this._alpha;
         if(this._flip) sprite.scale.x = -1;

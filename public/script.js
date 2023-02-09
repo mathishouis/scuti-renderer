@@ -188,6 +188,16 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         direction: 4,
         state: 1
     });
+    const furniture2 = new FloorFurniture({
+        id: 3895,
+        position: {
+            x: 7,
+            y: 5,
+            z: 0
+        },
+        direction: 4,
+        state: 1
+    });
     const wallFurniture = new WallFurniture({
         position: {
             x: 1,
@@ -287,6 +297,7 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
     }
 
     room.addRoomObject(avatar);
+    room.addRoomObject(furniture2);
     room.visualization.onTileClick = (position) => {
         console.log("click", position);
         /*if(furniture.direction === 4) {
