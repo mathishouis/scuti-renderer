@@ -3,11 +3,11 @@ import {
     AvatarFrameId,
     AvatarLayerConfiguration,
     AvatarLayerId, AvatarPart,
-    AvatarPartAction
+    IActionDefinition
 } from "../../interfaces/Avatar.interface";
 import {AnimatedSprite, Assets, BLEND_MODES, Container, utils} from "pixi.js";
 import {HitSprite} from "../interactions/HitSprite";
-import {AvatarAction} from "./AvatarAction";
+import {AvatarAction} from "./actions/AvatarAction";
 import {Direction} from "../../types/Direction";
 import {AvatarUtil} from "../../utilities/AvatarUtil";
 
@@ -66,7 +66,7 @@ export class AvatarLayer extends Container {
         if([4, 5, 6, 7].includes(tempDirection)) {
             tempDirection = 6 - tempDirection
         }
-        const avatarActions: AvatarPartAction[] = Assets.get("figures/actions");
+        const avatarActions: IActionDefinition[] = Assets.get("figures/actions");
         //if(this._type === "ls" || this._type === "lh" || this._type === "lc") console.log(2, this._part.lib.id + "_h_" + this._gesture + "_" + this._type + "_" + this._part.id + "_" + tempDirection + "_" + this._frame);
         const sprite: HitSprite = new HitSprite(Assets.get("figures/" + this._part.lib.id).textures[this._part.lib.id + "_h_" + this._gesture + "_" + this._type + "_" + this._part.id + "_" + tempDirection + "_" + this._frame]);
         if(this._tint !== undefined) sprite.tint = utils.premultiplyTint(this._tint, 0.999);

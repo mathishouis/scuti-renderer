@@ -1,18 +1,21 @@
 import {RoomObject} from "../rooms/RoomObject";
 import {FloorPosition} from "../../interfaces/Furniture.interface";
 import {Direction} from "../../types/Direction";
-import {AvatarAction} from "./AvatarAction";
+import {AvatarAction} from "./actions/AvatarAction";
 import {Assets, Spritesheet} from "pixi.js";
 import {
     AvatarConfiguration,
     AvatarFigure,
     AvatarPart,
-    AvatarPartAction,
-    AvatarPartSet
+    IActionDefinition,
+    AvatarPartSet, IAnimationFrameData
 } from "../../interfaces/Avatar.interface";
 import {AvatarUtil} from "../../utilities/AvatarUtil";
 import {AvatarLayer} from "./AvatarLayer";
 import {gsap} from "gsap";
+import {AvatarActionManager} from "./actions/AvatarActionManager";
+import {AvatarAnimationManager} from "./animations/AvatarAnimationManager";
+import {AvatarAnimation} from "./animations/AvatarAnimation";
 
 export class Avatar extends RoomObject {
 
@@ -28,6 +31,9 @@ export class Avatar extends RoomObject {
 
     private _frames: Map<number, Map<string, { action: String, frame: number, repeat: number }>> = new Map();
 
+    private _actionManager: AvatarActionManager;
+    private _animationManager: AvatarAnimationManager;
+
     constructor(
         configuration: AvatarConfiguration
     ) {
@@ -38,6 +44,10 @@ export class Avatar extends RoomObject {
         this._headDirection = configuration.headDirection;
         this._bodyDirection = configuration.bodyDirection;
         this._actions = configuration.actions;
+
+        this._actionManager = new AvatarActionManager(AvatarAction.Default);
+        this._animationManager = new AvatarAnimationManager();
+        this._actions.forEach((action: AvatarAction) => this._animationManager.registerAnimation(action));
     }
 
     private _draw(): void {
@@ -59,96 +69,51 @@ export class Avatar extends RoomObject {
         if(!this._frames.has(part.id)) this._frames.set(part.id, new Map());
 
         const spritesheet: Spritesheet = Assets.get("figures/" + part.lib.id);
-        const avatarActions: AvatarPartAction[] = Assets.get("figures/actions");
-        const avatarAnimations: [] = Assets.get("figures/animations");
         const avatarPartSets: AvatarPartSet = Assets.get("figures/partsets");
 
         Object.keys(spritesheet.data.partsType).forEach((type: string) => {
+            // We register the part type if it's not already registered
             if(!this._frames.get(part.id).has(type)) this._frames.get(part.id).set(type, {
                 action: "Default",
                 frame: 0,
                 repeat: 0
             });
-            //console.log(this._frames);
-            //console.log(this._frames.get(part.id).find(frame => frame.has(type)));
-            //let action: AvatarAction = AvatarAction.Default;
-            //let actionPrecedence: number = Number(avatarActions[action].precedence);
             let direction: Direction = this._bodyDirection;
 
-            /*spritesheet.data.partsType[type].gestures.forEach((gesture: string) => {
-                if(type.includes("l")) console.log(type, gesture);
+            // We get the actions, check if it's valid and if the action is included in the active part set
+            const sortedActions: AvatarAction[] = this._actionManager.filterActions(this._actions, type);
 
-                const actions: AvatarAction[] = this._actions.filter((avatarAction: AvatarAction) => AvatarUtil.getAction(gesture).includes(avatarAction));
-                actions.forEach((avatarAction: AvatarAction) => {
-                    if (Number(avatarActions[avatarAction].precedence) < actionPrecedence) {
-                        action = avatarAction;
-                        actionPrecedence = avatarActions[avatarAction].precedence;
-                        console.log(true)
-                        //                        if(type.includes("l")) console.log(type, gesture, action, actionPrecedence);
-                    }
-                });
-            });*/
+            let finalAction: AvatarAction = this._actionManager.sortActions(sortedActions)[0];
 
-            const sortedActions: AvatarAction[] = [];
-            this._actions.forEach((action: AvatarAction) => {
-                const avatarAction: AvatarPartAction = avatarActions[action];
-                if(avatarAction !== undefined) {
-                    const activePartSet: string = avatarActions[action].activepartset;
-                    if(avatarPartSets.activePartSets[activePartSet].includes(type)) {
-                        sortedActions.push(action);
-                    }
-                }
-            });
-            let actionPrecedence: number = 10000;
-            let finalAction: AvatarAction = AvatarAction.Default;
-            sortedActions.forEach((action: AvatarAction) => {
-                const avatarAction: AvatarPartAction = avatarActions[action];
-                if(Number(avatarAction.precedence) < actionPrecedence) {
-                    actionPrecedence = Number(avatarAction.precedence);
-                    finalAction = action;
-                }
-            });
-            /*if(type === "hd") finalAction = AvatarAction.Default;
-            if(type === "ey") finalAction = AvatarAction.Default;
-            if(type === "rs") finalAction = AvatarAction.Default;*/
-            /*if(!spritesheet.data.partsType[type].gestures.includes(avatarActions[finalAction].assetpartdefinition)) {
-                finalAction = AvatarAction.Default;
-            }*/
-
+            // If this part type is in the head part set, we put the direction equal to the head direction
             if (avatarPartSets.activePartSets.head.includes(type)) {
                 direction = this._headDirection;
             }
 
-            const animation = avatarAnimations[finalAction];
-            let gesture: string = avatarActions[finalAction].assetpartdefinition
+            // We get the animation gesture and frame
+            const frameData: IAnimationFrameData = this._animationManager.getLayerData(finalAction, this._frames.get(part.id).get(type).frame, type)
+            let gesture: string = this._actionManager.getActionDefinition(finalAction).assetpartdefinition
             let frame: Number = 0;
-            if(animation !== undefined && animation.frames[this._frames.get(part.id).get(type).frame].bodyparts[type] !== undefined) {
+            if(frameData !== undefined) {
                 this._frames.get(part.id).get(type).action = finalAction;
-                frame = animation.frames[this._frames.get(part.id).get(type).frame].bodyparts[type].frame;
-                gesture = animation.frames[this._frames.get(part.id).get(type).frame].bodyparts[type].assetpartdefinition
-                //console.log(frame);
+                frame = frameData.frame;
+                gesture = frameData.assetpartdefinition
             }
 
             let tempDirection: number = direction;
             if([4, 5, 6, 7].includes(tempDirection)) {
                 tempDirection = 6 - tempDirection
             }
+
+            // If the texture don't exist we reinitalise the gesture and the final action
             if(spritesheet.textures[part.lib.id + "_h_" + gesture + "_" + type + "_" + part.id + "_" + tempDirection + "_" + frame] === undefined) {
                 gesture = "std";
-                finalAction = AvatarAction.Respect;
+                finalAction = AvatarAction.Default;
                 this._frames.get(part.id).get(type).action = finalAction;
             }
 
-                //console.log(action, this._frames);
-
-            //if(type === "ls" || type === "lh" || type === "lc") console.log(1, part.lib.id + "_h_" + avatarActions[finalAction].assetpartdefinition + "_" + type + "_" + part.id + "_" + direction + "_" + frame);
-            //if(type === "hr" || type === "hd") console.log(type, finalAction, gesture);
-
-            //if(spritesheet.animations[type + "_" + part.id + "_" + gesture + "_" + direction] !== undefined && !spritesheet.animations[type + "_" + part.id + "_" + gesture + "_" + direction].includes(undefined)) {
-            //if(type === "hd" || type === "ey" || type === "rs") console.log(type, finalAction, gesture, animation.frames[this._frames.get(part.id).get(type).frame].bodyparts[type]);
-
-
-            try {
+            // We create the layer
+            if(spritesheet.textures[part.lib.id + "_h_" + gesture + "_" + type + "_" + part.id + "_" + tempDirection + "_" + frame] !== undefined) {
                 this.addChild(new AvatarLayer(this, {
                     type: type,
                     part: part,
@@ -159,39 +124,26 @@ export class Avatar extends RoomObject {
                     direction: direction,
                     frame: frame
                 }));
-            } catch (e) {
-                //console.log(e);
-
             }
-            //}
         });
     }
 
     private _updateFrame(): void {
         const avatarAnimations: [] = Assets.get("figures/animations");
-
-        this._frames.forEach((types: Map<string, { action: string, frame: number, repeat: number }>, partId: number ) => {
+        this._frames.forEach((types: Map<string, { action: string, frame: number, repeat: number }>, partId: number) => {
             types.forEach((value: { action: string, frame: number, repeat: number }, type: string) => {
                 const animation = avatarAnimations[value.action];
-                //console.log(animation, value.action, avatarAnimations);
-                if(animation !== undefined && animation.frames[value.frame] !== undefined && animation.frames[value.frame].bodyparts[type] !== undefined) {
-                    if(animation.frames[value.frame].bodyparts[type].repeats !== undefined) {
-                        if(value.repeat >= Number(animation.frames[value.frame].bodyparts[type].repeats)) {
-                            this._frames.get(partId).get(type).repeat = 0;
-                            if (value.frame >= animation.frames.length - 1) {
-                                this._frames.get(partId).get(type).frame = 0;
-                            } else {
-                                this._frames.get(partId).get(type).frame += 1;
-                            }
+                if (animation !== undefined && animation.frames[value.frame] !== undefined && animation.frames[value.frame].bodyparts[type] !== undefined) {
+                    const currentFrame = this._frames.get(partId).get(type);
+                    if (animation.frames[value.frame].bodyparts[type].repeats !== undefined) {
+                        if (currentFrame.repeat >= Number(animation.frames[value.frame].bodyparts[type].repeats)) {
+                            currentFrame.repeat = 0;
+                            currentFrame.frame = currentFrame.frame >= animation.frames.length - 1 ? 0 : currentFrame.frame + 1;
                         } else {
-                            this._frames.get(partId).get(type).repeat += 1;
+                            currentFrame.repeat += 1;
                         }
                     } else {
-                        if (value.frame >= animation.frames.length - 1) {
-                            this._frames.get(partId).get(type).frame = 0;
-                        } else {
-                            this._frames.get(partId).get(type).frame += 1;
-                        }
+                        currentFrame.frame = currentFrame.frame >= animation.frames.length - 1 ? 0 : currentFrame.frame + 1;
                     }
                 }
             });
@@ -242,6 +194,10 @@ export class Avatar extends RoomObject {
                 this._position = position;
             }
         });
+    }
+
+    public get actions(): AvatarAction[] {
+        return this._actions;
     }
 
 }

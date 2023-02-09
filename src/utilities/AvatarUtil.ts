@@ -1,6 +1,6 @@
-import {AvatarFigure, AvatarPart, AvatarPartAction} from "../interfaces/Avatar.interface";
+import {AvatarFigure, AvatarPart, IActionDefinition} from "../interfaces/Avatar.interface";
 import {Assets} from "pixi.js";
-import {AvatarAction} from "../objects/avatars/AvatarAction";
+import {AvatarAction} from "../objects/avatars/actions/AvatarAction";
 
 export class AvatarUtil {
 
@@ -39,7 +39,7 @@ export class AvatarUtil {
     }
 
     public static getAction(action: string): AvatarAction[] {
-        const avatarActions: AvatarPartAction[] = Assets.get('figures/actions');
+        const avatarActions: IActionDefinition[] = Assets.get('figures/actions');
         const actions: AvatarAction[] = Object.keys(avatarActions).filter((item: AvatarAction) => avatarActions[item].assetpartdefinition === action) as AvatarAction[];
         if(actions === undefined) return [AvatarAction.Default];
 

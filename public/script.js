@@ -8,7 +8,7 @@ import {random} from "gsap/gsap-core";
 import {Avatar} from "../src/objects/avatars/Avatar";
 import {FloorPosition} from "../src/interfaces/Furniture.interface";
 import {Direction} from "../src/types/Direction";
-import {AvatarAction} from "../src/objects/avatars/AvatarAction";
+import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
 
 (async ()=>{
     const renderer = new Scuti({
@@ -171,7 +171,7 @@ import {AvatarAction} from "../src/objects/avatars/AvatarAction";
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
     const room = new Room(renderer, {
-        tileMap: tileMap4,
+        tileMap: tileMap2,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         //floorMaterial: new FloorMaterial(renderer, 307),
@@ -228,8 +228,8 @@ import {AvatarAction} from "../src/objects/avatars/AvatarAction";
             y: 4,
             z: 0
         },
-        bodyDirection: 1,
-        headDirection: 1,
+        bodyDirection: 4,
+        headDirection: 5,
         actions: [
             //AvatarAction.Idle,
             //AvatarAction.Walk,
@@ -253,8 +253,8 @@ import {AvatarAction} from "../src/objects/avatars/AvatarAction";
     let color3 = [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110];
     let actions = [AvatarAction.Default, AvatarAction.Walk, AvatarAction.GestureSmile, AvatarAction.Wave, AvatarAction.GestureAngry, AvatarAction.GestureSurprised, AvatarAction.Respect, AvatarAction.CarryItem, AvatarAction.UseItem]
 
-    for(let y=0; y<3; y++) {
-        for(let x=0; x<3; x++) {
+    for(let y=0; y<2; y++) {
+        for(let x=0; x<1; x++) {
             let figure = "hr-" +
                 hr[Math.floor(Math.random() * hr.length)] + "-" + color2[Math.floor(Math.random() * color2.length)]
                 + ".hd-" +
@@ -277,8 +277,8 @@ import {AvatarAction} from "../src/objects/avatars/AvatarAction";
                     y: y,
                     z: 0,
                 },
-                bodyDirection: 2,
-                headDirection: 2,
+                bodyDirection: 6,
+                headDirection: 4,
                 figure: figure,
                 actions: [actions[Math.floor(Math.random() * actions.length)]]
             });
@@ -312,8 +312,8 @@ import {AvatarAction} from "../src/objects/avatars/AvatarAction";
     room.visualization.onTileOut = (position) => {
         console.log("out", position);
     }
-    room.addRoomObject(furniture);
-    room.addRoomObject(wallFurniture);
-    room.addRoomObject(wallFurniture2);
-    room.addRoomObject(wallFurniture3);
+    //room.addRoomObject(furniture);
+    //room.addRoomObject(wallFurniture);
+    //room.addRoomObject(wallFurniture2);
+    //room.addRoomObject(wallFurniture3);
 })();

@@ -1,6 +1,6 @@
 import {Direction} from "../types/Direction";
 import {FloorPosition, FurnitureLayerId} from "./Furniture.interface";
-import {AvatarAction} from "../objects/avatars/AvatarAction";
+import {AvatarAction} from "../objects/avatars/actions/AvatarAction";
 import {BLEND_MODES} from "pixi.js";
 
 export interface AvatarConfiguration {
@@ -25,7 +25,7 @@ export interface AvatarPart {
     type: string
 }
 
-export interface AvatarPartAction {
+export interface IActionDefinition {
     state: string,
     precedence: string,
     main: string,
@@ -33,6 +33,19 @@ export interface AvatarPartAction {
     activepartset: string,
     assetpartdefinition: string,
     prevents: string
+}
+
+export interface IAnimationDefinition {
+    desc: string,
+    frames: {
+        bodyparts: {}
+    }[],
+}
+
+export interface IAnimationFrameData {
+    assetpartdefinition: string,
+    repeats: number,
+    frame: number
 }
 
 export interface AvatarPartSet {
