@@ -5,72 +5,98 @@ import { Material } from "../materials/Material";
 import { WallType } from "../../../types/WallType";
 import { WallMaterial } from "../materials/WallMaterial";
 
+/**
+ * Wall class that show up on the sides of the tiles.
+ *
+ * @class
+ * @memberof Scuti
+ */
 export class Wall extends Container {
 
     /**
-     * The room instance
+     * The room instance where the wall will be drawn.
+     *
+     * @member {Room}
      * @private
      */
     private _room: Room;
 
     /**
-     * The wall thickness
+     * The thickness of the wall part.
+     *
+     * @member {number}
      * @private
      */
     private _thickness: number;
 
     /**
-     * The wall material
+     * The wall material that will be applied to this part, it contains the color and the texture of the wall.
+     *
+     * @member {Material}
      * @private
      */
     private _material: Material;
 
     /**
-     * The wall height
+     * The wall height, the height is added to the base height of the room.
+     *
+     * @member {number}
      * @private
      */
     private _height: number;
 
     /**
-     * The wall position
+     * The wall position.
+     *
+     * @member {IPosition3D}
      * @private
      */
     private _position: IPosition3D;
 
     /**
-     * The wall type
+     * The wall type.
+     *
+     * @member {WallType}
      * @private
      */
     private _type: WallType;
 
     /**
-     *
-     * @param room - The room instance
-     * @param configuration - The wall configuration
-     */
+     * @param {Room} [room] - The room instance where the wall will be drawn.
+     * @param {IWallConfiguration} [configuration] - The wall configuration.
+     * @param {Material} [configuration.material] - The wall material that will be applied.
+     * @param {number} [configuration.thickness] - The wall thickness.
+     * @param {number} [configuration.height] - The wall height.
+     * @param {IPosition3D} [configuration.position] - The wall position.
+     * @param {WallType} [configuration.type] - The wall type.
+     * @param {boolean} [configuration.door] - Is it a door wall?
+     **/
     constructor(
         room: Room,
         configuration: IWallConfiguration
     ) {
         super();
 
+        /** Store the configuration */
         this._room = room;
         this._position = configuration.position;
         this._thickness = configuration.thickness ?? 8;
         this._material = configuration.material ?? new WallMaterial(this._room.engine, 112);
-        // TODO: Implement wall height
-        this._height = configuration.height ?? 1;
+        this._height = configuration.height ?? 0;
         this._type = configuration.type;
-
+        /** Draw the wall */
         this._draw();
     }
 
     /**
-     * Select which wall should be drawn
+     * Select which wall should be drawn by it's type.
+     *
+     * @return {void}
      * @private
      */
     private _draw(): void {
         if(this._type === WallType.LEFT_WALL) {
+            /** Draw a left wall */
             this._drawWall([
                 {
                     x: - this._thickness,
@@ -90,6 +116,7 @@ export class Wall extends Container {
                 },
             ]);
         } else if(this._type === WallType.RIGHT_WALL) {
+            /** Draw a right wall */
             this._drawWall([
                 {
                     x: 32,
@@ -109,6 +136,7 @@ export class Wall extends Container {
                 },
             ]);
         } else if(this._type === WallType.CORNER_WALL) {
+            /** Draw a corner wall */
             this._drawWall([
                 {
                     x: 32 - this._thickness,
@@ -128,6 +156,7 @@ export class Wall extends Container {
                 },
             ]);
         } else if(this._type === WallType.DOOR_WALL) {
+            /** Draw a door wall */
             this._drawWall([
                 {
                     x: - this._thickness + 32,
@@ -150,11 +179,14 @@ export class Wall extends Container {
     }
 
     /**
-     * Draw the wall
-     * @param points
+     * Draw the wall using the given points.
+     *
+     * @param {IPosition2D[]} [points] - The point list that will be used to draw the wall.
+     * @return {void}
      * @private
      */
     private _drawWall(points: IPosition2D[]): void {
+        /** Top face */
         const top: Graphics = new Graphics()
             .beginTextureFill({
                 texture: Texture.WHITE,
@@ -166,6 +198,7 @@ export class Wall extends Container {
             .lineTo(points[3].x, points[3].y)
             .lineTo(points[0].x, points[0].y)
             .endFill();
+        /** Left face */
         const left: Graphics = new Graphics()
             .beginTextureFill({
                 texture: this._type === WallType.RIGHT_WALL ? this._material.texture : Texture.WHITE,
@@ -177,6 +210,7 @@ export class Wall extends Container {
             .lineTo(points[3].x, points[3].y + 115 + this._room.floorThickness + this._room.tileMap.maxZ * 32 - this._position.z * 32 + this._height * 64)
             .lineTo(points[3].x, points[3].y)
             .endFill();
+        /** Right face */
         const right: Graphics = new Graphics()
             .beginTextureFill({
                 texture: (this._type === WallType.LEFT_WALL || this._type === WallType.DOOR_WALL) ? this._material.texture : Texture.WHITE,
@@ -198,11 +232,11 @@ export class Wall extends Container {
             .lineTo(points[2].x, points[2].y)
             .lineTo(points[3].x, points[3].y)
             .endFill();
-
+        /** And we combine everything */
         this.addChild(top);
         this.addChild(left);
         this.addChild(right);
-
+        /** Positionate the wall */
         this.x = 32 * this._position.x - 32 * this._position.y;
         this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
     }

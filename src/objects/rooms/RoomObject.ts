@@ -41,7 +41,7 @@ export class RoomObject extends Container {
     /**
      * Update the current room instance.
      *
-     * @param {Room} room - The new room instance.
+     * @param {Room} [room] - The new room instance.
      * @public
      */
     public set room(

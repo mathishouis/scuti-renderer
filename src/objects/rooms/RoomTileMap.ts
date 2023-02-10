@@ -20,9 +20,11 @@ export class RoomTileMap {
     private _tileMap: TileMap;
 
     /**
-     * @param {string} tileMap - The room tile map string that need to be parsed.
+     * @param {string} [tileMap] - The room tile map string that need to be parsed.
      */
-    constructor(tileMap: string) {
+    constructor(
+        tileMap: string
+    ) {
         /** Parse the tile map string to convert it into a matrix */
         this._tileMap = this._parse(tileMap);
     }
@@ -30,10 +32,13 @@ export class RoomTileMap {
     /**
      * Parse the given tile map to convert it into a matrix.
      *
+     * @param {string} [tileMap] - The tile map string that we want to convert into a matrix.
      * @return {TileMap}
      * @private
      */
-    private _parse(tileMap: string): TileMap {
+    private _parse(
+        tileMap: string
+    ): TileMap {
         return tileMap.split(/\r?\n/).map(line => line.split(''));
     }
 
@@ -51,21 +56,26 @@ export class RoomTileMap {
     /**
      * Convert the 2D position into it's tile type character.
      *
+     * @param {IPosition2D} [position] - The tile position that we want to have the type.
      * @return {string}
      * @public
      */
-    public getTile(position: IPosition2D): string {
+    public getTile(
+        position: IPosition2D
+    ): string {
         return position.x < 0 || position.y < 0 || this._tileMap[position.y] === undefined || this._tileMap[position.y][position.x] === undefined ? "x" : this._tileMap[position.y][position.x];
     }
 
     /**
      * Convert the tile character into a number that is the height of the tile.
      *
-     * @param {IPosition2D} position - The tile position that we want to have the height.
+     * @param {IPosition2D} [position] - The tile position that we want to have the height.
      * @return {string}
      * @public
      */
-    public getTileHeight(position: IPosition2D): number {
+    public getTileHeight(
+        position: IPosition2D
+    ): number {
         const tile: string = this.getTile(position);
         return tile === 'x' ? 0 : isNaN(Number(tile)) ? tile.charCodeAt(0) - 96 + 9 : Number(tile);
     }
@@ -73,11 +83,13 @@ export class RoomTileMap {
     /**
      * Return informations about the tile (if it's a stair, a door, if there is walls, ...).
      *
-     * @param {IPosition2D} position - The tile position that we want to have informations.
+     * @param {IPosition2D} [position] - The tile position that we want to have informations.
      * @return {ITileInfo}
      * @public
      */
-    public getTileInfo(position: IPosition2D): ITileInfo {
+    public getTileInfo(
+        position: IPosition2D
+    ): ITileInfo {
         return {
             tile: this.isTile(position),
             door: this.isDoor(position),
@@ -90,11 +102,13 @@ export class RoomTileMap {
     /**
      * Return walls informations about the given tile, like if it's a left wall, a corner wall, ...
      *
-     * @param {IPosition2D} position - The tile position where we want to have the wall informations.
+     * @param {IPosition2D} [position] - The tile position where we want to have the wall informations.
      * @return {WallType}
      * @private
      */
-    private _getWallType(position: IPosition2D): WallType {
+    private _getWallType(
+        position: IPosition2D
+    ): WallType {
         const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 };
         const topTile: IPosition2D = { x: position.x, y: position.y - 1 };
         const midLeftTile: IPosition2D = { x: position.x - 1, y: position.y };
@@ -111,11 +125,13 @@ export class RoomTileMap {
     /**
      * Return stairs informations about the given tile, like if it's a normal stair, a corner stair, ...
      *
-     * @param {IPosition2D} position - The tile position where we want to have the stair informations.
+     * @param {IPosition2D} [position] - The tile position where we want to have the stair informations.
      * @return {{ type: StairType, direction: Direction }}
      * @private
      */
-    private _getStairType(position: IPosition2D): { type: StairType, direction: Direction } {
+    private _getStairType(
+        position: IPosition2D
+    ): { type: StairType, direction: Direction } {
         const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 };
         const topTile: IPosition2D = { x: position.x, y: position.y - 1 };
         const topRightTile: IPosition2D = { x: position.x + 1, y: position.y - 1 };
@@ -146,34 +162,41 @@ export class RoomTileMap {
     /**
      * Calculate the height differencte between two tile position.
      *
-     * @param {IPosition2D} position1 - The tile position that we want to compare the height.
-     * @param {IPosition2D} position2 - The tile position that we want to compare the height.
+     * @param {IPosition2D} [position1] - The tile position that we want to compare the height.
+     * @param {IPosition2D} [position2] - The tile position that we want to compare the height.
      * @return {number}
      * @private
      */
-    private _getTileDifference(position1: IPosition2D, position2: IPosition2D): number {
+    private _getTileDifference(
+        position1: IPosition2D,
+        position2: IPosition2D
+    ): number {
         return Number(this.getTileHeight(position1)) - Number(this.getTileHeight(position2));
     }
 
     /**
      * Return a boolean that indicate if the tile position given refer to an existing tile.
      *
-     * @param {IPosition2D} position - The tile position that we want to see if it exist.
+     * @param {IPosition2D} [position] - The tile position that we want to see if it exist.
      * @return {boolean}
      * @public
      */
-    public isTile(position: IPosition2D): boolean {
+    public isTile(
+        position: IPosition2D
+    ): boolean {
         return this.getTile(position) !== "x";
     }
 
     /**
      * Return a boolean that indicate if the given tile is a door.
      *
-     * @param {IPosition2D} position - The tile position that we want to see if it's a door.
+     * @param {IPosition2D} [position] - The tile position that we want to see if it's a door.
      * @return {boolean}
      * @public
      */
-    public isDoor(position: IPosition2D): boolean {
+    public isDoor(
+        position: IPosition2D
+    ): boolean {
         const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 };
         const topTile: IPosition2D = { x: position.x, y: position.y - 1 };
 
@@ -206,11 +229,13 @@ export class RoomTileMap {
     /**
      * Indicate if the given tile position have a left or a right wall.
      *
-     * @param {IPosition2D} position - The given tile position that we wan't to check if it have walls.
+     * @param {IPosition2D} [position] - The given tile position that we wan't to check if it have walls.
      * @return {{ x: boolean, y: boolean }}
      * @public
      */
-    public hasWall(position: IPosition2D): { x: boolean, y: boolean } {
+    public hasWall(
+        position: IPosition2D
+    ): { x: boolean, y: boolean } {
         // TODO: Integrate it in _getWallType()
         let wallX: boolean = false;
         let wallY: boolean = false;

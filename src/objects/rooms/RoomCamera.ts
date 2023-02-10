@@ -43,7 +43,7 @@ export class RoomCamera extends Container {
     private readonly _roomContainer: Container;
 
     /**
-     * @param {Room} room - The room instance that will be managed by this camera.
+     * @param {Room} [room] - The room instance that will be managed by this camera.
      */
     constructor(
         room: Room
@@ -123,7 +123,7 @@ export class RoomCamera extends Container {
     /**
      * This method is called when the user is moving the dragged room in the canvas.
      *
-     * @param {FederatedPointerEvent} event - The mouse event.
+     * @param {FederatedPointerEvent} [event] - The mouse event.
      * @return {void}
      * @private
      */

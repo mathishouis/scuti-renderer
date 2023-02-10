@@ -90,14 +90,14 @@ export class Room extends Container {
     private _camera: RoomCamera;
 
     /**
-     * @param {Scuti} [engine] - The Scuti instance that will be used to render the room
+     * @param {Scuti} [engine] - The Scuti instance that will be used to render the room.
      * @param {IRoomConfiguration} [configuration] - The room configuration.
      * @param {string} [configuration.tilemap] - The room tile map that will be parsed.
-     * @param {string} [configuration.floorMaterial] - The room floor material that will be applied.
-     * @param {string} [configuration.floorThickness] - The room floor thickness.
-     * @param {string} [configuration.wallMaterial] - The room wall material that will be applied.
-     * @param {string} [configuration.wallHeight] - The room wall height.
-     * @param {string} [configuration.wallThickness] - The room wall thickness.
+     * @param {Material} [configuration.floorMaterial] - The room floor material that will be applied.
+     * @param {number} [configuration.floorThickness] - The room floor thickness.
+     * @param {Material} [configuration.wallMaterial] - The room wall material that will be applied.
+     * @param {number} [configuration.wallHeight] - The room wall height.
+     * @param {number} [configuration.wallThickness] - The room wall thickness.
      **/
     constructor(
         engine: Scuti,
@@ -170,7 +170,7 @@ export class Room extends Container {
     /**
      * Update the wall material and rerender the room.
      *
-     * @param {Material} material - The room wall material that will be applied.
+     * @param {Material} [material] - The room wall material that will be applied.
      * @public
      */
     public set wallMaterial(
@@ -194,7 +194,7 @@ export class Room extends Container {
     /**
      * Update the floor material and rerender the room.
      *
-     * @param {Material} material - The room floor material that will be applied.
+     * @param {Material} [material] - The room floor material that will be applied.
      * @public
      */
     public set floorMaterial(
@@ -218,7 +218,7 @@ export class Room extends Container {
     /**
      * Update the wall thickness and rerender the room.
      *
-     * @param {number} thickness - The room wall thickness that will be applied.
+     * @param {number} [thickness] - The room wall thickness that will be applied.
      * @public
      */
     public set wallThickness(
@@ -242,7 +242,7 @@ export class Room extends Container {
     /**
      * Update the floor thickness and rerender the room.
      *
-     * @param {number} thickness - The room floor thickness that will be applied.
+     * @param {number} [thickness] - The room floor thickness that will be applied.
      * @public
      */
     public set floorThickness(
@@ -266,7 +266,7 @@ export class Room extends Container {
     /**
      * Update the wall height and rerender the room.
      *
-     * @param {number} height - The room wall height that will be applied.
+     * @param {number} [height] - The room wall height that will be applied.
      * @public
      */
     public set wallHeight(

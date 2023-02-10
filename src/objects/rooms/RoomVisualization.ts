@@ -147,8 +147,8 @@ export class RoomVisualization extends Container {
     /**
      * Create a room part and add it into the visualization.
      *
-     * @param {ITileInfo} tileInfo - The tile informations where we want to create the part.
-     * @param {IPosition3D} position - And the position.
+     * @param {ITileInfo} [tileInfo] - The tile informations where we want to create the part.
+     * @param {IPosition3D} [position] - And the position.
      * @return {void}
      * @private
      */
@@ -183,7 +183,7 @@ export class RoomVisualization extends Container {
     /**
      * Destroy the current cursor and draw a new one at the new position.
      *
-     * @param {IPosition3D} position - The cursor position.
+     * @param {IPosition3D} [position] - The cursor position.
      * @return {void}
      * @private
      */
@@ -212,7 +212,7 @@ export class RoomVisualization extends Container {
     /**
      * Create a tile.
      *
-     * @param {IPosition3D} position - The tile position.
+     * @param {IPosition3D} [position] - The tile position.
      * @return {void}
      * @private
      */
@@ -234,7 +234,7 @@ export class RoomVisualization extends Container {
     /**
      * Create a door.
      *
-     * @param {IPosition3D} position - The door position.
+     * @param {IPosition3D} [position] - The door position.
      * @return {void}
      * @private
      */
@@ -253,8 +253,8 @@ export class RoomVisualization extends Container {
     /**
      * Create a wall.
      *
-     * @param {IPosition3D} position - The wall position.
-     * @param {WallType} type - The wall type.
+     * @param {IPosition3D} [position] - The wall position.
+     * @param {WallType} [type] - The wall type.
      * @return {void}
      * @private
      */
@@ -276,8 +276,8 @@ export class RoomVisualization extends Container {
     /**
      * Create stairs.
      *
-     * @param {IPosition3D} position - The stairs position.
-     * @param {StairType} type - The stairs type.
+     * @param {IPosition3D} [position] - The stairs position.
+     * @param {StairType} [type] - The stairs type.
      * @return {void}
      * @private
      */
