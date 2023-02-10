@@ -3,6 +3,8 @@ import { Direction } from "../types/Direction";
 import { WallType } from "../types/WallType";
 import { Material } from "../objects/rooms/materials/Material";
 
+export type TileMap = string[][];
+
 export interface IRoomConfiguration {
     tileMap: string,
     floorMaterial?: Material,

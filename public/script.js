@@ -171,7 +171,7 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
     const room = new Room(renderer, {
-        tileMap: tileMap2,
+        tileMap: tileMap4,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         //floorMaterial: new FloorMaterial(renderer, 307),

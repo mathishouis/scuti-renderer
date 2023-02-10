@@ -9,63 +9,85 @@ import { StairType } from "../../types/StairType";
 import { Cursor } from "./parts/Cursor";
 import { RoomObject } from "./RoomObject";
 
+/**
+ * RoomVisualization class that manage all the rendering part of the room.
+ *
+ * @class
+ * @memberof Scuti
+ */
 export class RoomVisualization extends Container {
 
     /**
-     * The room that is being rendered
+     * The room instance that will be managed by the camera.
+     *
+     * @member {Room}
      * @private
      */
     private readonly _room: Room;
 
     /**
-     * The pixi container that contain all the walls parts
+     * The container that will contains all the walls objects.
+     *
+     * @member {Container}
      * @private
      */
     private _wallLayer: Container = new Container();
 
     /**
-     * The pixi container that contain all the tiles parts
+     * The container that will contains all the tiles objects.
+     *
+     * @member {Container}
      * @private
      */
     private _tileLayer: Container = new Container();
 
     /**
-     * The pixi container that contain all the objects
+     * The container that will contains all the objects like avatars or furnitures.
+     *
+     * @member {Container}
      * @private
      */
     private _objectLayer: Container = new Container();
 
     /**
-     * List containing all the walls instances
+     * List containing all the walls instances.
+     *
+     * @member {Wall}
      * @private
      */
     private _walls: (Wall)[] = [];
 
     /**
-     * List containing all the tiles and stairs instances
+     * List containing all the tiles and stairs instances.
+     *
+     * @member {Tile | Stair}
      * @private
      */
     private _tiles: (Tile | Stair)[] = [];
 
     /**
-     * The room tile cursor
+     * The room tile cursor instance.
+     *
+     * @member {Cursor}
      * @private
      */
     private _cursor: Cursor;
 
     /**
-     * The room animation ticker
+     * The room animation ticker instance that will manage all the objects animations
+     *
+     * @member {Ticker}
      * @private
      */
     private _animationTicker: Ticker = new Ticker();
 
+    // TODO: Comment this and also add furniture interaction
     private _onTileClick: (position: IPosition3D) => void;
     private _onTileOver: (position: IPosition3D) => void;
     private _onTileOut: (position: IPosition3D) => void;
 
     /**
-     * RoomVisualization class
-     * @param room - The room instance
+     * @param {Room} [room] - The room instance that we want to visualize.
      */
     constructor(
         room: Room
@@ -73,20 +95,22 @@ export class RoomVisualization extends Container {
         super();
 
         this._room = room;
-
+        /** Add layers to the visualization */
         this.addChild(this._wallLayer);
         this.addChild(this._tileLayer);
         this.addChild(this._objectLayer);
-
+        /** Start the animation ticker */
         //this._animationTicker.maxFPS = 15.666;
         this._animationTicker.maxFPS = 4;
         this._animationTicker.start();
-
+        /** Render everything */
         this._draw();
     }
 
     /**
-     * Destroy all the parts (tiles, walls, stairs, ...)
+     * Destroy all the parts (tiles, walls, stairs, ...).
+     *
+     * @return {void}
      * @private
      */
     private _destroyParts(): void {
@@ -98,7 +122,9 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Draw the room visualization
+     * Draw the room visualization with all the tiles and walls.
+     *
+     * @return {void}
      * @private
      */
     private _draw(): void {
@@ -119,9 +145,11 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Create a room part
-     * @param tileInfo
-     * @param position
+     * Create a room part and add it into the visualization.
+     *
+     * @param {ITileInfo} tileInfo - The tile informations where we want to create the part.
+     * @param {IPosition3D} position - And the position.
+     * @return {void}
      * @private
      */
     private _createPart(
@@ -153,8 +181,10 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Destroy the current cursor and draw a new one at the new position
-     * @param position
+     * Destroy the current cursor and draw a new one at the new position.
+     *
+     * @param {IPosition3D} position - The cursor position.
+     * @return {void}
      * @private
      */
     private _createCursor(
@@ -170,6 +200,8 @@ export class RoomVisualization extends Container {
 
     /**
      * Destroy the room cursor
+     *
+     * @return {void}
      * @private
      */
     private _destroyCursor(): void {
@@ -178,8 +210,10 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Create a tile
-     * @param position
+     * Create a tile.
+     *
+     * @param {IPosition3D} position - The tile position.
+     * @return {void}
      * @private
      */
     private _createTile(
@@ -198,8 +232,10 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Create a door
-     * @param position
+     * Create a door.
+     *
+     * @param {IPosition3D} position - The door position.
+     * @return {void}
      * @private
      */
     private _createDoor(
@@ -215,9 +251,11 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Create a wall
-     * @param position
-     * @param type
+     * Create a wall.
+     *
+     * @param {IPosition3D} position - The wall position.
+     * @param {WallType} type - The wall type.
+     * @return {void}
      * @private
      */
     private _createWall(
@@ -236,9 +274,11 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Create stairs
-     * @param position
-     * @param type
+     * Create stairs.
+     *
+     * @param {IPosition3D} position - The stairs position.
+     * @param {StairType} type - The stairs type.
+     * @return {void}
      * @private
      */
     private _createStair(
@@ -256,33 +296,50 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Return the room
+     * Reference to the room visualization room instance.
+     *
+     * @member {Room}
+     * @readonly
+     * @public
      */
     public get room(): Room {
         return this._room;
     }
 
     /**
-     * Return the tile layer
+     * Reference to the tile layer container.
+     *
+     * @member {Container}
+     * @readonly
+     * @public
      */
     public get tileLayer(): Container {
         return this._tileLayer;
     }
 
     /**
-     * Return the wall layer
+     * Reference to the wall layer container.
+     *
+     * @member {Container}
+     * @readonly
+     * @public
      */
     public get wallLayer(): Container {
         return this._wallLayer;
     }
 
     /**
-     * Return the object layer
+     * Reference to the object layer container.
+     *
+     * @member {Container}
+     * @readonly
+     * @public
      */
     public get objectLayer(): Container {
         return this._objectLayer;
     }
 
+    // TODO: Comment this part
     /**
      * Get the onTileClick event
      */
@@ -335,12 +392,17 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Return the room animation ticker
+     * Reference to the room animation ticker instance.
+     *
+     * @member {Ticker}
+     * @readonly
+     * @public
      */
     public get animationTicker(): Ticker {
         return this._animationTicker;
     }
 
+    // TODO: Replace this methods with one like room.objects.add
     /**
      * Add a room object in the object layer
      * @param object
