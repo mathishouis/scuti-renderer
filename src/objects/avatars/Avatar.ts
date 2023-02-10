@@ -1,5 +1,5 @@
 import {RoomObject} from "../rooms/RoomObject";
-import {FloorPosition} from "../../interfaces/Furniture.interface";
+import {IFloorPosition} from "../../interfaces/Furniture.interface";
 import {Direction} from "../../types/Direction";
 import {AvatarAction} from "./actions/AvatarAction";
 import {
@@ -19,7 +19,7 @@ export class Avatar extends RoomObject {
 
     private _figure: AvatarFigure;
 
-    private _position: FloorPosition;
+    private _position: IFloorPosition;
 
     private _bodyDirection: Direction;
 
@@ -114,11 +114,11 @@ export class Avatar extends RoomObject {
         }
     }
 
-    public get pos(): FloorPosition {
+    public get pos(): IFloorPosition {
         return this._position;
     }
 
-    public set pos(position: FloorPosition) {
+    public set pos(position: IFloorPosition) {
         gsap.to(this, {
             x: 32 * position.x - 32 * position.y, y: 16 * position.x + 16 * position.y - 32 * position.z, duration: 0.5, ease: "linear", onComplete: () => {
                 this._position = position;

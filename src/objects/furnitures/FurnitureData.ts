@@ -1,5 +1,5 @@
 import { Assets} from "pixi.js";
-import { FurnitureData } from "../../interfaces/Furniture.interface";
+import { IFurnitureData } from "../../interfaces/Furniture.interface";
 import { FloorFurniture } from "./FloorFurniture";
 import {WallFurniture} from "./WallFurniture";
 

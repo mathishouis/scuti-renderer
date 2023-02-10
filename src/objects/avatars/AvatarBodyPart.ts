@@ -130,7 +130,6 @@ export class AvatarBodyPart {
                 }
             });
         });
-
         this._draw();
     }
 

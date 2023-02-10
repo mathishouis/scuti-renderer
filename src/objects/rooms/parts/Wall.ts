@@ -1,5 +1,5 @@
 import { Room } from "../Room";
-import { Position, Position2D, WallConfiguration } from "../../../interfaces/Room.interface";
+import { IPosition3D, IPosition2D, IWallConfiguration } from "../../../interfaces/Room.interface";
 import { Container, Graphics, Matrix, Texture, utils } from "pixi.js";
 import { Material } from "../materials/Material";
 import { WallType } from "../../../types/WallType";
@@ -35,7 +35,7 @@ export class Wall extends Container {
      * The wall position
      * @private
      */
-    private _position: Position;
+    private _position: IPosition3D;
 
     /**
      * The wall type
@@ -50,7 +50,7 @@ export class Wall extends Container {
      */
     constructor(
         room: Room,
-        configuration: WallConfiguration
+        configuration: IWallConfiguration
     ) {
         super();
 
@@ -154,7 +154,7 @@ export class Wall extends Container {
      * @param points
      * @private
      */
-    private _drawWall(points: Position2D[]): void {
+    private _drawWall(points: IPosition2D[]): void {
         const top: Graphics = new Graphics()
             .beginTextureFill({
                 texture: Texture.WHITE,

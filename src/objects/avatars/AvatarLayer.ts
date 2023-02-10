@@ -1,6 +1,6 @@
 import {Avatar} from "./Avatar";
 import {
-    AvatarLayerConfiguration,
+    IAvatarLayerConfiguration,
     IAvatarPart,
     IActionDefinition
 } from "../../interfaces/Avatar.interface";
@@ -45,7 +45,7 @@ export class AvatarLayer extends Container {
 
     constructor(
         avatar: Avatar,
-        configuration: AvatarLayerConfiguration
+        configuration: IAvatarLayerConfiguration
     ) {
         super();
 

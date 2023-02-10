@@ -1,5 +1,5 @@
 import { Room } from "../Room";
-import { Position, Position2D, StairConfiguration } from "../../../interfaces/Room.interface";
+import { IPosition3D, IPosition2D, IStairConfiguration } from "../../../interfaces/Room.interface";
 import { Container, Graphics, Matrix, Texture, utils } from "pixi.js";
 import { Material } from "../materials/Material";
 import { StairType } from "../../../types/StairType";
@@ -30,7 +30,7 @@ export class Stair extends Container {
      * The stair position
      * @private
      */
-    private _position: Position;
+    private _position: IPosition3D;
 
     /**
      * The stair type
@@ -45,7 +45,7 @@ export class Stair extends Container {
      */
     constructor(
         room: Room,
-        configuration: StairConfiguration
+        configuration: IStairConfiguration
     ) {
         super();
 
@@ -254,8 +254,8 @@ export class Stair extends Container {
      * @private
      */
     private _drawStair(
-        points: Position2D[],
-        offsets: Position2D[]
+        points: IPosition2D[],
+        offsets: IPosition2D[]
     ): void {
         for (let i: number = 0; i < 4; i++) {
             const step: Container = new Container();
@@ -317,9 +317,9 @@ export class Stair extends Container {
      * @private
      */
     private _drawCornerStair(
-        points: Position2D[],
-        pointsOffsets: Position2D[],
-        offsets: Position2D[]
+        points: IPosition2D[],
+        pointsOffsets: IPosition2D[],
+        offsets: IPosition2D[]
     ): void {
         for (let i: number = 0; i < 3; i++) {
             const step: Container = new Container();

@@ -1,9 +1,9 @@
-import {StairType} from "../types/StairType";
-import {Direction} from "../types/Direction";
-import {WallType} from "../types/WallType";
-import {Material} from "../objects/rooms/materials/Material";
+import { StairType } from "../types/StairType";
+import { Direction } from "../types/Direction";
+import { WallType } from "../types/WallType";
+import { Material } from "../objects/rooms/materials/Material";
 
-export interface RoomConfiguration {
+export interface IRoomConfiguration {
     tileMap: string,
     floorMaterial?: Material,
     floorThickness?: number,
@@ -12,46 +12,45 @@ export interface RoomConfiguration {
     wallThickness?: number
 }
 
-export interface TileConfiguration {
+export interface ITileConfiguration {
     material?: Material,
     thickness?: number,
-    position: Position
+    position: IPosition3D
 }
 
-// TODO: Replace with FloorConfiguration?
-export interface StairConfiguration {
+export interface IStairConfiguration {
     material?: Material,
     thickness?: number,
     type: StairType,
-    position: Position
+    position: IPosition3D
 }
 
-export interface WallConfiguration {
+export interface IWallConfiguration {
     material?: Material,
     thickness?: number,
     height?: number,
-    position: Position,
+    position: IPosition3D,
     type: WallType,
     door?: boolean,
 }
 
-export interface CursorConfiguration {
-    position: Position
+export interface ICursorConfiguration {
+    position: IPosition3D
 }
 
-export interface Position {
+export interface IPosition3D {
     x: number,
     y: number,
     z: number,
     direction?: number
 }
 
-export interface Position2D {
+export interface IPosition2D {
     x: number,
     y: number
 }
 
-export interface TileInfo {
+export interface ITileInfo {
     tile: boolean,
     door: boolean,
     height: number,

@@ -1,6 +1,6 @@
 import {Assets, Container, Sprite, Texture} from "pixi.js";
 import {Room} from "../Room";
-import {CursorConfiguration, Position} from "../../../interfaces/Room.interface";
+import {ICursorConfiguration, IPosition3D} from "../../../interfaces/Room.interface";
 
 export class Cursor extends Container {
 
@@ -14,7 +14,7 @@ export class Cursor extends Container {
      * The cursor position
      * @private
      */
-    private _position: Position;
+    private _position: IPosition3D;
 
     /**
      *
@@ -23,7 +23,7 @@ export class Cursor extends Container {
      */
     constructor(
         room: Room,
-        configuration: CursorConfiguration
+        configuration: ICursorConfiguration
     ) {
         super();
 

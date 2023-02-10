@@ -1,6 +1,6 @@
 import { Assets, BLEND_MODES, Container, utils } from "pixi.js";
 import { FloorFurniture } from "./FloorFurniture";
-import { FurnitureFrameId, FurnitureLayerConfiguration, FurnitureLayerId } from "../../interfaces/Furniture.interface";
+import { FurnitureFrameId, IFurnitureLayerConfiguration, FurnitureLayerId } from "../../interfaces/Furniture.interface";
 import { HitSprite } from "../interactions/HitSprite";
 import {WallFurniture} from "./WallFurniture";
 import {Direction} from "../../types/Direction";
@@ -71,7 +71,7 @@ export class FurnitureLayer extends Container {
      */
     constructor(
         furniture: FloorFurniture | WallFurniture,
-        configuration: FurnitureLayerConfiguration
+        configuration: IFurnitureLayerConfiguration
     ) {
         super();
 

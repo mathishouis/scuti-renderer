@@ -1,6 +1,6 @@
 import { Scuti } from "../../Scuti";
 import { Container } from "pixi.js";
-import { RoomConfiguration } from "../../interfaces/Room.interface";
+import { IRoomConfiguration } from "../../interfaces/Room.interface";
 import { RoomVisualization } from "./RoomVisualization";
 import { RoomTileMap } from "./RoomTileMap";
 import { Material } from "./materials/Material";
@@ -72,7 +72,7 @@ export class Room extends Container {
      */
     constructor(
         engine: Scuti,
-        configuration: RoomConfiguration
+        configuration: IRoomConfiguration
     ) {
         super();
 

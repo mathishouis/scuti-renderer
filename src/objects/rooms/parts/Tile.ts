@@ -1,5 +1,5 @@
 import { Room } from "../Room";
-import { Position, TileConfiguration } from "../../../interfaces/Room.interface";
+import { IPosition3D, ITileConfiguration } from "../../../interfaces/Room.interface";
 import { Container, Graphics, Matrix, utils } from "pixi.js";
 import { Material } from "../materials/Material";
 import { FloorMaterial } from "../materials/FloorMaterial";
@@ -28,13 +28,13 @@ export class Tile extends Container {
      * The tile position
      * @private
      */
-    private _position: Position;
+    private _position: IPosition3D;
 
-    private _onClick: (position: Position) => void;
+    private _onClick: (position: IPosition3D) => void;
 
-    private _onOver: (position: Position) => void;
+    private _onOver: (position: IPosition3D) => void;
 
-    private _onOut: (position: Position) => void;
+    private _onOut: (position: IPosition3D) => void;
 
     /**
      * Tile class
@@ -43,7 +43,7 @@ export class Tile extends Container {
      */
     constructor(
         room: Room,
-        configuration: TileConfiguration
+        configuration: ITileConfiguration
     ) {
         super();
 
@@ -141,15 +141,15 @@ export class Tile extends Container {
         this._draw(); // We rerender the tile to apply the changes
     }
 
-    public set onClick(event: (position: Position) => void) {
+    public set onClick(event: (position: IPosition3D) => void) {
         this._onClick = event;
     }
 
-    public set onOver(event: (position: Position) => void) {
+    public set onOver(event: (position: IPosition3D) => void) {
         this._onOver = event;
     }
 
-    public set onOut(event: (position: Position) => void) {
+    public set onOut(event: (position: IPosition3D) => void) {
         this._onOut = event;
     }
 }

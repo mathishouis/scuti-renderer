@@ -1,6 +1,6 @@
 import { Room } from "./Room";
 import { Container, Ticker } from "pixi.js";
-import { Position, TileInfo } from "../../interfaces/Room.interface";
+import { IPosition3D, ITileInfo } from "../../interfaces/Room.interface";
 import { Tile } from "./parts/Tile";
 import { Wall } from "./parts/Wall";
 import { Stair } from "./parts/Stair";
@@ -59,9 +59,9 @@ export class RoomVisualization extends Container {
      */
     private _animationTicker: Ticker = new Ticker();
 
-    private _onTileClick: (position: Position) => void;
-    private _onTileOver: (position: Position) => void;
-    private _onTileOut: (position: Position) => void;
+    private _onTileClick: (position: IPosition3D) => void;
+    private _onTileOver: (position: IPosition3D) => void;
+    private _onTileOut: (position: IPosition3D) => void;
 
     /**
      * RoomVisualization class
@@ -105,7 +105,7 @@ export class RoomVisualization extends Container {
         this._destroyParts();
         for (let y = 0; y < this._room.tileMap.tileMap.length; y++) {
             for (let x = 0; x < this._room.tileMap.tileMap[y].length; x++) {
-                const tileInfo: TileInfo = this._room.tileMap.getTileInfo({
+                const tileInfo: ITileInfo = this._room.tileMap.getTileInfo({
                     x: x,
                     y: y
                 });
@@ -125,8 +125,8 @@ export class RoomVisualization extends Container {
      * @private
      */
     private _createPart(
-        tileInfo: TileInfo,
-        position: Position
+        tileInfo: ITileInfo,
+        position: IPosition3D
     ): void {
         if(tileInfo.wallType !== null || tileInfo.door) {
             if(tileInfo.wallType === WallType.CORNER_WALL && !this._room.tileMap.hasWall(position).x && !this._room.tileMap.hasWall(position).y) {
@@ -158,7 +158,7 @@ export class RoomVisualization extends Container {
      * @private
      */
     private _createCursor(
-        position: Position
+        position: IPosition3D
     ): void {
         this._destroyCursor();
         const cursor = new Cursor(this._room, {
@@ -183,7 +183,7 @@ export class RoomVisualization extends Container {
      * @private
      */
     private _createTile(
-        position: Position
+        position: IPosition3D
     ): void {
         const tile = new Tile(this._room, {
             position: position,
@@ -203,7 +203,7 @@ export class RoomVisualization extends Container {
      * @private
      */
     private _createDoor(
-        position: Position
+        position: IPosition3D
     ): void {
         const tile = new Tile(this._room, {
             position: position,
@@ -221,7 +221,7 @@ export class RoomVisualization extends Container {
      * @private
      */
     private _createWall(
-        position: Position,
+        position: IPosition3D,
         type: WallType
     ): void {
         const wall = new Wall(this._room, {
@@ -242,7 +242,7 @@ export class RoomVisualization extends Container {
      * @private
      */
     private _createStair(
-        position: Position,
+        position: IPosition3D,
         type: StairType
     ): void {
         const stair = new Stair(this._room, {
@@ -286,7 +286,7 @@ export class RoomVisualization extends Container {
     /**
      * Get the onTileClick event
      */
-    public get onTileClick(): (position: Position) => void {
+    public get onTileClick(): (position: IPosition3D) => void {
         return this._onTileClick;
     }
 
@@ -295,7 +295,7 @@ export class RoomVisualization extends Container {
      * @param event
      */
     public set onTileClick(
-        event: (position: Position) => void
+        event: (position: IPosition3D) => void
     ) {
         this._onTileClick = event;
     }
@@ -303,7 +303,7 @@ export class RoomVisualization extends Container {
     /**
      * Get the onTileOver event
      */
-    public get onTileOver(): (position: Position) => void {
+    public get onTileOver(): (position: IPosition3D) => void {
         return this._onTileOver;
     }
 
@@ -312,7 +312,7 @@ export class RoomVisualization extends Container {
      * @param event
      */
     public set onTileOver(
-        event: (position: Position) => void
+        event: (position: IPosition3D) => void
     ) {
         this._onTileOver = event;
     }
@@ -320,7 +320,7 @@ export class RoomVisualization extends Container {
     /**
      * Get the onTileOut event
      */
-    public get onTileOut(): (position: Position) => void {
+    public get onTileOut(): (position: IPosition3D) => void {
         return this._onTileOut;
     }
 
@@ -329,7 +329,7 @@ export class RoomVisualization extends Container {
      * @param event
      */
     public set onTileOut(
-        event: (position: Position) => void
+        event: (position: IPosition3D) => void
     ) {
         this._onTileOut = event;
     }

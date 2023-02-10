@@ -1,9 +1,9 @@
 import { Assets, BLEND_MODES, Sprite, Spritesheet } from "pixi.js";
 import {
-    FloorFurnitureConfiguration,
-    FloorPosition, FurnitureFrameId,
+    IFloorFurnitureConfiguration,
+    IFloorPosition, FurnitureFrameId,
     FurnitureLayerId,
-    FurnitureVisualization
+    IFurnitureVisualization
 } from "../../interfaces/Furniture.interface";
 import { Direction } from "../../types/Direction";
 import { FurnitureData } from "./FurnitureData";
@@ -23,7 +23,7 @@ export class FloorFurniture extends RoomObject {
      * The furniture position
      * @private
      */
-    private _position: FloorPosition;
+    private _position: IFloorPosition;
 
     /**
      * The furniture direction
@@ -54,7 +54,7 @@ export class FloorFurniture extends RoomObject {
      * @param configuration = The furniture configuration
      */
     constructor(
-        configuration: FloorFurnitureConfiguration
+        configuration: IFloorFurnitureConfiguration
     ) {
         super();
 
@@ -77,7 +77,7 @@ export class FloorFurniture extends RoomObject {
         this._destroyParts();
         this._createShadow();
         const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
-        const visualization: FurnitureVisualization = spritesheet.data["furniProperty"].visualization;
+        const visualization: IFurnitureVisualization = spritesheet.data["furniProperty"].visualization;
 
         for (let i: number = 0; i < visualization.layerCount; i++) {
             this._createLayer(i);
@@ -96,7 +96,7 @@ export class FloorFurniture extends RoomObject {
         layer: FurnitureLayerId
     ): void {
         const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
-        const visualization: FurnitureVisualization = spritesheet.data["furniProperty"].visualization;
+        const visualization: IFurnitureVisualization = spritesheet.data["furniProperty"].visualization;
 
         let alpha: number = 1;
         let tint: number;
@@ -157,7 +157,7 @@ export class FloorFurniture extends RoomObject {
     private _updateFrame(): void {
         this._frames.forEach((frame: FurnitureFrameId, layer: FurnitureLayerId) => {
             const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
-            const visualization: FurnitureVisualization = spritesheet.data["furniProperty"].visualization;
+            const visualization: IFurnitureVisualization = spritesheet.data["furniProperty"].visualization;
 
             if(visualization.animation[String(this._state)] !== undefined && visualization.animation[String(this._state)][layer] !== undefined) {
                 const frameSequence: number[] = visualization.animation[String(this._state)][layer].frameSequence;
@@ -248,7 +248,7 @@ export class FloorFurniture extends RoomObject {
     /**
      * Get the furniture position
      */
-    public get pos(): FloorPosition {
+    public get pos(): IFloorPosition {
         return this._position;
     }
 
@@ -256,7 +256,7 @@ export class FloorFurniture extends RoomObject {
      * Update the furniture position
      * @param position
      */
-    public set pos(position: FloorPosition) {
+    public set pos(position: IFloorPosition) {
         gsap.to(this, {
             x: 32 + 32 * position.x - 32 * position.y, y: 16 * position.x + 16 * position.y - 32 * position.z, duration: 0.5, ease: "linear", onComplete: () => {
                 this._position = position;

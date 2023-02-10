@@ -1,5 +1,5 @@
 import {Application, Assets, BaseTexture, Container, MIPMAP_MODES, SCALE_MODES, settings} from "pixi.js";
-import {RendererConfiguration} from "./interfaces/Configuration.interface";
+import {IRendererConfiguration} from "./interfaces/Configuration.interface";
 import {Logger} from "./utilities/Logger";
 import {PixiPlugin} from "gsap/PixiPlugin";
 import {gsap} from "gsap";
@@ -29,7 +29,7 @@ export class Scuti {
      * @param configuration - The game engine configuration.
      */
     constructor(
-        private configuration: RendererConfiguration
+        private configuration: IRendererConfiguration
     ) {
         this._logger.info("⚡ Scuti Renderer - v1.0.0");
         settings.RESOLUTION = 1;
