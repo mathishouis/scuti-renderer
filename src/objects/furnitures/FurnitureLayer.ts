@@ -3,7 +3,7 @@ import { FloorFurniture } from "./FloorFurniture";
 import { FurnitureFrameId, IFurnitureLayerConfiguration, FurnitureLayerId } from "../../interfaces/Furniture.interface";
 import { HitSprite } from "../interactions/HitSprite";
 import {WallFurniture} from "./WallFurniture";
-import {Direction} from "../../types/Direction";
+import {Direction} from "../../enums/Direction";
 
 export class FurnitureLayer extends Container {
 

@@ -6,7 +6,7 @@ import {
     IWallFurnitureConfiguration,
     WallPosition
 } from "../../interfaces/Furniture.interface";
-import { Direction } from "../../types/Direction";
+import { Direction } from "../../enums/Direction";
 import { FurnitureData } from "./FurnitureData";
 import { FurnitureLayer } from "./FurnitureLayer";
 import { RoomObject } from "../rooms/RoomObject";

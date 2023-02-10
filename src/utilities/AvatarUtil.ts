@@ -2,6 +2,8 @@ import {AvatarFigure, IAvatarPart, IActionDefinition} from "../interfaces/Avatar
 import {Assets} from "pixi.js";
 import {AvatarAction} from "../objects/avatars/actions/AvatarAction";
 
+// TODO: Move all this class directly into Avatar class
+
 export class AvatarUtil {
 
     public static parseFigure(figure: string): AvatarFigure {

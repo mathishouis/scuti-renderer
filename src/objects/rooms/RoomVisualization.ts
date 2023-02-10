@@ -4,8 +4,8 @@ import { IPosition3D, ITileInfo } from "../../interfaces/Room.interface";
 import { Tile } from "./parts/Tile";
 import { Wall } from "./parts/Wall";
 import { Stair } from "./parts/Stair";
-import { WallType } from "../../types/WallType";
-import { StairType } from "../../types/StairType";
+import { WallType } from "../../enums/WallType";
+import { StairType } from "../../enums/StairType";
 import { Cursor } from "./parts/Cursor";
 import { RoomObject } from "./RoomObject";
 

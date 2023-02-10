@@ -1,4 +1,4 @@
-import { Direction } from "../types/Direction";
+import { Direction } from "../enums/Direction";
 import { IFloorPosition } from "./Furniture.interface";
 import { AvatarAction } from "../objects/avatars/actions/AvatarAction";
 

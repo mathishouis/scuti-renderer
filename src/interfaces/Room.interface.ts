@@ -1,6 +1,6 @@
-import { StairType } from "../types/StairType";
-import { Direction } from "../types/Direction";
-import { WallType } from "../types/WallType";
+import { StairType } from "../enums/StairType";
+import { Direction } from "../enums/Direction";
+import { WallType } from "../enums/WallType";
 import { Material } from "../objects/rooms/materials/Material";
 
 export type TileMap = string[][];

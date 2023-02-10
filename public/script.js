@@ -7,7 +7,7 @@ import {WallFurniture} from "../src/objects/furnitures/WallFurniture";
 import {random} from "gsap/gsap-core";
 import {Avatar} from "../src/objects/avatars/Avatar";
 import {IFloorPosition} from "../src/interfaces/Furniture.interface";
-import {Direction} from "../src/types/Direction";
+import {Direction} from "../src/enums/Direction";
 import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
 
 (async ()=>{

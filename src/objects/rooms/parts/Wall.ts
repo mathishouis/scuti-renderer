@@ -2,7 +2,7 @@ import { Room } from "../Room";
 import { IPosition3D, IPosition2D, IWallConfiguration } from "../../../interfaces/Room.interface";
 import { Container, Graphics, Matrix, Texture, utils } from "pixi.js";
 import { Material } from "../materials/Material";
-import { WallType } from "../../../types/WallType";
+import { WallType } from "../../../enums/WallType";
 import { WallMaterial } from "../materials/WallMaterial";
 
 /**

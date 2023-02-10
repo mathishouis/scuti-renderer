@@ -1,4 +1,4 @@
-import { Direction } from "../types/Direction";
+import { Direction } from "../enums/Direction";
 import { BLEND_MODES } from "pixi.js";
 
 export interface IFloorPosition {

@@ -6,7 +6,7 @@ import {
 } from "../../interfaces/Avatar.interface";
 import {AvatarAction} from "./actions/AvatarAction";
 import {Assets, Spritesheet} from "pixi.js";
-import {Direction} from "../../types/Direction";
+import {Direction} from "../../enums/Direction";
 import {AvatarLayer} from "./AvatarLayer";
 import {AvatarUtil} from "../../utilities/AvatarUtil";
 import {Avatar} from "./Avatar";

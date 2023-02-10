@@ -7,7 +7,7 @@ import {
 import {AnimatedSprite, Assets, BLEND_MODES, Container, utils} from "pixi.js";
 import {HitSprite} from "../interactions/HitSprite";
 import {AvatarAction} from "./actions/AvatarAction";
-import {Direction} from "../../types/Direction";
+import {Direction} from "../../enums/Direction";
 import {AvatarUtil} from "../../utilities/AvatarUtil";
 
 export class AvatarLayer extends Container {

@@ -1,7 +1,7 @@
 import { IPosition2D, ITileInfo, TileMap } from "../../interfaces/Room.interface";
-import { WallType } from "../../types/WallType";
-import { StairType } from "../../types/StairType";
-import { Direction } from "../../types/Direction";
+import { WallType } from "../../enums/WallType";
+import { StairType } from "../../enums/StairType";
+import { Direction } from "../../enums/Direction";
 
 /**
  * RoomTileMap class that manage all the things about the room model.

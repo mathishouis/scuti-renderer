@@ -2,8 +2,8 @@ import { Room } from "../Room";
 import { IPosition3D, IPosition2D, IStairConfiguration } from "../../../interfaces/Room.interface";
 import { Container, Graphics, Matrix, utils } from "pixi.js";
 import { Material } from "../materials/Material";
-import { StairType } from "../../../types/StairType";
-import { Direction } from "../../../types/Direction";
+import { StairType } from "../../../enums/StairType";
+import { Direction } from "../../../enums/Direction";
 import { FloorMaterial } from "../materials/FloorMaterial";
 
 /**
