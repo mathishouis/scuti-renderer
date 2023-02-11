@@ -167,14 +167,49 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         "xxxxxxxxxxxxxxxx111111111111111111\n" +
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
+    const tileMap5 = "xxxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
+        "x2222xx1111111111xx11111111\n" +
+        "x2222xx1111111111xx11111111\n" +
+        "222222111111111111111111111\n" +
+        "x22222111111111111111111111\n" +
+        "x22222111111111111111111111\n" +
+        "x22222111111111111111111111\n" +
+        "x2222xx1111111111xx11111111\n" +
+        "x2222xx1111111111xx11111111\n" +
+        "x2222xx1111111111xxxx1111xx\n" +
+        "x2222xx1111111111xxxx0000xx\n" +
+        "xxxxxxx1111111111xx00000000\n" +
+        "xxxxxxx1111111111xx00000000\n" +
+        "x22222111111111111000000000\n" +
+        "x22222111111111111000000000\n" +
+        "x22222111111111111000000000\n" +
+        "x22222111111111111000000000\n" +
+        "x2222xx1111111111xx00000000\n" +
+        "x2222xx1111111111xx00000000\n" +
+        "x2222xxxx1111xxxxxxxxxxxxxx\n" +
+        "x2222xxxx0000xxxxxxxxxxxxxx\n" +
+        "x2222x0000000000xxxxxxxxxxx\n" +
+        "x2222x0000000000xxxxxxxxxxx\n" +
+        "x2222x0000000000xxxxxxxxxxx\n" +
+        "x2222x0000000000xxxxxxxxxxx\n" +
+        "x2222x0000000000xxxxxxxxxxx\n" +
+        "x2222x0000000000xxxxxxxxxxx"
+
     const room = new Room(renderer, {
-        tileMap: tileMap4,
+        tileMap: tileMap5,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         //floorMaterial: new FloorMaterial(renderer, 307),
         floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1601)
     });
+    setTimeout(() => {
+        room.wallMaterial = new WallMaterial(renderer, 1701);
+        room.floorMaterial = new FloorMaterial(renderer, 301);
+        room.wallThickness = 32;
+        room.floorThickness = 8;
+        room.wallHeight = 0;
+    }, 5000);
     const furniture = new FloorFurniture({
         id: 1619,
         position: {

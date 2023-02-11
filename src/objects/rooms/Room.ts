@@ -177,7 +177,7 @@ export class Room extends Container {
         material: Material
     ) {
         this._wallMaterial = material;
-        // TODO: Rerender room visualization
+        this._visualization.update();
     }
 
     /**
@@ -201,7 +201,7 @@ export class Room extends Container {
         material: Material
     ) {
         this._floorMaterial = material;
-        // TODO: Rerender room visualization
+        this._visualization.update();
     }
 
     /**
@@ -225,7 +225,7 @@ export class Room extends Container {
         thickness: number
     ) {
         this._wallThickness = thickness;
-        // TODO: Rerender room visualization
+        this._visualization.update();
     }
 
     /**
@@ -249,7 +249,7 @@ export class Room extends Container {
         thickness: number
     ) {
         this._floorThickness = thickness;
-        // TODO: Rerender room visualization
+        this._visualization.update();
     }
 
     /**
@@ -273,6 +273,7 @@ export class Room extends Container {
         height: number
     ) {
         this._wallHeight = height;
+        this._visualization.update();
     }
 
     /**

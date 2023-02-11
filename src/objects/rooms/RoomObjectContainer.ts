@@ -54,7 +54,6 @@ export class RoomObjectContainer extends Container {
     ): void {
         object.stopAnimation();
         this.removeChild(object);
-        object.destroy();
     }
 
 }

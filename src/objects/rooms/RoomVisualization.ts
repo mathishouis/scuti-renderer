@@ -146,6 +146,16 @@ export class RoomVisualization extends Container {
     }
 
     /**
+     * Rerender all the room visualization.
+     *
+     * @return {void}
+     * @private
+     */
+    public update(): void {
+        this._draw();
+    }
+
+    /**
      * Create a room part and add it into the visualization.
      *
      * @param {ITileInfo} [tileInfo] - The tile informations where we want to create the part.
