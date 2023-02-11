@@ -81,17 +81,31 @@ export class Avatar extends RoomObject {
     private _createHandItem(
         item: number
     ): void {
-        const handItemId: number = this._actionManager.getActionDefinition(AvatarAction.CarryItem).params[String(item)];
-        this.addChild(new AvatarLayer(this, {
-            type: "ri",
-            part: { id: handItemId, lib: { id: "hh_human_item" }},
-            gesture: "crr",
-            tint: undefined,
-            z: 1000,
-            flip: true,
-            direction: this._bodyDirection,
-            frame: 0
-        }));
+        const handItemCarryId: number = this._actionManager.getActionDefinition(AvatarAction.CarryItem).params[String(item)];
+        const handItemUseId: number = this._actionManager.getActionDefinition(AvatarAction.UseItem).params[String(item)];
+        if(this._actions.includes(AvatarAction.UseItem) && handItemUseId !== undefined) {
+            this.addChild(new AvatarLayer(this, {
+                type: "ri",
+                part: { id: handItemUseId, lib: { id: "hh_human_item" }},
+                gesture: "drk",
+                tint: undefined,
+                z: 1000,
+                flip: true,
+                direction: this._bodyDirection,
+                frame: 0
+            }));
+        } else if(this._actions.includes(AvatarAction.CarryItem) && handItemCarryId !== undefined) {
+            this.addChild(new AvatarLayer(this, {
+                type: "ri",
+                part: { id: handItemCarryId, lib: { id: "hh_human_item" }},
+                gesture: "crr",
+                tint: undefined,
+                z: 1000,
+                flip: true,
+                direction: this._bodyDirection,
+                frame: 0
+            }));
+        }
     }
 
     private _createPlaceholder(): void {

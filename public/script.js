@@ -235,8 +235,8 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
             y: 4,
             z: 0
         },
-        bodyDirection: 7,
-        headDirection: 7,
+        bodyDirection: 2,
+        headDirection: 2,
         actions: [
             //AvatarAction.Idle,
             //AvatarAction.Walk,
@@ -245,7 +245,7 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
             AvatarAction.Walk,
             AvatarAction.CarryItem,
         ],
-        handItem: 63
+        handItem: 55
     });
 
     let hd = [180, 185, 190, 195, 200, 205];
