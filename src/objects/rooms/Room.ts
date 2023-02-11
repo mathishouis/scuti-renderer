@@ -8,6 +8,7 @@ import { WallMaterial } from "./materials/WallMaterial";
 import { FloorMaterial } from "./materials/FloorMaterial";
 import { RoomCamera } from "./RoomCamera";
 import { RoomObject } from "./RoomObject";
+import {RoomObjectContainer} from "./RoomObjectContainer";
 
 /**
  * Room class for rendering rooms like the ones on Habbo Hotel.
@@ -275,15 +276,15 @@ export class Room extends Container {
         this._wallHeight = height;
     }
 
-    // TODO: Replace this methods with one like room.objects.add
     /**
-     * Add a room object to the room
-     * @param object
+     * Reference to the object layer container.
+     *
+     * @member {RoomObjectContainer}
+     * @readonly
+     * @public
      */
-    public addRoomObject(
-        object: RoomObject
-    ) {
-        this._visualization.addRoomObject(object);
+    public get objects(): RoomObjectContainer {
+        return this._visualization.objectLayer;
     }
 
 }

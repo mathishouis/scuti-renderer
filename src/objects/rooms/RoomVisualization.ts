@@ -7,7 +7,7 @@ import { Stair } from "./parts/Stair";
 import { WallType } from "../../enums/WallType";
 import { StairType } from "../../enums/StairType";
 import { Cursor } from "./parts/Cursor";
-import { RoomObject } from "./RoomObject";
+import {RoomObjectContainer} from "./RoomObjectContainer";
 
 /**
  * RoomVisualization class that manage all the rendering part of the room.
@@ -44,10 +44,10 @@ export class RoomVisualization extends Container {
     /**
      * The container that will contains all the objects like avatars or furnitures.
      *
-     * @member {Container}
+     * @member {RoomObjectContainer}
      * @private
      */
-    private _objectLayer: Container = new Container();
+    private _objectLayer: RoomObjectContainer;
 
     /**
      * List containing all the walls instances.
@@ -95,6 +95,7 @@ export class RoomVisualization extends Container {
         super();
 
         this._room = room;
+        this._objectLayer = new RoomObjectContainer(this._room);
         /** Add layers to the visualization */
         this.addChild(this._wallLayer);
         this.addChild(this._tileLayer);
@@ -331,11 +332,11 @@ export class RoomVisualization extends Container {
     /**
      * Reference to the object layer container.
      *
-     * @member {Container}
+     * @member {RoomObjectContainer}
      * @readonly
      * @public
      */
-    public get objectLayer(): Container {
+    public get objectLayer(): RoomObjectContainer {
         return this._objectLayer;
     }
 
@@ -400,19 +401,6 @@ export class RoomVisualization extends Container {
      */
     public get animationTicker(): Ticker {
         return this._animationTicker;
-    }
-
-    // TODO: Replace this methods with one like room.objects.add
-    /**
-     * Add a room object in the object layer
-     * @param object
-     */
-    public addRoomObject(
-        object: RoomObject
-    ) {
-        object.room = this._room;
-        object.startAnimation();
-        this._objectLayer.addChild(object);
     }
 
 }
