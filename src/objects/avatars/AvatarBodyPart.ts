@@ -80,7 +80,7 @@ export class AvatarBodyPart {
             }
 
             let tempDirection: number = direction;
-            if([4, 5, 6, 7].includes(tempDirection)) tempDirection = 6 - tempDirection;
+            if([4, 5, 6].includes(tempDirection)) tempDirection = 6 - tempDirection;
 
             // If the texture don't exist we reinitalise the gesture and the final action
             if(spritesheet.textures[part.lib.id + "_h_" + gesture + "_" + type + "_" + part.id + "_" + tempDirection + "_" + frame] === undefined) {
@@ -119,7 +119,8 @@ export class AvatarBodyPart {
 
     private _getDrawOrder(type: string, action: string, direction: number) {
         const drawOrder: [] = Assets.get("figures/draworder");
-        return Number(Object.entries(drawOrder[drawOrder[action] !== undefined ? action : "std"][direction]).find(entry => entry[1] === type)[0]);
+        const drawOrderList: [string, any] = Object.entries(drawOrder[drawOrder[action] !== undefined ? action : "std"][direction]).find(entry => entry[1] === type);
+        return drawOrderList !== undefined ? Number(drawOrderList[0]) : 0;
     }
 
     public updateParts(): void {
