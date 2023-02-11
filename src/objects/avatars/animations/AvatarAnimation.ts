@@ -12,4 +12,8 @@ export class AvatarAnimation {
         return this._definition.frames[frame].bodyparts[type];
     }
 
+    public getFrameCount(): number {
+        return this._definition.frames.length;
+    }
+
 }

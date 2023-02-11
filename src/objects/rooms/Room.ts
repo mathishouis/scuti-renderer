@@ -7,8 +7,7 @@ import { Material } from "./materials/Material";
 import { WallMaterial } from "./materials/WallMaterial";
 import { FloorMaterial } from "./materials/FloorMaterial";
 import { RoomCamera } from "./RoomCamera";
-import { RoomObject } from "./RoomObject";
-import {RoomObjectContainer} from "./RoomObjectContainer";
+import { RoomObjectContainer } from "./RoomObjectContainer";
 
 /**
  * Room class for rendering rooms like the ones on Habbo Hotel.

@@ -7,7 +7,7 @@ import { Stair } from "./parts/Stair";
 import { WallType } from "../../enums/WallType";
 import { StairType } from "../../enums/StairType";
 import { Cursor } from "./parts/Cursor";
-import {RoomObjectContainer} from "./RoomObjectContainer";
+import { RoomObjectContainer } from "./RoomObjectContainer";
 
 /**
  * RoomVisualization class that manage all the rendering part of the room.

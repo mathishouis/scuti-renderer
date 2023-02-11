@@ -10,6 +10,7 @@ import {Direction} from "../../enums/Direction";
 import {AvatarLayer} from "./AvatarLayer";
 import {AvatarUtil} from "../../utilities/AvatarUtil";
 import {Avatar} from "./Avatar";
+import {AvatarAnimation} from "./animations/AvatarAnimation";
 
 export class AvatarBodyPart {
 
@@ -25,7 +26,7 @@ export class AvatarBodyPart {
 
     private _actions: AvatarAction[];
 
-    private _frames: Map<number, Map<string, { action: String, frame: number, repeat: number }>> = new Map();
+    private _frames: Map<number, Map<string, { action: AvatarAction, frame: number, repeat: number }>> = new Map();
 
     constructor(
         avatar: Avatar,
@@ -96,8 +97,8 @@ export class AvatarBodyPart {
                     type: type,
                     part: part,
                     gesture: gesture,
-                    tint: part.colorable === 1 && type !== "ey" ? AvatarUtil.getColor(this._type, this._colors[part.index]) : undefined,
-                    z: AvatarUtil.getDrawOrder(type, gesture, direction),
+                    tint: part.colorable === 1 && type !== "ey" ? this._getColor(this._type, this._colors[part.index]) : undefined,
+                    z: this._getDrawOrder(type, gesture, direction),
                     flip: true,
                     direction: direction,
                     frame: frame
@@ -110,22 +111,36 @@ export class AvatarBodyPart {
         return this._avatar.actionManager.partSets.activePartSets.head.includes(type);
     }
 
+    private _getColor(type: string, colorId: number): number {
+        const figureData: [] = Assets.get('figures/figuredata');
+        let paletteId = figureData.settype[type].paletteid;
+        let palette = figureData.palette[String(paletteId)];
+        if(palette[String(colorId)] === undefined) return Number('0xFFFFFF');
+        return Number('0x' + palette[String(colorId)].color);
+    }
+
+    private _getDrawOrder(type: string, action: string, direction: number) {
+        const drawOrder: [] = Assets.get("figures/draworder");
+        if(drawOrder[action] === undefined) action = "std";
+        return Number(Object.entries(drawOrder[action][direction]).find(entry => entry[1] === type)[0]);
+    }
+
     public updateParts(): void {
-        const avatarAnimations: [] = Assets.get("figures/animations");
-        this._frames.forEach((types: Map<string, { action: string, frame: number, repeat: number }>, partId: number) => {
-            types.forEach((value: { action: string, frame: number, repeat: number }, type: string) => {
-                const animation = avatarAnimations[value.action];
-                if (animation !== undefined && animation.frames[value.frame] !== undefined && animation.frames[value.frame].bodyparts[type] !== undefined) {
+        this._frames.forEach((types: Map<string, { action: AvatarAction, frame: number, repeat: number }>, partId: number) => {
+            types.forEach((value: { action: AvatarAction, frame: number, repeat: number }, type: string) => {
+                const animation: AvatarAnimation = this._avatar.animationManager.getAnimation(value.action);
+                const frameData: IAnimationFrameData = this._avatar.animationManager.getLayerData(value.action, value.frame, type);
+                if (frameData !== undefined) {
                     const currentFrame = this._frames.get(partId).get(type);
-                    if (animation.frames[value.frame].bodyparts[type].repeats !== undefined) {
-                        if (currentFrame.repeat >= Number(animation.frames[value.frame].bodyparts[type].repeats)) {
+                    if (frameData.repeats !== undefined) {
+                        if (currentFrame.repeat >= Number(frameData.repeats)) {
                             currentFrame.repeat = 0;
-                            currentFrame.frame = currentFrame.frame >= animation.frames.length - 1 ? 0 : currentFrame.frame + 1;
+                            currentFrame.frame = currentFrame.frame >= animation.getFrameCount() - 1 ? 0 : currentFrame.frame + 1;
                         } else {
                             currentFrame.repeat += 1;
                         }
                     } else {
-                        currentFrame.frame = currentFrame.frame >= animation.frames.length - 1 ? 0 : currentFrame.frame + 1;
+                        currentFrame.frame = currentFrame.frame >= animation.getFrameCount() - 1 ? 0 : currentFrame.frame + 1;
                     }
                 }
             });

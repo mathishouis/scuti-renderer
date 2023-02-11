@@ -4,10 +4,7 @@ import {FloorMaterial} from "../src/objects/rooms/materials/FloorMaterial";
 import {WallMaterial} from "../src/objects/rooms/materials/WallMaterial";
 import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
 import {WallFurniture} from "../src/objects/furnitures/WallFurniture";
-import {random} from "gsap/gsap-core";
 import {Avatar} from "../src/objects/avatars/Avatar";
-import {IFloorPosition} from "../src/interfaces/Furniture.interface";
-import {Direction} from "../src/enums/Direction";
 import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
 
 (async ()=>{
@@ -292,7 +289,7 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
                 figure: figure,
                 actions: [actions[Math.floor(Math.random() * actions.length)]]
             });
-            //room.addRoomObject(randomAvatar);
+            room.objects.add(randomAvatar);
         }
     }
 

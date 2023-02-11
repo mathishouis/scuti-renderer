@@ -36,7 +36,7 @@ export class Avatar extends RoomObject {
     ) {
         super();
 
-        this._figure = AvatarUtil.parseFigure(configuration.figure);
+        this._figure = this._parseFigure(configuration.figure);
         this._position = configuration.position;
         this._headDirection = configuration.headDirection;
         this._bodyDirection = configuration.bodyDirection;
@@ -47,7 +47,7 @@ export class Avatar extends RoomObject {
         this._actions.forEach((action: AvatarAction) => this._animationManager.registerAnimation(action));
 
         this._figure.forEach((set: { setId: number, colors: number[] }, type: string) => {
-            const parts: IAvatarPart[] = AvatarUtil.getParts(type, set.setId);
+            const parts: IAvatarPart[] = this._getParts(type, set.setId);
             this._bodyParts.push(new AvatarBodyPart(this, {
                 type: type,
                 setId: set.setId,
@@ -66,6 +66,40 @@ export class Avatar extends RoomObject {
 
         this.x = 32 * this._position.x - 32 * this._position.y;
         this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
+    }
+
+    private _parseFigure(figure: string): AvatarFigure {
+        return new Map(figure.split(".").map(part => {
+            const data: string[] = part.split("-");
+            return [
+                data[0],
+                {
+                    setId: Number(data[1]),
+                    colors: data.splice(2, 2).map(color => {
+                        return Number(color);
+                    })
+                },
+            ] as const;
+        }));
+    }
+
+    private _getParts(type: string, setId: number): IAvatarPart[] {
+        const figureData: [] = Assets.get('figures/figuredata');
+        const figureMap: [] = Assets.get('figures/figuremap');
+        const hiddenLayers: [] = figureData.settype[type]?.set[setId]["hiddenLayers"];
+        let parts = [];
+        let set = figureData.settype[type]?.set[setId];
+        set?.parts.forEach((part) => {
+            let libId = figureMap.parts[part.type][String(part.id)];
+            let lib = figureMap.libs[libId];
+            //console.log(part.type, libId);
+            part.lib = lib;
+            parts.push(part);
+        });
+        if(hiddenLayers !== undefined) {
+            parts = parts.filter(part => !hiddenLayers.includes(part.type));
+        }
+        return parts;
     }
 
     /**
