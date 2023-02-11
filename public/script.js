@@ -244,7 +244,8 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
             AvatarAction.Wave,
             AvatarAction.Walk,
             AvatarAction.CarryItem,
-        ]
+        ],
+        handItem: 55
     });
 
     let hd = [180, 185, 190, 195, 200, 205];
@@ -289,7 +290,7 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
                 figure: figure,
                 actions: [actions[Math.floor(Math.random() * actions.length)]]
             });
-            room.objects.add(randomAvatar);
+            //room.objects.add(randomAvatar);
         }
     }
 

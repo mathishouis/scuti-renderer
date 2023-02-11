@@ -9,7 +9,8 @@ export interface IAvatarConfiguration {
     position: IFloorPosition,
     bodyDirection: Direction,
     headDirection: Direction,
-    actions: AvatarAction[]
+    actions: AvatarAction[],
+    handItem?: number
 }
 
 export interface IAvatarPart {
@@ -31,7 +32,8 @@ export interface IActionDefinition {
     geometrytype: string,
     activepartset: string,
     assetpartdefinition: string,
-    prevents: string
+    prevents: string,
+    params: string[]
 }
 
 export interface IAnimationDefinition {
