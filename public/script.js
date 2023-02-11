@@ -6,8 +6,8 @@ import {FloorFurniture} from "../src/objects/furnitures/FloorFurniture";
 import {WallFurniture} from "../src/objects/furnitures/WallFurniture";
 import {random} from "gsap/gsap-core";
 import {Avatar} from "../src/objects/avatars/Avatar";
-import {FloorPosition} from "../src/interfaces/Furniture.interface";
-import {Direction} from "../src/types/Direction";
+import {IFloorPosition} from "../src/interfaces/Furniture.interface";
+import {Direction} from "../src/enums/Direction";
 import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
 
 (async ()=>{
@@ -171,7 +171,7 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
     const room = new Room(renderer, {
-        tileMap: tileMap2,
+        tileMap: tileMap4,
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         //floorMaterial: new FloorMaterial(renderer, 307),

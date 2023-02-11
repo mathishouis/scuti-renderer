@@ -1,38 +1,48 @@
 import { Room } from "./Room";
 import { Container, Ticker } from "pixi.js";
 
+/**
+ * RoomObject class that is extended by the avatars or furnitures.
+ *
+ * @class
+ * @memberof Scuti
+ */
 export class RoomObject extends Container {
 
     /**
-     * The room instance
+     * The room instance that will be managed by the camera.
+     *
+     * @member {Room}
      * @private
      */
     private _room: Room;
 
     /**
-     * RoomObject class
-     */
-    constructor() {
-        super();
-    }
-
-    /**
-     * Destroy the room object
+     * Destroy the room object and remove it from the canvas
+     *
+     * @return {void}
+     * @public
      */
     public destroy(): void {
-
+        // TODO: Code this part
     }
 
     /**
-     * Return the room instance
+     * Reference to the room object room instance.
+     *
+     * @member {Room}
+     * @readonly
+     * @public
      */
     public get room(): Room {
         return this._room;
     }
 
     /**
-     * Update the room instance
-     * @param room
+     * Update the current room instance.
+     *
+     * @param {Room} [room] - The new room instance.
+     * @public
      */
     public set room(
         room: Room
@@ -41,7 +51,11 @@ export class RoomObject extends Container {
     }
 
     /**
-     * Return the animation ticker
+     * Reference to the room animation ticker instance.
+     *
+     * @member {Ticker}
+     * @readonly
+     * @public
      */
     public get animationTicker(): Ticker {
         return this._room.visualization.animationTicker;

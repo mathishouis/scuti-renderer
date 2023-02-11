@@ -2,11 +2,11 @@ import { Assets, BLEND_MODES, Sprite, Spritesheet } from "pixi.js";
 import {
     FurnitureFrameId,
     FurnitureLayerId,
-    FurnitureVisualization,
-    WallFurnitureConfiguration,
+    IFurnitureVisualization,
+    IWallFurnitureConfiguration,
     WallPosition
 } from "../../interfaces/Furniture.interface";
-import { Direction } from "../../types/Direction";
+import { Direction } from "../../enums/Direction";
 import { FurnitureData } from "./FurnitureData";
 import { FurnitureLayer } from "./FurnitureLayer";
 import { RoomObject } from "../rooms/RoomObject";
@@ -55,7 +55,7 @@ export class WallFurniture extends RoomObject {
      * @param configuration = The furniture configuration
      */
     constructor(
-        configuration: WallFurnitureConfiguration
+        configuration: IWallFurnitureConfiguration
     ) {
         super();
 
@@ -77,7 +77,7 @@ export class WallFurniture extends RoomObject {
     private _draw(): void {
         this._destroyParts();
         const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
-        const visualization: FurnitureVisualization = spritesheet.data["furniProperty"].visualization;
+        const visualization: IFurnitureVisualization = spritesheet.data["furniProperty"].visualization;
 
         for (let i: number = 0; i < visualization.layerCount; i++) {
             this._createLayer(i);
@@ -103,7 +103,7 @@ export class WallFurniture extends RoomObject {
         layer: FurnitureLayerId
     ): void {
         const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
-        const visualization: FurnitureVisualization = spritesheet.data["furniProperty"].visualization;
+        const visualization: IFurnitureVisualization = spritesheet.data["furniProperty"].visualization;
 
         let alpha: number = 1;
         let tint: number;
@@ -163,7 +163,7 @@ export class WallFurniture extends RoomObject {
     private _updateFrame(): void {
         this._frames.forEach((frame: FurnitureFrameId, layer: FurnitureLayerId) => {
             const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
-            const visualization: FurnitureVisualization = spritesheet.data["furniProperty"].visualization;
+            const visualization: IFurnitureVisualization = spritesheet.data["furniProperty"].visualization;
 
             if(visualization.animation[String(this._state)] !== undefined && visualization.animation[String(this._state)][layer] !== undefined) {
                 const frameSequence: number[] = visualization.animation[String(this._state)][layer].frameSequence;

@@ -1,29 +1,29 @@
-import { Direction } from "../types/Direction";
+import { Direction } from "../enums/Direction";
 import { BLEND_MODES } from "pixi.js";
 
-export interface FloorPosition {
+export interface IFloorPosition {
     x: number,
     y: number,
     z: number
 }
 
-export interface FloorFurnitureConfiguration {
+export interface IFloorFurnitureConfiguration {
     id: number,
-    position: FloorPosition,
+    position: IFloorPosition,
     direction: Direction,
     state?: number
 }
 
-export interface WallPosition {
+export interface IWallPosition {
     x: number,
     y: number,
     offsetX: number,
     offsetY: number
 }
 
-export interface WallFurnitureConfiguration {
+export interface IWallFurnitureConfiguration {
     id: number,
-    position: WallPosition,
+    position: IWallPosition,
     direction: Direction,
     state?: number
 }
@@ -32,7 +32,7 @@ export type FurnitureFrameId = number;
 
 export type FurnitureLayerId = number;
 
-export interface FurnitureData {
+export interface IFurnitureData {
     id: number,
     className: string,
     name: string,
@@ -53,7 +53,7 @@ export interface FurnitureData {
     canLayOn: boolean
 }
 
-export interface FurnitureVisualization {
+export interface IFurnitureVisualization {
     layerCount: number,
     directions: number[],
     colors: number[],
@@ -69,7 +69,7 @@ export interface FurnitureVisualization {
     }[][]
 }
 
-export interface FurnitureLayerConfiguration {
+export interface IFurnitureLayerConfiguration {
     layer: FurnitureLayerId | string,
     alpha: number,
     tint: number,

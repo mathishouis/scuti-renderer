@@ -1,56 +1,84 @@
 import { Texture } from "pixi.js";
 
+/**
+ * Material class that regroup the color and texture to be applied on the wall or the floor.
+ *
+ * @class
+ * @memberof Scuti
+ */
 export class Material {
 
     /**
-     * The material color
+     * The material color.
+     *
+     * @member {number}
      * @private
      */
     private _color: number;
 
     /**
-     * The material texture
+     * The material texture.
+     *
+     * @member {Texture}
      * @private
      */
     private _texture: Texture;
 
     /**
-     * Material class
-     * @param color - The material color
-     * @param texture - The material texture
-     */
-    constructor(color: number, texture: Texture) {
+     * @param {number} [color] - The material color.
+     * @param {Texture} [texture] - The material texture.
+     **/
+    constructor(
+        color: number,
+        texture: Texture
+    ) {
         this._color = color;
         this._texture = texture;
     }
 
     /**
-     * Return the material color
+     * Reference to the material color.
+     *
+     * @member {number}
+     * @readonly
+     * @public
      */
     public get color(): number {
         return this._color;
     }
 
     /**
-     * Set the material color
-     * @param color
+     * Update the material color.
+     *
+     * @param {number} [color] - The new material color.
+     * @public
      */
-    public set color(color: number) {
+    public set color(
+        color: number
+    ) {
         this._color = color;
     }
 
     /**
-     * Return the material texture
+     * Reference to the material texture.
+     *
+     * @member {Texture}
+     * @readonly
+     * @public
      */
     public get texture(): Texture {
         return this._texture;
     }
 
     /**
-     * Set the material texture
-     * @param texture
+     * Update the material texture.
+     *
+     * @param {Texture} [texture] - The new material texture.
+     * @public
      */
-    public set texture(texture: Texture) {
+    public set texture(
+        texture: Texture
+    ) {
         this._texture = texture;
     }
 

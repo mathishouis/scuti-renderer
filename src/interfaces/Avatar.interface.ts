@@ -1,16 +1,16 @@
-import {Direction} from "../types/Direction";
-import {FloorPosition} from "./Furniture.interface";
-import {AvatarAction} from "../objects/avatars/actions/AvatarAction";
+import { Direction } from "../enums/Direction";
+import { IFloorPosition } from "./Furniture.interface";
+import { AvatarAction } from "../objects/avatars/actions/AvatarAction";
+
+export type AvatarFigure = Map<string, { setId: number, colors: number[] }>;
 
 export interface IAvatarConfiguration {
     figure: string,
-    position: FloorPosition,
+    position: IFloorPosition,
     bodyDirection: Direction,
     headDirection: Direction,
     actions: AvatarAction[]
 }
-
-export type AvatarFigure = Map<string, { setId: number, colors: number[] }>;
 
 export interface IAvatarPart {
     colorable: number,
@@ -75,7 +75,7 @@ export interface IAvatarPartSets {
     }
 }
 
-export interface AvatarLayerConfiguration {
+export interface IAvatarLayerConfiguration {
     type: string,
     part: IAvatarPart,
     gesture: string,
