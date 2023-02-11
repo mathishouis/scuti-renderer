@@ -24,4 +24,8 @@ export class AvatarAnimationManager {
         return animation.getFrame(frame, type);
     }
 
+    public get animations(): IAvatarPartSets {
+        return this._avatarAnimationsLib;
+    }
+
 }
