@@ -1,14 +1,8 @@
-import {
-    IAvatarPartSets,
-    IAnimationFrameData,
-    IAvatarPart,
-    IBodyPartConfiguration
-} from "../../interfaces/Avatar.interface";
+import {IAnimationFrameData, IAvatarPart, IBodyPartConfiguration} from "../../interfaces/Avatar.interface";
 import {AvatarAction} from "./actions/AvatarAction";
 import {Assets, Spritesheet} from "pixi.js";
 import {Direction} from "../../enums/Direction";
 import {AvatarLayer} from "./AvatarLayer";
-import {AvatarUtil} from "../../utilities/AvatarUtil";
 import {Avatar} from "./Avatar";
 import {AvatarAnimation} from "./animations/AvatarAnimation";
 
@@ -42,8 +36,12 @@ export class AvatarBodyPart {
 
     private _draw(): void {
         this._parts.forEach((part: IAvatarPart) => {
-            Assets.add("figures/" + part.lib.id, "http://localhost:8081/figure/" + part.lib.id + "/" + part.lib.id + ".json");
-            Assets.load("figures/" + part.lib.id).then(() => this._createPart(part));
+            if(Assets.get("figures/" + part.lib.id) === undefined) {
+                Assets.add("figures/" + part.lib.id, "http://localhost:8081/figure/" + part.lib.id + "/" + part.lib.id + ".json");
+                Assets.load("figures/" + part.lib.id).then(() => this._createPart(part));
+            } else {
+                this._createPart(part);
+            }
         });
     }
 
@@ -57,7 +55,7 @@ export class AvatarBodyPart {
         Object.keys(spritesheet.data.partsType).forEach((type: string) => {
             // We register the part type if it's not already registered
             if(!this._frames.get(part.id).has(type)) this._frames.get(part.id).set(type, {
-                action: "Default",
+                action: AvatarAction.Default,
                 frame: 0,
                 repeat: 0
             });
@@ -121,8 +119,7 @@ export class AvatarBodyPart {
 
     private _getDrawOrder(type: string, action: string, direction: number) {
         const drawOrder: [] = Assets.get("figures/draworder");
-        if(drawOrder[action] === undefined) action = "std";
-        return Number(Object.entries(drawOrder[action][direction]).find(entry => entry[1] === type)[0]);
+        return Number(Object.entries(drawOrder[drawOrder[action] !== undefined ? action : "std"][direction]).find(entry => entry[1] === type)[0]);
     }
 
     public updateParts(): void {

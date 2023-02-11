@@ -60,8 +60,12 @@ export class Avatar extends RoomObject {
 
     private _draw(): void {
         this._destroyParts();
-        Assets.add("figures/hh_human_body", "http://localhost:8081/figure/hh_human_body/hh_human_body.json");
-        Assets.load("figures/hh_human_body").then(() => this._createShadow());
+        if(Assets.get("figures/hh_human_body") === undefined) {
+            Assets.add("figures/hh_human_body", "http://localhost:8081/figure/hh_human_body/hh_human_body.json");
+            Assets.load("figures/hh_human_body").then(() => this._createShadow());
+        } else {
+            this._createShadow();
+        }
         this._bodyParts.forEach((bodyPart: AvatarBodyPart) => bodyPart.updateParts());
 
         this.x = 32 * this._position.x - 32 * this._position.y;

@@ -294,7 +294,7 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
     }
 
     room.objects.add(avatar);
-    room.objects.add(furniture2);
+    //room.objects.add(furniture2);
     room.visualization.onTileClick = (position) => {
         console.log("click", position);
         /*if(furniture.direction === 4) {
