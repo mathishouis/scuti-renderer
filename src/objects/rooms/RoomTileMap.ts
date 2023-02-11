@@ -239,15 +239,34 @@ export class RoomTileMap {
         // TODO: Integrate it in _getWallType()
         let wallX: boolean = false;
         let wallY: boolean = false;
-        for (let i: number = position.x - 1; i >= 0; i--) {
-            for (let j: number = position.y - 1; j >= 0; j--) {
-                const wall: WallType = this._getWallType({ x: i, y: j });
-                if (wall !== null) {
-                    if (wall === WallType.LEFT_WALL || wall === WallType.CORNER_WALL) {
-                        wallX = true;
-                    }
-                    if (wall === WallType.RIGHT_WALL || wall === WallType.CORNER_WALL) {
+        for (let i = position.y - 1; i >= 0; i--) {
+            const wall: WallType = this._getWallType({ x: position.x, y: i });
+            if(wall !== null) {
+                if(wall === WallType.RIGHT_WALL || wall === WallType.CORNER_WALL) {
+                    wallY = true;
+                }
+            }
+            for (let j = position.x - 1; j >= 0; j--) {
+                const wall2: WallType = this._getWallType({ x: j, y: i });
+                if(wall2 !== null) {
+                    if(wall2 === WallType.LEFT_WALL || wall2 === WallType.CORNER_WALL) {
                         wallY = true;
+                    }
+                }
+            }
+        }
+        for (let i = position.x - 1; i >= 0; i--) {
+            const wall: WallType = this._getWallType({ x: i, y: position.y });
+            if(wall !== null) {
+                if(wall === WallType.LEFT_WALL || wall === WallType.CORNER_WALL) {
+                    wallX = true;
+                }
+            }
+            for (let j = position.y - 1; j >= 0; j--) {
+                const wall2: WallType = this._getWallType({ x: i, y: j });
+                if(wall2 !== null) {
+                    if(wall2 === WallType.RIGHT_WALL || wall2 === WallType.CORNER_WALL) {
+                        wallX = true;
                     }
                 }
             }
