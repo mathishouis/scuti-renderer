@@ -206,9 +206,9 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
     setTimeout(() => {
         room.wallMaterial = new WallMaterial(renderer, 1701);
         room.floorMaterial = new FloorMaterial(renderer, 301);
-        room.wallThickness = 32;
+        room.wallThickness = 8;
         room.floorThickness = 8;
-        room.wallHeight = 0;
+        room.wallHeight = 6;
     }, 5000);
     const furniture = new FloorFurniture({
         id: 1619,
