@@ -4,50 +4,57 @@ import {
     DisplayObject,
     Extract,
     ICanvas,
-    Rectangle,
+    Rectangle, Renderer,
     RenderTexture,
     Sprite,
     Texture
 } from "pixi.js";
-
 import { CanvasRenderTarget } from '@pixi/utils';
 import { HitSprite } from "./HitSprite";
+import {FurnitureLayer} from "../furnitures/FurnitureLayer";
+import {AvatarLayer} from "../avatars/AvatarLayer";
 
-
+/**
+ * HitTexture class create an hit map from a texture to manage interactions.
+ *
+ * @class
+ * @memberof Scuti
+ */
 export class HitTexture {
 
     /**
-     * The sprite instance.
+     * The hit sprite of the hit texture.
      *
+     * @member {HitSprite}
+     * @readonly
      * @private
      */
     private readonly _sprite: HitSprite;
 
     /**
-     * The texture.
+     * The hit texture base texture.
      *
+     * @member {Texture}
      * @private
      */
     private _texture: Texture;
 
     /**
-     * The hit map.
+     * The hit map array.
      *
+     * @member {Uint32Array}
      * @private
      */
     private _hitMap: Uint32Array = undefined;
 
     /**
-     * HitTexture class.
-     *
-     * @param {HitSprite} sprite - The sprite instance.
-     * @constructor
+     * @param {HitSprite} [sprite] - The hit sprite that we want to retrieve the texture.
      */
     constructor(
         sprite: HitSprite
     ) {
         this._sprite = sprite;
-
+        /** Generate the texture */
         this._texture = this._generateTexture();
     }
 
@@ -110,10 +117,10 @@ export class HitTexture {
         sprite.texture.trim.x = 0;
         sprite.texture.trim.y = 0;
         let renderTexture: RenderTexture = undefined;
-        if(this._sprite.parent.furniture !== undefined) {
+        if(this._sprite.parent instanceof FurnitureLayer) {
             this._sprite.parent.furniture.room.engine.application.stage.addChild(sprite);
             renderTexture = this._sprite.parent.furniture.room.engine.application.renderer.generateTexture(sprite);
-        } else {
+        } else if(this._sprite.parent instanceof AvatarLayer) {
             this._sprite.parent.avatar.room.engine.application.stage.addChild(sprite);
             renderTexture = this._sprite.parent.avatar.room.engine.application.renderer.generateTexture(sprite);
         }
@@ -162,7 +169,7 @@ export class HitTexture {
      */
     private _image(target: DisplayObject|RenderTexture, format?: string, quality?: number): HTMLImageElement
     {
-        const image = new Image();
+        const image: HTMLImageElement = new Image();
 
         image.src = this._base64(target, format, quality);
 
@@ -195,21 +202,21 @@ export class HitTexture {
      */
     private _canvas(target: DisplayObject|RenderTexture): ICanvas
     {
-        const TEMP_RECT = new Rectangle();
-        const BYTES_PER_PIXEL = 4;
+        const TEMP_RECT: Rectangle = new Rectangle();
+        const BYTES_PER_PIXEL: number = 4;
 
-        let renderer;
-        if(this._sprite.parent.furniture !== undefined) {
-            renderer = this._sprite.parent.furniture.room.engine.application.renderer;
-        } else {
-            renderer = this._sprite.parent.avatar.room.engine.application.renderer;
+        let renderer: Renderer;
+        if(this._sprite.parent instanceof FurnitureLayer) {
+            renderer = this._sprite.parent.furniture.room.engine.application.renderer as Renderer;
+        } else if(this._sprite.parent instanceof AvatarLayer) {
+            renderer = this._sprite.parent.avatar.room.engine.application.renderer as Renderer;
         }
 
-        let resolution;
-        let frame;
-        let flipY = false;
-        let renderTexture;
-        let generated = false;
+        let resolution: number;
+        let frame: Rectangle;
+        let flipY: boolean;
+        let renderTexture: RenderTexture;
+        let generated: boolean = false;
 
         if (target)
         {
@@ -244,15 +251,15 @@ export class HitTexture {
             renderer.renderTexture.bind(null);
         }
 
-        const width = Math.floor((frame.width * resolution) + 1e-4);
-        const height = Math.floor((frame.height * resolution) + 1e-4);
+        const width: number = Math.floor((frame.width * resolution) + 1e-4);
+        const height: number = Math.floor((frame.height * resolution) + 1e-4);
 
-        let canvasBuffer = new CanvasRenderTarget(width, height, 1);
+        let canvasBuffer: CanvasRenderTarget = new CanvasRenderTarget(width, height, 1);
 
-        const webglPixels = new Uint8Array(BYTES_PER_PIXEL * width * height);
+        const webglPixels: Uint8Array = new Uint8Array(BYTES_PER_PIXEL * width * height);
 
-        // read pixels to the array
-        const gl = renderer.gl;
+        /** Read pixels to the array */
+        const gl: any = renderer.gl;
 
         gl.readPixels(
             frame.x * resolution,
@@ -264,21 +271,21 @@ export class HitTexture {
             webglPixels
         );
 
-        // add the pixels to the canvas
-        const canvasData = canvasBuffer.context.getImageData(0, 0, width, height);
+        /** Add the pixels to the canvas */
+        const canvasData: ImageData = canvasBuffer.context.getImageData(0, 0, width, height);
 
         Extract.arrayPostDivide(webglPixels, canvasData.data);
 
         canvasBuffer.context.putImageData(canvasData, 0, 0);
 
-        // pulling pixels
+        /** Pulling pixels */
         if (flipY)
         {
-            const target = new CanvasRenderTarget(canvasBuffer.width, canvasBuffer.height, 1);
+            const target: CanvasRenderTarget = new CanvasRenderTarget(canvasBuffer.width, canvasBuffer.height, 1);
 
             target.context.scale(1, -1);
 
-            // we can't render to itself because we should be empty before render.
+            /** We can't render to itself because we should be empty before render. */
             target.context.drawImage(canvasBuffer.canvas, 0, -height);
 
             canvasBuffer.destroy();
@@ -290,7 +297,7 @@ export class HitTexture {
             renderTexture.destroy(true);
         }
 
-        // send the canvas back..
+        /** Send the canvas back... */
         return canvasBuffer.canvas;
     }
 

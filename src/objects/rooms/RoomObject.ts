@@ -10,6 +10,22 @@ import { Container, Ticker } from "pixi.js";
 export class RoomObject extends Container {
 
     /**
+     * Start the animation of the room object.
+     *
+     * @member {void}
+     * @public
+     */
+    public startAnimation: () => void;
+
+    /**
+     * Stop the animation of the room object.
+     *
+     * @member {void}
+     * @public
+     */
+    public stopAnimation: () => void;
+
+    /**
      * The room instance that will be managed by the camera.
      *
      * @member {Room}
