@@ -64,6 +64,8 @@ export class FurnitureLayer extends Container {
 
     private _direction: Direction;
 
+    private _tag: string;
+
     /**
      * FurnitureLayer class
      * @param furniture - The furniture instance
@@ -85,6 +87,7 @@ export class FurnitureLayer extends Container {
         this._frame = configuration.frame;
         this._ignoreMouse = configuration.ignoreMouse;
         this._direction = configuration.direction;
+        this._tag = configuration.tag;
 
         this._draw();
     }
@@ -100,7 +103,11 @@ export class FurnitureLayer extends Container {
         if(this._alpha !== undefined) sprite.alpha = this._alpha;
         if(this._flip) sprite.scale.x = -1;
         if(this._ignoreMouse !== null && !this._ignoreMouse) sprite.interactive = true;
-        sprite.on("pointerdown", () => console.log("XDDDD"));
+        sprite.on("pointerdown", (event: PointerEvent) => this._furniture.interactionManager.handlePointerDown({ mouseEvent: event, tag: this._tag }));
+        sprite.on("pointerup", (event: PointerEvent) => this._furniture.interactionManager.handlePointerUp({ mouseEvent: event, tag: this._tag }));
+        sprite.on("pointermove", (event: PointerEvent) => this._furniture.interactionManager.handlePointerMove({ mouseEvent: event, tag: this._tag }));
+        sprite.on("pointerout", (event: PointerEvent) => this._furniture.interactionManager.handlePointerOut({ mouseEvent: event, tag: this._tag }));
+        sprite.on("pointerover", (event: PointerEvent) => this._furniture.interactionManager.handlePointerOver({ mouseEvent: event, tag: this._tag }));
         this.addChild(sprite);
     }
 

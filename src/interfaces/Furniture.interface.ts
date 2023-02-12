@@ -78,5 +78,6 @@ export interface IFurnitureLayerConfiguration {
     flip: boolean,
     frame: number,
     ignoreMouse: boolean,
-    direction: Direction
+    direction: Direction,
+    tag?: string
 }
