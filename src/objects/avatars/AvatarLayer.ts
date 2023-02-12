@@ -9,6 +9,7 @@ import {HitSprite} from "../interactions/HitSprite";
 import {AvatarAction} from "./actions/AvatarAction";
 import {Direction} from "../../enums/Direction";
 import {AvatarUtil} from "../../utilities/AvatarUtil";
+import {IInteractionEvent} from "../../interfaces/Interaction.interface";
 
 export class AvatarLayer extends Container {
 
@@ -81,7 +82,11 @@ export class AvatarLayer extends Container {
         //sprite.animationSpeed = 0.167;
         //sprite.play();
         sprite.interactive = true;
-        sprite.on("pointerdown", () => console.log("XDDDD"));
+        sprite.on("pointerdown", (event: PointerEvent) => this._avatar.interactionManager.handlePointerDown({ mouseEvent: event }));
+        sprite.on("pointerup", (event: PointerEvent) => this._avatar.interactionManager.handlePointerUp({ mouseEvent: event }));
+        sprite.on("pointermove", (event: PointerEvent) => this._avatar.interactionManager.handlePointerMove({ mouseEvent: event }));
+        sprite.on("pointerout", (event: PointerEvent) => this._avatar.interactionManager.handlePointerOut({ mouseEvent: event }));
+        sprite.on("pointerover", (event: PointerEvent) => this._avatar.interactionManager.handlePointerOver({ mouseEvent: event }));
         this.addChild(sprite);
     }
 

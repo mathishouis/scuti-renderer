@@ -9,6 +9,8 @@ import { AvatarAnimationManager } from "./animations/AvatarAnimationManager";
 import { AvatarBodyPart } from "./AvatarBodyPart";
 import { AvatarLayer } from "./AvatarLayer";
 import { Assets } from "pixi.js";
+import {InteractionManager} from "../interactions/InteractionManager";
+import {IInteractionEvent} from "../../interfaces/Interaction.interface";
 
 export class Avatar extends RoomObject {
 
@@ -27,7 +29,9 @@ export class Avatar extends RoomObject {
     private _actionManager: AvatarActionManager;
 
     private _animationManager: AvatarAnimationManager;
-    
+
+    private _interactionManager: InteractionManager = new InteractionManager();
+
     private _bodyParts: AvatarBodyPart[] = [];
 
     constructor(
@@ -56,6 +60,7 @@ export class Avatar extends RoomObject {
                 actions: this._actions
             }));
         });
+        //this.interactive = true;
     }
 
     private _draw(): void {
@@ -220,6 +225,70 @@ export class Avatar extends RoomObject {
 
     public get animationManager(): AvatarAnimationManager {
         return this._animationManager;
+    }
+
+    public get interactionManager(): InteractionManager {
+        return this._interactionManager;
+    }
+
+    get onPointerDown(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerDown;
+    }
+
+    set onPointerDown(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerDown = value;
+    }
+
+    get onPointerUp(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerUp;
+    }
+
+    set onPointerUp(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerUp = value;
+    }
+
+    get onPointerMove(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerMove;
+    }
+
+    set onPointerMove(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerMove = value;
+    }
+
+    get onPointerOut(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerOut;
+    }
+
+    set onPointerOut(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerOut = value;
+    }
+
+    get onPointerOver(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerOver;
+    }
+
+    set onPointerOver(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerOver = value;
+    }
+
+    get onDoubleClick(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onDoubleClick;
+    }
+
+    set onDoubleClick(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onDoubleClick = value;
     }
 
 }

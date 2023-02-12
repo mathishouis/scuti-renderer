@@ -4,13 +4,15 @@ import {
     FurnitureLayerId,
     IFurnitureVisualization,
     IWallFurnitureConfiguration,
-    WallPosition
+    IWallPosition
 } from "../../interfaces/Furniture.interface";
 import { Direction } from "../../enums/Direction";
 import { FurnitureData } from "./FurnitureData";
 import { FurnitureLayer } from "./FurnitureLayer";
 import { RoomObject } from "../rooms/RoomObject";
 import { gsap } from "gsap";
+import {InteractionManager} from "../interactions/InteractionManager";
+import {IInteractionEvent} from "../../interfaces/Interaction.interface";
 
 export class WallFurniture extends RoomObject {
 
@@ -24,7 +26,7 @@ export class WallFurniture extends RoomObject {
      * The furniture position
      * @private
      */
-    private _position: WallPosition;
+    private _position: IWallPosition;
 
     /**
      * The furniture direction
@@ -49,6 +51,8 @@ export class WallFurniture extends RoomObject {
      * @private
      */
     private _frames: Map<FurnitureFrameId, FurnitureLayerId> = new Map();
+
+    private _interactionManager: InteractionManager = new InteractionManager();
 
     /**
      * FloorFurniture class
@@ -112,6 +116,7 @@ export class WallFurniture extends RoomObject {
         let flip: boolean = false;
         let frame: number = 0;
         let ignoreMouse: boolean = false;
+        let tag: string;
 
         if(visualization.directions.indexOf(this._direction) === -1) {
             this._direction = visualization.directions[0];
@@ -138,6 +143,7 @@ export class WallFurniture extends RoomObject {
             if(visualization.layers[layer].alpha !== undefined) alpha = visualization.layers[layer].alpha / 255;
             if(visualization.layers[layer].ink !== undefined) blendMode = BLEND_MODES.ADD;
             if(visualization.layers[layer].ignoreMouse !== undefined) ignoreMouse = visualization.layers[layer].ignoreMouse;
+            if(visualization.layers[layer].tag !== undefined) tag = visualization.layers[layer].tag;
         }
 
         if(spritesheet.data.frames[this._data.baseName + '_' + this._data.baseName + '_64_' + String.fromCharCode(97 + Number(layer)) + '_' + this._direction + '_' + frame] !== undefined) {
@@ -149,10 +155,12 @@ export class WallFurniture extends RoomObject {
             alpha: alpha,
             tint: tint,
             z: z,
+            direction: this._direction,
             blendMode: blendMode,
             flip: flip,
             frame: frame,
-            ignoreMouse: ignoreMouse
+            ignoreMouse: ignoreMouse,
+            tag: tag
         }));
     }
 
@@ -224,6 +232,10 @@ export class WallFurniture extends RoomObject {
      */
     public stopAnimation(): void {
         this.animationTicker.remove(() => this._onTicker());
+    }
+
+    public get interactionManager(): InteractionManager {
+        return this._interactionManager;
     }
 
     public get id(): number {
@@ -302,6 +314,66 @@ export class WallFurniture extends RoomObject {
     public set state(state: number) {
         this._state = state;
         this._draw();
+    }
+
+    get onPointerDown(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerDown;
+    }
+
+    set onPointerDown(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerDown = value;
+    }
+
+    get onPointerUp(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerUp;
+    }
+
+    set onPointerUp(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerUp = value;
+    }
+
+    get onPointerMove(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerMove;
+    }
+
+    set onPointerMove(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerMove = value;
+    }
+
+    get onPointerOut(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerOut;
+    }
+
+    set onPointerOut(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerOut = value;
+    }
+
+    get onPointerOver(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerOver;
+    }
+
+    set onPointerOver(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerOver = value;
+    }
+
+    get onDoubleClick(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onDoubleClick;
+    }
+
+    set onDoubleClick(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onDoubleClick = value;
     }
 
 }
