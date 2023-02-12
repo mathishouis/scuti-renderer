@@ -3,7 +3,7 @@ import { RoomObject } from "./RoomObject";
 import { Room } from "./Room";
 
 /**
- * RoomObjectContainer class that manage all the room objectss.
+ * RoomObjectContainer class that manage all the room objects.
  *
  * @class
  * @memberof Scuti
