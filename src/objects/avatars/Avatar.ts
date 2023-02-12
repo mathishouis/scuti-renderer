@@ -1,14 +1,14 @@
-import {RoomObject} from "../rooms/RoomObject";
-import {IFloorPosition} from "../../interfaces/Furniture.interface";
-import {Direction} from "../../enums/Direction";
-import {AvatarAction} from "./actions/AvatarAction";
-import {AvatarFigure, IAvatarConfiguration, IAvatarPart,} from "../../interfaces/Avatar.interface";
-import {gsap} from "gsap";
-import {AvatarActionManager} from "./actions/AvatarActionManager";
-import {AvatarAnimationManager} from "./animations/AvatarAnimationManager";
-import {AvatarBodyPart} from "./AvatarBodyPart";
-import {AvatarLayer} from "./AvatarLayer";
-import {Assets} from "pixi.js";
+import { RoomObject } from "../rooms/RoomObject";
+import { IFloorPosition } from "../../interfaces/Furniture.interface";
+import { Direction } from "../../enums/Direction";
+import { AvatarAction } from "./actions/AvatarAction";
+import { AvatarFigure, IAvatarConfiguration, IAvatarPart } from "../../interfaces/Avatar.interface";
+import { gsap } from "gsap";
+import { AvatarActionManager } from "./actions/AvatarActionManager";
+import { AvatarAnimationManager } from "./animations/AvatarAnimationManager";
+import { AvatarBodyPart } from "./AvatarBodyPart";
+import { AvatarLayer } from "./AvatarLayer";
+import { Assets } from "pixi.js";
 
 export class Avatar extends RoomObject {
 
@@ -25,7 +25,9 @@ export class Avatar extends RoomObject {
     private _handItem: number;
 
     private _actionManager: AvatarActionManager;
+
     private _animationManager: AvatarAnimationManager;
+    
     private _bodyParts: AvatarBodyPart[] = [];
 
     constructor(
