@@ -31,7 +31,6 @@ export class FurnitureLayer extends HitSprite {
      */
     private _alpha: number;
 
-
     /**
      * The layer tint.
      *

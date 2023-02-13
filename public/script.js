@@ -125,6 +125,16 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
             furniture.selected = true;
         }
     }
+    const guildGate = new FloorFurniture({
+        id: 4389,
+        position: {
+            x: 11,
+            y: 5,
+            z: 0
+        },
+        direction: 2,
+        state: 1
+    });
     setTimeout(() => {
         console.log(furniture.position);
         /*furniture.move({
@@ -136,6 +146,9 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         furniture.rotate(4)
         //furniture.direction = 4;
        furniture.state = 0;
+        guildGate.state = 101;
+        guildGate.visualization.secondaryColor = 0xFFFF00;
+        guildGate.visualization.primaryColor = 0x00FFFF;
     }, 5000);
     const wallFurniture3 = new WallFurniture({
         position: {
@@ -151,6 +164,7 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
     room.objects.add(wallFurniture);
     room.objects.add(wallFurniture3);
     room.objects.add(furniture);
+    room.objects.add(guildGate);
 
     /*const furniture = new FloorFurniture({
         id: 1619,

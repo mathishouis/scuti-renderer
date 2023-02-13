@@ -5,7 +5,8 @@ import { RoomObject } from "../rooms/RoomObject";
 import { gsap } from "gsap";
 import { InteractionManager } from "../interactions/InteractionManager";
 import { IInteractionEvent } from "../../interfaces/Interaction.interface";
-import { FurnitureVisualization } from "./FurnitureVisualization";
+import { FurnitureView } from "./FurnitureView";
+import {FurnitureVisualization} from "./visualizations/FurnitureVisualization";
 
 /**
  * WallFurniture class that aim to reproduce the wall furnitures on Habbo.
@@ -64,12 +65,12 @@ export class WallFurniture extends RoomObject {
     private _data: FurnitureData;
 
     /**
-     * The furniture visualization.
+     * The furniture view.
      *
-     * @member {FurnitureVisualization}
+     * @member {FurnitureView}
      * @private
      */
-    private _visualization: FurnitureVisualization;
+    private _view: FurnitureView;
 
     /**
      * The furniture interaction manager to handle all the clicks and taps.
@@ -92,9 +93,9 @@ export class WallFurniture extends RoomObject {
         this._direction = configuration.direction;
         this._state = configuration.state ?? 0;
         this._data = new FurnitureData(this);
-        /** Initialise visualization */
-        this._visualization = new FurnitureVisualization(this);
-        this.addChild(this._visualization);
+        /** Initialise view */
+        this._view = new FurnitureView(this);
+        this.addChild(this._view);
         /** Set the furniture position in the canvas */
         this._updatePosition();
     }
@@ -124,7 +125,7 @@ export class WallFurniture extends RoomObject {
      * @public
      */
     public start(): void {
-        this.animationTicker.add(() => this._visualization.tick());
+        this.animationTicker.add(() => this._view.tick());
     }
 
     /**
@@ -134,7 +135,7 @@ export class WallFurniture extends RoomObject {
      * @public
      */
     public stop(): void {
-        this.animationTicker.remove(() => this._visualization.tick());
+        this.animationTicker.remove(() => this._view.tick());
     }
 
     /**
@@ -191,7 +192,7 @@ export class WallFurniture extends RoomObject {
             ease: "easeIn",
             onComplete: () => {
                 this._direction = direction;
-                this._visualization.update();
+                this._view.update();
                 gsap.to(this, {
                     x: 32 + 32 * this._position.x - 32 * this._position.y + this._position.offsetX * 2 - 32,
                     y: 16 * this._position.x + 16 * this._position.y - 32 + this._position.offsetY * 2 - 84,
@@ -257,7 +258,7 @@ export class WallFurniture extends RoomObject {
         direction: Direction
     ) {
         this._direction = direction;
-        this._visualization.update();
+        this._view.update();
     }
 
     /**
@@ -279,7 +280,7 @@ export class WallFurniture extends RoomObject {
      */
     public set state(state: number) {
         this._state = state;
-        this._visualization.update();
+        this._view.update();
     }
 
     /**
@@ -303,7 +304,7 @@ export class WallFurniture extends RoomObject {
         selected: boolean
     ) {
         this._selected = selected;
-        this._visualization.update();
+        this._view.update();
     }
 
     /**
@@ -318,6 +319,29 @@ export class WallFurniture extends RoomObject {
     }
 
     /**
+     * Reference to the furniture view.
+     *
+     * @member {FurnitureView}
+     * @readonly
+     * @public
+     */
+    public get view(): FurnitureView {
+        return this._view;
+    }
+
+    /**
+     * Update the furniture view.
+     *
+     * @param {FurnitureView} [view] - The new furniture view.
+     * @public
+     */
+    public set view(
+        view: FurnitureView
+    ) {
+        this._view = view;
+    }
+
+    /**
      * Reference to the furniture visualization.
      *
      * @member {FurnitureVisualization}
@@ -325,7 +349,7 @@ export class WallFurniture extends RoomObject {
      * @public
      */
     public get visualization(): FurnitureVisualization {
-        return this._visualization;
+        return this._view.visualization;
     }
 
     /**
