@@ -8,7 +8,7 @@ import { IInteractionEvent } from "../../interfaces/Interaction.interface";
 import { FurnitureVisualization } from "./FurnitureVisualization";
 
 /**
- * FloorFurniture class that aim to reproduce the furnitures on Habbo.
+ * FloorFurniture class that aim to reproduce the floor furnitures on Habbo.
  *
  * @class
  * @memberof Scuti
@@ -26,7 +26,7 @@ export class FloorFurniture extends RoomObject {
     /**
      * The furniture position in the room.
      *
-     * @member {IFloorPosition>}
+     * @member {IFloorPosition}
      * @private
      */
     private _position: IFloorPosition;

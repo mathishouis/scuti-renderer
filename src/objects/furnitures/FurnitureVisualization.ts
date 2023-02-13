@@ -75,7 +75,7 @@ export class FurnitureVisualization extends Container {
     }
 
     /**
-     * Draw the furniture visualization with all the pars.
+     * Draw the furniture visualization with all the parts.
      *
      * @return {void}
      * @private

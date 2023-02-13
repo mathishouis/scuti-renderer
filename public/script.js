@@ -137,7 +137,19 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         //furniture.direction = 4;
        furniture.state = 0;
     }, 5000);
+    const wallFurniture3 = new WallFurniture({
+        position: {
+            x: 4,
+            y: 0,
+            offsetX: 14,
+            offsetY: 41,
+        },
+        id: 4066,
+        direction: 4,
+        state: 3,
+    });
     room.objects.add(wallFurniture);
+    room.objects.add(wallFurniture3);
     room.objects.add(furniture);
 
     /*const furniture = new FloorFurniture({

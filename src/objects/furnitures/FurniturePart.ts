@@ -4,32 +4,67 @@ import {WallFurniture} from "./WallFurniture";
 import {FurnitureLayer} from "./FurnitureLayer";
 import {FurnitureFrameId, FurnitureLayerId, IFurnitureVisualization} from "../../interfaces/Furniture.interface";
 
+/**
+ * FurniturePart class that represent a furniture layer.
+ *
+ * @class
+ * @memberof Scuti
+ */
 export class FurniturePart extends Container {
 
+    /**
+     * The furniture instance that is the parent of the part.
+     *
+     * @member {FloorFurniture | WallFurniture}
+     * @private
+     */
     private _furniture: FloorFurniture | WallFurniture;
 
+    /**
+     * The layer id.
+     *
+     * @member {number}
+     * @private
+     */
     private _layer: number;
 
+    /**
+     * The current frame id.
+     *
+     * @member {number}
+     * @private
+     */
     private _frame: number;
 
+    /**
+     * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
+     * @param {number} [layer] - The layer id.
+     */
     constructor(
         furniture: FloorFurniture | WallFurniture,
         layer: number
     ) {
         super();
-
+        /** Store data */
         this._furniture = furniture;
         this._layer = layer;
-
+        /** Draw the part */
         this._draw();
     }
 
+    /**
+     * Draw the part.
+     *
+     * @return {void}
+     * @private
+     */
     private _draw(): void {
+        /** Remove the old layer */
         this.removeChild(this.children[0]);
-
+        /** Needed resources */
         const visualization: IFurnitureVisualization = this._furniture.visualization.property.visualization;
         const spritesheet: Spritesheet = this._furniture.visualization.spritesheet;
-
+        /** Layer data */
         let alpha: number = 1;
         let tint: number;
         let z: number;
@@ -38,23 +73,15 @@ export class FurniturePart extends Container {
         let frame: number = 0;
         let ignoreMouse: boolean = false;
         let tag: string;
+        /** Check if the furniture support the current direction */
+        if(visualization.directions.indexOf(this._furniture.direction) === -1) this._furniture.direction = visualization.directions[0];
 
-        if(visualization.directions.indexOf(this._furniture.direction) === -1) {
-            this._furniture.direction = visualization.directions[0];
-        }
+        if (visualization.animation[this._furniture.state] !== undefined && visualization.animation[this._furniture.state][this._layer] !== undefined && visualization.animation[this._furniture.state][this._layer].frameSequence.length > 1) frame = this._frame;
 
-        if (visualization.animation[this._furniture.state] !== undefined && visualization.animation[this._furniture.state][this._layer] !== undefined && visualization.animation[this._furniture.state][this._layer].frameSequence.length > 1) {
-            frame = this._frame;
-        }
+        if (visualization.animation[this._furniture.state] !== undefined && visualization.animation[this._furniture.state][this._layer] !== undefined) frame = visualization.animation[this._furniture.state][this._layer].frameSequence[frame] ?? 0;
 
-        if (visualization.animation[this._furniture.state] !== undefined && visualization.animation[this._furniture.state][this._layer] !== undefined) {
-            frame = visualization.animation[this._furniture.state][this._layer].frameSequence[frame] ?? 0;
-        }
-
-        if(this._furniture.data.color !== null && visualization.colors[this._furniture.data.color] !== undefined && visualization.colors[this._furniture.data.color][this._layer] !== undefined) {
-            tint = Number('0x' + visualization.colors[this._furniture.data.color][this._layer]);
-        }
-
+        if(this._furniture.data.color !== null && visualization.colors[this._furniture.data.color] !== undefined && visualization.colors[this._furniture.data.color][this._layer] !== undefined) tint = Number('0x' + visualization.colors[this._furniture.data.color][this._layer]);
+        /** Set the layer data */
         if(visualization.layers[this._layer] !== undefined) {
             if(visualization.layers[this._layer].z !== undefined) z = visualization.layers[this._layer].z;
             if(visualization.layers[this._layer].alpha !== undefined) alpha = visualization.layers[this._layer].alpha / 255;
@@ -63,10 +90,10 @@ export class FurniturePart extends Container {
             if(visualization.layers[this._layer].tag !== undefined) tag = visualization.layers[this._layer].tag;
         }
 
-        if(spritesheet.data.frames[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + String.fromCharCode(97 + Number(this._layer)) + '_' + this._furniture.direction + '_' + frame] !== undefined) {
-            flip = spritesheet.data.frames[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + String.fromCharCode(97 + Number(this._layer)) + '_' + this._furniture.direction + '_' + frame]['flipH'];
-        }
+        const name: string = [this._furniture.data.baseName, this._furniture.data.baseName, 64, String.fromCharCode(97 + Number(this._layer)), this._furniture.direction, frame].join("_");
 
+        if(spritesheet.data.frames[name] !== undefined) flip = spritesheet.data.frames[name]['flipH'];
+        /** Create the layer */
         this.addChild(new FurnitureLayer(this._furniture, {
             layer: String.fromCharCode(97 + Number(this._layer)),
             alpha: alpha,
@@ -81,6 +108,12 @@ export class FurniturePart extends Container {
         }));
     }
 
+    /**
+     * Switch the part to the next frame and rerender it.
+     *
+     * @return {void}
+     * @private
+     */
     public nextFrame(): void {
         const visualization: IFurnitureVisualization = this._furniture.visualization.property.visualization;
         if(visualization.animation[String(this._furniture.state)] !== undefined && visualization.animation[String(this._furniture.state)][this._layer] !== undefined) {

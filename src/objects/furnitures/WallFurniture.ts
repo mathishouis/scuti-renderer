@@ -1,95 +1,111 @@
-import { Assets, BLEND_MODES, Sprite, Spritesheet } from "pixi.js";
-import {
-    FurnitureFrameId,
-    FurnitureLayerId,
-    IFurnitureVisualization,
-    IWallFurnitureConfiguration,
-    IWallPosition
-} from "../../interfaces/Furniture.interface";
+import { IFloorFurnitureConfiguration, IWallFurnitureConfiguration, IWallPosition } from "../../interfaces/Furniture.interface";
 import { Direction } from "../../enums/Direction";
 import { FurnitureData } from "./FurnitureData";
-import { FurnitureLayer } from "./FurnitureLayer";
 import { RoomObject } from "../rooms/RoomObject";
 import { gsap } from "gsap";
-import {InteractionManager} from "../interactions/InteractionManager";
-import {IInteractionEvent} from "../../interfaces/Interaction.interface";
-import {WiredSelectionFilter} from "../filters/WiredSelectionFilter";
+import { InteractionManager } from "../interactions/InteractionManager";
+import { IInteractionEvent } from "../../interfaces/Interaction.interface";
+import { FurnitureVisualization } from "./FurnitureVisualization";
 
+/**
+ * WallFurniture class that aim to reproduce the wall furnitures on Habbo.
+ *
+ * @class
+ * @memberof Scuti
+ */
 export class WallFurniture extends RoomObject {
 
     /**
-     * The furniture id
+     * The furniture id that represent the one in furnidata.
+     *
+     * @member {number}
      * @private
      */
     private readonly _id: number;
 
     /**
-     * The furniture position
+     * The furniture position in the room.
+     *
+     * @member {IWallPosition}
      * @private
      */
     private _position: IWallPosition;
 
     /**
-     * The furniture direction
+     * The furniture direction (0, 2, 4, 6).
+     *
+     * @member {Direction}
      * @private
      */
     private _direction: Direction;
 
     /**
-     * The furniture state
+     * The furniture state that represent it's current playing animation.
+     *
+     * @member {number}
      * @private
      */
     private _state: number;
 
     /**
-     * The furniture data
+     * A boolean indicating if we have to apply the wired selection filter to the furniture.
+     *
+     * @member {boolean}
+     * @private
+     */
+    private _selected: boolean = false;
+
+    /**
+     * The furniture data.
+     *
+     * @member {FurnitureData}
      * @private
      */
     private _data: FurnitureData;
 
-    private _wiredSelected: boolean = false;
-
     /**
-     * The current frame for each layers
+     * The furniture visualization.
+     *
+     * @member {FurnitureVisualization}
      * @private
      */
-    private _frames: Map<FurnitureFrameId, FurnitureLayerId> = new Map();
+    private _visualization: FurnitureVisualization;
 
+    /**
+     * The furniture interaction manager to handle all the clicks and taps.
+     *
+     * @member {InteractionManager}
+     * @private
+     */
     private _interactionManager: InteractionManager = new InteractionManager();
 
     /**
-     * FloorFurniture class
-     * @param configuration = The furniture configuration
+     * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.
      */
     constructor(
         configuration: IWallFurnitureConfiguration
     ) {
         super();
-
+        /** Store the data */
         this._id = configuration.id;
         this._position = configuration.position;
         this._direction = configuration.direction;
         this._state = configuration.state ?? 0;
         this._data = new FurnitureData(this);
-
-        this._createPlaceholder();
-        Assets.add("furnitures/" + this._data.baseName, "http://localhost:8081/furniture/" + this._data.baseName + "/" + this._data.baseName + ".json");
-        Assets.load("furnitures/" + this._data.baseName).then(() => this._draw());
+        /** Initialise visualization */
+        this._visualization = new FurnitureVisualization(this);
+        this.addChild(this._visualization);
+        /** Set the furniture position in the canvas */
+        this._updatePosition();
     }
 
     /**
-     * Draw the furniture
+     * Update the furniture position in the canvas.
+     *
+     * @return {void}
      * @private
      */
-    private _draw(): void {
-        this._destroyParts();
-        const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
-        const visualization: IFurnitureVisualization = spritesheet.data["furniProperty"].visualization;
-
-        for (let i: number = 0; i < visualization.layerCount; i++) {
-            this._createLayer(i);
-        }
-
+    private _updatePosition(): void {
         this.x = 32 + 32 * this._position.x - 32 * this._position.y;
         this.y = 16 * this._position.x + 16 * this._position.y - 32;
         if(this._direction === 2) {
@@ -102,186 +118,42 @@ export class WallFurniture extends RoomObject {
     }
 
     /**
-     * Draw the layer
-     * @param layer
-     * @private
-     */
-    private _createLayer(
-        layer: FurnitureLayerId
-    ): void {
-        const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
-        const visualization: IFurnitureVisualization = spritesheet.data["furniProperty"].visualization;
-
-        let alpha: number = 1;
-        let tint: number;
-        let z: number;
-        let blendMode: BLEND_MODES;
-        let flip: boolean = false;
-        let frame: number = 0;
-        let ignoreMouse: boolean = false;
-        let tag: string;
-
-        if(visualization.directions.indexOf(this._direction) === -1) {
-            this._direction = visualization.directions[0];
-        }
-
-        if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layer] !== undefined && visualization.animation[this._state][layer].frameSequence.length > 1) {
-            if (this._frames.has(layer)) {
-                frame = this._frames.get(layer);
-            } else {
-                this._frames.set(layer, 0);
-            }
-        }
-
-        if (visualization.animation[this._state] !== undefined && visualization.animation[this._state][layer] !== undefined) {
-            frame = visualization.animation[this._state][layer].frameSequence[frame] ?? 0;
-        }
-
-        if(this._data.color !== null && visualization.colors[this._data.color] !== undefined && visualization.colors[this._data.color][layer] !== undefined) {
-            tint = Number('0x' + visualization.colors[this._data.color][layer]);
-        }
-
-        if(visualization.layers[layer] !== undefined) {
-            if(visualization.layers[layer].z !== undefined) z = visualization.layers[layer].z;
-            if(visualization.layers[layer].alpha !== undefined) alpha = visualization.layers[layer].alpha / 255;
-            if(visualization.layers[layer].ink !== undefined) blendMode = BLEND_MODES.ADD;
-            if(visualization.layers[layer].ignoreMouse !== undefined) ignoreMouse = visualization.layers[layer].ignoreMouse;
-            if(visualization.layers[layer].tag !== undefined) tag = visualization.layers[layer].tag;
-        }
-
-        if(spritesheet.data.frames[this._data.baseName + '_' + this._data.baseName + '_64_' + String.fromCharCode(97 + Number(layer)) + '_' + this._direction + '_' + frame] !== undefined) {
-            flip = spritesheet.data.frames[this._data.baseName + '_' + this._data.baseName + '_64_' + String.fromCharCode(97 + Number(layer)) + '_' + this._direction + '_' + frame]['flipH'];
-        }
-
-        this.addChild(new FurnitureLayer(this, {
-            layer: String.fromCharCode(97 + Number(layer)),
-            alpha: alpha,
-            tint: tint,
-            z: z,
-            direction: this._direction,
-            blendMode: blendMode,
-            flip: flip,
-            frame: frame,
-            ignoreMouse: ignoreMouse,
-            tag: tag
-        }));
-    }
-
-    /**
-     * Draw the next frame
-     * @private
-     */
-    private _updateFrame(): void {
-        this._frames.forEach((frame: FurnitureFrameId, layer: FurnitureLayerId) => {
-            const spritesheet: Spritesheet = Assets.get("furnitures/" + this._data.baseName);
-            const visualization: IFurnitureVisualization = spritesheet.data["furniProperty"].visualization;
-
-            if(visualization.animation[String(this._state)] !== undefined && visualization.animation[String(this._state)][layer] !== undefined) {
-                const frameSequence: number[] = visualization.animation[String(this._state)][layer].frameSequence;
-                const currentFrame: number = frame;
-                if(frameSequence.length > 1)  {
-                    if ((frameSequence.length - 1) > currentFrame) {
-                        this._frames.set(layer, currentFrame + 1);
-                    } else {
-                        this._frames.set(layer, 0);
-                    }
-                    this._draw();
-                }
-
-            }
-
-        });
-    }
-
-    /**
-     * Draw the furniture placeholder
-     * @private
-     */
-    private _createPlaceholder(): void {
-        const placeholder: Sprite = new Sprite(Assets.get("furnitures/floor/placeholder").textures["place_holder_furniture_64.png"]);
-        this.addChild(placeholder);
-
-        placeholder.x = -32;
-        placeholder.y = -50;
-    }
-
-    /**
-     * Destroy all sprites
-     * @private
-     */
-    private _destroyParts(): void {
-        while(this.children[0]) {
-            this.removeChild(this.children[0]);
-        }
-    }
-
-    /**
-     * On each animation tick
-     * @private
-     */
-    private _onTicker(): void {
-        this._updateFrame();
-    }
-
-    /**
-     * Start the furniture animation
+     * Add the furniture to the ticker to start the animation.
+     *
+     * @return {void}
+     * @public
      */
     public start(): void {
-        this.animationTicker.add(() => this._onTicker());
+        this.animationTicker.add(() => this._visualization.tick());
     }
 
     /**
-     * Stop the furniture animation
+     * Remove the furniture from the ticker to stop the animation.
+     *
+     * @return {void}
+     * @public
      */
     public stop(): void {
-        this.animationTicker.remove(() => this._onTicker());
-    }
-
-    public get interactionManager(): InteractionManager {
-        return this._interactionManager;
-    }
-
-    public get wiredSelected(): boolean {
-        return this._wiredSelected;
-    }
-
-    public set wiredSelected(selected: boolean) {
-        this._wiredSelected = selected;
-        if(selected) {
-            this.filters = [new WiredSelectionFilter(0xffffff, 0x999999)];
-        } else {
-            this.filters = [];
-        }
-    }
-
-    public get id(): number {
-        return this._id;
+        this.animationTicker.remove(() => this._visualization.tick());
     }
 
     /**
-     * Get the furniture data
+     * Move the furniture at the given position and in time.
+     *
+     * @param {IWallPosition} [position] - The position where we want to move the furniture.
+     * @param {number} [duration] - The time to move the furniture to the given position.
+     * @return {void}
+     * @public
      */
-    public get data(): FurnitureData {
-        return this._data;
-    }
-
-    /**
-     * Get the furniture position
-     */
-    public get pos(): WallPosition {
-        return this._position;
-    }
-
-    /**
-     * Update the furniture position
-     * @param position
-     */
-    public set pos(position: WallPosition) {
+    public move = (
+        position: IWallPosition,
+        duration: number = 0.5
+    ) => {
         if(this._direction === 2) {
             gsap.to(this, {
                 x: 32 + 32 * this._position.x - 32 * this._position.y + this._position.offsetX * 2,
                 y: 16 * this._position.x + 16 * this._position.y - 32 + this._position.offsetY * 2 - 84,
-                duration: 0.5,
+                duration: duration,
                 ease: "linear",
                 onComplete: () => {
                     this._position = position;
@@ -291,7 +163,7 @@ export class WallFurniture extends RoomObject {
             gsap.to(this, {
                 x: 32 + 32 * this._position.x - 32 * this._position.y + this._position.offsetX * 2 - 32,
                 y: 16 * this._position.x + 16 * this._position.y - 32 + this._position.offsetY * 2 - 84,
-                duration: 0.5,
+                duration: duration,
                 ease: "linear",
                 onComplete: () => {
                     this._position = position;
@@ -301,92 +173,305 @@ export class WallFurniture extends RoomObject {
     }
 
     /**
-     * Get the furniture direction
+     * Rotate the furniture at the given direction and in time.
+     *
+     * @param {Direction} [direction] - The new direction of the furniture.
+     * @param {number} [duration] - The time to rotate the furniture at the given direction.
+     * @return {void}
+     * @public
+     */
+    public rotate = (
+        direction: Direction,
+        duration: number = 0.2
+    ) => {
+        gsap.to(this, {
+            x: 32 + 32 * this._position.x - 32 * this._position.y + this._position.offsetX * 2 - 32,
+            y: 16 * this._position.x + 16 * this._position.y - 32 + this._position.offsetY * 2 - 84 - 6.25,
+            duration: duration / 2,
+            ease: "easeIn",
+            onComplete: () => {
+                this._direction = direction;
+                this._visualization.update();
+                gsap.to(this, {
+                    x: 32 + 32 * this._position.x - 32 * this._position.y + this._position.offsetX * 2 - 32,
+                    y: 16 * this._position.x + 16 * this._position.y - 32 + this._position.offsetY * 2 - 84,
+                    duration: duration / 2,
+                    ease: "easeOut"
+                });
+            }
+        });
+    }
+
+    /**
+     * Reference to the furniture id from the furni data.
+     *
+     * @member {number}
+     * @readonly
+     * @public
+     */
+    public get id(): number {
+        return this._id;
+    }
+
+    /**
+     * Reference to the furniture position in the room.
+     *
+     * @member {IWallPosition}
+     * @readonly
+     * @public
+     */
+    public get roomPosition(): IWallPosition {
+        return this._position;
+    }
+
+    /**
+     * Update the furniture position.
+     *
+     * @param {IWallPosition} [position] - The new furniture position.
+     * @public
+     */
+    public set roomPosition(
+        position: IWallPosition
+    ) {
+        this._position = position;
+    }
+
+    /**
+     * Reference to the furniture direction.
+     *
+     * @member {Direction}
+     * @readonly
+     * @public
      */
     public get direction(): Direction {
-        return this._direction;
+        return this._direction
     }
 
     /**
-     * Update the furniture direction
-     * @param direction
+     * Update the furniture direction.
+     *
+     * @param {Direction} [direction] - The new furniture direction.
+     * @public
      */
-    public set direction(direction: Direction) {
+    public set direction(
+        direction: Direction
+    ) {
         this._direction = direction;
-        this._draw();
+        this._visualization.update();
     }
 
     /**
-     * Return the furniture state
+     * Reference to the furniture state.
+     *
+     * @member {number}
+     * @readonly
+     * @public
      */
     public get state(): number {
         return this._state;
     }
 
     /**
-     * Update the furniture state
-     * @param state
+     * Update the furniture state (so the animation).
+     *
+     * @param {number} [state] - The new furniture state.
+     * @public
      */
     public set state(state: number) {
         this._state = state;
-        this._draw();
+        this._visualization.update();
     }
 
-    get onPointerDown(): (event: IInteractionEvent) => void {
+    /**
+     * Reference to the furniture selection state.
+     *
+     * @member {boolean}
+     * @readonly
+     * @public
+     */
+    public get selected(): boolean {
+        return this._selected;
+    }
+
+    /**
+     * Update the furniture selection state (add the wired selection filter to the furniture).
+     *
+     * @param {boolean} [selected] - The new furniture selection state.
+     * @public
+     */
+    public set selected(
+        selected: boolean
+    ) {
+        this._selected = selected;
+        this._visualization.update();
+    }
+
+    /**
+     * Reference to the furniture data.
+     *
+     * @member {FurnitureData}
+     * @readonly
+     * @public
+     */
+    public get data(): FurnitureData {
+        return this._data;
+    }
+
+    /**
+     * Reference to the furniture visualization.
+     *
+     * @member {FurnitureVisualization}
+     * @readonly
+     * @public
+     */
+    public get visualization(): FurnitureVisualization {
+        return this._visualization;
+    }
+
+    /**
+     * Reference to the furniture interaction manager.
+     *
+     * @member {InteractionManager}
+     * @readonly
+     * @public
+     */
+    public get interactionManager(): InteractionManager {
+        return this._interactionManager;
+    }
+
+    /**
+     * Reference to the pointer down event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    public get onPointerDown(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerDown;
     }
 
-    set onPointerDown(
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    public set onPointerDown(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerDown = value;
     }
 
-    get onPointerUp(): (event: IInteractionEvent) => void {
+    /**
+     * Reference to the pointer up event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    public get onPointerUp(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerUp;
     }
 
-    set onPointerUp(
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    public set onPointerUp(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerUp = value;
     }
 
-    get onPointerMove(): (event: IInteractionEvent) => void {
+    /**
+     * Reference to the pointer move event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    public get onPointerMove(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerMove;
     }
 
-    set onPointerMove(
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    public set onPointerMove(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerMove = value;
     }
 
-    get onPointerOut(): (event: IInteractionEvent) => void {
+    /**
+     * Reference to the pointer out event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    public get onPointerOut(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerOut;
     }
 
-    set onPointerOut(
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    public set onPointerOut(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerOut = value;
     }
 
-    get onPointerOver(): (event: IInteractionEvent) => void {
+    /**
+     * Reference to the pointer over event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    public get onPointerOver(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerOver;
     }
 
-    set onPointerOver(
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    public set onPointerOver(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerOver = value;
     }
 
-    get onDoubleClick(): (event: IInteractionEvent) => void {
+    /**
+     * Reference to the pointer double click event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    public get onDoubleClick(): (event: IInteractionEvent) => void {
         return this._interactionManager.onDoubleClick;
     }
 
-    set onDoubleClick(
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    public set onDoubleClick(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onDoubleClick = value;
