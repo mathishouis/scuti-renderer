@@ -3,6 +3,7 @@ import { FloorFurniture } from "./FloorFurniture";
 import { WallFurniture } from "./WallFurniture";
 import { FurnitureLayer } from "./FurnitureLayer";
 import { IFurnitureVisualization } from "../../interfaces/Furniture.interface";
+import {FurnitureGuildCustomizedVisualization} from "./visualizations/FurnitureGuildCustomizedVisualization";
 
 /**
  * FurniturePart class that represent a furniture layer.
@@ -62,8 +63,8 @@ export class FurniturePart extends Container {
         /** Remove the old layer */
         this.removeChild(this.children[0]);
         /** Needed resources */
-        const visualization: IFurnitureVisualization = this._furniture.visualization.property.visualization;
-        const spritesheet: Spritesheet = this._furniture.visualization.spritesheet;
+        const visualization: IFurnitureVisualization = this._furniture.view.property.visualization;
+        const spritesheet: Spritesheet = this._furniture.view.spritesheet;
         /** Layer data */
         let alpha: number = 1;
         let tint: number;
@@ -85,9 +86,16 @@ export class FurniturePart extends Container {
         if(visualization.layers[this._layer] !== undefined) {
             if(visualization.layers[this._layer].z !== undefined) z = visualization.layers[this._layer].z;
             if(visualization.layers[this._layer].alpha !== undefined) alpha = visualization.layers[this._layer].alpha / 255;
-            if(visualization.layers[this._layer].ink !== undefined) blendMode = BLEND_MODES.ADD;
+            if(visualization.layers[this._layer].ink !== undefined) blendMode = BLEND_MODES[visualization.layers[this._layer].ink];
             if(visualization.layers[this._layer].ignoreMouse !== undefined) ignoreMouse = visualization.layers[this._layer].ignoreMouse;
             if(visualization.layers[this._layer].tag !== undefined) tag = visualization.layers[this._layer].tag;
+        }
+
+        if(this._furniture.view.visualization !== undefined) {
+            if(this._furniture.view.visualization instanceof FurnitureGuildCustomizedVisualization) {
+                if(tag === "COLOR1") tint = this._furniture.view.visualization.primaryColor;
+                if(tag === "COLOR2") tint = this._furniture.view.visualization.secondaryColor;
+            }
         }
 
         const name: string = [this._furniture.data.baseName, this._furniture.data.baseName, 64, String.fromCharCode(97 + Number(this._layer)), this._furniture.direction, frame].join("_");
@@ -115,7 +123,7 @@ export class FurniturePart extends Container {
      * @private
      */
     public nextFrame(): void {
-        const visualization: IFurnitureVisualization = this._furniture.visualization.property.visualization;
+        const visualization: IFurnitureVisualization = this._furniture.view.property.visualization;
         if(visualization.animation[String(this._furniture.state)] !== undefined && visualization.animation[String(this._furniture.state)][this._layer] !== undefined) {
             const frameSequence: number[] = visualization.animation[String(this._furniture.state)][this._layer].frameSequence;
             const currentFrame: number = this._frame;

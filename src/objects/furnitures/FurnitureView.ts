@@ -5,17 +5,19 @@ import { WallFurniture } from "./WallFurniture";
 import { IFurnitureProperty } from "../../interfaces/Furniture.interface";
 import { FurnitureLayer } from "./FurnitureLayer";
 import { WiredSelectionFilter } from "../filters/WiredSelectionFilter";
+import { FurnitureGuildCustomizedVisualization } from "./visualizations/FurnitureGuildCustomizedVisualization";
+import { FurnitureVisualization } from "./visualizations/FurnitureVisualization";
 
 /** The wired selection filter */
 const WIRED_SELECTION_FILTER: WiredSelectionFilter = new WiredSelectionFilter(0xffffff, 0x999999);
 
 /**
- * FurnitureVisualization class that manage all the rendering part of the furniture.
+ * FurnitureView class that manage all the rendering part of the furniture.
  *
  * @class
  * @memberof Scuti
  */
-export class FurnitureVisualization extends Container {
+export class FurnitureView extends Container {
 
     /**
      * The furniture instance that we want to render.
@@ -50,6 +52,14 @@ export class FurnitureVisualization extends Container {
     private _property: IFurnitureProperty;
 
     /**
+     * The furniture visualization.
+     *
+     * @member {FurnitureVisualization}
+     * @private
+     */
+    private _visualization: FurnitureVisualization;
+
+    /**
      * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance to render.
      */
     constructor(
@@ -65,13 +75,25 @@ export class FurnitureVisualization extends Container {
             Assets.load("furnitures/" + this._furniture.data.baseName).then(() => {
                 this._spritesheet = Assets.get("furnitures/" + this._furniture.data.baseName);
                 this._property = this._spritesheet.data["furniProperty"];
+                this._initialiseVisualization();
                 this._draw();
             });
         } else {
             this._spritesheet = Assets.get("furnitures/" + this._furniture.data.baseName);
             this._property = this._spritesheet.data["furniProperty"];
+            this._initialiseVisualization();
             this._draw();
         }
+    }
+
+    /**
+     * Initialise furniture visualization.
+     *
+     * @return {void}
+     * @private
+     */
+    private _initialiseVisualization(): void {
+        if(this._property.infos.visualization === "furniture_guild_customized") this._visualization = new FurnitureGuildCustomizedVisualization(this._furniture);
     }
 
     /**
@@ -204,6 +226,17 @@ export class FurnitureVisualization extends Container {
      */
     public get property(): IFurnitureProperty {
         return this._property;
+    }
+
+    /**
+     * Reference to the furniture visualization.
+     *
+     * @member {FurnitureVisualization}
+     * @readonly
+     * @public
+     */
+    public get visualization(): FurnitureVisualization {
+        return this._visualization;
     }
 
 }
