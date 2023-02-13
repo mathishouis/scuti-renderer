@@ -97,7 +97,6 @@ export class FurnitureLayer extends Container {
      * @private
      */
     private _draw(): void {
-        console.log(Assets.get("furnitures/" + this._furniture.data.baseName).textures);
         const sprite: HitSprite = new HitSprite(Assets.get("furnitures/" + this._furniture.data.baseName).textures[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + this._layer + '_' + this._direction + '_' + this._frame]);
         if(this._tint !== undefined) sprite.tint = utils.premultiplyTint(this._tint, 1);
         if(this._blendMode !== undefined) sprite.blendMode = this._blendMode;

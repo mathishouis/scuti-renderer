@@ -53,6 +53,11 @@ export interface IFurnitureData {
     canLayOn: boolean
 }
 
+export interface IFurnitureProperty {
+    infos: {},
+    visualization: IFurnitureVisualization
+}
+
 export interface IFurnitureVisualization {
     layerCount: number,
     directions: number[],

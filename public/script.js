@@ -115,16 +115,28 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
             y: 5,
             z: 0
         },
-        direction: 4,
-        state: 0
+        direction: 2,
+        state: 1
     });
     furniture.onPointerDown = () => {
-        if(furniture.wiredSelected) {
-            furniture.wiredSelected = false;
+        if(furniture.selected) {
+            furniture.selected = false;
         } else {
-            furniture.wiredSelected = true;
+            furniture.selected = true;
         }
     }
+    setTimeout(() => {
+        console.log(furniture.position);
+        /*furniture.move({
+            x: 10,
+            y: 6,
+            z: 0
+        }, 0);*/
+        //
+        furniture.rotate(4)
+        //furniture.direction = 4;
+       furniture.state = 0;
+    }, 5000);
     room.objects.add(wallFurniture);
     room.objects.add(furniture);
 
@@ -148,7 +160,7 @@ function dice(room, x, y, z) {
             z: z,
         },
         //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
-        direction: 4,
+        direction: 0,
         //id: furniId[Math.floor(Math.random() * furniId.length)],
         id: 284,
         state: 1,

@@ -184,14 +184,14 @@ export class Avatar extends RoomObject {
     /**
      * Start the furniture animation
      */
-    public startAnimation(): void {
+    public start(): void {
         this.animationTicker.add(() => this._onTicker());
     }
 
     /**
      * Stop the furniture animation
      */
-    public stopAnimation(): void {
+    public stop(): void {
         this.animationTicker.remove(() => this._onTicker());
     }
 
