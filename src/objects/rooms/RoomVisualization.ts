@@ -7,8 +7,8 @@ import { Stair } from "./parts/Stair";
 import { WallType } from "../../enums/WallType";
 import { StairType } from "../../enums/StairType";
 import { Cursor } from "./parts/Cursor";
-import { RoomObjectContainer } from "./RoomObjectContainer";
-import { RoomTileContainer } from "./RoomTileContainer";
+import { RoomObjectLayer } from "./layers/RoomObjectLayer";
+import { RoomTileLayer } from "./layers/RoomTileLayer";
 import { IInteractionEvent } from "../../interfaces/Interaction.interface";
 
 /**
@@ -38,18 +38,18 @@ export class RoomVisualization extends Container {
     /**
      * The container that will contains all the tiles objects.
      *
-     * @member {RoomTileContainer}
+     * @member {RoomTileLayer}
      * @private
      */
-    private _tileLayer: RoomTileContainer;
+    private _tileLayer: RoomTileLayer;
 
     /**
      * The container that will contains all the objects like avatars or furnitures.
      *
-     * @member {RoomObjectContainer}
+     * @member {RoomObjectLayer}
      * @private
      */
-    private _objectLayer: RoomObjectContainer;
+    private _objectLayer: RoomObjectLayer;
 
     /**
      * List containing all the walls instances.
@@ -92,8 +92,8 @@ export class RoomVisualization extends Container {
         super();
 
         this._room = room;
-        this._tileLayer = new RoomTileContainer(this._room);
-        this._objectLayer = new RoomObjectContainer(this._room);
+        this._tileLayer = new RoomTileLayer(this._room);
+        this._objectLayer = new RoomObjectLayer(this._room);
         /** Add layers to the visualization */
         this.addChild(this._wallLayer);
         this.addChild(this._tileLayer);
@@ -336,11 +336,11 @@ export class RoomVisualization extends Container {
     /**
      * Reference to the tile layer container.
      *
-     * @member {RoomTileContainer}
+     * @member {RoomTileLayer}
      * @readonly
      * @public
      */
-    public get tileLayer(): RoomTileContainer {
+    public get tileLayer(): RoomTileLayer {
         return this._tileLayer;
     }
 
@@ -358,11 +358,11 @@ export class RoomVisualization extends Container {
     /**
      * Reference to the object layer container.
      *
-     * @member {RoomObjectContainer}
+     * @member {RoomObjectLayer}
      * @readonly
      * @public
      */
-    public get objectLayer(): RoomObjectContainer {
+    public get objectLayer(): RoomObjectLayer {
         return this._objectLayer;
     }
 

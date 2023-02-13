@@ -1,14 +1,14 @@
 import { Container } from "pixi.js";
-import { RoomObject } from "./RoomObject";
-import { Room } from "./Room";
+import { RoomObject } from "../RoomObject";
+import { Room } from "../Room";
 
 /**
- * RoomObjectContainer class that manage all the room objects.
+ * RoomObjectLayer class that manage all the room objects.
  *
  * @class
  * @memberof Scuti
  */
-export class RoomObjectContainer extends Container {
+export class RoomObjectLayer extends Container {
 
     /**
      * The room instance that will be managed by the camera.

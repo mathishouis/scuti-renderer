@@ -1,15 +1,15 @@
 import { Container } from "pixi.js";
-import { Room } from "./Room";
-import { IInteractionEvent } from "../../interfaces/Interaction.interface";
-import { InteractionManager } from "../interactions/InteractionManager";
+import { Room } from "../Room";
+import { IInteractionEvent } from "../../../interfaces/Interaction.interface";
+import { InteractionManager } from "../../interactions/InteractionManager";
 
 /**
- * RoomTileContainer class that manage all the room tiles.
+ * RoomTileLayer class that manage all the room tiles.
  *
  * @class
  * @memberof Scuti
  */
-export class RoomTileContainer extends Container {
+export class RoomTileLayer extends Container {
 
     /**
      * The room instance that will be managed by the camera.
