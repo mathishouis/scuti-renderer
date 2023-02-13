@@ -117,9 +117,9 @@ export class HitTexture {
         sprite.texture.trim.x = 0;
         sprite.texture.trim.y = 0;
         let renderTexture: RenderTexture = undefined;
-        if(this._sprite.parent instanceof FurnitureLayer) {
-            this._sprite.parent.furniture.room.engine.application.stage.addChild(sprite);
-            renderTexture = this._sprite.parent.furniture.room.engine.application.renderer.generateTexture(sprite);
+        if(this._sprite instanceof FurnitureLayer) {
+            this._sprite.furniture.room.engine.application.stage.addChild(sprite);
+            renderTexture = this._sprite.furniture.room.engine.application.renderer.generateTexture(sprite);
         } else if(this._sprite.parent instanceof AvatarLayer) {
             this._sprite.parent.avatar.room.engine.application.stage.addChild(sprite);
             renderTexture = this._sprite.parent.avatar.room.engine.application.renderer.generateTexture(sprite);
@@ -206,8 +206,8 @@ export class HitTexture {
         const BYTES_PER_PIXEL: number = 4;
 
         let renderer: Renderer;
-        if(this._sprite.parent instanceof FurnitureLayer) {
-            renderer = this._sprite.parent.furniture.room.engine.application.renderer as Renderer;
+        if(this._sprite instanceof FurnitureLayer) {
+            renderer = this._sprite.furniture.room.engine.application.renderer as Renderer;
         } else if(this._sprite.parent instanceof AvatarLayer) {
             renderer = this._sprite.parent.avatar.room.engine.application.renderer as Renderer;
         }

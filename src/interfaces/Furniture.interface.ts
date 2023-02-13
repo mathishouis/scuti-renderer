@@ -28,10 +28,6 @@ export interface IWallFurnitureConfiguration {
     state?: number
 }
 
-export type FurnitureFrameId = number;
-
-export type FurnitureLayerId = number;
-
 export interface IFurnitureData {
     id: number,
     className: string,
@@ -53,6 +49,11 @@ export interface IFurnitureData {
     canLayOn: boolean
 }
 
+export interface IFurnitureProperty {
+    infos: {},
+    visualization: IFurnitureVisualization
+}
+
 export interface IFurnitureVisualization {
     layerCount: number,
     directions: number[],
@@ -70,7 +71,7 @@ export interface IFurnitureVisualization {
 }
 
 export interface IFurnitureLayerConfiguration {
-    layer: FurnitureLayerId | string,
+    layer: number | string,
     alpha: number,
     tint: number,
     z: number,

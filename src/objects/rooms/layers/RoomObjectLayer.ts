@@ -32,6 +32,7 @@ export class RoomObjectLayer extends Container {
     /**
      * Add the given room object into the object layer of the room.
      *
+     * @param {RoomObject} [object] - The room object that we want to add.
      * @return {void}
      * @public
      */
@@ -39,20 +40,21 @@ export class RoomObjectLayer extends Container {
         object: RoomObject
     ): void {
         object.room = this._room;
-        object.startAnimation();
+        object.start();
         this.addChild(object);
     }
 
     /**
      * Remove the given room object into the object layer of the room.
      *
+     * @param {RoomObject} [object] - The room object that we want to remove.
      * @return {void}
      * @public
      */
     public remove(
         object: RoomObject
     ): void {
-        object.stopAnimation();
+        object.stop();
         this.removeChild(object);
     }
 

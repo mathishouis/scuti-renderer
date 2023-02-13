@@ -45,7 +45,7 @@ export class RoomTileLayer extends Container {
      * @readonly
      * @public
      */
-    get onPointerDown(): (event: IInteractionEvent) => void {
+    public get onPointerDown(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerDown;
     }
 
@@ -55,7 +55,7 @@ export class RoomTileLayer extends Container {
      * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
      * @public
      */
-    set onPointerDown(
+    public set onPointerDown(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerDown = value;
@@ -68,7 +68,7 @@ export class RoomTileLayer extends Container {
      * @readonly
      * @public
      */
-    get onPointerUp(): (event: IInteractionEvent) => void {
+    public get onPointerUp(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerUp;
     }
 
@@ -78,7 +78,7 @@ export class RoomTileLayer extends Container {
      * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
      * @public
      */
-    set onPointerUp(
+    public set onPointerUp(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerUp = value;
@@ -91,7 +91,7 @@ export class RoomTileLayer extends Container {
      * @readonly
      * @public
      */
-    get onPointerMove(): (event: IInteractionEvent) => void {
+    public get onPointerMove(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerMove;
     }
 
@@ -101,7 +101,7 @@ export class RoomTileLayer extends Container {
      * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
      * @public
      */
-    set onPointerMove(
+    public set onPointerMove(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerMove = value;
@@ -114,7 +114,7 @@ export class RoomTileLayer extends Container {
      * @readonly
      * @public
      */
-    get onPointerOut(): (event: IInteractionEvent) => void {
+    public get onPointerOut(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerOut;
     }
 
@@ -124,7 +124,7 @@ export class RoomTileLayer extends Container {
      * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
      * @public
      */
-    set onPointerOut(
+    public set onPointerOut(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerOut = value;
@@ -137,7 +137,7 @@ export class RoomTileLayer extends Container {
      * @readonly
      * @public
      */
-    get onPointerOver(): (event: IInteractionEvent) => void {
+    public get onPointerOver(): (event: IInteractionEvent) => void {
         return this._interactionManager.onPointerOver;
     }
 
@@ -147,7 +147,7 @@ export class RoomTileLayer extends Container {
      * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
      * @public
      */
-    set onPointerOver(
+    public set onPointerOver(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onPointerOver = value;
@@ -160,7 +160,7 @@ export class RoomTileLayer extends Container {
      * @readonly
      * @public
      */
-    get onDoubleClick(): (event: IInteractionEvent) => void {
+    public get onDoubleClick(): (event: IInteractionEvent) => void {
         return this._interactionManager.onDoubleClick;
     }
 
@@ -170,7 +170,7 @@ export class RoomTileLayer extends Container {
      * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
      * @public
      */
-    set onDoubleClick(
+    public set onDoubleClick(
         value: (event: IInteractionEvent) => void
     ) {
         this._interactionManager.onDoubleClick = value;

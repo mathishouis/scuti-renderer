@@ -107,20 +107,6 @@ export class RoomVisualization extends Container {
     }
 
     /**
-     * Destroy all the parts (tiles, walls, stairs, ...).
-     *
-     * @return {void}
-     * @private
-     */
-    private _destroyParts(): void {
-        [...this._tiles, ...this._walls].forEach((part: Tile | Stair | Wall) =>
-            part.destroy()
-        );
-        this._tiles = [];
-        this._walls = [];
-    }
-
-    /**
      * Draw the room visualization with all the tiles and walls.
      *
      * @return {void}
@@ -141,6 +127,20 @@ export class RoomVisualization extends Container {
                 });
             }
         }
+    }
+
+    /**
+     * Destroy all the parts (tiles, walls, stairs, ...).
+     *
+     * @return {void}
+     * @private
+     */
+    private _destroyParts(): void {
+        [...this._tiles, ...this._walls].forEach((part: Tile | Stair | Wall) =>
+            part.destroy()
+        );
+        this._tiles = [];
+        this._walls = [];
     }
 
     /**

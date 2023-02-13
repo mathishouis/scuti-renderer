@@ -115,17 +115,41 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
             y: 5,
             z: 0
         },
-        direction: 4,
-        state: 0
+        direction: 2,
+        state: 1
     });
     furniture.onPointerDown = () => {
-        if(furniture.wiredSelected) {
-            furniture.wiredSelected = false;
+        if(furniture.selected) {
+            furniture.selected = false;
         } else {
-            furniture.wiredSelected = true;
+            furniture.selected = true;
         }
     }
+    setTimeout(() => {
+        console.log(furniture.position);
+        /*furniture.move({
+            x: 10,
+            y: 6,
+            z: 0
+        }, 0);*/
+        //
+        furniture.rotate(4)
+        //furniture.direction = 4;
+       furniture.state = 0;
+    }, 5000);
+    const wallFurniture3 = new WallFurniture({
+        position: {
+            x: 4,
+            y: 0,
+            offsetX: 14,
+            offsetY: 41,
+        },
+        id: 4066,
+        direction: 4,
+        state: 3,
+    });
     room.objects.add(wallFurniture);
+    room.objects.add(wallFurniture3);
     room.objects.add(furniture);
 
     /*const furniture = new FloorFurniture({
@@ -148,7 +172,7 @@ function dice(room, x, y, z) {
             z: z,
         },
         //direction: randomRotation[Math.floor(Math.random() * randomRotation.length)],
-        direction: 4,
+        direction: 0,
         //id: furniId[Math.floor(Math.random() * furniId.length)],
         id: 284,
         state: 1,

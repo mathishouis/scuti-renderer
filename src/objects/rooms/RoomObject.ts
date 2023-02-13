@@ -15,7 +15,7 @@ export class RoomObject extends Container {
      * @member {void}
      * @public
      */
-    public startAnimation: () => void;
+    public start: () => void;
 
     /**
      * Stop the animation of the room object.
@@ -23,7 +23,7 @@ export class RoomObject extends Container {
      * @member {void}
      * @public
      */
-    public stopAnimation: () => void;
+    public stop: () => void;
 
     /**
      * The room instance that will be managed by the camera.
