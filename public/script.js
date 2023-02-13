@@ -35,8 +35,8 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         "x22222111111111111000000000\n" +
         "x2222xx1111111111xx00000000\n" +
         "x2222xx1111111111xx00000000\n" +
-        "x2222xxxx1111xxxxxxxxxxxxxx\n" +
-        "x2222xxxx0000xxxxxxxxxxxxxx\n" +
+        "x2222xx00111100xxxxxxxxxxxx\n" +
+        "x2222xx00000000xxxxxxxxxxxx\n" +
         "x2222x0000000000xxxxxxxxxxx\n" +
         "x2222x0000000000xxxxxxxxxxx\n" +
         "x2222x0000000000xxxxxxxxxxx\n" +
@@ -52,6 +52,12 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1601)
     });
+    room.tiles.onPointerDown = (position) => {
+        console.log("click", position);
+    }
+    room.tiles.onDoubleClick = (position) => {
+        console.log("dblclick", position);
+    }
     dice(room, 5, 5, 2);
     dice(room, 5, 6, 1);
     dice(room, 6, 5, 2);

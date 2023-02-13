@@ -1,10 +1,12 @@
 import { Room } from "../Room";
 import { IPosition3D, IPosition2D, IStairConfiguration } from "../../../interfaces/Room.interface";
-import { Container, Graphics, Matrix, utils } from "pixi.js";
+import { Container, Graphics, Matrix, Point, Polygon, utils } from "pixi.js";
 import { Material } from "../materials/Material";
 import { StairType } from "../../../enums/StairType";
 import { Direction } from "../../../enums/Direction";
 import { FloorMaterial } from "../materials/FloorMaterial";
+import { InteractionManager } from "../../interactions/InteractionManager";
+import { IInteractionEvent } from "../../../interfaces/Interaction.interface";
 
 /**
  * Stair class that show up when two tiles side by side have a height difference of one.
@@ -55,6 +57,14 @@ export class Stair extends Container {
     private _type: StairType;
 
     /**
+     * The stair interaction manager.
+     *
+     * @member {InteractionManager}
+     * @private
+     */
+    private _interactionManager: InteractionManager = new InteractionManager();
+
+    /**
      * @param {Room} [room] - The room instance where the stair will be drawn.
      * @param {IStairConfiguration} [configuration] - The stair configuration.
      * @param {Material} [configuration.material] - The stair material that will be applied.
@@ -73,6 +83,13 @@ export class Stair extends Container {
         this._thickness = configuration.thickness ?? 8;
         this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
         this._type = configuration.type;
+        /** Register interactions */
+        this.interactive = true;
+        this.on("pointerdown", (event: PointerEvent) => this._interactionManager.handlePointerDown({ mouseEvent: event, position: { x: this._position.x, y: this._position.y, z: this._position.z } }));
+        this.on("pointerup", (event: PointerEvent) => this._interactionManager.handlePointerUp({ mouseEvent: event, position: { x: this._position.x, y: this._position.y, z: this._position.z } }));
+        this.on("pointermove", (event: PointerEvent) => this._interactionManager.handlePointerMove({ mouseEvent: event, position: { x: this._position.x, y: this._position.y, z: this._position.z } }));
+        this.on("pointerout", (event: PointerEvent) => this._interactionManager.handlePointerOut({ mouseEvent: event, position: { x: this._position.x, y: this._position.y, z: this._position.z } }));
+        this.on("pointerover", (event: PointerEvent) => this._interactionManager.handlePointerOver({ mouseEvent: event, position: { x: this._position.x, y: this._position.y, z: this._position.z } }));
         /** Draw the stair */
         this._draw();
     }
@@ -347,6 +364,14 @@ export class Stair extends Container {
         /** Positionate the stair */
         this.x = 32 * this._position.x - 32 * this._position.y + offsets[1].x;
         this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z + offsets[1].y;
+        /** Set the hit area */
+        this.hitArea = new Polygon(
+            new Point(0 - offsets[1].x, 0 - offsets[1].y),
+            new Point(32 - offsets[1].x, -16 - offsets[1].y),
+            new Point(64 - offsets[1].x, 0 - offsets[1].y),
+            new Point(32 - offsets[1].x, 16 - offsets[1].y),
+            new Point(0 - offsets[1].x, 0 - offsets[1].y),
+        );
     }
 
     /**
@@ -474,6 +499,152 @@ export class Stair extends Container {
         /** Positionate the stair */
         this.x = 32 * this._position.x - 32 * this._position.y + offsets[2].x;
         this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z + offsets[2].y;
+        /** Set the hit area */
+        this.hitArea = new Polygon(
+            new Point(0 - offsets[2].x, 0 - offsets[2].y),
+            new Point(32 - offsets[2].x, -16 - offsets[2].y),
+            new Point(64 - offsets[2].x, 0 - offsets[2].y),
+            new Point(32 - offsets[2].x, 16 - offsets[2].y),
+            new Point(0 - offsets[2].x, 0 - offsets[2].y),
+        );
+    }
+
+    /**
+     * Reference to the pointer down event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    get onPointerDown(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerDown;
+    }
+
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    set onPointerDown(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerDown = value;
+    }
+
+    /**
+     * Reference to the pointer up event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    get onPointerUp(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerUp;
+    }
+
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    set onPointerUp(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerUp = value;
+    }
+
+    /**
+     * Reference to the pointer move event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    get onPointerMove(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerMove;
+    }
+
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    set onPointerMove(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerMove = value;
+    }
+
+    /**
+     * Reference to the pointer out event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    get onPointerOut(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerOut;
+    }
+
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    set onPointerOut(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerOut = value;
+    }
+
+    /**
+     * Reference to the pointer over event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    get onPointerOver(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onPointerOver;
+    }
+
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    set onPointerOver(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onPointerOver = value;
+    }
+
+    /**
+     * Reference to the pointer double click event.
+     *
+     * @member {(event: IInteractionEvent) => void}
+     * @readonly
+     * @public
+     */
+    get onDoubleClick(): (event: IInteractionEvent) => void {
+        return this._interactionManager.onDoubleClick;
+    }
+
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
+     * @public
+     */
+    set onDoubleClick(
+        value: (event: IInteractionEvent) => void
+    ) {
+        this._interactionManager.onDoubleClick = value;
     }
 
 }

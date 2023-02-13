@@ -7,7 +7,8 @@ import { Material } from "./materials/Material";
 import { WallMaterial } from "./materials/WallMaterial";
 import { FloorMaterial } from "./materials/FloorMaterial";
 import { RoomCamera } from "./RoomCamera";
-import { RoomObjectContainer } from "./RoomObjectContainer";
+import { RoomObjectLayer } from "./layers/RoomObjectLayer";
+import { RoomTileLayer } from "./layers/RoomTileLayer";
 
 /**
  * Room class for rendering rooms like the ones on Habbo Hotel.
@@ -277,13 +278,24 @@ export class Room extends Container {
     }
 
     /**
-     * Reference to the object layer container.
+     * Reference to the object tile container.
      *
-     * @member {RoomObjectContainer}
+     * @member {RoomTileLayer}
      * @readonly
      * @public
      */
-    public get objects(): RoomObjectContainer {
+    public get tiles(): RoomTileLayer {
+        return this._visualization.tileLayer;
+    }
+
+    /**
+     * Reference to the object layer container.
+     *
+     * @member {RoomObjectLayer}
+     * @readonly
+     * @public
+     */
+    public get objects(): RoomObjectLayer {
         return this._visualization.objectLayer;
     }
 
