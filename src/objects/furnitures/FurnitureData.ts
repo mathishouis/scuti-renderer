@@ -1,34 +1,46 @@
-import { Assets} from "pixi.js";
-import { IFurnitureData } from "../../interfaces/Furniture.interface";
+import { Assets } from "pixi.js";
 import { FloorFurniture } from "./FloorFurniture";
-import {WallFurniture} from "./WallFurniture";
+import { WallFurniture } from "./WallFurniture";
 
+/**
+ * FurnitureData class that manage the data of a furniture.
+ *
+ * @class
+ * @memberof Scuti
+ */
 export class FurnitureData {
 
     /**
-     * The furniture instance
+     * The furniture instance that we want to retrieve data.
+     *
+     * @member {FloorFurniture | WallFurniture}
      * @private
      */
     private readonly _furniture: FloorFurniture | WallFurniture;
 
     /**
-     * The furniture data
+     * The furniture data.
+     *
+     * @member {FurnitureData}
      * @private
      */
     private _data: FurnitureData;
 
     /**
-     * FurnitureData class
-     * @param furniture
+     * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
      */
-    constructor(furniture: FloorFurniture | WallFurniture) {
+    constructor(
+        furniture: FloorFurniture | WallFurniture
+    ) {
         this._furniture = furniture;
 
         this._load();
     }
 
     /**
-     * Load the furniture data
+     * Load the furniture data.
+     *
+     * @return {void}
      * @private
      */
     private _load(): void {
@@ -40,29 +52,45 @@ export class FurnitureData {
     }
 
     /**
-     * Return the furniture id
+     * Reference to the furniture id.
+     *
+     * @member {number}
+     * @readonly
+     * @public
      */
     public get id(): number {
         return this._data.id;
     }
 
     /**
-     * Return the furniture class name
+     * Reference to the furniture class name.
+     *
+     * @member {string}
+     * @readonly
+     * @public
      */
     public get className(): string {
         return this._data.className;
     }
 
     /**
-     * Return the furniture class name without the color id
+     * Reference to the furniture base name.
+     *
+     * @member {string}
+     * @readonly
+     * @public
      */
-    public get baseName() {
+    public get baseName(): string {
         if(!this._data.className.includes("*")) return this._data.className;
         return this._data.className.split("*")[0];
     }
 
     /**
-     * Return the furniture color id
+     * Reference to the furniture color id.
+     *
+     * @member {number}
+     * @readonly
+     * @public
      */
     public get color(): number {
         if(!this._data.className.includes("*")) return null;
