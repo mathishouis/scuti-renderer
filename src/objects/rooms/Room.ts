@@ -1,7 +1,7 @@
 import { Scuti } from "../../Scuti";
 import { Container } from "pixi.js";
 import { IRoomConfiguration } from "../../interfaces/Room.interface";
-import { RoomVisualization } from "./RoomVisualization";
+import { RoomView } from "./RoomView";
 import { RoomTileMap } from "./RoomTileMap";
 import { Material } from "./materials/Material";
 import { WallMaterial } from "./materials/WallMaterial";
@@ -75,12 +75,12 @@ export class Room extends Container {
     private _wallHeight: number;
 
     /**
-     * The room visualization instance, where all the objects like furnitures, avatars or the tiles, walls and stairs are stored.
+     * The room view instance, where all the objects like furnitures, avatars or the tiles, walls and stairs are stored.
      *
-     * @member {RoomVisualization}
+     * @member {RoomView}
      * @private
      */
-    private _visualization: RoomVisualization;
+    private _view: RoomView;
 
     /**
      * The room camera, it manage the room dragging and centering the room when it's out of bounds.
@@ -116,11 +116,11 @@ export class Room extends Container {
 
         /** Initialise everything */
         this._tileMap = new RoomTileMap(configuration.tileMap);
-        this._visualization = new RoomVisualization(this);
+        this._view = new RoomView(this);
         this._camera = new RoomCamera(this);
 
-        /** Add the room visualization and then the room camera to the PixiJS application */
-        this.addChild(this._visualization);
+        /** Add the room view and then the room camera to the PixiJS application */
+        this.addChild(this._view);
         this._engine.application.stage.addChild(this._camera);
     }
 
@@ -136,14 +136,14 @@ export class Room extends Container {
     }
 
     /**
-     * Reference to the room visualization instance.
+     * Reference to the room view instance.
      *
-     * @member {RoomVisualization}
+     * @member {RoomView}
      * @readonly
      * @public
      */
-    public get visualization(): RoomVisualization {
-        return this._visualization;
+    public get view(): RoomView {
+        return this._view;
     }
 
     /**
@@ -178,7 +178,7 @@ export class Room extends Container {
         material: Material
     ) {
         this._wallMaterial = material;
-        this._visualization.update();
+        this._view.update();
     }
 
     /**
@@ -202,7 +202,7 @@ export class Room extends Container {
         material: Material
     ) {
         this._floorMaterial = material;
-        this._visualization.update();
+        this._view.update();
     }
 
     /**
@@ -226,7 +226,7 @@ export class Room extends Container {
         thickness: number
     ) {
         this._wallThickness = thickness;
-        this._visualization.update();
+        this._view.update();
     }
 
     /**
@@ -250,7 +250,7 @@ export class Room extends Container {
         thickness: number
     ) {
         this._floorThickness = thickness;
-        this._visualization.update();
+        this._view.update();
     }
 
     /**
@@ -274,7 +274,7 @@ export class Room extends Container {
         height: number
     ) {
         this._wallHeight = height;
-        this._visualization.update();
+        this._view.update();
     }
 
     /**
@@ -285,7 +285,7 @@ export class Room extends Container {
      * @public
      */
     public get tiles(): RoomTileLayer {
-        return this._visualization.tileLayer;
+        return this._view.tileLayer;
     }
 
     /**
@@ -296,7 +296,7 @@ export class Room extends Container {
      * @public
      */
     public get objects(): RoomObjectLayer {
-        return this._visualization.objectLayer;
+        return this._view.objectLayer;
     }
 
 }

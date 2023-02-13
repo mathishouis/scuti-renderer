@@ -74,8 +74,8 @@ export class RoomCamera extends Container {
      * @private
      */
     private _updateBounds(): void {
-        this._roomContainer.pivot.x = this._room.visualization.wallLayer.getBounds().x;
-        this._roomContainer.pivot.y = this._room.visualization.wallLayer.getBounds().y;
+        this._roomContainer.pivot.x = this._room.view.wallLayer.getBounds().x;
+        this._roomContainer.pivot.y = this._room.view.wallLayer.getBounds().y;
     }
 
     /**
@@ -86,8 +86,8 @@ export class RoomCamera extends Container {
      */
     private _centerCamera(): void {
         gsap.to(this._roomContainer, {
-            x: Math.floor(this._room.engine.application.view.width / 2 - this._room.visualization.width / 2),
-            y: Math.floor(this._room.engine.application.view.height / 2 - this._room.visualization.height / 2),
+            x: Math.floor(this._room.engine.application.view.width / 2 - this._room.view.width / 2),
+            y: Math.floor(this._room.engine.application.view.height / 2 - this._room.view.height / 2),
             duration: 0.8,
             ease: "easeOut",
         });

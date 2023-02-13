@@ -12,12 +12,12 @@ import { RoomTileLayer } from "./layers/RoomTileLayer";
 import { IInteractionEvent } from "../../interfaces/Interaction.interface";
 
 /**
- * RoomVisualization class that manage all the rendering part of the room.
+ * RoomView class that manage all the rendering part of the room.
  *
  * @class
  * @memberof Scuti
  */
-export class RoomVisualization extends Container {
+export class RoomView extends Container {
 
     /**
      * The room instance that will be managed by the camera.

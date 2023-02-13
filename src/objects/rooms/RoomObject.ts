@@ -74,7 +74,7 @@ export class RoomObject extends Container {
      * @public
      */
     public get animationTicker(): Ticker {
-        return this._room.visualization.animationTicker;
+        return this._room.view.animationTicker;
     }
 
 }
