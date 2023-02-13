@@ -52,17 +52,58 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1601)
     });
+    const avatar = new Avatar({
+        figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80",
+        position: {
+            x: 4,
+            y: 4,
+            z: 0
+        },
+        bodyDirection: 2,
+        headDirection: 2,
+        actions: [
+            //AvatarAction.Idle,
+            //AvatarAction.Walk,
+            AvatarAction.Talk,
+            AvatarAction.Wave,
+            AvatarAction.Walk,
+            AvatarAction.CarryItem,
+        ],
+        handItem: 55
+    });
+    room.objects.add(avatar);
     room.tiles.onPointerDown = (position) => {
         console.log("click", position);
     }
     room.tiles.onDoubleClick = (position) => {
         console.log("dblclick", position);
     }
+    room.tiles.onPointerOver = (event) => {
+        avatar.pos = event.position;
+    }
     dice(room, 5, 5, 2);
     dice(room, 5, 6, 1);
     dice(room, 6, 5, 2);
     dice(room, 7, 5, 2);
     dice(room, 7, 6, 1);
+    const furniture = new FloorFurniture({
+        id: 1619,
+        position: {
+            x: 8,
+            y: 5,
+            z: 0
+        },
+        direction: 4,
+        state: 0
+    });
+    furniture.onPointerDown = () => {
+        if(furniture.wiredSelected) {
+            furniture.wiredSelected = false;
+        } else {
+            furniture.wiredSelected = true;
+        }
+    }
+    room.objects.add(furniture);
     /*const furniture = new FloorFurniture({
         id: 1619,
         position: {
