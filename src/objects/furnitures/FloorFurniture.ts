@@ -12,6 +12,7 @@ import { RoomObject } from "../rooms/RoomObject";
 import { gsap } from "gsap";
 import {InteractionManager} from "../interactions/InteractionManager";
 import {IInteractionEvent} from "../../interfaces/Interaction.interface";
+import {WiredSelectionFilter} from "../filters/WiredSelectionFilter";
 
 export class FloorFurniture extends RoomObject {
 
@@ -44,6 +45,8 @@ export class FloorFurniture extends RoomObject {
      * @private
      */
     private _data: FurnitureData;
+
+    private _wiredSelected: boolean = false;
 
     /**
      * The current frame for each layers
@@ -243,6 +246,19 @@ export class FloorFurniture extends RoomObject {
 
     public get interactionManager(): InteractionManager {
         return this._interactionManager;
+    }
+
+    public get wiredSelected(): boolean {
+        return this._wiredSelected;
+    }
+
+    public set wiredSelected(selected: boolean) {
+        this._wiredSelected = selected;
+        if(selected) {
+            this.filters = [new WiredSelectionFilter(0xffffff, 0x999999)];
+        } else {
+            this.filters = [];
+        }
     }
 
     public get id(): number {
