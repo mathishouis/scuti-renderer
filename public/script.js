@@ -86,6 +86,28 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
     dice(room, 6, 5, 2);
     dice(room, 7, 5, 2);
     dice(room, 7, 6, 1);
+    const wallFurniture = new WallFurniture({
+        id: 4054,
+        position: {
+            x: 0,
+            y: 0,
+            offsetX: 0,
+            offsetY: 0
+        },
+        direction: 4,
+        state: 0
+    })
+    const wallFurniture2 = new WallFurniture({
+        position: {
+            x: 1,
+            y: 0,
+            offsetX: 8,
+            offsetY: 36,
+        },
+        state: 0,
+        id: 4625,
+        direction: 2,
+    });
     const furniture = new FloorFurniture({
         id: 1619,
         position: {
@@ -103,7 +125,9 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
             furniture.wiredSelected = true;
         }
     }
+    room.objects.add(wallFurniture);
     room.objects.add(furniture);
+
     /*const furniture = new FloorFurniture({
         id: 1619,
         position: {

@@ -154,7 +154,7 @@ export class WallFurniture extends RoomObject {
         }
 
         this.addChild(new FurnitureLayer(this, {
-            layer: layer,
+            layer: String.fromCharCode(97 + Number(layer)),
             alpha: alpha,
             tint: tint,
             z: z,
