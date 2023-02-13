@@ -1,81 +1,110 @@
-import { Assets, BLEND_MODES, Container, utils } from "pixi.js";
+import { Assets, BLEND_MODES, utils } from "pixi.js";
 import { FloorFurniture } from "./FloorFurniture";
-import { FurnitureFrameId, IFurnitureLayerConfiguration, FurnitureLayerId } from "../../interfaces/Furniture.interface";
+import { IFurnitureLayerConfiguration } from "../../interfaces/Furniture.interface";
 import { HitSprite } from "../interactions/HitSprite";
-import {WallFurniture} from "./WallFurniture";
-import {Direction} from "../../enums/Direction";
+import { WallFurniture } from "./WallFurniture";
+import { Direction } from "../../enums/Direction";
 
-export class FurnitureLayer extends Container {
+export class FurnitureLayer extends HitSprite {
 
     /**
-     * The furniture instance
+     * The furniture instance.
+     *
+     * @member {FloorFurniture | WallFurniture}
      * @private
      */
     private readonly _furniture: FloorFurniture | WallFurniture;
 
     /**
-     * The layer id
+     * The layer id.
+     *
+     * @member {number | string}
      * @private
      */
-    private _layer: FurnitureLayerId | string;
+    private _layer: number | string;
 
     /**
-     * The layer alpha
+     * The layer alpha.
+     *
+     * @member {number}
      * @private
      */
     private _alpha: number;
 
 
     /**
-     * The layer tint
+     * The layer tint.
+     *
+     * @member {number}
      * @private
      */
     private _tint: number;
 
     /**
-     * The layer z
+     * The layer z index.
+     *
+     * @member {number}
      * @private
      */
     private _z: number;
 
     /**
-     * The layer blend mode
+     * The layer blend mode.
+     *
+     * @member {BLEND_MODES}
      * @private
      */
     private _blendMode: BLEND_MODES;
 
     /**
-     * Is the layer flipped
+     * Is the layer flipped.
+     *
+     * @member {boolean}
      * @private
      */
     private _flip: boolean;
 
     /**
-     * The layer frame id
+     * The layer frame id.
+     *
+     * @member {number}
      * @private
      */
-    private _frame: FurnitureFrameId;
+    private _frame: number;
 
     /**
-     * Ignore mouse
+     * Is the layer interactive.
+     *
+     * @member {boolean}
      * @private
      */
     private _ignoreMouse: boolean;
 
+    /**
+     * The layer direction.
+     *
+     * @member {Direction}
+     * @private
+     */
     private _direction: Direction;
 
+    /**
+     * The layer tag.
+     *
+     * @member {string}
+     * @private
+     */
     private _tag: string;
 
     /**
-     * FurnitureLayer class
-     * @param furniture - The furniture instance
-     * @param configuration - The layer configuration
+     * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
+     * @param {IFurnitureLayerConfiguration} [configuration] - The layer configuration.
      */
     constructor(
         furniture: FloorFurniture | WallFurniture,
         configuration: IFurnitureLayerConfiguration
     ) {
-        super();
+        super(null);
 
         this._furniture = furniture;
         this._layer = configuration.layer;
@@ -93,26 +122,31 @@ export class FurnitureLayer extends Container {
     }
 
     /**
-     * Draw the layer
+     * Draw the part.
+     *
+     * @return {void}
      * @private
      */
     private _draw(): void {
-        const sprite: HitSprite = new HitSprite(Assets.get("furnitures/" + this._furniture.data.baseName).textures[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + this._layer + '_' + this._direction + '_' + this._frame]);
-        if(this._tint !== undefined) sprite.tint = utils.premultiplyTint(this._tint, 1);
-        if(this._blendMode !== undefined) sprite.blendMode = this._blendMode;
-        if(this._alpha !== undefined) sprite.alpha = this._alpha;
-        if(this._flip) sprite.scale.x = -1;
-        if(this._ignoreMouse !== null && !this._ignoreMouse) sprite.interactive = true;
-        sprite.on("pointerdown", (event: PointerEvent) => this._furniture.interactionManager.handlePointerDown({ mouseEvent: event, tag: this._tag }));
-        sprite.on("pointerup", (event: PointerEvent) => this._furniture.interactionManager.handlePointerUp({ mouseEvent: event, tag: this._tag }));
-        sprite.on("pointermove", (event: PointerEvent) => this._furniture.interactionManager.handlePointerMove({ mouseEvent: event, tag: this._tag }));
-        sprite.on("pointerout", (event: PointerEvent) => this._furniture.interactionManager.handlePointerOut({ mouseEvent: event, tag: this._tag }));
-        sprite.on("pointerover", (event: PointerEvent) => this._furniture.interactionManager.handlePointerOver({ mouseEvent: event, tag: this._tag }));
-        this.addChild(sprite);
+        this.texture = Assets.get("furnitures/" + this._furniture.data.baseName).textures[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + this._layer + '_' + this._direction + '_' + this._frame];
+        if(this._tint !== undefined) this.tint = utils.premultiplyTint(this._tint, 1);
+        if(this._blendMode !== undefined) this.blendMode = this._blendMode;
+        if(this._alpha !== undefined) this.alpha = this._alpha;
+        if(this._flip) this.scale.x = -1;
+        if(this._ignoreMouse !== null && !this._ignoreMouse) this.interactive = true;
+        this.on("pointerdown", (event: PointerEvent) => this._furniture.interactionManager.handlePointerDown({ mouseEvent: event, tag: this._tag }));
+        this.on("pointerup", (event: PointerEvent) => this._furniture.interactionManager.handlePointerUp({ mouseEvent: event, tag: this._tag }));
+        this.on("pointermove", (event: PointerEvent) => this._furniture.interactionManager.handlePointerMove({ mouseEvent: event, tag: this._tag }));
+        this.on("pointerout", (event: PointerEvent) => this._furniture.interactionManager.handlePointerOut({ mouseEvent: event, tag: this._tag }));
+        this.on("pointerover", (event: PointerEvent) => this._furniture.interactionManager.handlePointerOver({ mouseEvent: event, tag: this._tag }));
     }
 
     /**
-     * Return the furniture instance
+     * Reference to the furniture instance.
+     *
+     * @member {FloorFurniture | WallFurniture}
+     * @readonly
+     * @public
      */
     public get furniture(): FloorFurniture | WallFurniture {
         return this._furniture;

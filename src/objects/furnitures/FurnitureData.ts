@@ -1,6 +1,7 @@
 import { Assets } from "pixi.js";
 import { FloorFurniture } from "./FloorFurniture";
 import { WallFurniture } from "./WallFurniture";
+import { IFurnitureData } from "../../interfaces/Furniture.interface";
 
 /**
  * FurnitureData class that manage the data of a furniture.
@@ -21,10 +22,10 @@ export class FurnitureData {
     /**
      * The furniture data.
      *
-     * @member {FurnitureData}
+     * @member {IFurnitureData}
      * @private
      */
-    private _data: FurnitureData;
+    private _data: IFurnitureData;
 
     /**
      * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.

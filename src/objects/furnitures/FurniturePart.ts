@@ -1,8 +1,8 @@
-import {Assets, BLEND_MODES, Container, Spritesheet} from "pixi.js";
-import {FloorFurniture} from "./FloorFurniture";
-import {WallFurniture} from "./WallFurniture";
-import {FurnitureLayer} from "./FurnitureLayer";
-import {FurnitureFrameId, FurnitureLayerId, IFurnitureVisualization} from "../../interfaces/Furniture.interface";
+import { BLEND_MODES, Container, Spritesheet } from "pixi.js";
+import { FloorFurniture } from "./FloorFurniture";
+import { WallFurniture } from "./WallFurniture";
+import { FurnitureLayer } from "./FurnitureLayer";
+import { IFurnitureVisualization } from "../../interfaces/Furniture.interface";
 
 /**
  * FurniturePart class that represent a furniture layer.
