@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@pixi/layers": "^2.0.1",
     "gsap": "^3.11.4",
     "pixi.js": "^7.1.2"
   },

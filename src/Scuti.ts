@@ -3,6 +3,7 @@ import { IRendererConfiguration } from "./interfaces/Configuration.interface";
 import { Logger } from "./utilities/Logger";
 import { PixiPlugin } from "gsap/PixiPlugin";
 import { gsap } from "gsap";
+import {Stage} from "@pixi/layers";
 
 /**
  * Convenience class to create a new Scuti renderer.
@@ -73,6 +74,7 @@ export class Scuti {
             resolution: 1,
             antialias: false,
         });
+        this._application.stage = new Stage();
         this._canvas = configuration.canvas;
         /** Append it to the canvas */
         this._canvas.append(this._application.view);
