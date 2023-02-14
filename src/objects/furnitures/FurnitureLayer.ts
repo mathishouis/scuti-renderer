@@ -4,6 +4,10 @@ import { IFurnitureLayerConfiguration } from "../../interfaces/Furniture.interfa
 import { HitSprite } from "../interactions/HitSprite";
 import { WallFurniture } from "./WallFurniture";
 import { Direction } from "../../enums/Direction";
+import {WiredSelectionFilter} from "../filters/WiredSelectionFilter";
+
+/** The wired selection filter */
+const WIRED_SELECTION_FILTER: WiredSelectionFilter = new WiredSelectionFilter(0xffffff, 0x999999);
 
 /**
  * FurnitureLayer class.
@@ -133,6 +137,7 @@ export class FurnitureLayer extends HitSprite {
      * @private
      */
     private _draw(): void {
+        this.filters = [];
         this.texture = Assets.get("furnitures/" + this._furniture.data.baseName).textures[this._furniture.data.baseName + '_' + this._furniture.data.baseName + '_64_' + this._layer + '_' + this._direction + '_' + this._frame];
         if(this._tint !== undefined) this.tint = utils.premultiplyTint(this._tint, 1);
         if(this._blendMode !== undefined) this.blendMode = this._blendMode;
@@ -141,6 +146,7 @@ export class FurnitureLayer extends HitSprite {
         if(this._furniture.room !== undefined) this.parentLayer = this._furniture.room.objects.layer;
         if(this._z) this.zOrder = this._z;
         if(this._ignoreMouse !== null && !this._ignoreMouse) this.interactive = true;
+        if(this._furniture.selected) this.filters.push(WIRED_SELECTION_FILTER);
         this.on("pointerdown", (event: PointerEvent) => this._furniture.interactionManager.handlePointerDown({ mouseEvent: event, tag: this._tag }));
         this.on("pointerup", (event: PointerEvent) => this._furniture.interactionManager.handlePointerUp({ mouseEvent: event, tag: this._tag }));
         this.on("pointermove", (event: PointerEvent) => this._furniture.interactionManager.handlePointerMove({ mouseEvent: event, tag: this._tag }));
