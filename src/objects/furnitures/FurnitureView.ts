@@ -4,12 +4,8 @@ import { FloorFurniture } from "./FloorFurniture";
 import { WallFurniture } from "./WallFurniture";
 import { IFurnitureProperty } from "../../interfaces/Furniture.interface";
 import { FurnitureLayer } from "./FurnitureLayer";
-import { WiredSelectionFilter } from "../filters/WiredSelectionFilter";
 import { FurnitureGuildCustomizedVisualization } from "./visualizations/FurnitureGuildCustomizedVisualization";
 import { FurnitureVisualization } from "./visualizations/FurnitureVisualization";
-
-/** The wired selection filter */
-const WIRED_SELECTION_FILTER: WiredSelectionFilter = new WiredSelectionFilter(0xffffff, 0x999999);
 
 /**
  * FurnitureView class that manage all the rendering part of the furniture.
@@ -108,7 +104,6 @@ export class FurnitureView extends Container {
         for (let i: number = 0; i < this._property.visualization.layerCount; i++) {
             this._createPart(i);
         }
-        this._applyFilters();
     }
 
     /**
@@ -193,17 +188,6 @@ export class FurnitureView extends Container {
             ignoreMouse: true,
             direction: 0
         }));
-    }
-
-    /**
-     * Apply the filters to the furniture.
-     *
-     * @return {void}
-     * @private
-     */
-    private _applyFilters(): void {
-        this.filters = [];
-        if(this._furniture.selected) this.filters.push(WIRED_SELECTION_FILTER);
     }
 
     /**
