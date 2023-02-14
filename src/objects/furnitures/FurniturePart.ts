@@ -3,7 +3,7 @@ import { FloorFurniture } from "./FloorFurniture";
 import { WallFurniture } from "./WallFurniture";
 import { FurnitureLayer } from "./FurnitureLayer";
 import { IFurnitureVisualization } from "../../interfaces/Furniture.interface";
-import {FurnitureGuildCustomizedVisualization} from "./visualizations/FurnitureGuildCustomizedVisualization";
+import { FurnitureGuildCustomizedVisualization } from "./visualizations/FurnitureGuildCustomizedVisualization";
 
 /**
  * FurniturePart class that represent a furniture layer.
@@ -68,7 +68,7 @@ export class FurniturePart extends Container {
         /** Layer data */
         let alpha: number = 1;
         let tint: number;
-        let z: number;
+        let z: number = 0;
         let blendMode: BLEND_MODES;
         let flip: boolean = false;
         let frame: number = 0;
@@ -99,6 +99,8 @@ export class FurniturePart extends Container {
         }
 
         const name: string = [this._furniture.data.baseName, this._furniture.data.baseName, 64, String.fromCharCode(97 + Number(this._layer)), this._furniture.direction, frame].join("_");
+        /** Calculate zOrder */
+        z = (((this._furniture.roomPosition.x + this._furniture.roomPosition.y + (Math.trunc(z / 100)) / 10) * 1000000 + (this._furniture.roomPosition.z * 10000)) + 10000000 * 11);
 
         if(spritesheet.data.frames[name] !== undefined) flip = spritesheet.data.frames[name]['flipH'];
         /** Create the layer */
@@ -133,6 +135,8 @@ export class FurniturePart extends Container {
                 } else {
                     this._frame = 0;
                 }
+                this._draw();
+            } else {
                 this._draw();
             }
         }

@@ -118,6 +118,26 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         direction: 2,
         state: 1
     });
+    const furniture2 = new FloorFurniture({
+        id: 8916,
+        position: {
+            x: 8,
+            y: 10,
+            z: 0
+        },
+        direction: 2,
+        state: 1
+    });
+    const furniture3 = new FloorFurniture({
+        id: 8916,
+        position: {
+            x: 10,
+            y: 10,
+            z: 0
+        },
+        direction: 2,
+        state: 0
+    });
     furniture.onPointerDown = () => {
         if(furniture.selected) {
             furniture.selected = false;
@@ -164,6 +184,8 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
     room.objects.add(wallFurniture);
     room.objects.add(wallFurniture3);
     room.objects.add(furniture);
+    room.objects.add(furniture2);
+    room.objects.add(furniture3);
     room.objects.add(guildGate);
 
     /*const furniture = new FloorFurniture({
