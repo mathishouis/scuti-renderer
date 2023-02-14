@@ -1,7 +1,10 @@
-import { Container } from "pixi.js";
+import { Container, Point } from "pixi.js";
 import { Room } from "../Room";
 import { IInteractionEvent } from "../../../interfaces/Interaction.interface";
 import { InteractionManager } from "../../interactions/InteractionManager";
+import { Tile } from "../parts/Tile";
+import { Stair } from "../parts/Stair";
+import { IPosition2D } from "../../../interfaces/Room.interface";
 
 /**
  * RoomTileLayer class that manage all the room tiles.
@@ -36,6 +39,23 @@ export class RoomTileLayer extends Container {
         super();
 
         this._room = room;
+    }
+
+    /**
+     * Return the tile or the stair at the specified screen position.
+     *
+     * @param {IPosition2D} [position] - The screen position.
+     * @return {Tile | Stair}
+     * @public
+     */
+    public getTileFromGlobal(
+        position: IPosition2D
+    ): Tile | Stair {
+        const container = this.children.find((container: Container) => {
+            const point: Point = new Point(position.x, position.y);
+            if(container.hitArea.contains(container.toLocal(point).x, container.toLocal(point).y)) return container;
+        });
+        return container;
     }
 
     /**

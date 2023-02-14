@@ -84,7 +84,6 @@ export class Stair extends Container {
         this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
         this._type = configuration.type;
         /** Register interactions */
-        this.interactive = true;
         this.on("pointerdown", (event: PointerEvent) => this._interactionManager.handlePointerDown({ mouseEvent: event, position: { x: this._position.x, y: this._position.y, z: this._position.z } }));
         this.on("pointerup", (event: PointerEvent) => this._interactionManager.handlePointerUp({ mouseEvent: event, position: { x: this._position.x, y: this._position.y, z: this._position.z } }));
         this.on("pointermove", (event: PointerEvent) => this._interactionManager.handlePointerMove({ mouseEvent: event, position: { x: this._position.x, y: this._position.y, z: this._position.z } }));

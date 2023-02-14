@@ -16,33 +16,55 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
     });
     await renderer.loadResources();
 
-    const tileMap = "xxxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
-        "x2222xx1111111111xx11111111\n" +
-        "x2222xx1111111111xx11111111\n" +
-        "222222111111111111111111111\n" +
-        "x22222111111111111111111111\n" +
-        "x22222111111111111111111111\n" +
-        "x22222111111111111111111111\n" +
-        "x2222xx1111111111xx11111111\n" +
-        "x2222xx1111111111xx11111111\n" +
-        "x2222xx1111111111xxxx1111xx\n" +
-        "x2222xx1111111111xxxx0000xx\n" +
-        "xxxxxxx1111111111xx00000000\n" +
-        "xxxxxxx1111111111xx00000000\n" +
-        "x22222111111111111000000000\n" +
-        "x22222111111111111000000000\n" +
-        "x22222111111111111000000000\n" +
-        "x22222111111111111000000000\n" +
-        "x2222xx1111111111xx00000000\n" +
-        "x2222xx1111111111xx00000000\n" +
-        "x2222xx00111100xxxxxxxxxxxx\n" +
-        "x2222xx00000000xxxxxxxxxxxx\n" +
-        "x2222x0000000000xxxxxxxxxxx\n" +
-        "x2222x0000000000xxxxxxxxxxx\n" +
-        "x2222x0000000000xxxxxxxxxxx\n" +
-        "x2222x0000000000xxxxxxxxxxx\n" +
-        "x2222x0000000000xxxxxxxxxxx\n" +
-        "x2222x0000000000xxxxxxxxxxx"
+    const tileMap = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
+        "xeeeeeeeeeeeeeeeedcba9888888888888\n" +
+        "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
+        "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
+        "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
+        "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
+        "xdxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "xcxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "xbxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "xaxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "aaaaaaaaaaaaaaaaaxxxxxxxxxxxxxxxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxxxxxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxxxxxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxx6666666666666\n" +
+        "xaaaaaaaaaaaaaaaa98766666666666666\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxx5xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxx4xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxxxxxxxxxxx3xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xaaaaaaaaaaaaaaaaxxx3333333333xxxx\n" +
+        "xxxxxxxxxxxxxxxx9xxx3333333333xxxx\n" +
+        "xxxxxxxxxxxxxxxx8xxx3333333333xxxx\n" +
+        "xxxxxxxxxxxxxxxx7xxx3333333333xxxx\n" +
+        "xxx777777777xxxx6xxx3333333333xxxx\n" +
+        "xxx777777777xxxx5xxxxxxxxxxxxxxxxx\n" +
+        "xxx777777777xxxx4xxxxxxxxxxxxxxxxx\n" +
+        "xxx777777777xxxx3xxxxxxxxxxxxxxxxx\n" +
+        "xxx777777777xxxx2xxxxxxxxxxxxxxxxx\n" +
+        "xfffffffffxxxxxx1xxxxxxxxxxxxxxxxx\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xfffffffffxxxxxx111111111111111111\n" +
+        "xxxxxxxxxxxxxxxx111111111111111111\n" +
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
     const room = new Room(renderer, {
         tileMap: tileMap,
@@ -74,12 +96,13 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
     room.objects.add(avatar);
     room.tiles.onPointerDown = (position) => {
         console.log("click", position);
+        avatar.pos = position.position;
+
     }
     room.tiles.onDoubleClick = (position) => {
         console.log("dblclick", position);
     }
     room.tiles.onPointerOver = (event) => {
-        avatar.pos = event.position;
     }
     dice(room, 5, 5, 2);
     dice(room, 5, 6, 1);

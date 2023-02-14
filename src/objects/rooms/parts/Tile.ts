@@ -73,7 +73,6 @@ export class Tile extends Container {
         this._thickness = configuration.thickness ?? 8;
         this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
         /** Register interactions */
-        this.interactive = true;
         this.on("pointerdown", (event: PointerEvent) => this._interactionManager.handlePointerDown({ mouseEvent: event, position: this._position }));
         this.on("pointerup", (event: PointerEvent) => this._interactionManager.handlePointerUp({ mouseEvent: event, position: this._position }));
         this.on("pointermove", (event: PointerEvent) => this._interactionManager.handlePointerMove({ mouseEvent: event, position: this._position }));
