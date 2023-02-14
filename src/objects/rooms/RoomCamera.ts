@@ -1,6 +1,8 @@
 import { Room } from "./Room";
 import { Container, FederatedPointerEvent } from "pixi.js";
 import { gsap } from "gsap";
+import { Tile } from "./parts/Tile";
+import { Stair } from "./parts/Stair";
 
 /**
  * RoomCamera class that manage things like the room dragging or detecting if the room is out of bounds.
@@ -43,6 +45,14 @@ export class RoomCamera extends Container {
     private readonly _roomContainer: Container;
 
     /**
+     * The current selected tile.
+     *
+     * @member {Tile | Stair}
+     * @private
+     */
+    private _selectedTile: Tile | Stair;
+
+    /**
      * @param {Room} [room] - The room instance that will be managed by this camera.
      */
     constructor(
@@ -62,6 +72,10 @@ export class RoomCamera extends Container {
         this._room.engine.application.renderer.events.domElement.addEventListener("pointerdown", this._dragStart);
         this._room.engine.application.renderer.events.domElement.addEventListener("pointerup", this._dragEnd);
         this._room.engine.application.renderer.events.domElement.addEventListener("pointermove", this._dragMove);
+        /** Handle tile interactions */
+        this._room.engine.application.renderer.events.domElement.addEventListener("pointerdown", this._tilePointerDown);
+        this._room.engine.application.renderer.events.domElement.addEventListener("pointerup", this._tilePointerUp);
+        this._room.engine.application.renderer.events.domElement.addEventListener("pointermove", this._tilePointerMove);
 
         this._updateBounds();
         this._centerCamera();
@@ -149,6 +163,47 @@ export class RoomCamera extends Container {
         if((this._roomContainer.y + this._roomContainer.height) < 0) return true;
         /** It is not out of bounds */
         return false;
+    }
+
+    /**
+     * Manage pointer down event on the canvas for tile interaction.
+     *
+     * @return {void}
+     * @private
+     */
+    private _tilePointerDown = (event: PointerEvent): void => {
+        this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY }).emit("pointerdown");
+    }
+
+    /**
+     * Manage pointer up event on the canvas for tile interaction.
+     *
+     * @return {void}
+     * @private
+     */
+    private _tilePointerUp = (event: PointerEvent): void => {
+        this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY }).emit("pointerup");
+    }
+
+    /**
+     * Manage pointer move event on the canvas for tile interaction.
+     *
+     * @return {void}
+     * @private
+     */
+    private _tilePointerMove = (event: PointerEvent): void => {
+        const object: Tile | Stair = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
+        if(this._selectedTile === object) {
+            object.emit("pointermove");
+        } else {
+            if(this._selectedTile !== undefined) {
+                this._selectedTile.emit("pointerout");
+            }
+            if(object !== undefined) {
+                object.emit("pointerover");
+            }
+            this._selectedTile = object;
+        }
     }
 
 }

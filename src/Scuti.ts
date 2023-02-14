@@ -4,6 +4,7 @@ import { Logger } from "./utilities/Logger";
 import { PixiPlugin } from "gsap/PixiPlugin";
 import { gsap } from "gsap";
 import {Stage} from "@pixi/layers";
+import {handleClick} from "./objects/interactions/HitInteraction";
 
 /**
  * Convenience class to create a new Scuti renderer.

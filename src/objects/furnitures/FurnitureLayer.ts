@@ -140,7 +140,6 @@ export class FurnitureLayer extends HitSprite {
         if(this._flip) this.scale.x = -1;
         if(this._furniture.room !== undefined) this.parentLayer = this._furniture.room.objects.layer;
         if(this._z) this.zOrder = this._z;
-        if(this._furniture.room !== undefined) console.log(this._furniture.room.objects.layer._sortedChildren);
         if(this._ignoreMouse !== null && !this._ignoreMouse) this.interactive = true;
         this.on("pointerdown", (event: PointerEvent) => this._furniture.interactionManager.handlePointerDown({ mouseEvent: event, tag: this._tag }));
         this.on("pointerup", (event: PointerEvent) => this._furniture.interactionManager.handlePointerUp({ mouseEvent: event, tag: this._tag }));
