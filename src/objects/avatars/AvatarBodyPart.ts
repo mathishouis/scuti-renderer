@@ -73,11 +73,18 @@ export class AvatarBodyPart {
             const frameData: IAnimationFrameData = this._avatar.animationManager.getLayerData(finalAction, this._frames.get(part.id).get(type).frame, type)
             let gesture: string = this._avatar.actionManager.getActionDefinition(finalAction).assetpartdefinition
             let frame: Number = 0;
+            let flip: boolean = false;
             if(frameData !== undefined) {
                 this._frames.get(part.id).get(type).action = finalAction;
                 frame = frameData.frame;
                 gesture = frameData.assetpartdefinition
             }
+
+            if([4, 5, 6].includes(direction)) {
+                flip = true;
+            }
+
+            let zDirection = direction;
 
             let tempDirection: number = direction;
             if([4, 5, 6].includes(tempDirection)) tempDirection = 6 - tempDirection;
@@ -89,18 +96,38 @@ export class AvatarBodyPart {
                 this._frames.get(part.id).get(type).action = finalAction;
             }
 
+            if(((gesture === "wav" && (type === "lh" || type === "ls" || type === "lcs")) || (gesture === "drk" && (type === "rh" || type === "rs" || type === "rcs")) || (gesture === "blw" && type === "rh") || (gesture === "sig" && type === "lh") || (gesture === "respect" && type === "lh")) && [4, 5, 6].includes(this._avatar.bodyDirection)) {
+                flip = !flip;
+
+            }
+
+            if((gesture === "crr" || gesture === "respect" || gesture === "sig") && [4, 5, 6].includes(this._avatar.bodyDirection)) {
+                if(this._avatar.actionManager.partSets.partSets[type] !== undefined && this._avatar.actionManager.partSets.partSets[type]["flipped-set-type"] !== undefined && [4, 5, 6, 7].includes(direction)) {
+                    type = this._avatar.actionManager.partSets.partSets[type]["flipped-set-type"];
+                }
+            }
+
             // We create the layer
             if(spritesheet.textures[part.lib.id + "_h_" + gesture + "_" + type + "_" + part.id + "_" + tempDirection + "_" + frame] !== undefined) {
-                this._avatar.addChild(new AvatarLayer(this._avatar, {
+                const layer = new AvatarLayer(this._avatar, {
                     type: type,
                     part: part,
                     gesture: gesture,
                     tint: part.colorable === 1 && type !== "ey" ? this._getColor(this._type, this._colors[part.index]) : undefined,
                     z: this._getDrawOrder(type, gesture, direction),
-                    flip: true,
+                    flip: flip,
                     direction: direction,
                     frame: frame
-                }));
+                });
+                /*let tempType: string = type;
+                if(this._avatar.actionManager.partSets.partSets[type] !== undefined && this._avatar.actionManager.partSets.partSets[type]["flipped-set-type"] !== undefined && [4, 5, 6, 7].includes(direction)) {
+                    tempType = this._avatar.actionManager.partSets.partSets[type]["flipped-set-type"];
+                    if(spritesheet.data.frames[part.lib.id + "_h_std_" + tempType + "_" + part.id + "_" + tempDirection + "_0"] !== undefined) {
+                        layer.x = spritesheet.data.frames[part.lib.id + "_h_std_" + tempType + "_" + part.id + "_" + tempDirection + "_0"].spriteSourceSize.x;
+                        layer.y = spritesheet.data.frames[part.lib.id + "_h_std_" + tempType + "_" + part.id + "_" + tempDirection + "_0"].spriteSourceSize.y;
+                    }
+                }*/
+                this._avatar.addChild(layer);
             }
         });
     }
