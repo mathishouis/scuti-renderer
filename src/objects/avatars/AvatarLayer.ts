@@ -66,17 +66,15 @@ export class AvatarLayer extends Container {
 
     private _draw(): void {
         let tempDirection: number = this._direction;
-        if([4, 5, 6].includes(tempDirection)) {
+        if(this._flip && [4, 5, 6].includes(tempDirection)) this.scale.x = -1;
+        if(this._flip && [4, 5, 6].includes(tempDirection)) this.x = 64;
+        if([4, 5, 6].includes(tempDirection) && this._flip) {
             tempDirection = 6 - tempDirection
         }
         const avatarActions: IActionDefinition[] = Assets.get("figures/actions");
         //if(this._type === "ls" || this._type === "lh" || this._type === "lc") console.log(2, this._part.lib.id + "_h_" + this._gesture + "_" + this._type + "_" + this._part.id + "_" + tempDirection + "_" + this._frame);
         const sprite: HitSprite = new HitSprite(Assets.get("figures/" + this._part.lib.id).textures[this._part.lib.id + "_h_" + this._gesture + "_" + this._type + "_" + this._part.id + "_" + tempDirection + "_" + this._frame]);
         if(this._tint !== undefined) sprite.tint = utils.premultiplyTint(this._tint, 0.999);
-        if(this._flip) {
-            [4, 5, 6].includes(this._direction) ? this.scale.x = -1 : null;
-            [4, 5, 6].includes(this._direction) ? this.x = 64 : null;
-        }
         if(this._z !== undefined) this.zIndex = this._z;
         if(this._alpha !== undefined) sprite.alpha = this._alpha;
         //sprite.animationSpeed = 0.167;

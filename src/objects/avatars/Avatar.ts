@@ -97,7 +97,7 @@ export class Avatar extends RoomObject {
                 gesture: "drk",
                 tint: undefined,
                 z: 1000,
-                flip: true,
+                flip: false,
                 direction: this._bodyDirection,
                 frame: 0
             }));
@@ -108,7 +108,7 @@ export class Avatar extends RoomObject {
                 gesture: "crr",
                 tint: undefined,
                 z: 1000,
-                flip: true,
+                flip: false,
                 direction: this._bodyDirection,
                 frame: 0
             }));
