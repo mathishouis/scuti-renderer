@@ -90,9 +90,7 @@ export class HitTexture {
         if (w > canvas.width) w = canvas.width;
         if (h > canvas.height) h = canvas.height;
 
-        if (w === 0) {
-            return new Uint32Array();
-        }
+        if (w === 0) return new Uint32Array();
 
         const imageData: ImageData = context.getImageData(0, 0, w, h);
         const threshold: number = 255;
