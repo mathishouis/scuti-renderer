@@ -172,7 +172,9 @@ export class RoomCamera extends Container {
      * @private
      */
     private _tilePointerDown = (event: PointerEvent): void => {
-        this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY }).emit("pointerdown");
+        const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
+
+        if (tile) tile.emit("pointerdown");
     }
 
     /**
@@ -182,7 +184,9 @@ export class RoomCamera extends Container {
      * @private
      */
     private _tilePointerUp = (event: PointerEvent): void => {
-        this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY }).emit("pointerup");
+        const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
+
+        if (tile) tile.emit("pointerup");
     }
 
     /**
@@ -193,6 +197,9 @@ export class RoomCamera extends Container {
      */
     private _tilePointerMove = (event: PointerEvent): void => {
         const object: Tile | Stair = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
+        
+        if(object === undefined) return;
+        
         if(this._selectedTile === object) {
             object.emit("pointermove");
         } else {
