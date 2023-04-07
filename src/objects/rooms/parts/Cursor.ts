@@ -56,6 +56,11 @@ export class Cursor extends Container {
         sprite.y = -20;
         this.addChild(sprite);
         /** Positionate the cursor */
+        this.moveTo(this._position);
+    }
+
+    public moveTo (position: IPosition3D): void {
+        this._position = position;
         this.x = 32 * this._position.x - 32 * this._position.y;
         this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
     }

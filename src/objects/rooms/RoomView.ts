@@ -185,7 +185,7 @@ export class RoomView extends Container {
         } else if(tileInfo.door) {
             this._createDoor(position);
         } else if(tileInfo.tile) {
-            this._createTile(position);
+            this._createTile(position, tileInfo);
         }
     }
 
@@ -199,6 +199,11 @@ export class RoomView extends Container {
     private _createCursor(
         position: IPosition3D
     ): void {
+        if (this._cursor) {
+            this._cursor.visible = true;
+            this._cursor.moveTo(position);
+            return;
+        }
         this._destroyCursor();
         const cursor = new Cursor(this._room, {
             position: position
@@ -214,8 +219,9 @@ export class RoomView extends Container {
      * @private
      */
     private _destroyCursor(): void {
-        this._objectLayer.removeChild(this._cursor);
-        this._cursor?.destroy();
+        if (this._cursor) {
+            this._cursor.visible = false;
+        }
     }
 
     /**
@@ -226,13 +232,14 @@ export class RoomView extends Container {
      * @private
      */
     private _createTile(
-        position: IPosition3D
+        position: IPosition3D,
+        tileInfo: ITileInfo
     ): void {
         const tile = new Tile(this._room, {
             position: position,
             material: this._room.floorMaterial,
             thickness: this._room.floorThickness
-        });
+        }, tileInfo);
         /** Register interactions */
         tile.onPointerDown = (event: IInteractionEvent): void => { if(this._tileLayer.onPointerDown) this._tileLayer.onPointerDown(event); };
         tile.onPointerUp = (event: IInteractionEvent): void => { if(this._tileLayer.onPointerUp) this._tileLayer.onPointerUp(event); };
