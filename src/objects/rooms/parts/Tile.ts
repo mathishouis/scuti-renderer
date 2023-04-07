@@ -1,5 +1,5 @@
 import { Room } from "../Room";
-import { IPosition3D, ITileConfiguration } from "../../../interfaces/Room.interface";
+import { IPosition3D, ITileConfiguration, ITileInfo } from "../../../interfaces/Room.interface";
 import { Container, Graphics, Matrix, Point, Polygon, utils } from "pixi.js";
 import { Material } from "../materials/Material";
 import { FloorMaterial } from "../materials/FloorMaterial";
@@ -22,6 +22,14 @@ export class Tile extends Container {
      * @private
      */
     private _room: Room;
+
+    /**
+     * The ITileInfo instance
+     *
+     * @member {ITileInfo}
+     * @private
+     */
+    private _tileInfo?: ITileInfo;
 
     /**
      * The thickness of the tile part.
@@ -64,11 +72,13 @@ export class Tile extends Container {
      **/
     constructor(
         room: Room,
-        configuration: ITileConfiguration
+        configuration: ITileConfiguration,
+        tileInfo?: ITileInfo,
     ) {
         super();
         /** Store the configuration */
         this._room = room;
+        this._tileInfo = tileInfo;
         this._position = configuration.position;
         this._thickness = configuration.thickness ?? 8;
         this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
@@ -104,8 +114,23 @@ export class Tile extends Container {
             .lineTo(32, 16)
             .lineTo(0, 0)
             .endFill();
-        /** Left face */
-        const left: Graphics = new Graphics()
+
+        this.addChild(top);
+        
+        let bottomTile;
+        let rightTile;
+
+        if (this._room.tileMap.tileMap[this._position.y + 1][this._position.x] !== undefined) {
+            bottomTile = this._room.tileMap.getTileInfo({x: this._position.x, y: this._position.y + 1});
+        }
+        
+        if (typeof this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== "undefined") {
+            rightTile = this._room.tileMap.getTileInfo({x: this._position.x + 1, y: this._position.y});
+        }
+
+        if (!bottomTile || bottomTile.stairType !== null || !bottomTile.tile || (this._tileInfo && bottomTile.height != this._tileInfo.height)) {
+            /** Left face */
+            const left: Graphics = new Graphics()
             .beginTextureFill({
                 texture: this._material.texture,
                 color: utils.premultiplyTint(this._material.color, 0.8),
@@ -116,23 +141,28 @@ export class Tile extends Container {
             .lineTo(32, 16 + this._thickness)
             .lineTo(32, 16)
             .endFill();
-        /** Right face */
-        const right: Graphics = new Graphics()
-            .beginTextureFill({
-                texture: this._material.texture,
-                color: utils.premultiplyTint(this._material.color, 0.71),
-                matrix: new Matrix(1, -0.5, 0, 1, 0, 0)
-            })
-            .moveTo(32, 16)
-            .lineTo(32, 16 + this._thickness)
-            .lineTo(64, this._thickness)
-            .lineTo(64, 0)
-            .lineTo(32, 16)
-            .endFill();
-        /** And we combine everything */
-        this.addChild(top);
-        this.addChild(left);
-        this.addChild(right);
+
+            this.addChild(left);
+        }
+
+        if (!rightTile || rightTile.stairType !== null || !rightTile.tile || (this._tileInfo && rightTile.height != this._tileInfo.height)) {
+            /** Right face */
+            const right: Graphics = new Graphics()
+                .beginTextureFill({
+                    texture: this._material.texture,
+                    color: utils.premultiplyTint(this._material.color, 0.71),
+                    matrix: new Matrix(1, -0.5, 0, 1, 0, 0)
+                })
+                .moveTo(32, 16)
+                .lineTo(32, 16 + this._thickness)
+                .lineTo(64, this._thickness)
+                .lineTo(64, 0)
+                .lineTo(32, 16)
+                .endFill();
+            
+            this.addChild(right);
+        }
+
         /** Positionate the wall */
         this.x = 32 * this._position.x - 32 * this._position.y;
         this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
