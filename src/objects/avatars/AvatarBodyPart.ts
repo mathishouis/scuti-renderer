@@ -23,6 +23,8 @@ export class AvatarBodyPart {
 
     private _frames: Map<number, Map<string, { action: AvatarAction, frame: number, repeat: number }>> = new Map();
 
+    private areAllAssetsLoaded: boolean = false;
+
     constructor(
         avatar: Avatar,
         configuration: IBodyPartConfiguration
@@ -33,11 +35,23 @@ export class AvatarBodyPart {
         this._colors = configuration.colors;
         this._parts = configuration.parts;
         this._actions = configuration.actions;
+        let assets : Promise<void>[] = [];
+
+        this._parts.forEach((part: IAvatarPart) => {
+            assets.push(AssetLoader.load("figures/" + part.lib.id, "figure/" + part.lib.id + "/" + part.lib.id + ".json"));
+        });
+
+        Promise.all(assets).then(() => {
+            this.areAllAssetsLoaded = true;
+        });
     }
 
     private _draw(): void {
+        if (!this.areAllAssetsLoaded) {
+            return;
+        }
         this._parts.forEach((part: IAvatarPart) => {
-            AssetLoader.load("figures/" + part.lib.id, "figure/" + part.lib.id + "/" + part.lib.id + ".json").then(() => this._createPart(part));
+            this._createPart(part);
         });
     }
 
