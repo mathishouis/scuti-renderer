@@ -39,6 +39,8 @@ export class RoomTileMap {
     private _parse(
         tileMap: string
     ): TileMap {
+        tileMap = tileMap.replace(/ /g, '');
+        tileMap = tileMap.replace(/\n\n/g, '\n');
         return tileMap.split(/\r?\n/).map(line => line.split(''));
     }
 

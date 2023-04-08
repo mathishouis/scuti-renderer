@@ -87,19 +87,19 @@ export class Scuti {
      * @member {Promise<void>}
      * @public
      */
-    public async loadResources(): Promise<void> {
+    public async loadResources(domain: String = 'http://127.0.0.1:8081'): Promise<void> {
         /** Add all the resources */
-        Assets.add("room/materials", "http://127.0.0.1:8081/generic/room/room_data.json");
-        Assets.add("room/room", "http://127.0.0.1:8081/generic/room/room.json");
-        Assets.add("room/cursors", "http://127.0.0.1:8081/generic/tile_cursor/tile_cursor.json");
-        Assets.add("furnitures/floor/placeholder", "http://127.0.0.1:8081/generic/place_holder/place_holder_furniture.json");
-        Assets.add("furnitures/furnidata", "http://127.0.0.1:8081/gamedata/furnidata.json");
-        Assets.add("figures/figuredata", "http://127.0.0.1:8081/gamedata/figuredata.json");
-        Assets.add("figures/figuremap", "http://127.0.0.1:8081/gamedata/figuremap.json");
-        Assets.add("figures/draworder", "http://127.0.0.1:8081/gamedata/draworder.json");
-        Assets.add("figures/actions", "http://127.0.0.1:8081/generic/HabboAvatarActions.json");
-        Assets.add("figures/partsets", "http://127.0.0.1:8081/generic/HabboAvatarPartSets.json");
-        Assets.add("figures/animations", "http://127.0.0.1:8081/generic/HabboAvatarAnimations.json");
+        Assets.add("room/materials", domain + "/generic/room/room_data.json");
+        Assets.add("room/room", domain + "/generic/room/room.json");
+        Assets.add("room/cursors", domain + "/generic/tile_cursor/tile_cursor.json");
+        Assets.add("furnitures/floor/placeholder", domain + "/generic/place_holder/place_holder_furniture.json");
+        Assets.add("furnitures/furnidata", domain + "/gamedata/furnidata.json");
+        Assets.add("figures/figuredata", domain + "/gamedata/figuredata.json");
+        Assets.add("figures/figuremap", domain + "/gamedata/figuremap.json");
+        Assets.add("figures/draworder", domain + "/gamedata/draworder.json");
+        Assets.add("figures/actions", domain + "/generic/HabboAvatarActions.json");
+        Assets.add("figures/partsets", domain + "/generic/HabboAvatarPartSets.json");
+        Assets.add("figures/animations", domain + "/generic/HabboAvatarAnimations.json");
         /** And now load them */
         await Assets.load("room/materials");
         await Assets.load("room/room");
