@@ -13,6 +13,7 @@
   "scripts": {
     "start": "parcel public/index.html --no-cache",
     "build": "tsc",
+    "storybook": "cd storybook && npm start",
     "tsc-build": "rm -rf dist && tsc"
   },
   "keywords": [],

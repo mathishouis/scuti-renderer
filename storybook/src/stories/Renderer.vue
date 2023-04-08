@@ -7,6 +7,7 @@
   import { defineComponent, onMounted, onUnmounted, ref, type Ref } from 'vue';
   import { FloorMaterial, Room, Scuti, WallMaterial } from '@kozennnn/scuti-renderer';
 
+
   export default defineComponent({
     setup(props, { emit }) {
       const containerRef: Ref<HTMLDivElement | null> = ref(null);
@@ -26,12 +27,7 @@
         });
         await scuti.loadResources("https://psociety.github.io/scuti-resources/");
 
-        const room = new Room(scuti, {
-            tileMap: props.tileMap as string,
-            floorMaterial: new FloorMaterial(scuti, 110),
-            wallMaterial: new WallMaterial(scuti, 1601)
-        });
-        
+        if (props.cb) props.cb(scuti);
       });
       onUnmounted(() => {
         scuti.application.destroy();
@@ -42,7 +38,7 @@
       };
     },
     props: {
-      tileMap: String,
+      cb: Function as unknown as () => (scut: Scuti) => void,
     },
   });
   </script>

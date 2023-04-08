@@ -5,6 +5,7 @@ import {Direction} from "../../enums/Direction";
 import {AvatarLayer} from "./AvatarLayer";
 import {Avatar} from "./Avatar";
 import {AvatarAnimation} from "./animations/AvatarAnimation";
+import { AssetLoader } from "../../utilities/AssetLoader";
 
 export class AvatarBodyPart {
 
@@ -36,12 +37,7 @@ export class AvatarBodyPart {
 
     private _draw(): void {
         this._parts.forEach((part: IAvatarPart) => {
-            if(Assets.get("figures/" + part.lib.id) === undefined) {
-                Assets.add("figures/" + part.lib.id, "http://localhost:8081/figure/" + part.lib.id + "/" + part.lib.id + ".json");
-                Assets.load("figures/" + part.lib.id).then(() => this._createPart(part));
-            } else {
-                this._createPart(part);
-            }
+            AssetLoader.load("figures/" + part.lib.id, "figure/" + part.lib.id + "/" + part.lib.id + ".json").then(() => this._createPart(part));
         });
     }
 

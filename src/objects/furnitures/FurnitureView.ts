@@ -6,6 +6,7 @@ import { IFurnitureProperty } from "../../interfaces/Furniture.interface";
 import { FurnitureLayer } from "./FurnitureLayer";
 import { FurnitureGuildCustomizedVisualization } from "./visualizations/FurnitureGuildCustomizedVisualization";
 import { FurnitureVisualization } from "./visualizations/FurnitureVisualization";
+import { AssetLoader } from "../../utilities/AssetLoader";
 
 /**
  * FurnitureView class that manage all the rendering part of the furniture.
@@ -65,21 +66,14 @@ export class FurnitureView extends Container {
         /** Store data */
         this._furniture = furniture;
         /** Load the spritesheet */
-        if(Assets.get("furnitures/" + this._furniture.data.baseName) === undefined) {
+        AssetLoader.load("furnitures/" + this._furniture.data.baseName, "furniture/" + this._furniture.data.baseName + "/" + this._furniture.data.baseName + ".json", () => {
             this._createPlaceholder();
-            Assets.add("furnitures/" + this._furniture.data.baseName, "http://localhost:8081/furniture/" + this._furniture.data.baseName + "/" + this._furniture.data.baseName + ".json");
-            Assets.load("furnitures/" + this._furniture.data.baseName).then(() => {
-                this._spritesheet = Assets.get("furnitures/" + this._furniture.data.baseName);
-                this._property = this._spritesheet.data["furniProperty"];
-                this._initialiseVisualization();
-                this._draw();
-            });
-        } else {
+        }).then(() => {
             this._spritesheet = Assets.get("furnitures/" + this._furniture.data.baseName);
             this._property = this._spritesheet.data["furniProperty"];
             this._initialiseVisualization();
             this._draw();
-        }
+        });
     }
 
     /**

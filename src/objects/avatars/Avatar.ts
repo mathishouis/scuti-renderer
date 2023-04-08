@@ -11,6 +11,7 @@ import { AvatarLayer } from "./AvatarLayer";
 import { Assets } from "pixi.js";
 import {InteractionManager} from "../interactions/InteractionManager";
 import {IInteractionEvent} from "../../interfaces/Interaction.interface";
+import { AssetLoader } from "../../utilities/AssetLoader";
 
 export class Avatar extends RoomObject {
 
@@ -66,19 +67,9 @@ export class Avatar extends RoomObject {
     private _draw(): void {
         this._destroyParts();
         if(this._handItem !== 0 || this._handItem !== undefined) {
-            if(Assets.get("figures/hh_human_item") === undefined) {
-                Assets.add("figures/hh_human_item", "http://localhost:8081/figure/hh_human_item/hh_human_item.json");
-                Assets.load("figures/hh_human_item").then(() => this._createHandItem(this._handItem));
-            } else {
-                this._createHandItem(this._handItem);
-            }
+            AssetLoader.load("figures/hh_human_item", "figure/hh_human_item/hh_human_item.json").then(() => this._createHandItem(this._handItem));
         }
-        if(Assets.get("figures/hh_human_body") === undefined) {
-            Assets.add("figures/hh_human_body", "http://localhost:8081/figure/hh_human_body/hh_human_body.json");
-            Assets.load("figures/hh_human_body").then(() => this._createShadow());
-        } else {
-            this._createShadow();
-        }
+        AssetLoader.load("figures/hh_human_body", "figure/hh_human_body/hh_human_body.json").then(() => this._createShadow());
         this._bodyParts.forEach((bodyPart: AvatarBodyPart) => bodyPart.updateParts());
 
         this.x = 32 * this._position.x - 32 * this._position.y;
