@@ -1,12 +1,19 @@
 {
-  "name": "scuti-renderer",
+  "name": "@kozennnn/scuti-renderer",
   "version": "1.0.0",
-  "description": "",
   "main": "dist/index.js",
   "source": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kozennnn/scuti-renderer.git"
+  },
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "start": "parcel public/index.html --no-cache",
-    "build": "parcel build public/index.html",
+    "build": "tsc",
+    "storybook": "cd storybook && npm start",
     "tsc-build": "rm -rf dist && tsc"
   },
   "keywords": [],
@@ -14,6 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "@pixi/layers": "^2.0.1",
+    "@pixi/utils": "^7.2.4",
     "gsap": "^3.11.4",
     "pixi.js": "^7.1.2"
   },
@@ -23,6 +31,9 @@
     "process": "^0.11.10",
     "punycode": "^1.4.1",
     "querystring-es3": "^0.2.1",
-    "timers-browserify": "^2.0.12"
+    "timers-browserify": "^2.0.12",
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.1.1",
+    "typescript": "^4.0.3"
   }
 }

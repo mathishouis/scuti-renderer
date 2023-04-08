@@ -4,6 +4,7 @@ import { Logger } from "./utilities/Logger";
 import { PixiPlugin } from "gsap/PixiPlugin";
 import { gsap } from "gsap";
 import { Stage } from "@pixi/layers";
+import { AssetLoader } from "./utilities/AssetLoader";
 
 /**
  * Convenience class to create a new Scuti renderer.
@@ -87,31 +88,23 @@ export class Scuti {
      * @member {Promise<void>}
      * @public
      */
-    public async loadResources(): Promise<void> {
-        /** Add all the resources */
-        Assets.add("room/materials", "http://127.0.0.1:8081/generic/room/room_data.json");
-        Assets.add("room/room", "http://127.0.0.1:8081/generic/room/room.json");
-        Assets.add("room/cursors", "http://127.0.0.1:8081/generic/tile_cursor/tile_cursor.json");
-        Assets.add("furnitures/floor/placeholder", "http://127.0.0.1:8081/generic/place_holder/place_holder_furniture.json");
-        Assets.add("furnitures/furnidata", "http://127.0.0.1:8081/gamedata/furnidata.json");
-        Assets.add("figures/figuredata", "http://127.0.0.1:8081/gamedata/figuredata.json");
-        Assets.add("figures/figuremap", "http://127.0.0.1:8081/gamedata/figuremap.json");
-        Assets.add("figures/draworder", "http://127.0.0.1:8081/gamedata/draworder.json");
-        Assets.add("figures/actions", "http://127.0.0.1:8081/generic/HabboAvatarActions.json");
-        Assets.add("figures/partsets", "http://127.0.0.1:8081/generic/HabboAvatarPartSets.json");
-        Assets.add("figures/animations", "http://127.0.0.1:8081/generic/HabboAvatarAnimations.json");
+    public async loadResources(domain: string = 'http://127.0.0.1:8081/'): Promise<void> {
+        AssetLoader.domain = domain;
+
         /** And now load them */
-        await Assets.load("room/materials");
-        await Assets.load("room/room");
-        await Assets.load("room/cursors");
-        await Assets.load("furnitures/floor/placeholder");
-        await Assets.load("furnitures/furnidata");
-        await Assets.load("figures/figuredata");
-        await Assets.load("figures/figuremap");
-        await Assets.load("figures/draworder");
-        await Assets.load("figures/actions");
-        await Assets.load("figures/partsets");
-        await Assets.load("figures/animations");
+        await Promise.all([
+            AssetLoader.load("room/materials", "generic/room/room_data.json"),
+            AssetLoader.load("room/room", "generic/room/room.json"),
+            AssetLoader.load("room/cursors", "generic/tile_cursor/tile_cursor.json"),
+            AssetLoader.load("furnitures/floor/placeholder", "generic/place_holder/place_holder_furniture.json"),
+            AssetLoader.load("furnitures/furnidata", "gamedata/furnidata.json"),
+            AssetLoader.load("figures/figuredata", "gamedata/figuredata.json"),
+            AssetLoader.load("figures/figuremap", "gamedata/figuremap.json"),
+            AssetLoader.load("figures/draworder", "gamedata/draworder.json"),
+            AssetLoader.load("figures/actions", "generic/HabboAvatarActions.json"),
+            AssetLoader.load("figures/partsets", "generic/HabboAvatarPartSets.json"),
+            AssetLoader.load("figures/animations", "generic/HabboAvatarAnimations.json")
+        ]);
     }
 
     /**
