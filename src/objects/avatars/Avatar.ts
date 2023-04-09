@@ -35,6 +35,8 @@ export class Avatar extends RoomObject {
 
     private _bodyParts: AvatarBodyPart[] = [];
 
+    private areAllAssetsLoaded: boolean = false;
+
     constructor(
         configuration: IAvatarConfiguration
     ) {
@@ -46,6 +48,12 @@ export class Avatar extends RoomObject {
         this._bodyDirection = configuration.bodyDirection;
         this._actions = configuration.actions;
         this._handItem = configuration.handItem;
+        let assets = [];
+
+        if(this._handItem !== 0 || this._handItem !== undefined) {
+            assets.push(AssetLoader.load("figures/hh_human_item", "figure/hh_human_item/hh_human_item.json"));
+        }
+        assets.push(AssetLoader.load("figures/hh_human_body", "figure/hh_human_body/hh_human_body.json"));
 
         this._actionManager = new AvatarActionManager(AvatarAction.Default);
         this._animationManager = new AvatarAnimationManager();
@@ -62,14 +70,24 @@ export class Avatar extends RoomObject {
             }));
         });
         //this.interactive = true;
+
+        Promise.all(assets).then(() => {
+            this.areAllAssetsLoaded = true;
+        });
     }
 
     private _draw(): void {
         this._destroyParts();
-        if(this._handItem !== 0 || this._handItem !== undefined) {
-            AssetLoader.load("figures/hh_human_item", "figure/hh_human_item/hh_human_item.json").then(() => this._createHandItem(this._handItem));
+
+        if (!this.areAllAssetsLoaded) {
+            return;
         }
-        AssetLoader.load("figures/hh_human_body", "figure/hh_human_body/hh_human_body.json").then(() => this._createShadow());
+
+        if(this._handItem !== 0 || this._handItem !== undefined) {
+            this._createHandItem(this._handItem);
+        }
+        this._createShadow();
+
         this._bodyParts.forEach((bodyPart: AvatarBodyPart) => bodyPart.updateParts());
 
         this.x = 32 * this._position.x - 32 * this._position.y;
