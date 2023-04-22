@@ -121,11 +121,11 @@ export class Tile extends Container {
         let bottomTile;
         let rightTile;
 
-        if (this._room.tileMap.tileMap[this._position.y + 1][this._position.x] !== undefined) {
+        if (this._room.tileMap.tileMap[this._position.y + 1] !== undefined && this._room.tileMap.tileMap[this._position.y + 1][this._position.x] !== undefined) {
             bottomTile = this._room.tileMap.getTileInfo({x: this._position.x, y: this._position.y + 1});
         }
 
-        if (typeof this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== "undefined") {
+        if (typeof this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== undefined) {
             rightTile = this._room.tileMap.getTileInfo({x: this._position.x + 1, y: this._position.y});
         }
 

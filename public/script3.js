@@ -79,7 +79,40 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         "x0000000000000000x\n";
 
     const room = new Room(renderer, {
-        tileMap: tileMap,
+        tileMap:
+            "xxxxxxxxxxxxxxxxxxxxxxxx\n" +
+            "xxxxxxxxxxxxxxxxxxxxxxxx\n" +
+            "xxxxxxxxxxxxxxxxxxxxxxxx\n" +
+            "xxxxxxxxxxxxxxxxxxxxxxxx\n" +
+            "xxxxxxxxxxxxxxxxxxxxxxxx\n" +
+            "xxxxxxxxxxxxxxxxxxxxxxxx\n" +
+            "xxxxxxxxxxxxxxxxxxxxxxxx\n" +
+            "xxxxx00xxxxxxxxxxxxxxxxx\n" +
+            "xxxxx00xxxxxxxxxxxxxxxxx\n" +
+            "xxxxx00xxxxx00xxxxxxxxxx\n" +
+            "xxxxxxxxxxx00000000xxxxx\n" +
+            "xxxxxxxxxxx00000000xxxxx\n" +
+            "xxxxxxxxxxx00000000xxxxx\n" +
+            "xxxxxxxxxxx00000000xxxxx\n" +
+            "xxxxxxxxxxx00000000xxxxx\n" +
+            "xxxxxxxxxxx00000000xxxxx\n" +
+            "xxxxxxxxxxx000000000000x\n" +
+            "xxxxxxxxxxx000000000000x\n" +
+            "xxxxxxxxxxx000000000000x\n" +
+            "xxxxxxxxxx0000000000000x\n" +
+            "xxxxxxxxxxx0000000000000\n" +
+            "xxxxxxxxxxx0000000000000\n" +
+            "x66666xxxxx000000000000x\n" +
+            "x66666xxxxx000000000000x\n" +
+            "x6666xxxxxx000000000000x\n" +
+            "x6666xxxxxx000000000000x\n" +
+            "x6666xxxxxx00000000xxxxx\n" +
+            "x6666xxxxxx00000000xxxxx\n" +
+            "x6666xxxxxx00000000xxxxx\n" +
+            "x6666xxxxxx00000000xxxxx\n" +
+            "x6666xxxxxx00000000xxxxx\n" +
+            "x6666xxxxxx00000000xxxxx\n" +
+            "xxxxxxxxxxxx00xxxxxxxxxx",
         /*floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1501)*/
         //floorMaterial: new FloorMaterial(renderer, 307),
