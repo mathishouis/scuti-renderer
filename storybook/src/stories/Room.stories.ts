@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import Renderer from './Renderer.vue';
-import { FloorMaterial, WallMaterial, type Scuti, Room, Avatar, AvatarAction, FloorFurniture } from '@kozennnn/scuti-renderer';
+import { FloorMaterial, WallMaterial, type Scuti, Room, Avatar, AvatarAction, FloorFurniture } from 'scuti-renderer';
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/vue/writing-stories/introduction
 const meta: Meta<typeof Renderer> = {

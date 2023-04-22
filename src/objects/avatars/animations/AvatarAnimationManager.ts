@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {IAvatarPartSets, IAnimationFrameData} from "../../../interfaces/Avatar.interface";
 import {Assets} from "pixi.js";
 import {AvatarAction} from "../actions/AvatarAction";

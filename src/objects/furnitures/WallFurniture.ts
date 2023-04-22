@@ -124,6 +124,7 @@ export class WallFurniture extends RoomObject {
      * @return {void}
      * @public
      */
+    // @ts-ignore
     public start(): void {
         this.animationTicker.add(() => this._view.tick());
     }
@@ -134,6 +135,7 @@ export class WallFurniture extends RoomObject {
      * @return {void}
      * @public
      */
+    // @ts-ignore
     public stop(): void {
         this.animationTicker.remove(() => this._view.tick());
     }

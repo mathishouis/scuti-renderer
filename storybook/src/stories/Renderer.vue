@@ -2,10 +2,10 @@
     <div ref="containerRef">
     </div>
   </template>
-  
+
   <script lang="ts">
   import { defineComponent, onMounted, onUnmounted, ref, type Ref } from 'vue';
-  import { FloorMaterial, Room, Scuti, WallMaterial } from '@kozennnn/scuti-renderer';
+  import { FloorMaterial, Room, Scuti, WallMaterial } from 'scuti-renderer';
 
 
   export default defineComponent({
@@ -13,26 +13,26 @@
       const containerRef: Ref<HTMLDivElement | null> = ref(null);
 
         let scuti: Scuti;
-        
+
       onMounted(async () => {
         const container = containerRef.value;
-  
+
         if (container == null) return;
-  
+
         scuti = new Scuti({
           canvas: container,
           width: window.innerWidth / 2,
           height: window.innerHeight / 2,
           resources: './resources'
         });
-        await scuti.loadResources("https://psociety.github.io/scuti-resources/");
+        await scuti.loadResources("https://kozennnn.github.io/scuti-resources/");
 
         if (props.cb) props.cb(scuti);
       });
       onUnmounted(() => {
         scuti.application.destroy();
       });
-  
+
       return {
         containerRef,
       };

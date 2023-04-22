@@ -78,6 +78,7 @@ export class Scuti {
         this._application.stage = new Stage();
         this._canvas = configuration.canvas;
         /** Append it to the canvas */
+        // @ts-ignore
         this._canvas.append(this._application.view);
     }
 

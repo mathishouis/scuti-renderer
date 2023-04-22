@@ -51,10 +51,13 @@ export class RoomTileLayer extends Container {
     public getTileFromGlobal(
         position: IPosition2D
     ): Tile | Stair {
+        // @ts-ignore
         const container = this.children.find((container: Container) => {
             const point: Point = new Point(position.x, position.y);
+            // @ts-ignore
             if(container.hitArea.contains(container.toLocal(point).x, container.toLocal(point).y)) return container;
         });
+        // @ts-ignore
         return container;
     }
 

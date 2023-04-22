@@ -44,9 +44,13 @@ export class FloorMaterial extends Material {
      */
     private _load(): void {
         const materials: { floorData: { textures: [] } } = Assets.get('room/materials');
+        // @ts-ignore
         const material: { id: string, visualizations: [] } = materials.floorData.floors.find(material => material.id === this._id.toString());
+        // @ts-ignore
         const { color, materialId } = material.visualizations[0].layers[0];
+        // @ts-ignore
         const materialTexture: { id: string, bitmaps: [] } = materials.floorData.textures.find(texture => texture.id === materialId.toString());
+        // @ts-ignore
         const name: string = materialTexture.bitmaps[0].assetName;
         const texture: Texture = Assets.get('room/room').textures[`room_${name}.png`];
         const sprite: Sprite = new Sprite(texture);

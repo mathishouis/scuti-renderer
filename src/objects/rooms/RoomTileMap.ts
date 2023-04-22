@@ -110,18 +110,18 @@ export class RoomTileMap {
      */
     private _getWallType(
         position: IPosition2D
-    ): WallType {
+    ): WallType | undefined {
         const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 };
         const topTile: IPosition2D = { x: position.x, y: position.y - 1 };
         const midLeftTile: IPosition2D = { x: position.x - 1, y: position.y };
 
-        if(this.isDoor(position)) return null;
+        if(this.isDoor(position)) return;
 
         if(!this.isTile(topLeftTile) && !this.isTile(topTile) && !this.isTile(midLeftTile) && this.isTile(position)) return WallType.CORNER_WALL;
         if(!this.isTile(midLeftTile) && this.isTile(position)) return WallType.LEFT_WALL;
         if(!this.isTile(topTile) && this.isTile(position)) return WallType.RIGHT_WALL;
 
-        return null;
+        return;
     }
 
     /**
@@ -133,7 +133,7 @@ export class RoomTileMap {
      */
     private _getStairType(
         position: IPosition2D
-    ): { type: StairType, direction: Direction } {
+    ): { type: StairType, direction: Direction } | undefined {
         const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 };
         const topTile: IPosition2D = { x: position.x, y: position.y - 1 };
         const topRightTile: IPosition2D = { x: position.x + 1, y: position.y - 1 };
@@ -158,7 +158,7 @@ export class RoomTileMap {
         if(this.isTile(position) && this.isTile(midLeftTile) && this._getTileDifference(midLeftTile, position) === 1) return { type: StairType.STAIR, direction: Direction.WEST };
         if(this.isTile(position) && this.isTile(topLeftTile) && this._getTileDifference(topLeftTile, position) === 1 && this._getTileDifference(midLeftTile, position) === 0 && this._getTileDifference(topTile, position) === 0) return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.NORTH_WEST,  };
 
-        return null;
+        return;
     }
 
     /**
@@ -242,32 +242,32 @@ export class RoomTileMap {
         let wallX: boolean = false;
         let wallY: boolean = false;
         for (let i = position.y - 1; i >= 0; i--) {
-            const wall: WallType = this._getWallType({ x: position.x, y: i });
-            if(wall !== null) {
-                if(wall === WallType.RIGHT_WALL || wall === WallType.CORNER_WALL) {
+            const wall: WallType | undefined = this._getWallType({ x: position.x, y: i });
+            if(wall) {
+                if(wall === WallType.RIGHT_WALL || wall === WallType.CORNER_WALL as WallType) {
                     wallY = true;
                 }
             }
             for (let j = position.x - 1; j >= 0; j--) {
-                const wall2: WallType = this._getWallType({ x: j, y: i });
-                if(wall2 !== null) {
-                    if(wall2 === WallType.LEFT_WALL || wall2 === WallType.CORNER_WALL) {
+                const wall2: WallType | undefined = this._getWallType({ x: j, y: i });
+                if(wall2) {
+                    if(wall2 === WallType.LEFT_WALL || wall2 === WallType.CORNER_WALL as WallType) {
                         wallY = true;
                     }
                 }
             }
         }
         for (let i = position.x - 1; i >= 0; i--) {
-            const wall: WallType = this._getWallType({ x: i, y: position.y });
-            if(wall !== null) {
-                if(wall === WallType.LEFT_WALL || wall === WallType.CORNER_WALL) {
+            const wall: WallType | undefined = this._getWallType({ x: i, y: position.y });
+            if(wall) {
+                if(wall === WallType.LEFT_WALL || wall === WallType.CORNER_WALL as WallType) {
                     wallX = true;
                 }
             }
             for (let j = position.y - 1; j >= 0; j--) {
-                const wall2: WallType = this._getWallType({ x: i, y: j });
-                if(wall2 !== null) {
-                    if(wall2 === WallType.RIGHT_WALL || wall2 === WallType.CORNER_WALL) {
+                const wall2: WallType | undefined = this._getWallType({ x: i, y: j });
+                if(wall2) {
+                    if(wall2 === WallType.RIGHT_WALL || wall2 === WallType.CORNER_WALL as WallType) {
                         wallX = true;
                     }
                 }

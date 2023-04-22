@@ -1,5 +1,5 @@
 import { Room } from "./Room";
-import { Container, FederatedPointerEvent } from "pixi.js";
+import {Container, EventBoundary, FederatedPointerEvent} from "pixi.js";
 import { gsap } from "gsap";
 import { Tile } from "./parts/Tile";
 import { Stair } from "./parts/Stair";
@@ -26,7 +26,7 @@ export class RoomCamera extends Container {
      * @member {boolean}
      * @private
      */
-    private _dragging: boolean;
+    private _dragging!: boolean;
 
     /**
      * The container that will act as a trigger to drag the room container.
@@ -50,7 +50,7 @@ export class RoomCamera extends Container {
      * @member {Tile | Stair}
      * @private
      */
-    private _selectedTile: Tile | Stair;
+    private _selectedTile!: Tile | Stair;
 
     /**
      * @param {Room} [room] - The room instance that will be managed by this camera.
@@ -71,6 +71,7 @@ export class RoomCamera extends Container {
         /** Handle interactions */
         this._room.engine.application.renderer.events.domElement.addEventListener("pointerdown", this._dragStart);
         this._room.engine.application.renderer.events.domElement.addEventListener("pointerup", this._dragEnd);
+        // @ts-ignore
         this._room.engine.application.renderer.events.domElement.addEventListener("pointermove", this._dragMove);
         /** Handle tile interactions */
         this._room.engine.application.renderer.events.domElement.addEventListener("pointerdown", this._tilePointerDown);
@@ -174,7 +175,7 @@ export class RoomCamera extends Container {
     private _tilePointerDown = (event: PointerEvent): void => {
         const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
 
-        if (tile) tile.emit("pointerdown");
+        if (tile) tile.emit("pointerdown", new FederatedPointerEvent(new EventBoundary()));
     }
 
     /**
@@ -186,7 +187,7 @@ export class RoomCamera extends Container {
     private _tilePointerUp = (event: PointerEvent): void => {
         const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
 
-        if (tile) tile.emit("pointerup");
+        if (tile) tile.emit("pointerup", new FederatedPointerEvent(new EventBoundary()));
     }
 
     /**
@@ -197,17 +198,17 @@ export class RoomCamera extends Container {
      */
     private _tilePointerMove = (event: PointerEvent): void => {
         const object: Tile | Stair = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
-        
+
         if(object === undefined) return;
-        
+
         if(this._selectedTile === object) {
-            object.emit("pointermove");
+            object.emit("pointermove", new FederatedPointerEvent(new EventBoundary()));
         } else {
             if(this._selectedTile !== undefined) {
-                this._selectedTile.emit("pointerout");
+                this._selectedTile.emit("pointerout", new FederatedPointerEvent(new EventBoundary()));
             }
             if(object !== undefined) {
-                object.emit("pointerover");
+                object.emit("pointerover", new FederatedPointerEvent(new EventBoundary()));
             }
             this._selectedTile = object;
         }

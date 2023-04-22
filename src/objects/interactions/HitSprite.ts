@@ -15,7 +15,7 @@ export class HitSprite extends Sprite {
      * @member {boolean}
      * @public
      */
-    public interactive: boolean;
+    public interactive!: boolean;
 
     /**
      * The global sprite position in the canvas.
@@ -23,6 +23,7 @@ export class HitSprite extends Sprite {
      * @member {{ x: number, y: number }}
      * @public
      */
+    // @ts-ignore
     public getGlobalPosition: () => { x: number, y: number };
 
     /**
@@ -31,7 +32,7 @@ export class HitSprite extends Sprite {
      * @member {HitTexture}
      * @private
      */
-    private _hitTexture: HitTexture;
+    private _hitTexture!: HitTexture;
 
     /**
      * @param {Texture} [texture] - The texture that will be converted into a hit texture.

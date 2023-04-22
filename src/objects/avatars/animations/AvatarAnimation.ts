@@ -9,6 +9,7 @@ export class AvatarAnimation {
     ) {}
 
     public getFrame(frame: number, type: string): IAnimationFrameData {
+        // @ts-ignore
         return this._definition.frames[frame].bodyparts[type];
     }
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Assets } from "pixi.js";
 import { FloorFurniture } from "./FloorFurniture";
 import { WallFurniture } from "./WallFurniture";
@@ -25,7 +26,7 @@ export class FurnitureData {
      * @member {IFurnitureData}
      * @private
      */
-    private _data: IFurnitureData;
+    private _data!: IFurnitureData;
 
     /**
      * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
@@ -46,8 +47,10 @@ export class FurnitureData {
      */
     private _load(): void {
         if(this._furniture instanceof  FloorFurniture) {
+            // @ts-ignore
             this._data = Assets.get('furnitures/furnidata').floorItems.find(item => item.id === this._furniture.id);
         } else if(this._furniture instanceof  WallFurniture) {
+            // @ts-ignore
             this._data = Assets.get('furnitures/furnidata').wallItems.find(item => item.id === this._furniture.id);
         }
     }
@@ -94,6 +97,7 @@ export class FurnitureData {
      * @public
      */
     public get color(): number {
+        // @ts-ignore
         if(!this._data.className.includes("*")) return null;
         return Number(this._data.className.split("*")[1]);
     }

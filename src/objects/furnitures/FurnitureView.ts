@@ -38,7 +38,7 @@ export class FurnitureView extends Container {
      * @member {Spritesheet}
      * @private
      */
-    private _spritesheet: Spritesheet;
+    private _spritesheet!: Spritesheet;
 
     /**
      * The furniture property.
@@ -46,7 +46,7 @@ export class FurnitureView extends Container {
      * @member {IFurnitureProperty}
      * @private
      */
-    private _property: IFurnitureProperty;
+    private _property!: IFurnitureProperty;
 
     /**
      * The furniture visualization.
@@ -54,7 +54,7 @@ export class FurnitureView extends Container {
      * @member {FurnitureVisualization}
      * @private
      */
-    private _visualization: FurnitureVisualization;
+    private _visualization!: FurnitureVisualization;
 
     /**
      * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance to render.
@@ -70,6 +70,7 @@ export class FurnitureView extends Container {
             this._createPlaceholder();
         }).then(() => {
             this._spritesheet = Assets.get("furnitures/" + this._furniture.data.baseName);
+            // @ts-ignore
             this._property = this._spritesheet.data["furniProperty"];
             this._initialiseVisualization();
             this._draw();
@@ -83,6 +84,7 @@ export class FurnitureView extends Container {
      * @private
      */
     private _initialiseVisualization(): void {
+        // @ts-ignore
         if(this._property.infos.visualization === "furniture_guild_customized") this._visualization = new FurnitureGuildCustomizedVisualization(this._furniture);
     }
 
@@ -171,11 +173,14 @@ export class FurnitureView extends Container {
      * @private
      */
     private _createShadow(): void {
+        // @ts-ignore
         this.addChild(new FurnitureLayer(this._furniture, {
             layer: "sd",
             alpha: 0.1,
+            // @ts-ignore
             tint: undefined,
             z: 0,
+            // @ts-ignore
             blendMode: undefined,
             flip: false,
             frame: 0,

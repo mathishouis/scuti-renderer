@@ -35,7 +35,7 @@ export class FurniturePart extends Container {
      * @member {number}
      * @private
      */
-    private _frame: number;
+    private _frame!: number;
 
     /**
      * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
@@ -80,12 +80,13 @@ export class FurniturePart extends Container {
         if (visualization.animation[this._furniture.state] !== undefined && visualization.animation[this._furniture.state][this._layer] !== undefined && visualization.animation[this._furniture.state][this._layer].frameSequence.length > 1) frame = this._frame;
 
         if (visualization.animation[this._furniture.state] !== undefined && visualization.animation[this._furniture.state][this._layer] !== undefined) frame = visualization.animation[this._furniture.state][this._layer].frameSequence[frame] ?? 0;
-
+        // @ts-ignore
         if(this._furniture.data.color !== null && visualization.colors[this._furniture.data.color] !== undefined && visualization.colors[this._furniture.data.color][this._layer] !== undefined) tint = Number('0x' + visualization.colors[this._furniture.data.color][this._layer]);
         /** Set the layer data */
         if(visualization.layers[this._layer] !== undefined) {
             if(visualization.layers[this._layer].z !== undefined) z = visualization.layers[this._layer].z;
             if(visualization.layers[this._layer].alpha !== undefined) alpha = visualization.layers[this._layer].alpha / 255;
+            // @ts-ignore
             if(visualization.layers[this._layer].ink !== undefined) blendMode = BLEND_MODES[visualization.layers[this._layer].ink];
             if(visualization.layers[this._layer].ignoreMouse !== undefined) ignoreMouse = visualization.layers[this._layer].ignoreMouse;
             if(visualization.layers[this._layer].tag !== undefined) tag = visualization.layers[this._layer].tag;
@@ -93,27 +94,34 @@ export class FurniturePart extends Container {
 
         if(this._furniture.view.visualization !== undefined) {
             if(this._furniture.view.visualization instanceof FurnitureGuildCustomizedVisualization) {
+                // @ts-ignore
                 if(tag === "COLOR1") tint = this._furniture.view.visualization.primaryColor;
+                // @ts-ignore
                 if(tag === "COLOR2") tint = this._furniture.view.visualization.secondaryColor;
             }
         }
 
         const name: string = [this._furniture.data.baseName, this._furniture.data.baseName, 64, String.fromCharCode(97 + Number(this._layer)), this._furniture.direction, frame].join("_");
         /** Calculate zOrder */
+        // @ts-ignore
         z = (((this._furniture.roomPosition.x + this._furniture.roomPosition.y + (Math.trunc(z / 100)) / 10) * 1000000 + (this._furniture.roomPosition.z * 10000)) + 10000000 * 11);
-
+        // @ts-ignore
         if(spritesheet.data.frames[name] !== undefined) flip = spritesheet.data.frames[name]['flipH'];
         /** Create the layer */
+        // @ts-ignore
         this.addChild(new FurnitureLayer(this._furniture, {
             layer: String.fromCharCode(97 + Number(this._layer)),
             alpha: alpha,
+            // @ts-ignore
             tint: tint,
             z: z,
+            // @ts-ignore
             blendMode: blendMode,
             flip: flip,
             frame: frame,
             ignoreMouse: ignoreMouse,
             direction: this._furniture.direction,
+            // @ts-ignore
             tag: tag
         }));
     }
@@ -126,7 +134,9 @@ export class FurniturePart extends Container {
      */
     public nextFrame(): void {
         const visualization: IFurnitureVisualization = this._furniture.view.property.visualization;
+        // @ts-ignore
         if(visualization.animation[String(this._furniture.state)] !== undefined && visualization.animation[String(this._furniture.state)][this._layer] !== undefined) {
+            // @ts-ignore
             const frameSequence: number[] = visualization.animation[String(this._furniture.state)][this._layer].frameSequence;
             const currentFrame: number = this._frame;
             if(frameSequence.length > 1)  {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Assets, BLEND_MODES, utils } from "pixi.js";
 import { FloorFurniture } from "./FloorFurniture";
 import { IFurnitureLayerConfiguration } from "../../interfaces/Furniture.interface";
@@ -15,6 +16,7 @@ const WIRED_SELECTION_FILTER: WiredSelectionFilter = new WiredSelectionFilter(0x
  * @class
  * @memberof Scuti
  */
+// @ts-ignore
 export class FurnitureLayer extends HitSprite {
 
     /**
@@ -113,6 +115,7 @@ export class FurnitureLayer extends HitSprite {
         furniture: FloorFurniture | WallFurniture,
         configuration: IFurnitureLayerConfiguration
     ) {
+        // @ts-ignore
         super(null);
 
         this._furniture = furniture;
@@ -125,6 +128,7 @@ export class FurnitureLayer extends HitSprite {
         this._frame = configuration.frame;
         this._ignoreMouse = configuration.ignoreMouse;
         this._direction = configuration.direction;
+        // @ts-ignore
         this._tag = configuration.tag;
 
         this._draw();

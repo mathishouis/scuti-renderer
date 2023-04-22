@@ -45,7 +45,7 @@ export class HitTexture {
      * @member {Uint32Array}
      * @private
      */
-    private _hitMap: Uint32Array = undefined;
+    private _hitMap!: Uint32Array;
 
     /**
      * @param {HitSprite} [sprite] - The hit sprite that we want to retrieve the texture.
@@ -79,10 +79,12 @@ export class HitTexture {
      * @private
      */
     private _generateHitMap(baseTexture: BaseTexture): Uint32Array {
+        // @ts-ignore
         const image: HTMLImageElement = baseTexture.resource['source'];
         const canvas: HTMLCanvasElement = document.createElement('canvas');
         canvas.width = image.width;
         canvas.height = image.height;
+        // @ts-ignore
         const context: CanvasRenderingContext2D = canvas.getContext('2d');
         context.drawImage(image, 0, 0);
 
@@ -118,6 +120,7 @@ export class HitTexture {
         sprite.y = this._sprite.getGlobalPosition().y + this._sprite.texture.trim.y;
         sprite.texture.trim.x = 0;
         sprite.texture.trim.y = 0;
+        // @ts-ignore
         let renderTexture: RenderTexture = undefined;
         if(this._sprite instanceof FurnitureLayer) {
             this._sprite.furniture.room.engine.application.stage.addChild(sprite);
@@ -191,6 +194,7 @@ export class HitTexture {
      */
     private _base64(target: DisplayObject|RenderTexture, format?: string, quality?: number): string
     {
+        // @ts-ignore
         return this._canvas(target).toDataURL(format, quality);
     }
 
@@ -228,28 +232,33 @@ export class HitTexture {
             }
             else
             {
+                // @ts-ignore
                 renderTexture = renderer.generateTexture(target);
                 generated = true;
             }
         }
-
+        // @ts-ignore
         if (renderTexture)
         {
             resolution = renderTexture.baseTexture.resolution;
             frame = renderTexture.frame;
             flipY = false;
+            // @ts-ignore
             renderer.renderTexture.bind(renderTexture);
         }
         else
         {
+            // @ts-ignore
             resolution = renderer.resolution;
 
             flipY = true;
 
             frame = TEMP_RECT;
+            // @ts-ignore
             frame.width = renderer.width;
+            // @ts-ignore
             frame.height = renderer.height;
-
+            // @ts-ignore
             renderer.renderTexture.bind(null);
         }
 
@@ -261,6 +270,7 @@ export class HitTexture {
         const webglPixels: Uint8Array = new Uint8Array(BYTES_PER_PIXEL * width * height);
 
         /** Read pixels to the array */
+          // @ts-ignore
         const gl: any = renderer.gl;
 
         gl.readPixels(
@@ -296,6 +306,7 @@ export class HitTexture {
 
         if (generated)
         {
+            // @ts-ignore
             renderTexture.destroy(true);
         }
 

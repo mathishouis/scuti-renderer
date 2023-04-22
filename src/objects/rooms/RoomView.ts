@@ -73,7 +73,7 @@ export class RoomView extends Container {
      * @member {Cursor}
      * @private
      */
-    private _cursor: Cursor;
+    private _cursor!: Cursor;
 
     /**
      * The room animation ticker instance that will manage all the objects animations
@@ -179,7 +179,7 @@ export class RoomView extends Container {
             if(tileInfo.wallType === WallType.RIGHT_WALL && !this._room.tileMap.hasWall(position).y) this._createWall(position, WallType.RIGHT_WALL);
             if(tileInfo.door) this._createWall(position, WallType.DOOR_WALL);
         }
-        if(tileInfo.stairType !== null) {
+        if(tileInfo.stairType) {
             position.direction = tileInfo.stairType.direction;
             this._createStair(position, tileInfo.stairType.type);
         } else if(tileInfo.door) {

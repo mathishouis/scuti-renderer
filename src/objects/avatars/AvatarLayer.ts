@@ -4,12 +4,10 @@ import {
     IAvatarPart,
     IActionDefinition
 } from "../../interfaces/Avatar.interface";
-import {AnimatedSprite, Assets, BLEND_MODES, Container, utils} from "pixi.js";
+import {Assets, Container, utils} from "pixi.js";
 import {HitSprite} from "../interactions/HitSprite";
-import {AvatarAction} from "./actions/AvatarAction";
 import {Direction} from "../../enums/Direction";
-import {AvatarUtil} from "../../utilities/AvatarUtil";
-import {IInteractionEvent} from "../../interfaces/Interaction.interface";
+import {Color} from "@pixi/color";
 
 export class AvatarLayer extends Container {
 
@@ -59,6 +57,7 @@ export class AvatarLayer extends Container {
         this._flip = configuration.flip;
         this._direction = configuration.direction;
         this._frame = configuration.frame;
+        // @ts-ignore
         this._alpha = configuration.alpha;
 
         this._draw();
@@ -74,7 +73,7 @@ export class AvatarLayer extends Container {
         const avatarActions: IActionDefinition[] = Assets.get("figures/actions");
         //if(this._type === "ls" || this._type === "lh" || this._type === "lc") console.log(2, this._part.lib.id + "_h_" + this._gesture + "_" + this._type + "_" + this._part.id + "_" + tempDirection + "_" + this._frame);
         const sprite: HitSprite = new HitSprite(Assets.get("figures/" + this._part.lib.id).textures[this._part.lib.id + "_h_" + this._gesture + "_" + this._type + "_" + this._part.id + "_" + tempDirection + "_" + this._frame]);
-        if(this._tint !== undefined) sprite.tint = utils.premultiplyTint(this._tint, 0.999);
+        if(this._tint !== undefined) sprite.tint = new Color(this._tint).premultiply(1).toNumber();
         if(this._z !== undefined) this.zIndex = this._z;
         if(this._alpha !== undefined) sprite.alpha = this._alpha;
         //sprite.animationSpeed = 0.167;
@@ -85,6 +84,7 @@ export class AvatarLayer extends Container {
         sprite.on("pointermove", (event: PointerEvent) => this._avatar.interactionManager.handlePointerMove({ mouseEvent: event }));
         sprite.on("pointerout", (event: PointerEvent) => this._avatar.interactionManager.handlePointerOut({ mouseEvent: event }));
         sprite.on("pointerover", (event: PointerEvent) => this._avatar.interactionManager.handlePointerOver({ mouseEvent: event }));
+        // @ts-ignore
         this.addChild(sprite);
     }
 

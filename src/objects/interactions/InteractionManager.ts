@@ -22,7 +22,7 @@ export class InteractionManager {
      * @member {number}
      * @private
      */
-    private _doubleClickTimeout: number;
+    private _doubleClickTimeout!: number;
 
     /**
      * The pointer down event.
@@ -30,7 +30,7 @@ export class InteractionManager {
      * @member {(event: IInteractionEvent) => void}
      * @private
      */
-    private _onPointerDown: (event: IInteractionEvent) => void;
+    private _onPointerDown!: (event: IInteractionEvent) => void;
 
     /**
      * The pointer up event.
@@ -38,7 +38,7 @@ export class InteractionManager {
      * @member {(event: IInteractionEvent) => void}
      * @private
      */
-    private _onPointerUp: (event: IInteractionEvent) => void;
+    private _onPointerUp!: (event: IInteractionEvent) => void;
 
     /**
      * The pointer move event.
@@ -46,7 +46,7 @@ export class InteractionManager {
      * @member {(event: IInteractionEvent) => void}
      * @private
      */
-    private _onPointerMove: (event: IInteractionEvent) => void;
+    private _onPointerMove!: (event: IInteractionEvent) => void;
 
     /**
      * The pointer out event.
@@ -54,7 +54,7 @@ export class InteractionManager {
      * @member {(event: IInteractionEvent) => void}
      * @private
      */
-    private _onPointerOut: (event: IInteractionEvent) => void;
+    private _onPointerOut!: (event: IInteractionEvent) => void;
 
     /**
      * The pointer ouver event.
@@ -62,7 +62,7 @@ export class InteractionManager {
      * @member {(event: IInteractionEvent) => void}
      * @private
      */
-    private _onPointerOver: (event: IInteractionEvent) => void;
+    private _onPointerOver!: (event: IInteractionEvent) => void;
 
     /**
      * The pointer double click event.
@@ -70,7 +70,7 @@ export class InteractionManager {
      * @member {(event: IInteractionEvent) => void}
      * @private
      */
-    private _onDoubleClick: (event: IInteractionEvent) => void;
+    private _onDoubleClick!: (event: IInteractionEvent) => void;
 
     /**
      * Reference to the pointer down event.

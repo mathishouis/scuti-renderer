@@ -7,6 +7,7 @@ import { Direction } from "../../../enums/Direction";
 import { FloorMaterial } from "../materials/FloorMaterial";
 import { InteractionManager } from "../../interactions/InteractionManager";
 import { IInteractionEvent } from "../../../interfaces/Interaction.interface";
+import {Color} from "@pixi/color";
 
 /**
  * Stair class that show up when two tiles side by side have a height difference of one.
@@ -316,7 +317,7 @@ export class Stair extends Container {
             const top: Graphics = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 1),
+                    color: new Color(this._material.color).premultiply(1).toNumber(),
                     matrix: new Matrix(1, 0.5, 1, -0.5, (this._position.y % 2 === 0) ? 32 : 64, (this._position.y % 2 === 0) ? 16 : 0)
                 })
                 .moveTo(points[0].x, points[0].y)
@@ -329,7 +330,7 @@ export class Stair extends Container {
             const left: Graphics = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 0.8),
+                    color: new Color(this._material.color).premultiply(0.8).toNumber(),
                     matrix: new Matrix(1, 0.5, 0, 1, 0, 0)
                 })
                 .moveTo(points[0].x, points[0].y)
@@ -341,7 +342,7 @@ export class Stair extends Container {
             const right: Graphics = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 0.71),
+                    color: new Color(this._material.color).premultiply(0.71).toNumber(),
                     matrix: new Matrix(1, -0.5, 0, 1, 0, 0)
                 })
                 .moveTo(points[3].x, points[3].y)
@@ -393,7 +394,7 @@ export class Stair extends Container {
             const top: Graphics = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 1),
+                    color: new Color(this._material.color).premultiply(1).toNumber(),
                     matrix: new Matrix(1, 0.5, 1, -0.5, (this._position.y % 2 === 0) ? 32 : 64, (this._position.y % 2 === 0) ? 16 : 0)
                 })
                 .moveTo(points[0].x + (-pointsOffsets[2].x * (2 - i)), points[0].y + (pointsOffsets[2].y * (2 - i)))
@@ -406,7 +407,7 @@ export class Stair extends Container {
             const left: Graphics = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 0.8),
+                    color: new Color(this._material.color).premultiply(0.8).toNumber(),
                     matrix: new Matrix(1, 0.5, 0, 1, 0, 0)
                 })
                 .moveTo(points[0].x + (-pointsOffsets[2].x * (2 - i)), points[0].y + (pointsOffsets[2].y * (2 - i)))
@@ -418,7 +419,7 @@ export class Stair extends Container {
             const right: Graphics = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 0.71),
+                    color: new Color(this._material.color).premultiply(0.71).toNumber(),
                     matrix: new Matrix(1, -0.5, 0, 1, 0, 0)
                 })
                 .moveTo(points[3].x + (-pointsOffsets[3].x * (2 - i)), points[3].y + (pointsOffsets[3].y * (2 - i)))
@@ -447,7 +448,7 @@ export class Stair extends Container {
             const top: Graphics = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 1),
+                    color: new Color(this._material.color).premultiply(1).toNumber(),
                     matrix: new Matrix(1, 0.5, 1, -0.5, 0, 0)
                 })
                 .moveTo(points[0].x + (pointsOffsets[0].x * (3 - i)), points[0].y + (pointsOffsets[0].y * (3 - i)))
@@ -460,7 +461,7 @@ export class Stair extends Container {
             const left: Container = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 0.8),
+                    color: new Color(this._material.color).premultiply(0.8).toNumber(),
                     matrix: new Matrix(1, 0.5, 0, 1, 0, 0)
                 })
                 .moveTo(points[0].x + (pointsOffsets[0].x * (3 - i)), points[0].y + (pointsOffsets[0].y * (3 - i)))
@@ -472,7 +473,7 @@ export class Stair extends Container {
             const right: Container = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 0.71),
+                    color: new Color(this._material.color).premultiply(0.71).toNumber(),
                     matrix: new Matrix(1, -0.5, 0, 1, 0, 0)
                 })
                 .moveTo(points[3].x + (pointsOffsets[3].x * (3 - i)), points[3].y + (pointsOffsets[3].y * (3 - i)))

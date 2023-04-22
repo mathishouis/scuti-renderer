@@ -4,6 +4,7 @@ import { Container, Graphics, Matrix, Texture, utils } from "pixi.js";
 import { Material } from "../materials/Material";
 import { WallType } from "../../../enums/WallType";
 import { WallMaterial } from "../materials/WallMaterial";
+import { Color } from "@pixi/color";
 
 /**
  * Wall class that show up on the sides of the tiles.
@@ -11,6 +12,7 @@ import { WallMaterial } from "../materials/WallMaterial";
  * @class
  * @memberof Scuti
  */
+// @ts-ignore
 export class Wall extends Container {
 
     /**
@@ -190,7 +192,7 @@ export class Wall extends Container {
         const top: Graphics = new Graphics()
             .beginTextureFill({
                 texture: Texture.WHITE,
-                color: utils.premultiplyTint(this._material.color, 0.61)
+                color: new Color(this._material.color).premultiply(0.61).toNumber()
             })
             .moveTo(points[0].x, points[0].y)
             .lineTo(points[1].x, points[1].y)
@@ -202,7 +204,7 @@ export class Wall extends Container {
         const left: Graphics = new Graphics()
             .beginTextureFill({
                 texture: this._type === WallType.RIGHT_WALL ? this._material.texture : Texture.WHITE,
-                color: utils.premultiplyTint(this._material.color, 1),
+                color: new Color(this._material.color).premultiply(1).toNumber(),
                 matrix: new Matrix(1, 0.5, 0, 1, points[0].x, points[0].y)
             })
             .moveTo(points[0].x, points[0].y)
@@ -214,7 +216,7 @@ export class Wall extends Container {
         const right: Graphics = new Graphics()
             .beginTextureFill({
                 texture: (this._type === WallType.LEFT_WALL || this._type === WallType.DOOR_WALL) ? this._material.texture : Texture.WHITE,
-                color: utils.premultiplyTint(this._material.color, 0.8),
+                color: new Color(this._material.color).premultiply(0.8).toNumber(),
                 matrix: new Matrix(1, -0.5, 0, 1, points[0].x + this._thickness, points[0].y + 4)
             })
             .moveTo(points[3].x, points[3].y);

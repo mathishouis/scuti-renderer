@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { RoomObject } from "../rooms/RoomObject";
 import { IFloorPosition } from "../../interfaces/Furniture.interface";
 import { Direction } from "../../enums/Direction";

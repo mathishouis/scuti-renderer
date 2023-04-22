@@ -1,4 +1,4 @@
-import {Avatar} from "../Avatar";
+// @ts-nocheck
 import {AvatarAction} from "./AvatarAction";
 import {IActionDefinition, IAvatarPartSets} from "../../../interfaces/Avatar.interface";
 import {Assets} from "pixi.js";

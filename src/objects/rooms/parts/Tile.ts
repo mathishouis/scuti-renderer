@@ -6,6 +6,7 @@ import { FloorMaterial } from "../materials/FloorMaterial";
 import { InteractionManager } from "../../interactions/InteractionManager";
 import { IInteractionEvent } from "../../../interfaces/Interaction.interface";
 import { IFloorPosition } from "../../../interfaces/Furniture.interface";
+import {Color} from "@pixi/color";
 
 /**
  * Tile class that show up during room rendering.
@@ -104,7 +105,7 @@ export class Tile extends Container {
         const top: Graphics = new Graphics()
             .beginTextureFill({
                 texture: this._material.texture,
-                color: utils.premultiplyTint(this._material.color, 1),
+                color: new Color(this._material.color).premultiply(1).toNumber(),
                 //matrix: new Matrix(1, 0.5, 1, -0.5, (this._position.x % 2 === 0 || this._position.y % 2 === 0) && !(this._position.x % 2 === 0 && this._position.y % 2 === 0) ? 32 : 0, (this._position.x % 2 === 0 || this._position.y % 2 === 0) && !(this._position.x % 2 === 0 && this._position.y % 2 === 0) ? 16 : 0)
                 matrix: new Matrix(1, 0.5, 1, -0.5, (this._position.y % 2 === 0) ? 32 : 64, (this._position.y % 2 === 0) ? 16 : 0)
             })
@@ -116,24 +117,24 @@ export class Tile extends Container {
             .endFill();
 
         this.addChild(top);
-        
+
         let bottomTile;
         let rightTile;
 
         if (this._room.tileMap.tileMap[this._position.y + 1][this._position.x] !== undefined) {
             bottomTile = this._room.tileMap.getTileInfo({x: this._position.x, y: this._position.y + 1});
         }
-        
+
         if (typeof this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== "undefined") {
             rightTile = this._room.tileMap.getTileInfo({x: this._position.x + 1, y: this._position.y});
         }
 
-        if (!bottomTile || bottomTile.stairType !== null || !bottomTile.tile || (this._tileInfo && bottomTile.height != this._tileInfo.height)) {
+        if (!bottomTile || bottomTile.stairType || !bottomTile.tile || (this._tileInfo && bottomTile.height != this._tileInfo.height)) {
             /** Left face */
             const left: Graphics = new Graphics()
             .beginTextureFill({
                 texture: this._material.texture,
-                color: utils.premultiplyTint(this._material.color, 0.8),
+                color: new Color(this._material.color).premultiply(0.8).toNumber(),
                 matrix: new Matrix(1, 0.5, 0, 1, 0, 0)
             })
             .moveTo(0, 0)
@@ -145,12 +146,12 @@ export class Tile extends Container {
             this.addChild(left);
         }
 
-        if (!rightTile || rightTile.stairType !== null || !rightTile.tile || (this._tileInfo && rightTile.height != this._tileInfo.height)) {
+        if (!rightTile || rightTile.stairType || !rightTile.tile || (this._tileInfo && rightTile.height != this._tileInfo.height)) {
             /** Right face */
             const right: Graphics = new Graphics()
                 .beginTextureFill({
                     texture: this._material.texture,
-                    color: utils.premultiplyTint(this._material.color, 0.71),
+                    color: new Color(this._material.color).premultiply(0.71).toNumber(),
                     matrix: new Matrix(1, -0.5, 0, 1, 0, 0)
                 })
                 .moveTo(32, 16)
@@ -159,7 +160,7 @@ export class Tile extends Container {
                 .lineTo(64, 0)
                 .lineTo(32, 16)
                 .endFill();
-            
+
             this.addChild(right);
         }
 

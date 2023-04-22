@@ -1,6 +1,6 @@
 {
-  "name": "@kozennnn/scuti-renderer",
-  "version": "1.0.0",
+  "name": "scuti-renderer",
+  "version": "2.0.2",
   "main": "dist/index.js",
   "source": "src/index.ts",
   "repository": {

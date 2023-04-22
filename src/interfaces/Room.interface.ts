@@ -56,6 +56,6 @@ export interface ITileInfo {
     tile: boolean,
     door: boolean,
     height: number,
-    stairType: { type: StairType, direction: Direction },
-    wallType: WallType
+    stairType: { type: StairType, direction: Direction } | undefined,
+    wallType: WallType | undefined
 }

@@ -23,9 +23,9 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
         "xeeeeeeeeeeeeeeeexxxxxx88888888888\n" +
         "xdxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
-        "xcxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
-        "xbxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
-        "xaxxxxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "xcaaaxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "xbaaaxxxxxxxxxxxxxxxxxx88888888888\n" +
+        "xaaaaxxxxxxxxxxxxxxxxxx88888888888\n" +
         "aaaaaaaaaaaaaaaaaxxxxxxxxxxxxxxxxx\n" +
         "xaaaaaaaaaaaaaaaaxxxxxxxxxxxxxxxxx\n" +
         "xaaaaaaaaaaaaaaaaxxxxxxxxxxxxxxxxx\n" +
