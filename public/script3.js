@@ -66,6 +66,18 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         "xxxxxxxxxxxxxxxx111111111111111111\n" +
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
+    const tileMapUpdated =
+        "x6543210000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "00000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n" +
+        "x0000000000000000x\n";
+
     const room = new Room(renderer, {
         tileMap: tileMap,
         /*floorMaterial: new FloorMaterial(renderer, 110),
@@ -74,6 +86,9 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         floorMaterial: new FloorMaterial(renderer, 110),
         wallMaterial: new WallMaterial(renderer, 1601)
     });
+    setTimeout(() => {
+        room.tileMap = tileMapUpdated;
+    }, 5000);
     const avatar = new Avatar({
         figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80",
         position: {

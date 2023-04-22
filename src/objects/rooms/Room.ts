@@ -153,8 +153,22 @@ export class Room extends Container {
      * @readonly
      * @public
      */
+    // @ts-ignore
     public get tileMap(): RoomTileMap {
         return this._tileMap;
+    }
+
+    /**
+     * Update the room tileMap.
+     *
+     * @param {string} [tileMap] - The new room tileMap.
+     * @public
+     */
+    public set tileMap(
+      tileMap: string
+    ) {
+        this._tileMap = new RoomTileMap(tileMap);
+        this._view.update();
     }
 
     /**
