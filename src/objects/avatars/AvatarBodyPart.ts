@@ -39,7 +39,9 @@ export class AvatarBodyPart {
         let assets : Promise<void>[] = [];
 
         this._parts.forEach((part: IAvatarPart) => {
-            assets.push(AssetLoader.load("figures/" + part.lib.id, "figure/" + part.lib.id + "/" + part.lib.id + ".json"));
+            if(part.lib) {
+                assets.push(AssetLoader.load("figures/" + part.lib.id, "figure/" + part.lib.id + "/" + part.lib.id + ".json"));
+            }
         });
 
         Promise.all(assets).then(() => {
@@ -60,6 +62,8 @@ export class AvatarBodyPart {
         part: IAvatarPart
     ): void {
         if(!this._frames.has(part.id)) this._frames.set(part.id, new Map());
+
+        if(!part.lib) return;
 
         const spritesheet: Spritesheet = Assets.get("figures/" + part.lib.id);
 
@@ -182,6 +186,14 @@ export class AvatarBodyPart {
             });
         });
         this._draw();
+    }
+
+    public get actions(): AvatarAction[] {
+        return this._actions;
+    }
+
+    public set actions(actions: AvatarAction[]) {
+        this._actions = actions;
     }
 
 }

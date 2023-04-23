@@ -89,7 +89,10 @@ export class Avatar extends RoomObject {
         }
         this._createShadow();
 
-        this._bodyParts.forEach((bodyPart: AvatarBodyPart) => bodyPart.updateParts());
+        this._bodyParts.forEach((bodyPart: AvatarBodyPart) => {
+            bodyPart.actions = this._actions;
+            bodyPart.updateParts();
+        });
 
         this.x = 32 * this._position.x - 32 * this._position.y;
         this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
@@ -167,8 +170,9 @@ export class Avatar extends RoomObject {
     private _getParts(type: string, setId: number): IAvatarPart[] {
         const figureData: [] = Assets.get('figures/figuredata');
         const figureMap: [] = Assets.get('figures/figuremap');
-        const hiddenLayers: [] = figureData.settype[type]?.set[setId]["hiddenLayers"];
         let parts = [];
+        if(!figureData.settype[type]?.set[setId]) return parts;
+        const hiddenLayers: [] = figureData.settype[type]?.set[setId]["hiddenLayers"];
         let set = figureData.settype[type]?.set[setId];
         set?.parts.forEach((part) => {
             let libId = figureMap.parts[part.type][String(part.id)];
@@ -221,12 +225,35 @@ export class Avatar extends RoomObject {
         return this._actions;
     }
 
+    public set actions(actions: AvatarAction[]) {
+        actions.forEach((action: AvatarAction) => this._animationManager.registerAnimation(action));
+        this._actions = actions;
+    }
+
+    public addAction(action: AvatarAction): void {
+        if (!this._animationManager.getAnimation(action)) this._animationManager.registerAnimation(action);
+        if (!this._actions.includes(action))
+            this._actions.push(action);
+    }
+
+    public removeAction(action: AvatarAction): void {
+        this._actions = this._actions.filter((fAction: AvatarAction) => fAction !== action);
+    }
+
     public get headDirection(): Direction {
         return this._headDirection;
     }
 
+    public set headDirection(direction: Direction) {
+        this._headDirection = direction;
+    }
+
     public get bodyDirection(): Direction {
         return this._bodyDirection;
+    }
+
+    public set bodyDirection(direction: Direction) {
+        this._bodyDirection = direction;
     }
 
     public get actionManager(): AvatarActionManager {

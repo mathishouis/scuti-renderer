@@ -123,7 +123,10 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         room.tileMap = tileMapUpdated;
     }, 5000);
     const avatar = new Avatar({
-        figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80",
+        //figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80",
+        // police figure: "hr-892-46.hd-209-8.ch-225-81.lg-270-64.sh-300-64.ca-1804-64.wa-2012",
+        figure: "hd-209-14.ch-3688-1408.lg-280-1408.sh-290-1408.ha-1008.ea-3578.ca-1806-82.cc-3360-1408",
+        //figure: "hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61",
         position: {
             x: 4,
             y: 4,
@@ -136,11 +139,20 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
             //AvatarAction.Walk,
             AvatarAction.Talk,
             AvatarAction.Wave,
-            AvatarAction.Walk,
+            //AvatarAction.Walk,
             AvatarAction.CarryItem,
         ],
         handItem: 55
     });
+    setTimeout(() => {
+        avatar.addAction(AvatarAction.Walk);
+    }, 5000)
+    setTimeout(() => {
+        avatar.removeAction(AvatarAction.Walk);
+    }, 7000)
+    setTimeout(() => {
+        avatar.addAction(AvatarAction.Walk);
+    }, 9000)
     room.objects.add(avatar);
     room.tiles.onPointerDown = (position) => {
         console.log("click", position);
