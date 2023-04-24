@@ -1,4 +1,4 @@
-import type { IInteractionEvent } from '../../interfaces/Interaction'
+import type { IInteractionEvent } from '../../interfaces/Interaction';
 
 /**
  * InteractionManager class for interaction handling.
@@ -13,7 +13,7 @@ export class InteractionManager {
    * @member {boolean}
    * @private
    */
-  private _isDoubleClicking: boolean = false
+  private _isDoubleClicking: boolean = false;
 
   /**
    * The double click timeout that set the _isDoubleClicking boolean value to false after 350ms.
@@ -21,7 +21,7 @@ export class InteractionManager {
    * @member {number}
    * @private
    */
-  private _doubleClickTimeout!: number
+  private _doubleClickTimeout!: number;
 
   /**
    * The pointer down event.
@@ -29,7 +29,7 @@ export class InteractionManager {
    * @member {(event: IInteractionEvent) => void}
    * @private
    */
-  private _onPointerDown!: (event: IInteractionEvent) => void
+  private _onPointerDown!: (event: IInteractionEvent) => void;
 
   /**
    * The pointer up event.
@@ -37,7 +37,7 @@ export class InteractionManager {
    * @member {(event: IInteractionEvent) => void}
    * @private
    */
-  private _onPointerUp!: (event: IInteractionEvent) => void
+  private _onPointerUp!: (event: IInteractionEvent) => void;
 
   /**
    * The pointer move event.
@@ -45,7 +45,7 @@ export class InteractionManager {
    * @member {(event: IInteractionEvent) => void}
    * @private
    */
-  private _onPointerMove!: (event: IInteractionEvent) => void
+  private _onPointerMove!: (event: IInteractionEvent) => void;
 
   /**
    * The pointer out event.
@@ -53,7 +53,7 @@ export class InteractionManager {
    * @member {(event: IInteractionEvent) => void}
    * @private
    */
-  private _onPointerOut!: (event: IInteractionEvent) => void
+  private _onPointerOut!: (event: IInteractionEvent) => void;
 
   /**
    * The pointer ouver event.
@@ -61,7 +61,7 @@ export class InteractionManager {
    * @member {(event: IInteractionEvent) => void}
    * @private
    */
-  private _onPointerOver!: (event: IInteractionEvent) => void
+  private _onPointerOver!: (event: IInteractionEvent) => void;
 
   /**
    * The pointer double click event.
@@ -69,7 +69,7 @@ export class InteractionManager {
    * @member {(event: IInteractionEvent) => void}
    * @private
    */
-  private _onDoubleClick!: (event: IInteractionEvent) => void
+  private _onDoubleClick!: (event: IInteractionEvent) => void;
 
   /**
    * Reference to the pointer down event.
@@ -79,7 +79,7 @@ export class InteractionManager {
    * @public
    */
   public get onPointerDown(): (event: IInteractionEvent) => void {
-    return this._onPointerDown
+    return this._onPointerDown;
   }
 
   /**
@@ -89,7 +89,7 @@ export class InteractionManager {
    * @public
    */
   public set onPointerDown(value: (event: IInteractionEvent) => void) {
-    this._onPointerDown = value
+    this._onPointerDown = value;
   }
 
   /**
@@ -100,7 +100,7 @@ export class InteractionManager {
    * @public
    */
   public get onPointerUp(): (event: IInteractionEvent) => void {
-    return this._onPointerUp
+    return this._onPointerUp;
   }
 
   /**
@@ -110,7 +110,7 @@ export class InteractionManager {
    * @public
    */
   public set onPointerUp(value: (event: IInteractionEvent) => void) {
-    this._onPointerUp = value
+    this._onPointerUp = value;
   }
 
   /**
@@ -121,7 +121,7 @@ export class InteractionManager {
    * @public
    */
   public get onPointerMove(): (event: IInteractionEvent) => void {
-    return this._onPointerMove
+    return this._onPointerMove;
   }
 
   /**
@@ -131,7 +131,7 @@ export class InteractionManager {
    * @public
    */
   public set onPointerMove(value: (event: IInteractionEvent) => void) {
-    this._onPointerMove = value
+    this._onPointerMove = value;
   }
 
   /**
@@ -142,7 +142,7 @@ export class InteractionManager {
    * @public
    */
   public get onPointerOut(): (event: IInteractionEvent) => void {
-    return this._onPointerOut
+    return this._onPointerOut;
   }
 
   /**
@@ -152,7 +152,7 @@ export class InteractionManager {
    * @public
    */
   public set onPointerOut(value: (event: IInteractionEvent) => void) {
-    this._onPointerOut = value
+    this._onPointerOut = value;
   }
 
   /**
@@ -163,7 +163,7 @@ export class InteractionManager {
    * @public
    */
   public get onPointerOver(): (event: IInteractionEvent) => void {
-    return this._onPointerOver
+    return this._onPointerOver;
   }
 
   /**
@@ -173,7 +173,7 @@ export class InteractionManager {
    * @public
    */
   public set onPointerOver(value: (event: IInteractionEvent) => void) {
-    this._onPointerOver = value
+    this._onPointerOver = value;
   }
 
   /**
@@ -184,7 +184,7 @@ export class InteractionManager {
    * @public
    */
   public get onDoubleClick(): (event: IInteractionEvent) => void {
-    return this._onDoubleClick
+    return this._onDoubleClick;
   }
 
   /**
@@ -194,7 +194,7 @@ export class InteractionManager {
    * @public
    */
   public set onDoubleClick(value: (event: IInteractionEvent) => void) {
-    this._onDoubleClick = value
+    this._onDoubleClick = value;
   }
 
   /**
@@ -205,15 +205,15 @@ export class InteractionManager {
    */
   public handlePointerDown(event: IInteractionEvent): void {
     if (!this._isDoubleClicking) {
-      if (this.onPointerDown !== undefined) this._onPointerDown(event)
-      this._isDoubleClicking = true
+      if (this.onPointerDown !== undefined) this._onPointerDown(event);
+      this._isDoubleClicking = true;
       this._doubleClickTimeout = window.setTimeout(() => {
-        return (this._isDoubleClicking = false)
-      }, 350)
+        return (this._isDoubleClicking = false);
+      }, 350);
     } else {
-      if (this.onDoubleClick !== undefined) this._onDoubleClick(event)
-      this._isDoubleClicking = false
-      window.clearTimeout(this._doubleClickTimeout)
+      if (this.onDoubleClick !== undefined) this._onDoubleClick(event);
+      this._isDoubleClicking = false;
+      window.clearTimeout(this._doubleClickTimeout);
     }
   }
 
@@ -224,7 +224,7 @@ export class InteractionManager {
    * @public
    */
   public handlePointerUp(event: IInteractionEvent): void {
-    if (this.onPointerUp !== undefined) this._onPointerUp(event)
+    if (this.onPointerUp !== undefined) this._onPointerUp(event);
   }
 
   /**
@@ -234,7 +234,7 @@ export class InteractionManager {
    * @public
    */
   public handlePointerMove(event: IInteractionEvent): void {
-    if (this.onPointerMove !== undefined) this._onPointerMove(event)
+    if (this.onPointerMove !== undefined) this._onPointerMove(event);
   }
 
   /**
@@ -244,7 +244,7 @@ export class InteractionManager {
    * @public
    */
   public handlePointerOut(event: IInteractionEvent): void {
-    if (this.onPointerOut !== undefined) this._onPointerOut(event)
+    if (this.onPointerOut !== undefined) this._onPointerOut(event);
   }
 
   /**
@@ -254,6 +254,6 @@ export class InteractionManager {
    * @public
    */
   public handlePointerOver(event: IInteractionEvent): void {
-    if (this.onPointerOver !== undefined) this._onPointerOver(event)
+    if (this.onPointerOver !== undefined) this._onPointerOver(event);
   }
 }

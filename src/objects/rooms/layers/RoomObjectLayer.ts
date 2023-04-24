@@ -1,8 +1,8 @@
-import { Container } from 'pixi.js'
-import { Layer } from '@pixi/layers'
+import { Container } from 'pixi.js';
+import { Layer } from '@pixi/layers';
 
-import type { RoomObject } from '../RoomObject'
-import type { Room } from '../Room'
+import type { RoomObject } from '../RoomObject';
+import type { Room } from '../Room';
 
 /**
  * RoomObjectLayer class that manage all the room objects.
@@ -17,7 +17,7 @@ export class RoomObjectLayer extends Container {
    * @member {Room}
    * @private
    */
-  private readonly _room: Room
+  private readonly _room: Room;
 
   /**
    * The object layer.
@@ -25,18 +25,18 @@ export class RoomObjectLayer extends Container {
    * @member {Layer}
    * @private
    */
-  private readonly _layer: Layer = new Layer()
+  private readonly _layer: Layer = new Layer();
 
   /**
    * @param {Room} [room] - The room instance that we want to visualize.
    */
   constructor(room: Room) {
-    super()
+    super();
 
-    this._room = room
-    this._room.engine.application.stage.addChild(this._layer)
-    this._layer.group.enableSort = true
-    this._layer.zIndex = 1000
+    this._room = room;
+    this._room.engine.application.stage.addChild(this._layer);
+    this._layer.group.enableSort = true;
+    this._layer.zIndex = 1000;
   }
 
   /**
@@ -47,9 +47,9 @@ export class RoomObjectLayer extends Container {
    * @public
    */
   public add(object: RoomObject): void {
-    object.room = this._room
-    object.start()
-    this.addChild(object)
+    object.room = this._room;
+    object.start();
+    this.addChild(object);
   }
 
   /**
@@ -60,8 +60,8 @@ export class RoomObjectLayer extends Container {
    * @public
    */
   public remove(object: RoomObject): void {
-    object.stop()
-    this.removeChild(object)
+    object.stop();
+    this.removeChild(object);
   }
 
   /**
@@ -72,6 +72,6 @@ export class RoomObjectLayer extends Container {
    * @public
    */
   public get layer(): Layer {
-    return this._layer
+    return this._layer;
   }
 }

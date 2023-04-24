@@ -1,7 +1,7 @@
-import { Direction } from '../../enums/Direction'
-import { StairType } from '../../enums/StairType'
-import { WallType } from '../../enums/WallType'
-import type { IPosition2D, ITileInfo, TileMap } from '../../interfaces/Room'
+import { Direction } from '../../enums/Direction';
+import { StairType } from '../../enums/StairType';
+import { WallType } from '../../enums/WallType';
+import type { IPosition2D, ITileInfo, TileMap } from '../../interfaces/Room';
 
 /**
  * RoomTileMap class that manage all the things about the room model.
@@ -16,14 +16,14 @@ export class RoomTileMap {
    * @member {TileMap}
    * @private
    */
-  private readonly _tileMap: TileMap
+  private readonly _tileMap: TileMap;
 
   /**
    * @param {string} [tileMap] - The room tile map string that need to be parsed.
    */
   constructor(tileMap: string) {
     /** Parse the tile map string to convert it into a matrix */
-    this._tileMap = this._parse(tileMap)
+    this._tileMap = this._parse(tileMap);
   }
 
   /**
@@ -34,11 +34,11 @@ export class RoomTileMap {
    * @private
    */
   private _parse(tileMap: string): TileMap {
-    tileMap = tileMap.replace(/ /g, '')
-    tileMap = tileMap.replace(/\n\n/g, '\n')
+    tileMap = tileMap.replace(/ /g, '');
+    tileMap = tileMap.replace(/\n\n/g, '\n');
     return tileMap.split(/\r?\n/).map((line) => {
-      return line.split('')
-    })
+      return line.split('');
+    });
   }
 
   /**
@@ -49,7 +49,7 @@ export class RoomTileMap {
    * @public
    */
   public get tileMap(): TileMap {
-    return this._tileMap
+    return this._tileMap;
   }
 
   /**
@@ -65,7 +65,7 @@ export class RoomTileMap {
       this._tileMap[position.y] === undefined ||
       this._tileMap[position.y][position.x] === undefined
       ? 'x'
-      : this._tileMap[position.y][position.x]
+      : this._tileMap[position.y][position.x];
   }
 
   /**
@@ -76,8 +76,8 @@ export class RoomTileMap {
    * @public
    */
   public getTileHeight(position: IPosition2D): number {
-    const tile: string = this.getTile(position)
-    return tile === 'x' ? 0 : isNaN(Number(tile)) ? tile.charCodeAt(0) - 96 + 9 : Number(tile)
+    const tile: string = this.getTile(position);
+    return tile === 'x' ? 0 : isNaN(Number(tile)) ? tile.charCodeAt(0) - 96 + 9 : Number(tile);
   }
 
   /**
@@ -94,7 +94,7 @@ export class RoomTileMap {
       height: this.getTileHeight(position),
       stairType: this._getStairType(position),
       wallType: this._getWallType(position)
-    }
+    };
   }
 
   /**
@@ -105,16 +105,16 @@ export class RoomTileMap {
    * @private
    */
   private _getWallType(position: IPosition2D): WallType | undefined {
-    const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 }
-    const topTile: IPosition2D = { x: position.x, y: position.y - 1 }
-    const midLeftTile: IPosition2D = { x: position.x - 1, y: position.y }
+    const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 };
+    const topTile: IPosition2D = { x: position.x, y: position.y - 1 };
+    const midLeftTile: IPosition2D = { x: position.x - 1, y: position.y };
 
-    if (this.isDoor(position)) return
+    if (this.isDoor(position)) return;
 
     if (!this.isTile(topLeftTile) && !this.isTile(topTile) && !this.isTile(midLeftTile) && this.isTile(position))
-      return WallType.CORNER_WALL
-    if (!this.isTile(midLeftTile) && this.isTile(position)) return WallType.LEFT_WALL
-    if (!this.isTile(topTile) && this.isTile(position)) return WallType.RIGHT_WALL
+      return WallType.CORNER_WALL;
+    if (!this.isTile(midLeftTile) && this.isTile(position)) return WallType.LEFT_WALL;
+    if (!this.isTile(topTile) && this.isTile(position)) return WallType.RIGHT_WALL;
   }
 
   /**
@@ -125,16 +125,16 @@ export class RoomTileMap {
    * @private
    */
   private _getStairType(position: IPosition2D): { type: StairType; direction: Direction } | undefined {
-    const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 }
-    const topTile: IPosition2D = { x: position.x, y: position.y - 1 }
-    const topRightTile: IPosition2D = { x: position.x + 1, y: position.y - 1 }
+    const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 };
+    const topTile: IPosition2D = { x: position.x, y: position.y - 1 };
+    const topRightTile: IPosition2D = { x: position.x + 1, y: position.y - 1 };
 
-    const midLeftTile: IPosition2D = { x: position.x - 1, y: position.y }
-    const midRightTile: IPosition2D = { x: position.x + 1, y: position.y }
+    const midLeftTile: IPosition2D = { x: position.x - 1, y: position.y };
+    const midRightTile: IPosition2D = { x: position.x + 1, y: position.y };
 
-    const botLeftTile: IPosition2D = { x: position.x - 1, y: position.y + 1 }
-    const botTile: IPosition2D = { x: position.x, y: position.y + 1 }
-    const botRightTile: IPosition2D = { x: position.x + 1, y: position.y + 1 }
+    const botLeftTile: IPosition2D = { x: position.x - 1, y: position.y + 1 };
+    const botTile: IPosition2D = { x: position.x, y: position.y + 1 };
+    const botRightTile: IPosition2D = { x: position.x + 1, y: position.y + 1 };
 
     if (
       this.isTile(position) &&
@@ -143,7 +143,7 @@ export class RoomTileMap {
       this._getTileDifference(midRightTile, position) === 1 &&
       this._getTileDifference(topTile, position) === 1
     )
-      return { type: StairType.INNER_CORNER_STAIR, direction: Direction.NORTH_EAST }
+      return { type: StairType.INNER_CORNER_STAIR, direction: Direction.NORTH_EAST };
     if (
       this.isTile(position) &&
       this.isTile(botRightTile) &&
@@ -151,7 +151,7 @@ export class RoomTileMap {
       this._getTileDifference(midRightTile, position) === 1 &&
       this._getTileDifference(botTile, position) === 1
     )
-      return { type: StairType.INNER_CORNER_STAIR, direction: Direction.SOUTH_EAST }
+      return { type: StairType.INNER_CORNER_STAIR, direction: Direction.SOUTH_EAST };
     if (
       this.isTile(position) &&
       this.isTile(botLeftTile) &&
@@ -159,7 +159,7 @@ export class RoomTileMap {
       this._getTileDifference(midLeftTile, position) === 1 &&
       this._getTileDifference(botTile, position) === 1
     )
-      return { type: StairType.INNER_CORNER_STAIR, direction: Direction.SOUTH_WEST }
+      return { type: StairType.INNER_CORNER_STAIR, direction: Direction.SOUTH_WEST };
     if (
       this.isTile(position) &&
       this.isTile(topLeftTile) &&
@@ -167,9 +167,9 @@ export class RoomTileMap {
       this._getTileDifference(midLeftTile, position) === 1 &&
       this._getTileDifference(topTile, position) === 1
     )
-      return { type: StairType.INNER_CORNER_STAIR, direction: Direction.NORTH_WEST }
+      return { type: StairType.INNER_CORNER_STAIR, direction: Direction.NORTH_WEST };
     if (this.isTile(position) && this.isTile(topTile) && this._getTileDifference(topTile, position) === 1)
-      return { type: StairType.STAIR, direction: Direction.NORTH }
+      return { type: StairType.STAIR, direction: Direction.NORTH };
     if (
       this.isTile(position) &&
       this.isTile(topRightTile) &&
@@ -177,9 +177,9 @@ export class RoomTileMap {
       this._getTileDifference(midRightTile, position) === 0 &&
       this._getTileDifference(topTile, position) === 0
     )
-      return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.NORTH_EAST }
+      return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.NORTH_EAST };
     if (this.isTile(position) && this.isTile(midRightTile) && this._getTileDifference(midRightTile, position) === 1)
-      return { type: StairType.STAIR, direction: Direction.EAST }
+      return { type: StairType.STAIR, direction: Direction.EAST };
     if (
       this.isTile(position) &&
       this.isTile(botRightTile) &&
@@ -187,9 +187,9 @@ export class RoomTileMap {
       this._getTileDifference(midRightTile, position) === 0 &&
       this._getTileDifference(botTile, position) === 0
     )
-      return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.SOUTH_EAST }
+      return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.SOUTH_EAST };
     if (this.isTile(position) && this.isTile(botTile) && this._getTileDifference(botTile, position) === 1)
-      return { type: StairType.STAIR, direction: Direction.SOUTH }
+      return { type: StairType.STAIR, direction: Direction.SOUTH };
     if (
       this.isTile(position) &&
       this.isTile(botLeftTile) &&
@@ -197,9 +197,9 @@ export class RoomTileMap {
       this._getTileDifference(midLeftTile, position) === 0 &&
       this._getTileDifference(botTile, position) === 0
     )
-      return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.SOUTH_WEST }
+      return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.SOUTH_WEST };
     if (this.isTile(position) && this.isTile(midLeftTile) && this._getTileDifference(midLeftTile, position) === 1)
-      return { type: StairType.STAIR, direction: Direction.WEST }
+      return { type: StairType.STAIR, direction: Direction.WEST };
     if (
       this.isTile(position) &&
       this.isTile(topLeftTile) &&
@@ -207,7 +207,7 @@ export class RoomTileMap {
       this._getTileDifference(midLeftTile, position) === 0 &&
       this._getTileDifference(topTile, position) === 0
     )
-      return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.NORTH_WEST }
+      return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.NORTH_WEST };
   }
 
   /**
@@ -219,7 +219,7 @@ export class RoomTileMap {
    * @private
    */
   private _getTileDifference(position1: IPosition2D, position2: IPosition2D): number {
-    return Number(this.getTileHeight(position1)) - Number(this.getTileHeight(position2))
+    return Number(this.getTileHeight(position1)) - Number(this.getTileHeight(position2));
   }
 
   /**
@@ -230,7 +230,7 @@ export class RoomTileMap {
    * @public
    */
   public isTile(position: IPosition2D): boolean {
-    return this.getTile(position) !== 'x'
+    return this.getTile(position) !== 'x';
   }
 
   /**
@@ -241,14 +241,14 @@ export class RoomTileMap {
    * @public
    */
   public isDoor(position: IPosition2D): boolean {
-    const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 }
-    const topTile: IPosition2D = { x: position.x, y: position.y - 1 }
+    const topLeftTile: IPosition2D = { x: position.x - 1, y: position.y - 1 };
+    const topTile: IPosition2D = { x: position.x, y: position.y - 1 };
 
-    const midLeftTile: IPosition2D = { x: position.x - 1, y: position.y }
-    const midTile: IPosition2D = { x: position.x, y: position.y }
+    const midLeftTile: IPosition2D = { x: position.x - 1, y: position.y };
+    const midTile: IPosition2D = { x: position.x, y: position.y };
 
-    const botLeftTile: IPosition2D = { x: position.x - 1, y: position.y + 1 }
-    const botTile: IPosition2D = { x: position.x, y: position.y + 1 }
+    const botLeftTile: IPosition2D = { x: position.x - 1, y: position.y + 1 };
+    const botTile: IPosition2D = { x: position.x, y: position.y + 1 };
 
     return (
       !this.isTile(topTile) &&
@@ -257,7 +257,7 @@ export class RoomTileMap {
       !this.isTile(botLeftTile) &&
       !this.isTile(botTile) &&
       this.isTile(midTile)
-    )
+    );
   }
 
   /**
@@ -267,14 +267,14 @@ export class RoomTileMap {
    * @public
    */
   public get maxZ(): number {
-    let z: number = 0
+    let z: number = 0;
     for (let y: number = 0; y < this._tileMap.length; y++) {
       for (let x: number = 0; x < this._tileMap[y].length; x++) {
-        const height: number = this.getTileHeight({ x, y })
-        if (height > z) z = height
+        const height: number = this.getTileHeight({ x, y });
+        if (height > z) z = height;
       }
     }
-    return z
+    return z;
   }
 
   /**
@@ -286,40 +286,40 @@ export class RoomTileMap {
    */
   public hasWall(position: IPosition2D): { x: boolean; y: boolean } {
     // TODO: Integrate it in _getWallType()
-    let wallX: boolean = false
-    let wallY: boolean = false
+    let wallX: boolean = false;
+    let wallY: boolean = false;
     for (let i = position.y - 1; i >= 0; i--) {
-      const wall: WallType | undefined = this._getWallType({ x: position.x, y: i })
+      const wall: WallType | undefined = this._getWallType({ x: position.x, y: i });
       if (wall) {
         if (wall === WallType.RIGHT_WALL || wall === (WallType.CORNER_WALL as WallType)) {
-          wallY = true
+          wallY = true;
         }
       }
       for (let j = position.x - 1; j >= 0; j--) {
-        const wall2: WallType | undefined = this._getWallType({ x: j, y: i })
+        const wall2: WallType | undefined = this._getWallType({ x: j, y: i });
         if (wall2) {
           if (wall2 === WallType.LEFT_WALL || wall2 === (WallType.CORNER_WALL as WallType)) {
-            wallY = true
+            wallY = true;
           }
         }
       }
     }
     for (let i = position.x - 1; i >= 0; i--) {
-      const wall: WallType | undefined = this._getWallType({ x: i, y: position.y })
+      const wall: WallType | undefined = this._getWallType({ x: i, y: position.y });
       if (wall) {
         if (wall === WallType.LEFT_WALL || wall === (WallType.CORNER_WALL as WallType)) {
-          wallX = true
+          wallX = true;
         }
       }
       for (let j = position.y - 1; j >= 0; j--) {
-        const wall2: WallType | undefined = this._getWallType({ x: i, y: j })
+        const wall2: WallType | undefined = this._getWallType({ x: i, y: j });
         if (wall2) {
           if (wall2 === WallType.RIGHT_WALL || wall2 === (WallType.CORNER_WALL as WallType)) {
-            wallX = true
+            wallX = true;
           }
         }
       }
     }
-    return { x: wallX, y: wallY }
+    return { x: wallX, y: wallY };
   }
 }

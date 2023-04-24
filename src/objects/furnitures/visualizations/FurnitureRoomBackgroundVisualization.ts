@@ -1,4 +1,4 @@
-import { FurnitureVisualization } from './FurnitureVisualization'
+import { FurnitureVisualization } from './FurnitureVisualization';
 
 /**
  * FurnitureGuildCustomizedVisualization class for the guild furnitures.
@@ -13,7 +13,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @member {string}
    * @private
    */
-  private _imageUrl: string = ''
+  private _imageUrl: string = '';
 
   /**
    * The image offset X.
@@ -21,7 +21,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @member {number}
    * @private
    */
-  private _offsetX: number = 0
+  private _offsetX: number = 0;
 
   /**
    * The image offset Y.
@@ -29,7 +29,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @member {number}
    * @private
    */
-  private _offsetY: number = 0
+  private _offsetY: number = 0;
 
   /**
    * The image offset Z.
@@ -37,7 +37,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @member {number}
    * @private
    */
-  private _offsetZ: number = 0
+  private _offsetZ: number = 0;
 
   /**
    * Reference to the imageUrl.
@@ -47,7 +47,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @public
    */
   public get imageUrl(): string {
-    return this._imageUrl
+    return this._imageUrl;
   }
 
   /**
@@ -57,8 +57,8 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @public
    */
   public set imageUrl(imageUrl: string) {
-    this._imageUrl = imageUrl
-    this.furniture.view.update()
+    this._imageUrl = imageUrl;
+    this.furniture.view.update();
   }
 
   /**
@@ -69,7 +69,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @public
    */
   public get offsetX(): number {
-    return this._offsetX
+    return this._offsetX;
   }
 
   /**
@@ -79,8 +79,8 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @public
    */
   public set offsetX(offsetX: number) {
-    this._offsetX = offsetX
-    this.furniture.view.update()
+    this._offsetX = offsetX;
+    this.furniture.view.update();
   }
 
   /**
@@ -91,7 +91,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @public
    */
   public get offsetY(): number {
-    return this._offsetY
+    return this._offsetY;
   }
 
   /**
@@ -101,8 +101,8 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @public
    */
   public set offsetY(offsetY: number) {
-    this._offsetY = offsetY
-    this.furniture.view.update()
+    this._offsetY = offsetY;
+    this.furniture.view.update();
   }
 
   /**
@@ -113,7 +113,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @public
    */
   public get offsetZ(): number {
-    return this._offsetZ
+    return this._offsetZ;
   }
 
   /**
@@ -123,7 +123,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @public
    */
   public set offsetZ(offsetZ: number) {
-    this._offsetZ = offsetZ
-    this.furniture.view.update()
+    this._offsetZ = offsetZ;
+    this.furniture.view.update();
   }
 }

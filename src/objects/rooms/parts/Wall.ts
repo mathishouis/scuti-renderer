@@ -1,11 +1,11 @@
-import { Container, Graphics, Matrix, Texture } from 'pixi.js'
-import { Color } from '@pixi/color'
+import { Container, Graphics, Matrix, Texture } from 'pixi.js';
+import { Color } from '@pixi/color';
 
-import type { Room } from '../Room'
-import type { IPosition3D, IPosition2D, IWallConfiguration } from '../../../interfaces/Room'
-import type { Material } from '../materials/Material'
-import { WallType } from '../../../enums/WallType'
-import { WallMaterial } from '../materials/WallMaterial'
+import type { Room } from '../Room';
+import type { IPosition3D, IPosition2D, IWallConfiguration } from '../../../interfaces/Room';
+import type { Material } from '../materials/Material';
+import { WallType } from '../../../enums/WallType';
+import { WallMaterial } from '../materials/WallMaterial';
 
 /**
  * Wall class that show up on the sides of the tiles.
@@ -21,7 +21,7 @@ export class Wall extends Container {
    * @member {Room}
    * @private
    */
-  private readonly _room: Room
+  private readonly _room: Room;
 
   /**
    * The thickness of the wall part.
@@ -29,7 +29,7 @@ export class Wall extends Container {
    * @member {number}
    * @private
    */
-  private readonly _thickness: number
+  private readonly _thickness: number;
 
   /**
    * The wall material that will be applied to this part, it contains the color and the texture of the wall.
@@ -37,7 +37,7 @@ export class Wall extends Container {
    * @member {Material}
    * @private
    */
-  private readonly _material: Material
+  private readonly _material: Material;
 
   /**
    * The wall height, the height is added to the base height of the room.
@@ -45,7 +45,7 @@ export class Wall extends Container {
    * @member {number}
    * @private
    */
-  private readonly _height: number
+  private readonly _height: number;
 
   /**
    * The wall position.
@@ -53,7 +53,7 @@ export class Wall extends Container {
    * @member {IPosition3D}
    * @private
    */
-  private readonly _position: IPosition3D
+  private readonly _position: IPosition3D;
 
   /**
    * The wall type.
@@ -61,7 +61,7 @@ export class Wall extends Container {
    * @member {WallType}
    * @private
    */
-  private readonly _type: WallType
+  private readonly _type: WallType;
 
   /**
    * @param {Room} [room] - The room instance where the wall will be drawn.
@@ -74,18 +74,18 @@ export class Wall extends Container {
    * @param {boolean} [configuration.door] - Is it a door wall?
    **/
   constructor(room: Room, configuration: IWallConfiguration) {
-    super()
+    super();
 
     /** Store the configuration */
-    this._room = room
-    this._position = configuration.position
-    this._thickness = configuration.thickness ?? 8
-    this._material = configuration.material ?? new WallMaterial(this._room.engine, 112)
-    this._height = configuration.height ?? 0
-    this._type = configuration.type
+    this._room = room;
+    this._position = configuration.position;
+    this._thickness = configuration.thickness ?? 8;
+    this._material = configuration.material ?? new WallMaterial(this._room.engine, 112);
+    this._height = configuration.height ?? 0;
+    this._type = configuration.type;
 
     /** Draw the wall */
-    this._draw()
+    this._draw();
   }
 
   /**
@@ -126,7 +126,7 @@ export class Wall extends Container {
             this._thickness / 2 -
             this._height * 64
         }
-      ])
+      ]);
     } else if (this._type === WallType.RIGHT_WALL) {
       /** Draw a right wall */
       this._drawWall([
@@ -146,7 +146,7 @@ export class Wall extends Container {
           x: 64,
           y: -16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 99 - this._height * 64
         }
-      ])
+      ]);
     } else if (this._type === WallType.CORNER_WALL) {
       /** Draw a corner wall */
       this._drawWall([
@@ -172,7 +172,7 @@ export class Wall extends Container {
           x: 32,
           y: -16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._height * 64
         }
-      ])
+      ]);
     } else if (this._type === WallType.DOOR_WALL) {
       /** Draw a door wall */
       this._drawWall([
@@ -204,7 +204,7 @@ export class Wall extends Container {
             this._thickness / 2 -
             this._height * 64
         }
-      ])
+      ]);
     }
   }
 
@@ -227,7 +227,7 @@ export class Wall extends Container {
       .lineTo(points[2].x, points[2].y)
       .lineTo(points[3].x, points[3].y)
       .lineTo(points[0].x, points[0].y)
-      .endFill()
+      .endFill();
 
     /** Left face */
     const left: Graphics = new Graphics()
@@ -256,7 +256,7 @@ export class Wall extends Container {
           this._height * 64
       )
       .lineTo(points[3].x, points[3].y)
-      .endFill()
+      .endFill();
 
     /** Right face */
     const right: Graphics = new Graphics()
@@ -268,7 +268,7 @@ export class Wall extends Container {
         color: new Color(this._material.color).premultiply(0.8).toNumber(),
         matrix: new Matrix(1, -0.5, 0, 1, points[0].x + this._thickness, points[0].y + 4)
       })
-      .moveTo(points[3].x, points[3].y)
+      .moveTo(points[3].x, points[3].y);
 
     if (this._type === WallType.DOOR_WALL) {
       right
@@ -289,7 +289,7 @@ export class Wall extends Container {
             this._room.tileMap.maxZ * 32 -
             this._position.z * 32 +
             this._height * 64
-        )
+        );
     } else {
       right
         .lineTo(
@@ -309,17 +309,17 @@ export class Wall extends Container {
             this._room.tileMap.maxZ * 32 -
             this._position.z * 32 +
             this._height * 64
-        )
+        );
     }
-    right.lineTo(points[2].x, points[2].y).lineTo(points[3].x, points[3].y).endFill()
+    right.lineTo(points[2].x, points[2].y).lineTo(points[3].x, points[3].y).endFill();
 
     /** And we combine everything */
-    this.addChild(top)
-    this.addChild(left)
-    this.addChild(right)
+    this.addChild(top);
+    this.addChild(left);
+    this.addChild(right);
 
     /** Positionate the wall */
-    this.x = 32 * this._position.x - 32 * this._position.y
-    this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z
+    this.x = 32 * this._position.x - 32 * this._position.y;
+    this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
   }
 }

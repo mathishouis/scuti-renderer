@@ -1,4 +1,4 @@
-import type { StorybookConfig } from '@storybook/vue3-vite'
+import type { StorybookConfig } from '@storybook/vue3-vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -10,6 +10,6 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag'
   }
-}
+};
 
-export default config
+export default config;

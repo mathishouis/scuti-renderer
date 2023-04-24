@@ -1,4 +1,4 @@
-import type { Texture } from 'pixi.js'
+import type { Texture } from 'pixi.js';
 
 /**
  * Material class that regroup the color and texture to be applied on the wall or the floor.
@@ -13,7 +13,7 @@ export class Material {
    * @member {number}
    * @private
    */
-  private _color: number
+  private _color: number;
 
   /**
    * The material texture.
@@ -21,15 +21,15 @@ export class Material {
    * @member {Texture}
    * @private
    */
-  private _texture: Texture
+  private _texture: Texture;
 
   /**
    * @param {number} [color] - The material color.
    * @param {Texture} [texture] - The material texture.
    **/
   constructor(color: number, texture: Texture) {
-    this._color = color
-    this._texture = texture
+    this._color = color;
+    this._texture = texture;
   }
 
   /**
@@ -40,7 +40,7 @@ export class Material {
    * @public
    */
   public get color(): number {
-    return this._color
+    return this._color;
   }
 
   /**
@@ -50,7 +50,7 @@ export class Material {
    * @public
    */
   public set color(color: number) {
-    this._color = color
+    this._color = color;
   }
 
   /**
@@ -61,7 +61,7 @@ export class Material {
    * @public
    */
   public get texture(): Texture {
-    return this._texture
+    return this._texture;
   }
 
   /**
@@ -71,6 +71,6 @@ export class Material {
    * @public
    */
   public set texture(texture: Texture) {
-    this._texture = texture
+    this._texture = texture;
   }
 }

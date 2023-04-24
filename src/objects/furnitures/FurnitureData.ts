@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { Assets } from 'pixi.js'
+import { Assets } from 'pixi.js';
 
-import { FloorFurniture } from './FloorFurniture'
-import { WallFurniture } from './WallFurniture'
+import { FloorFurniture } from './FloorFurniture';
+import { WallFurniture } from './WallFurniture';
 
 /**
  * FurnitureData class that manage the data of a furniture.
@@ -17,7 +17,7 @@ export class FurnitureData {
    * @member {FloorFurniture | WallFurniture}
    * @private
    */
-  private readonly _furniture: FloorFurniture | WallFurniture
+  private readonly _furniture: FloorFurniture | WallFurniture;
 
   /**
    * The furniture data.
@@ -25,15 +25,15 @@ export class FurnitureData {
    * @member {IFurnitureData}
    * @private
    */
-  private _data!: IFurnitureData
+  private _data!: IFurnitureData;
 
   /**
    * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
    */
   constructor(furniture: FloorFurniture | WallFurniture) {
-    this._furniture = furniture
+    this._furniture = furniture;
 
-    this._load()
+    this._load();
   }
 
   /**
@@ -46,13 +46,13 @@ export class FurnitureData {
     if (this._furniture instanceof FloorFurniture) {
       // @ts-expect-error
       this._data = Assets.get('furnitures/furnidata').floorItems.find((item) => {
-        return item.id === this._furniture.id
-      })
+        return item.id === this._furniture.id;
+      });
     } else if (this._furniture instanceof WallFurniture) {
       // @ts-expect-error
       this._data = Assets.get('furnitures/furnidata').wallItems.find((item) => {
-        return item.id === this._furniture.id
-      })
+        return item.id === this._furniture.id;
+      });
     }
   }
 
@@ -64,7 +64,7 @@ export class FurnitureData {
    * @public
    */
   public get id(): number {
-    return this._data.id
+    return this._data.id;
   }
 
   /**
@@ -75,7 +75,7 @@ export class FurnitureData {
    * @public
    */
   public get className(): string {
-    return this._data.className
+    return this._data.className;
   }
 
   /**
@@ -86,8 +86,8 @@ export class FurnitureData {
    * @public
    */
   public get baseName(): string {
-    if (!Boolean(this._data.className.includes('*'))) return this._data.className
-    return this._data.className.split('*')[0]
+    if (!Boolean(this._data.className.includes('*'))) return this._data.className;
+    return this._data.className.split('*')[0];
   }
 
   /**
@@ -98,7 +98,7 @@ export class FurnitureData {
    * @public
    */
   public get color(): number {
-    if (!Boolean(this._data.className.includes('*'))) return null
-    return Number(this._data.className.split('*')[1])
+    if (!Boolean(this._data.className.includes('*'))) return null;
+    return Number(this._data.className.split('*')[1]);
   }
 }

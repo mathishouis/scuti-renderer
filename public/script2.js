@@ -1,19 +1,20 @@
-import { Scuti } from '../src/Scuti'
-import { Room } from '../src/objects/rooms/Room'
-import { FloorMaterial } from '../src/objects/rooms/materials/FloorMaterial'
-import { WallMaterial } from '../src/objects/rooms/materials/WallMaterial'
-import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture'
-import { WallFurniture } from '../src/objects/furnitures/WallFurniture'
-import { Avatar } from '../src/objects/avatars/Avatar'
-import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
-;(async () => {
+import { Scuti } from '../src/Scuti';
+import { Room } from '../src/objects/rooms/Room';
+import { FloorMaterial } from '../src/objects/rooms/materials/FloorMaterial';
+import { WallMaterial } from '../src/objects/rooms/materials/WallMaterial';
+import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture';
+import { WallFurniture } from '../src/objects/furnitures/WallFurniture';
+import { Avatar } from '../src/objects/avatars/Avatar';
+import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
+
+(async () => {
   const renderer = new Scuti({
     canvas: document.getElementById('app'),
     width: window.innerWidth,
     height: window.innerHeight,
     resources: './resources'
-  })
-  await renderer.loadResources()
+  });
+  await renderer.loadResources();
 
   const tileMap =
     'xxxxxxxxxxxxxxxxxxxx\n' +
@@ -45,7 +46,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     'x000000000000000000x\n' +
     'x000000000000000000x\n' +
     'x000000000000000000x\n' +
-    'xxxxxxxxxxxxxxxxxxxx\n'
+    'xxxxxxxxxxxxxxxxxxxx\n';
 
   const tileMap1 =
     'xxxxxx\n' +
@@ -75,7 +76,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     'x00000011100xxxxxx\n' +
     'x00000001000xxxxxx\n' +
     'x00000000000xxxxxx\n' +
-    'x00000000000xxxxxx\n'
+    'x00000000000xxxxxx\n';
 
   const tileMap2 =
     'x0000000000000000x\n' +
@@ -87,7 +88,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     'x0000000000000000x\n' +
     'x0000000000000000x\n' +
     'x0000000000000000x\n' +
-    'x0000000000000000x\n'
+    'x0000000000000000x\n';
 
   const tileMap3 =
     'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n' +
@@ -117,7 +118,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     'x222222222222222222222222222x\n' +
     'x222222222222222222222222222x\n' +
     'x222222222222222222222222222x\n' +
-    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
   const tileMap4 =
     'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n' +
@@ -168,7 +169,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     'xfffffffffxxxxxx111111111111111111\n' +
     'xfffffffffxxxxxx111111111111111111\n' +
     'xxxxxxxxxxxxxxxx111111111111111111\n' +
-    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
   const tileMap5 =
     'xxxxxxxxxxxxxxxxxxxxxxxxxxx\n' +
@@ -197,7 +198,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     'x2222x0000000000xxxxxxxxxxx\n' +
     'x2222x0000000000xxxxxxxxxxx\n' +
     'x2222x0000000000xxxxxxxxxxx\n' +
-    'x2222x0000000000xxxxxxxxxxx'
+    'x2222x0000000000xxxxxxxxxxx';
 
   const room = new Room(renderer, {
     tileMap: tileMap5,
@@ -206,7 +207,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     //floorMaterial: new FloorMaterial(renderer, 307),
     floorMaterial: new FloorMaterial(renderer, 110),
     wallMaterial: new WallMaterial(renderer, 1601)
-  })
+  });
   /*setTimeout(() => {
         room.wallMaterial = new WallMaterial(renderer, 1701);
         room.floorMaterial = new FloorMaterial(renderer, 301);
@@ -223,7 +224,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     },
     direction: 4,
     state: 1
-  })
+  });
   const furniture2 = new FloorFurniture({
     id: 3895,
     position: {
@@ -233,7 +234,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     },
     direction: 4,
     state: 1
-  })
+  });
   const wallFurniture = new WallFurniture({
     position: {
       x: 1,
@@ -244,7 +245,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     state: 0,
     id: 4625,
     direction: 2
-  })
+  });
   const wallFurniture2 = new WallFurniture({
     position: {
       x: 1,
@@ -255,7 +256,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     state: 0,
     id: 4625,
     direction: 2
-  })
+  });
   const wallFurniture3 = new WallFurniture({
     position: {
       x: 4,
@@ -266,7 +267,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     id: 4066,
     direction: 4,
     state: 3
-  })
+  });
   const avatar = new Avatar({
     figure: 'hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80',
     position: {
@@ -285,30 +286,30 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
       AvatarAction.CarryItem
     ],
     handItem: 55
-  })
+  });
 
-  let hd = [180, 185, 190, 195, 200, 205]
-  let hr = [100, 105, 110, 115, 125, 135, 145, 155, 165, 170]
-  let ch = [210, 215, 220, 225, 230, 235, 240, 245, 250, 255]
-  let sh = [290, 295, 300, 305, 725, 730, 735, 740, 905, 906, 907, 908]
+  let hd = [180, 185, 190, 195, 200, 205];
+  let hr = [100, 105, 110, 115, 125, 135, 145, 155, 165, 170];
+  let ch = [210, 215, 220, 225, 230, 235, 240, 245, 250, 255];
+  let sh = [290, 295, 300, 305, 725, 730, 735, 740, 905, 906, 907, 908];
   let ha = [
     1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019,
     1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027
-  ]
-  let lg = [270, 275, 280, 285, 281, 695, 696, 716, 700, 705, 710, 715, 720, 827]
-  let wa = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012]
-  let ea = [1401, 1402, 1403, 1404, 1405, 1406]
+  ];
+  let lg = [270, 275, 280, 285, 281, 695, 696, 716, 700, 705, 710, 715, 720, 827];
+  let wa = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012];
+  let ea = [1401, 1402, 1403, 1404, 1405, 1406];
   let color = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30
-  ]
+  ];
   let color2 = [
     31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
     60, 61
-  ]
+  ];
   let color3 = [
     62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90,
     91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110
-  ]
+  ];
   let actions = [
     AvatarAction.Default,
     AvatarAction.Walk,
@@ -319,7 +320,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
     AvatarAction.Respect,
     AvatarAction.CarryItem,
     AvatarAction.UseItem
-  ]
+  ];
 
   for (let y = 0; y < 2; y++) {
     for (let x = 0; x < 2; x++) {
@@ -355,7 +356,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
         '.ea-' +
         ea[Math.floor(Math.random() * ea.length)] +
         '-' +
-        color3[Math.floor(Math.random() * color3.length)]
+        color3[Math.floor(Math.random() * color3.length)];
       let randomAvatar = new Avatar({
         position: {
           x: x + 1,
@@ -366,33 +367,33 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
         headDirection: 2,
         figure: figure,
         actions: [actions[Math.floor(Math.random() * actions.length)]]
-      })
+      });
       //room.objects.add(randomAvatar);
     }
   }
 
-  room.objects.add(avatar)
+  room.objects.add(avatar);
   avatar.onPointerDown = (event) => {
-    console.log('down', event)
-  }
+    console.log('down', event);
+  };
   avatar.onPointerUp = (event) => {
-    console.log('up', event)
-  }
+    console.log('up', event);
+  };
   avatar.onPointerMove = (event) => {
-    console.log('move', event)
-  }
+    console.log('move', event);
+  };
   avatar.onPointerOut = (event) => {
-    console.log('out', event)
-  }
+    console.log('out', event);
+  };
   avatar.onPointerOver = (event) => {
-    console.log('over', event)
-  }
+    console.log('over', event);
+  };
   avatar.onDoubleClick = (event) => {
-    console.log('doubleclick', event)
-  }
+    console.log('doubleclick', event);
+  };
   //room.objects.add(furniture2);
   room.visualization.onTileClick = (position) => {
-    console.log('click', position)
+    console.log('click', position);
     /*if(furniture.direction === 4) {
             furniture.direction = 2
         } else {
@@ -402,25 +403,25 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction'
       x: position.x,
       y: position.y,
       z: position.z
-    }
+    };
     wallFurniture.pos = {
       x: 1,
       y: Math.floor(Math.random() * (10 - 1 + 1) + 1),
       offsetX: 8,
       offsetY: 36
-    }
-  }
+    };
+  };
   room.visualization.onTileOver = (position) => {
-    console.log('over', position)
-  }
+    console.log('over', position);
+  };
   room.visualization.onTileOut = (position) => {
-    console.log('out', position)
-  }
-  room.objects.add(furniture)
+    console.log('out', position);
+  };
+  room.objects.add(furniture);
   furniture.onDoubleClick = (event) => {
-    console.log('dblclick furni', event)
-  }
+    console.log('dblclick furni', event);
+  };
   //room.addRoomObject(wallFurniture);
   //room.addRoomObject(wallFurniture2);
   //room.addRoomObject(wallFurniture3);
-})()
+})();

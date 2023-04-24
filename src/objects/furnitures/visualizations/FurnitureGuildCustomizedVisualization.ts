@@ -1,4 +1,4 @@
-import { FurnitureVisualization } from './FurnitureVisualization'
+import { FurnitureVisualization } from './FurnitureVisualization';
 
 /**
  * FurnitureGuildCustomizedVisualization class for the guild furnitures.
@@ -13,7 +13,7 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureVisualizatio
    * @member {number}
    * @private
    */
-  private _primaryColor: number = 0xffffff
+  private _primaryColor: number = 0xffffff;
 
   /**
    * The secondary color.
@@ -21,7 +21,7 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureVisualizatio
    * @member {number}
    * @private
    */
-  private _secondaryColor: number = 0xffffff
+  private _secondaryColor: number = 0xffffff;
 
   /**
    * Reference to the primary color.
@@ -31,7 +31,7 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureVisualizatio
    * @public
    */
   public get primaryColor(): number {
-    return this._primaryColor
+    return this._primaryColor;
   }
 
   /**
@@ -41,8 +41,8 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureVisualizatio
    * @public
    */
   public set primaryColor(color: number) {
-    this._primaryColor = color
-    this.furniture.view.update()
+    this._primaryColor = color;
+    this.furniture.view.update();
   }
 
   /**
@@ -53,7 +53,7 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureVisualizatio
    * @public
    */
   public get secondaryColor(): number {
-    return this._secondaryColor
+    return this._secondaryColor;
   }
 
   /**
@@ -63,7 +63,7 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureVisualizatio
    * @public
    */
   public set secondaryColor(color: number) {
-    this._secondaryColor = color
-    this.furniture.view.update()
+    this._secondaryColor = color;
+    this.furniture.view.update();
   }
 }

@@ -1,31 +1,31 @@
 // @ts-nocheck
-import { Assets } from 'pixi.js'
+import { Assets } from 'pixi.js';
 
-import type { IAvatarPartSets, IAnimationFrameData } from '../../../interfaces/Avatar'
-import type { AvatarAction } from '../actions/AvatarAction'
-import { AvatarAnimation } from './AvatarAnimation'
+import type { IAvatarPartSets, IAnimationFrameData } from '../../../interfaces/Avatar';
+import type { AvatarAction } from '../actions/AvatarAction';
+import { AvatarAnimation } from './AvatarAnimation';
 
 export class AvatarAnimationManager {
-  private readonly _animations: Map<AvatarAction, AvatarAnimation> = new Map<AvatarAction, AvatarAnimation>()
+  private readonly _animations: Map<AvatarAction, AvatarAnimation> = new Map<AvatarAction, AvatarAnimation>();
 
-  private readonly _avatarAnimationsLib: IAvatarPartSets = Assets.get('figures/animations')
+  private readonly _avatarAnimationsLib: IAvatarPartSets = Assets.get('figures/animations');
 
   public registerAnimation(action: AvatarAction): void {
-    if (this._avatarAnimationsLib[action] === undefined) return
-    this._animations.set(action, new AvatarAnimation(action, this._avatarAnimationsLib[action]))
+    if (this._avatarAnimationsLib[action] === undefined) return;
+    this._animations.set(action, new AvatarAnimation(action, this._avatarAnimationsLib[action]));
   }
 
   public getAnimation(action: AvatarAction): AvatarAnimation {
-    return this._animations.get(action)
+    return this._animations.get(action);
   }
 
   public getLayerData(action: AvatarAction, frame: number, type: string): IAnimationFrameData {
-    const animation: AvatarAnimation = this.getAnimation(action)
-    if (animation === undefined) return
-    return animation.getFrame(frame, type)
+    const animation: AvatarAnimation = this.getAnimation(action);
+    if (animation === undefined) return;
+    return animation.getFrame(frame, type);
   }
 
   public get animations(): IAvatarPartSets {
-    return this._avatarAnimationsLib
+    return this._avatarAnimationsLib;
   }
 }

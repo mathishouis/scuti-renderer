@@ -33,7 +33,7 @@ npm install scuti-renderer
 Package import
 
 ```js
-import { Scuti } from 'scuti-renderer'
+import { Scuti } from 'scuti-renderer';
 ```
 
 #### CDN Install

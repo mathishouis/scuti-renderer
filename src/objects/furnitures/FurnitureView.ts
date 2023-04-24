@@ -1,15 +1,15 @@
-import type { Spritesheet } from 'pixi.js'
-import { Assets, Container, Sprite } from 'pixi.js'
+import type { Spritesheet } from 'pixi.js';
+import { Assets, Container, Sprite } from 'pixi.js';
 
-import { FurniturePart } from './FurniturePart'
-import type { FloorFurniture } from './FloorFurniture'
-import type { WallFurniture } from './WallFurniture'
-import { FurnitureLayer } from './FurnitureLayer'
-import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization'
-import type { FurnitureVisualization } from './visualizations/FurnitureVisualization'
-import { AssetLoader } from '../../utilities/AssetLoader'
-import { FurnitureRoomBackgroundVisualization } from './visualizations/FurnitureRoomBackgroundVisualization'
-import type { IFurnitureProperty } from '../../interfaces/Furniture'
+import { FurniturePart } from './FurniturePart';
+import type { FloorFurniture } from './FloorFurniture';
+import type { WallFurniture } from './WallFurniture';
+import { FurnitureLayer } from './FurnitureLayer';
+import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization';
+import type { FurnitureVisualization } from './visualizations/FurnitureVisualization';
+import { AssetLoader } from '../../utilities/AssetLoader';
+import { FurnitureRoomBackgroundVisualization } from './visualizations/FurnitureRoomBackgroundVisualization';
+import type { IFurnitureProperty } from '../../interfaces/Furniture';
 
 /**
  * FurnitureView class that manage all the rendering part of the furniture.
@@ -24,7 +24,7 @@ export class FurnitureView extends Container {
    * @member {FloorFurniture | WallFurniture}
    * @private
    */
-  private readonly _furniture: FloorFurniture | WallFurniture
+  private readonly _furniture: FloorFurniture | WallFurniture;
 
   /**
    * A list containing all the furnitures parts.
@@ -32,7 +32,7 @@ export class FurnitureView extends Container {
    * @member {FurniturePart[]}
    * @private
    */
-  private _parts: FurniturePart[] = []
+  private _parts: FurniturePart[] = [];
 
   /**
    * The spritesheet of the furniture.
@@ -40,7 +40,7 @@ export class FurnitureView extends Container {
    * @member {Spritesheet}
    * @private
    */
-  private _spritesheet!: Spritesheet
+  private _spritesheet!: Spritesheet;
 
   /**
    * The furniture property.
@@ -48,7 +48,7 @@ export class FurnitureView extends Container {
    * @member {IFurnitureProperty}
    * @private
    */
-  private _property!: IFurnitureProperty
+  private _property!: IFurnitureProperty;
 
   /**
    * The furniture visualization.
@@ -56,7 +56,7 @@ export class FurnitureView extends Container {
    * @member {FurnitureVisualization}
    * @private
    */
-  private _visualization!: FurnitureVisualization
+  private _visualization!: FurnitureVisualization;
 
   /**
    * The load event.
@@ -64,34 +64,34 @@ export class FurnitureView extends Container {
    * @member {() => void}
    * @private
    */
-  private _onLoad!: () => void
+  private _onLoad!: () => void;
 
   /**
    * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance to render.
    */
   constructor(furniture: FloorFurniture | WallFurniture) {
-    super()
+    super();
     /** Store data */
-    this._furniture = furniture
+    this._furniture = furniture;
     /** Load the spritesheet */
     AssetLoader.load(
       'furnitures/' + this._furniture.data.baseName,
       'furniture/' + this._furniture.data.baseName + '/' + this._furniture.data.baseName + '.json',
       () => {
-        this._createPlaceholder()
+        this._createPlaceholder();
       }
     )
       .then(() => {
-        this._spritesheet = Assets.get('furnitures/' + this._furniture.data.baseName)
+        this._spritesheet = Assets.get('furnitures/' + this._furniture.data.baseName);
         // @ts-expect-error
-        this._property = this._spritesheet.data.furniProperty
-        this._initialiseVisualization()
-        if (this._onLoad != null) this._onLoad()
-        this._draw()
+        this._property = this._spritesheet.data.furniProperty;
+        this._initialiseVisualization();
+        if (this._onLoad != null) this._onLoad();
+        this._draw();
       })
       .catch((error) => {
-        return console.error(error)
-      })
+        return console.error(error);
+      });
   }
 
   /**
@@ -103,10 +103,10 @@ export class FurnitureView extends Container {
   private _initialiseVisualization(): void {
     // @ts-expect-error
     if (this._property.infos.visualization === 'furniture_guild_customized')
-      this._visualization = new FurnitureGuildCustomizedVisualization(this._furniture)
+      this._visualization = new FurnitureGuildCustomizedVisualization(this._furniture);
     // @ts-expect-error
     if (this._property.infos.visualization === 'furniture_bg')
-      this._visualization = new FurnitureRoomBackgroundVisualization(this._furniture)
+      this._visualization = new FurnitureRoomBackgroundVisualization(this._furniture);
   }
 
   /**
@@ -116,10 +116,10 @@ export class FurnitureView extends Container {
    * @private
    */
   private _draw(): void {
-    this._destroyParts()
-    this._createShadow()
+    this._destroyParts();
+    this._createShadow();
     for (let i: number = 0; i < this._property.visualization.layerCount; i++) {
-      this._createPart(i)
+      this._createPart(i);
     }
   }
 
@@ -130,11 +130,11 @@ export class FurnitureView extends Container {
    * @private
    */
   private _destroyParts(): void {
-    ;[...this._parts].forEach((part: FurniturePart) => {
-      return part.destroy()
-    })
-    this._parts = []
-    this.removeChild(this.children[0])
+    [...this._parts].forEach((part: FurniturePart) => {
+      return part.destroy();
+    });
+    this._parts = [];
+    this.removeChild(this.children[0]);
   }
 
   /**
@@ -144,7 +144,7 @@ export class FurnitureView extends Container {
    * @private
    */
   public update(): void {
-    this._draw()
+    this._draw();
   }
 
   /**
@@ -155,8 +155,8 @@ export class FurnitureView extends Container {
    */
   public tick(): void {
     this._parts.forEach((part: FurniturePart) => {
-      return part.nextFrame()
-    })
+      return part.nextFrame();
+    });
   }
 
   /**
@@ -167,9 +167,9 @@ export class FurnitureView extends Container {
    * @private
    */
   private _createPart(layer: number): void {
-    const part: FurniturePart = new FurniturePart(this._furniture, layer)
-    this._parts.push(part)
-    this.addChild(part)
+    const part: FurniturePart = new FurniturePart(this._furniture, layer);
+    this._parts.push(part);
+    this.addChild(part);
   }
 
   /**
@@ -181,10 +181,10 @@ export class FurnitureView extends Container {
   private _createPlaceholder(): void {
     const placeholder: Sprite = new Sprite(
       Assets.get('furnitures/floor/placeholder').textures['place_holder_furniture_64.png']
-    )
-    this.addChild(placeholder)
-    placeholder.x = -32
-    placeholder.y = -50
+    );
+    this.addChild(placeholder);
+    placeholder.x = -32;
+    placeholder.y = -50;
   }
 
   /**
@@ -209,7 +209,7 @@ export class FurnitureView extends Container {
         ignoreMouse: true,
         direction: 0
       })
-    )
+    );
   }
 
   /**
@@ -220,7 +220,7 @@ export class FurnitureView extends Container {
    * @public
    */
   public get spritesheet(): Spritesheet {
-    return this._spritesheet
+    return this._spritesheet;
   }
 
   /**
@@ -231,7 +231,7 @@ export class FurnitureView extends Container {
    * @public
    */
   public get property(): IFurnitureProperty {
-    return this._property
+    return this._property;
   }
 
   /**
@@ -242,7 +242,7 @@ export class FurnitureView extends Container {
    * @public
    */
   public get visualization(): FurnitureVisualization {
-    return this._visualization
+    return this._visualization;
   }
 
   /**
@@ -253,7 +253,7 @@ export class FurnitureView extends Container {
    * @public
    */
   public get onLoad(): () => void {
-    return this._onLoad
+    return this._onLoad;
   }
 
   /**
@@ -263,6 +263,6 @@ export class FurnitureView extends Container {
    * @public
    */
   public set onLoad(value: () => void) {
-    this._onLoad = value
+    this._onLoad = value;
   }
 }

@@ -1,4 +1,4 @@
-import { Filter, utils } from 'pixi.js'
+import { Filter, utils } from 'pixi.js';
 
 /** The shader vertex */
 const vertex: string = `
@@ -11,7 +11,7 @@ const vertex: string = `
         gl_Position = vec4((projectionMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
         vTextureCoord = aTextureCoord;
     }
-`
+`;
 
 /** The shader fragment */
 const fragment: string = `
@@ -29,7 +29,7 @@ const fragment: string = `
             gl_FragColor = vec4(colorOverlay.r, colorOverlay.g, colorOverlay.b, currentColor.a);
         }
     }
-`
+`;
 
 /**
  * WiredSelectionFilter class that aim to reproduce the wired selection effect.
@@ -43,9 +43,9 @@ export class WiredSelectionFilter extends Filter {
    * @param {number} [backgroundColor] - The main color of the furniture when selected.
    **/
   constructor(lineColor: number, backgroundColor: number) {
-    super(vertex, fragment)
+    super(vertex, fragment);
     /** Set the colors */
-    this.uniforms.lineColor = utils.hex2rgb(lineColor)
-    this.uniforms.backgroundColor = utils.hex2rgb(backgroundColor)
+    this.uniforms.lineColor = utils.hex2rgb(lineColor);
+    this.uniforms.backgroundColor = utils.hex2rgb(backgroundColor);
   }
 }

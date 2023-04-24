@@ -1,11 +1,11 @@
-import { Container, Point } from 'pixi.js'
+import { Container, Point } from 'pixi.js';
 
-import type { Room } from '../Room'
-import type { IInteractionEvent } from '../../../interfaces/Interaction'
-import { InteractionManager } from '../../interactions/InteractionManager'
-import type { Tile } from '../parts/Tile'
-import type { Stair } from '../parts/Stair'
-import type { IPosition2D } from '../../../interfaces/Room'
+import type { Room } from '../Room';
+import type { IInteractionEvent } from '../../../interfaces/Interaction';
+import { InteractionManager } from '../../interactions/InteractionManager';
+import type { Tile } from '../parts/Tile';
+import type { Stair } from '../parts/Stair';
+import type { IPosition2D } from '../../../interfaces/Room';
 
 /**
  * RoomTileLayer class that manage all the room tiles.
@@ -21,7 +21,7 @@ export class RoomTileLayer extends Container {
    * @private
    */
   // @ts-expect-error
-  private readonly _room: Room
+  private readonly _room: Room;
 
   /**
    * The room tiles interaction manager.
@@ -29,15 +29,15 @@ export class RoomTileLayer extends Container {
    * @member {InteractionManager}
    * @private
    */
-  private readonly _interactionManager: InteractionManager = new InteractionManager()
+  private readonly _interactionManager: InteractionManager = new InteractionManager();
 
   /**
    * @param {Room} [room] - The room instance that we want to visualize.
    */
   constructor(room: Room) {
-    super()
+    super();
 
-    this._room = room
+    this._room = room;
   }
 
   /**
@@ -50,12 +50,12 @@ export class RoomTileLayer extends Container {
   public getTileFromGlobal(position: IPosition2D): Tile | Stair {
     // @ts-expect-error
     const container = this.children.find((container: Container) => {
-      const point: Point = new Point(position.x, position.y)
+      const point: Point = new Point(position.x, position.y);
       // @ts-expect-error
-      if (container.hitArea.contains(container.toLocal(point).x, container.toLocal(point).y)) return container
-    })
+      if (container.hitArea.contains(container.toLocal(point).x, container.toLocal(point).y)) return container;
+    });
     // @ts-expect-error
-    return container
+    return container;
   }
 
   /**
@@ -66,7 +66,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public get onPointerDown(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerDown
+    return this._interactionManager.onPointerDown;
   }
 
   /**
@@ -76,7 +76,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public set onPointerDown(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerDown = value
+    this._interactionManager.onPointerDown = value;
   }
 
   /**
@@ -87,7 +87,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public get onPointerUp(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerUp
+    return this._interactionManager.onPointerUp;
   }
 
   /**
@@ -97,7 +97,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public set onPointerUp(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerUp = value
+    this._interactionManager.onPointerUp = value;
   }
 
   /**
@@ -108,7 +108,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public get onPointerMove(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerMove
+    return this._interactionManager.onPointerMove;
   }
 
   /**
@@ -118,7 +118,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public set onPointerMove(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerMove = value
+    this._interactionManager.onPointerMove = value;
   }
 
   /**
@@ -129,7 +129,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public get onPointerOut(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOut
+    return this._interactionManager.onPointerOut;
   }
 
   /**
@@ -139,7 +139,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public set onPointerOut(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOut = value
+    this._interactionManager.onPointerOut = value;
   }
 
   /**
@@ -150,7 +150,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public get onPointerOver(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOver
+    return this._interactionManager.onPointerOver;
   }
 
   /**
@@ -160,7 +160,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public set onPointerOver(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOver = value
+    this._interactionManager.onPointerOver = value;
   }
 
   /**
@@ -171,7 +171,7 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public get onDoubleClick(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onDoubleClick
+    return this._interactionManager.onDoubleClick;
   }
 
   /**
@@ -181,6 +181,6 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public set onDoubleClick(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onDoubleClick = value
+    this._interactionManager.onDoubleClick = value;
   }
 }

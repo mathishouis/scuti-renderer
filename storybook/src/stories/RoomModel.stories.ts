@@ -8,7 +8,7 @@ const meta: Meta<typeof Renderer> = {
   component: Renderer,
   tags: ['autodocs'],
   argTypes: {
-    tileMap: { control: 'text' },
+    tileMap: { control: 'text' }
   }
 };
 
@@ -40,8 +40,8 @@ export const ModelA: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelB: Story = {
@@ -69,8 +69,8 @@ export const ModelB: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelC: Story = {
@@ -98,8 +98,8 @@ export const ModelC: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelD: Story = {
@@ -127,8 +127,8 @@ export const ModelD: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelE: Story = {
@@ -156,8 +156,8 @@ export const ModelE: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelF: Story = {
@@ -185,8 +185,8 @@ export const ModelF: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelG: Story = {
@@ -215,8 +215,8 @@ export const ModelG: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelH: Story = {
@@ -244,8 +244,8 @@ export const ModelH: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelI: Story = {
@@ -285,8 +285,8 @@ export const ModelI: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelJ: Story = {
@@ -322,8 +322,8 @@ export const ModelJ: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelK: Story = {
@@ -363,8 +363,8 @@ export const ModelK: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelL: Story = {
@@ -398,8 +398,8 @@ export const ModelL: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelM: Story = {
@@ -441,8 +441,8 @@ export const ModelM: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelN: Story = {
@@ -476,8 +476,8 @@ export const ModelN: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelO: Story = {
@@ -517,8 +517,8 @@ export const ModelO: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelP: Story = {
@@ -556,8 +556,8 @@ export const ModelP: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelQ: Story = {
@@ -595,8 +595,8 @@ export const ModelQ: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelR: Story = {
@@ -634,8 +634,8 @@ export const ModelR: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelT: Story = {
@@ -675,8 +675,8 @@ export const ModelT: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelU: Story = {
@@ -724,8 +724,8 @@ export const ModelU: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelV: Story = {
@@ -767,8 +767,8 @@ export const ModelV: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelW: Story = {
@@ -807,8 +807,8 @@ export const ModelW: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelX: Story = {
@@ -846,8 +846,8 @@ export const ModelX: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelY: Story = {
@@ -883,8 +883,8 @@ export const ModelY: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const ModelZ: Story = {
@@ -916,8 +916,8 @@ export const ModelZ: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model0: Story = {
@@ -939,8 +939,8 @@ export const Model0: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model1: Story = {
@@ -1026,8 +1026,8 @@ export const Model1: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model2: Story = {
@@ -1107,8 +1107,8 @@ export const Model2: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model3: Story = {
@@ -1135,8 +1135,8 @@ export const Model3: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model4: Story = {
@@ -1168,8 +1168,8 @@ export const Model4: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model5: Story = {
@@ -1215,8 +1215,8 @@ export const Model5: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model6: Story = {
@@ -1260,8 +1260,8 @@ export const Model6: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model7: Story = {
@@ -1303,8 +1303,8 @@ export const Model7: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model8: Story = {
@@ -1350,8 +1350,8 @@ export const Model8: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };
 
 export const Model9: Story = {
@@ -1407,6 +1407,6 @@ export const Model9: Story = {
         floorMaterial: new FloorMaterial(scuti, 111),
         wallMaterial: new WallMaterial(scuti, 112)
       });
-    },
-  },
+    }
+  }
 };

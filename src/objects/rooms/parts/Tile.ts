@@ -1,13 +1,13 @@
-import { Container, Graphics, Matrix, Point, Polygon } from 'pixi.js'
-import { Color } from '@pixi/color'
+import { Container, Graphics, Matrix, Point, Polygon } from 'pixi.js';
+import { Color } from '@pixi/color';
 
-import type { Room } from '../Room'
-import type { ITileConfiguration, ITileInfo } from '../../../interfaces/Room'
-import type { Material } from '../materials/Material'
-import { FloorMaterial } from '../materials/FloorMaterial'
-import { InteractionManager } from '../../interactions/InteractionManager'
-import type { IInteractionEvent } from '../../../interfaces/Interaction'
-import type { IFloorPosition } from '../../../interfaces/Furniture'
+import type { Room } from '../Room';
+import type { ITileConfiguration, ITileInfo } from '../../../interfaces/Room';
+import type { Material } from '../materials/Material';
+import { FloorMaterial } from '../materials/FloorMaterial';
+import { InteractionManager } from '../../interactions/InteractionManager';
+import type { IInteractionEvent } from '../../../interfaces/Interaction';
+import type { IFloorPosition } from '../../../interfaces/Furniture';
 
 /**
  * Tile class that show up during room rendering.
@@ -22,7 +22,7 @@ export class Tile extends Container {
    * @member {Room}
    * @private
    */
-  private readonly _room: Room
+  private readonly _room: Room;
 
   /**
    * The ITileInfo instance
@@ -30,7 +30,7 @@ export class Tile extends Container {
    * @member {ITileInfo}
    * @private
    */
-  private readonly _tileInfo?: ITileInfo
+  private readonly _tileInfo?: ITileInfo;
 
   /**
    * The thickness of the tile part.
@@ -38,7 +38,7 @@ export class Tile extends Container {
    * @member {number}
    * @private
    */
-  private _thickness: number
+  private _thickness: number;
 
   /**
    * The tile material that will be applied to this part, it contains the color and the texture of the tile.
@@ -46,7 +46,7 @@ export class Tile extends Container {
    * @member {Material}
    * @private
    */
-  private _material: Material
+  private _material: Material;
 
   /**
    * The tile position.
@@ -54,7 +54,7 @@ export class Tile extends Container {
    * @member {IFloorPosition}
    * @private
    */
-  private readonly _position: IFloorPosition
+  private readonly _position: IFloorPosition;
 
   /**
    * The tile interaction manager.
@@ -62,7 +62,7 @@ export class Tile extends Container {
    * @member {InteractionManager}
    * @private
    */
-  private readonly _interactionManager: InteractionManager = new InteractionManager()
+  private readonly _interactionManager: InteractionManager = new InteractionManager();
 
   /**
    * @param {Room} [room] - The room instance where the tile will be drawn.
@@ -72,35 +72,35 @@ export class Tile extends Container {
    * @param {IPosition3D} [configuration.position] - The tile position.
    **/
   constructor(room: Room, configuration: ITileConfiguration, tileInfo?: ITileInfo) {
-    super()
+    super();
 
     /** Store the configuration */
-    this._room = room
-    this._tileInfo = tileInfo
-    this._position = configuration.position
-    this._thickness = configuration.thickness ?? 8
-    this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111)
+    this._room = room;
+    this._tileInfo = tileInfo;
+    this._position = configuration.position;
+    this._thickness = configuration.thickness ?? 8;
+    this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
 
     /** Register interactions */
     this.on('pointerdown', (event) => {
-      return this._interactionManager.handlePointerDown({ mouseEvent: event, position: this._position })
-    })
+      return this._interactionManager.handlePointerDown({ mouseEvent: event, position: this._position });
+    });
     this.on('pointerup', (event) => {
-      return this._interactionManager.handlePointerUp({ mouseEvent: event, position: this._position })
-    })
+      return this._interactionManager.handlePointerUp({ mouseEvent: event, position: this._position });
+    });
     this.on('pointermove', (event) => {
-      return this._interactionManager.handlePointerMove({ mouseEvent: event, position: this._position })
-    })
+      return this._interactionManager.handlePointerMove({ mouseEvent: event, position: this._position });
+    });
     this.on('pointerout', (event) => {
-      return this._interactionManager.handlePointerOut({ mouseEvent: event, position: this._position })
-    })
+      return this._interactionManager.handlePointerOut({ mouseEvent: event, position: this._position });
+    });
     this.on('pointerover', (event) => {
-      return this._interactionManager.handlePointerOver({ mouseEvent: event, position: this._position })
-    })
+      return this._interactionManager.handlePointerOver({ mouseEvent: event, position: this._position });
+    });
 
     // TODO: Make the method public and use it when adding it to a room, not when instancing the class
     /** Draw the tile */
-    this._draw()
+    this._draw();
   }
 
   /**
@@ -125,22 +125,22 @@ export class Tile extends Container {
       .lineTo(64, 0)
       .lineTo(32, 16)
       .lineTo(0, 0)
-      .endFill()
+      .endFill();
 
-    this.addChild(top)
+    this.addChild(top);
 
-    let bottomTile
-    let rightTile
+    let bottomTile;
+    let rightTile;
 
     if (
       this._room.tileMap.tileMap[this._position.y + 1] !== undefined &&
       this._room.tileMap.tileMap[this._position.y + 1][this._position.x] !== undefined
     ) {
-      bottomTile = this._room.tileMap.getTileInfo({ x: this._position.x, y: this._position.y + 1 })
+      bottomTile = this._room.tileMap.getTileInfo({ x: this._position.x, y: this._position.y + 1 });
     }
 
     if (this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== 'undefined') {
-      rightTile = this._room.tileMap.getTileInfo({ x: this._position.x + 1, y: this._position.y })
+      rightTile = this._room.tileMap.getTileInfo({ x: this._position.x + 1, y: this._position.y });
     }
 
     if (
@@ -160,9 +160,9 @@ export class Tile extends Container {
         .lineTo(0, this._thickness)
         .lineTo(32, 16 + this._thickness)
         .lineTo(32, 16)
-        .endFill()
+        .endFill();
 
-      this.addChild(left)
+      this.addChild(left);
     }
 
     if (
@@ -183,14 +183,14 @@ export class Tile extends Container {
         .lineTo(64, this._thickness)
         .lineTo(64, 0)
         .lineTo(32, 16)
-        .endFill()
+        .endFill();
 
-      this.addChild(right)
+      this.addChild(right);
     }
 
     /** Positionate the wall */
-    this.x = 32 * this._position.x - 32 * this._position.y
-    this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z
+    this.x = 32 * this._position.x - 32 * this._position.y;
+    this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
 
     /** Set the hit area */
     this.hitArea = new Polygon(
@@ -199,7 +199,7 @@ export class Tile extends Container {
       new Point(64, 0),
       new Point(32, 16),
       new Point(0, 0)
-    )
+    );
   }
 
   /**
@@ -210,7 +210,7 @@ export class Tile extends Container {
    * @public
    */
   public get thickness(): number {
-    return this._thickness
+    return this._thickness;
   }
 
   /**
@@ -220,9 +220,9 @@ export class Tile extends Container {
    * @public
    */
   public set thickness(thickness: number) {
-    this._thickness = thickness
+    this._thickness = thickness;
     /** Redraw the tile */
-    this._draw()
+    this._draw();
   }
 
   /**
@@ -233,7 +233,7 @@ export class Tile extends Container {
    * @public
    */
   public get material(): Material {
-    return this._material
+    return this._material;
   }
 
   /**
@@ -243,9 +243,9 @@ export class Tile extends Container {
    * @public
    */
   public set material(material: Material) {
-    this._material = material
+    this._material = material;
     /** Redraw the tile */
-    this._draw()
+    this._draw();
   }
 
   /**
@@ -256,7 +256,7 @@ export class Tile extends Container {
    * @public
    */
   public get onPointerDown(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerDown
+    return this._interactionManager.onPointerDown;
   }
 
   /**
@@ -266,7 +266,7 @@ export class Tile extends Container {
    * @public
    */
   public set onPointerDown(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerDown = value
+    this._interactionManager.onPointerDown = value;
   }
 
   /**
@@ -277,7 +277,7 @@ export class Tile extends Container {
    * @public
    */
   public get onPointerUp(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerUp
+    return this._interactionManager.onPointerUp;
   }
 
   /**
@@ -287,7 +287,7 @@ export class Tile extends Container {
    * @public
    */
   public set onPointerUp(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerUp = value
+    this._interactionManager.onPointerUp = value;
   }
 
   /**
@@ -298,7 +298,7 @@ export class Tile extends Container {
    * @public
    */
   public get onPointerMove(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerMove
+    return this._interactionManager.onPointerMove;
   }
 
   /**
@@ -308,7 +308,7 @@ export class Tile extends Container {
    * @public
    */
   public set onPointerMove(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerMove = value
+    this._interactionManager.onPointerMove = value;
   }
 
   /**
@@ -319,7 +319,7 @@ export class Tile extends Container {
    * @public
    */
   public get onPointerOut(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOut
+    return this._interactionManager.onPointerOut;
   }
 
   /**
@@ -329,7 +329,7 @@ export class Tile extends Container {
    * @public
    */
   public set onPointerOut(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOut = value
+    this._interactionManager.onPointerOut = value;
   }
 
   /**
@@ -340,7 +340,7 @@ export class Tile extends Container {
    * @public
    */
   public get onPointerOver(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOver
+    return this._interactionManager.onPointerOver;
   }
 
   /**
@@ -350,7 +350,7 @@ export class Tile extends Container {
    * @public
    */
   public set onPointerOver(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOver = value
+    this._interactionManager.onPointerOver = value;
   }
 
   /**
@@ -361,7 +361,7 @@ export class Tile extends Container {
    * @public
    */
   public get onDoubleClick(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onDoubleClick
+    return this._interactionManager.onDoubleClick;
   }
 
   /**
@@ -371,6 +371,6 @@ export class Tile extends Container {
    * @public
    */
   public set onDoubleClick(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onDoubleClick = value
+    this._interactionManager.onDoubleClick = value;
   }
 }

@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
-import type { Scuti } from 'scuti-renderer'
-import { FloorMaterial, WallMaterial, Room, Avatar, AvatarAction, FloorFurniture } from 'scuti-renderer'
+import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Scuti } from 'scuti-renderer';
+import { FloorMaterial, WallMaterial, Room, Avatar, AvatarAction, FloorFurniture } from 'scuti-renderer';
 
-import Renderer from './Renderer.vue'
+import Renderer from './Renderer.vue';
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/vue/writing-stories/introduction
 const meta: Meta<typeof Renderer> = {
@@ -12,10 +12,10 @@ const meta: Meta<typeof Renderer> = {
   argTypes: {
     tileMap: { control: 'text' }
   }
-}
+};
 
-export default meta
-type Story = StoryObj<typeof Renderer>
+export default meta;
+type Story = StoryObj<typeof Renderer>;
 
 export const DefaultRoom: Story = {
   args: {
@@ -28,10 +28,10 @@ export const DefaultRoom: Story = {
         `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
     }
   }
-}
+};
 
 export const Stairs: Story = {
   args: {
@@ -46,10 +46,10 @@ export const Stairs: Story = {
         `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
     }
   }
-}
+};
 
 export const StairCorners: Story = {
   args: {
@@ -65,10 +65,10 @@ export const StairCorners: Story = {
         `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
     }
   }
-}
+};
 
 export const StairWalls: Story = {
   args: {
@@ -85,10 +85,10 @@ export const StairWalls: Story = {
         `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
     }
   }
-}
+};
 
 export const MultipleSubsequentStairs: Story = {
   args: {
@@ -104,10 +104,10 @@ export const MultipleSubsequentStairs: Story = {
         `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
     }
   }
-}
+};
 
 export const Holes: Story = {
   args: {
@@ -123,10 +123,10 @@ export const Holes: Story = {
         `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
     }
   }
-}
+};
 
 export const AngledRoom: Story = {
   args: {
@@ -143,10 +143,10 @@ export const AngledRoom: Story = {
         `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
     }
   }
-}
+};
 
 export const Door: Story = {
   args: {
@@ -161,10 +161,10 @@ export const Door: Story = {
         `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
     }
   }
-}
+};
 
 export const OtherRoomShape: Story = {
   args: {
@@ -183,10 +183,10 @@ export const OtherRoomShape: Story = {
           'x0000000000000000x\n',
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
     }
   }
-}
+};
 
 export const CustomLook: Story = {
   args: {
@@ -203,15 +203,15 @@ export const CustomLook: Story = {
           `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
 
-      room.wallThickness = 0
-      room.wallHeight = 128
-      room.floorThickness = 2
-      room.wallThickness = 2
+      room.wallThickness = 0;
+      room.wallHeight = 128;
+      room.floorThickness = 2;
+      room.wallThickness = 2;
     }
   }
-}
+};
 
 export const TestTileClick: Story = {
   args: {
@@ -237,7 +237,7 @@ export const TestTileClick: Story = {
           `,
         floorMaterial: new FloorMaterial(scuti, 110),
         wallMaterial: new WallMaterial(scuti, 1601)
-      })
+      });
 
       const avatar = new Avatar({
         figure: 'hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80',
@@ -257,8 +257,8 @@ export const TestTileClick: Story = {
           AvatarAction.CarryItem
         ],
         handItem: 55
-      })
-      room.objects.add(avatar)
+      });
+      room.objects.add(avatar);
 
       const furniture = new FloorFurniture({
         id: 1619,
@@ -269,13 +269,13 @@ export const TestTileClick: Story = {
         },
         direction: 4,
         state: 1
-      })
-      room.objects.add(furniture)
+      });
+      room.objects.add(furniture);
 
       room.tiles.onPointerDown = (position: any) => {
-        console.log('click', position)
-        avatar.pos = position.position
-      }
+        console.log('click', position);
+        avatar.pos = position.position;
+      };
     }
   }
-}
+};

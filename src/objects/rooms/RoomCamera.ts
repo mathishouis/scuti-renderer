@@ -1,9 +1,9 @@
-import { Container, EventBoundary, FederatedPointerEvent } from 'pixi.js'
-import { gsap } from 'gsap'
+import { Container, EventBoundary, FederatedPointerEvent } from 'pixi.js';
+import { gsap } from 'gsap';
 
-import type { Room } from './Room'
-import type { Tile } from './parts/Tile'
-import type { Stair } from './parts/Stair'
+import type { Room } from './Room';
+import type { Tile } from './parts/Tile';
+import type { Stair } from './parts/Stair';
 
 /**
  * RoomCamera class that manage things like the room dragging or detecting if the room is out of bounds.
@@ -18,7 +18,7 @@ export class RoomCamera extends Container {
    * @member {Room}
    * @private
    */
-  private readonly _room: Room
+  private readonly _room: Room;
 
   /**
    * A boolean indicating if the room is being dragged.
@@ -26,7 +26,7 @@ export class RoomCamera extends Container {
    * @member {boolean}
    * @private
    */
-  private _dragging!: boolean
+  private _dragging!: boolean;
 
   /**
    * The container that will act as a trigger to drag the room container.
@@ -34,7 +34,7 @@ export class RoomCamera extends Container {
    * @member {Container}
    * @private
    */
-  private readonly _viewContainer: Container
+  private readonly _viewContainer: Container;
 
   /**
    * The container that will contain the room.
@@ -42,7 +42,7 @@ export class RoomCamera extends Container {
    * @member {Container}
    * @private
    */
-  private readonly _roomContainer: Container
+  private readonly _roomContainer: Container;
 
   /**
    * The current selected tile.
@@ -50,34 +50,34 @@ export class RoomCamera extends Container {
    * @member {Tile | Stair}
    * @private
    */
-  private _selectedTile!: Tile | Stair
+  private _selectedTile!: Tile | Stair;
 
   /**
    * @param {Room} [room] - The room instance that will be managed by this camera.
    */
   constructor(room: Room) {
-    super()
+    super();
 
-    this._room = room
+    this._room = room;
     /** Initialise the view container */
-    this._viewContainer = new Container()
+    this._viewContainer = new Container();
     /** Initialise the room container */
-    this._roomContainer = new Container()
-    this._roomContainer.addChild(this._room)
-    this._viewContainer.addChild(this._roomContainer)
-    this.addChild(this._viewContainer)
+    this._roomContainer = new Container();
+    this._roomContainer.addChild(this._room);
+    this._viewContainer.addChild(this._roomContainer);
+    this.addChild(this._viewContainer);
     /** Handle interactions */
-    this._room.engine.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart)
-    this._room.engine.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd)
+    this._room.engine.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
+    this._room.engine.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
     // @ts-expect-error
-    this._room.engine.application.renderer.events.domElement.addEventListener('pointermove', this._dragMove)
+    this._room.engine.application.renderer.events.domElement.addEventListener('pointermove', this._dragMove);
     /** Handle tile interactions */
-    this._room.engine.application.renderer.events.domElement.addEventListener('pointerdown', this._tilePointerDown)
-    this._room.engine.application.renderer.events.domElement.addEventListener('pointerup', this._tilePointerUp)
-    this._room.engine.application.renderer.events.domElement.addEventListener('pointermove', this._tilePointerMove)
+    this._room.engine.application.renderer.events.domElement.addEventListener('pointerdown', this._tilePointerDown);
+    this._room.engine.application.renderer.events.domElement.addEventListener('pointerup', this._tilePointerUp);
+    this._room.engine.application.renderer.events.domElement.addEventListener('pointermove', this._tilePointerMove);
 
-    this._updateBounds()
-    this._centerCamera()
+    this._updateBounds();
+    this._centerCamera();
   }
 
   /**
@@ -87,8 +87,8 @@ export class RoomCamera extends Container {
    * @private
    */
   private _updateBounds(): void {
-    this._roomContainer.pivot.x = this._room.view.wallLayer.getBounds().x
-    this._roomContainer.pivot.y = this._room.view.wallLayer.getBounds().y
+    this._roomContainer.pivot.x = this._room.view.wallLayer.getBounds().x;
+    this._roomContainer.pivot.y = this._room.view.wallLayer.getBounds().y;
   }
 
   /**
@@ -103,7 +103,7 @@ export class RoomCamera extends Container {
       y: Math.floor(this._room.engine.application.view.height / 2 - this._room.view.height / 2),
       duration: 0.8,
       ease: 'easeOut'
-    })
+    });
   }
 
   /**
@@ -113,8 +113,8 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _dragStart = (): void => {
-    this._dragging = true
-  }
+    this._dragging = true;
+  };
 
   /**
    * This method is called when the user stop dragging the room.
@@ -123,11 +123,11 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _dragEnd = (): void => {
-    this._dragging = false
+    this._dragging = false;
     if (this._isOutOfBounds()) {
-      this._centerCamera()
+      this._centerCamera();
     }
-  }
+  };
 
   /**
    * This method is called when the user is moving the dragged room in the canvas.
@@ -138,10 +138,10 @@ export class RoomCamera extends Container {
    */
   private readonly _dragMove = (event: FederatedPointerEvent): void => {
     if (this._dragging) {
-      this._roomContainer.x = Math.floor(this._roomContainer.x + event.movementX)
-      this._roomContainer.y = Math.floor(this._roomContainer.y + event.movementY)
+      this._roomContainer.x = Math.floor(this._roomContainer.x + event.movementX);
+      this._roomContainer.y = Math.floor(this._roomContainer.y + event.movementY);
     }
-  }
+  };
 
   /**
    * Indicate if the room container is out of bounds of the PixiJS view.
@@ -151,15 +151,15 @@ export class RoomCamera extends Container {
    */
   private _isOutOfBounds(): boolean {
     /** Out of bounds on the right */
-    if (this._roomContainer.x > this._room.engine.application.view.width) return true
+    if (this._roomContainer.x > this._room.engine.application.view.width) return true;
     /** Out of bounds on the left */
-    if (this._roomContainer.x + this._roomContainer.width < 0) return true
+    if (this._roomContainer.x + this._roomContainer.width < 0) return true;
     /** Out of bounds on the bottom */
-    if (this._roomContainer.y > this._room.engine.application.view.height) return true
+    if (this._roomContainer.y > this._room.engine.application.view.height) return true;
     /** Out of bounds on the top */
-    if (this._roomContainer.y + this._roomContainer.height < 0) return true
+    if (this._roomContainer.y + this._roomContainer.height < 0) return true;
     /** It is not out of bounds */
-    return false
+    return false;
   }
 
   /**
@@ -169,10 +169,10 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _tilePointerDown = (event: PointerEvent): void => {
-    const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY })
+    const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
 
-    if (tile != null) tile.emit('pointerdown', new FederatedPointerEvent(new EventBoundary()))
-  }
+    if (tile != null) tile.emit('pointerdown', new FederatedPointerEvent(new EventBoundary()));
+  };
 
   /**
    * Manage pointer up event on the canvas for tile interaction.
@@ -181,10 +181,10 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _tilePointerUp = (event: PointerEvent): void => {
-    const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY })
+    const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
 
-    if (tile != null) tile.emit('pointerup', new FederatedPointerEvent(new EventBoundary()))
-  }
+    if (tile != null) tile.emit('pointerup', new FederatedPointerEvent(new EventBoundary()));
+  };
 
   /**
    * Manage pointer move event on the canvas for tile interaction.
@@ -193,20 +193,20 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _tilePointerMove = (event: PointerEvent): void => {
-    const object: Tile | Stair = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY })
+    const object: Tile | Stair = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
 
-    if (object === undefined) return
+    if (object === undefined) return;
 
     if (this._selectedTile === object) {
-      object.emit('pointermove', new FederatedPointerEvent(new EventBoundary()))
+      object.emit('pointermove', new FederatedPointerEvent(new EventBoundary()));
     } else {
       if (this._selectedTile !== undefined) {
-        this._selectedTile.emit('pointerout', new FederatedPointerEvent(new EventBoundary()))
+        this._selectedTile.emit('pointerout', new FederatedPointerEvent(new EventBoundary()));
       }
       if (object !== undefined) {
-        object.emit('pointerover', new FederatedPointerEvent(new EventBoundary()))
+        object.emit('pointerover', new FederatedPointerEvent(new EventBoundary()));
       }
-      this._selectedTile = object
+      this._selectedTile = object;
     }
-  }
+  };
 }

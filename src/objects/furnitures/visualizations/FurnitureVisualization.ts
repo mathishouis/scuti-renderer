@@ -1,5 +1,5 @@
-import type { FloorFurniture } from '../FloorFurniture'
-import type { WallFurniture } from '../WallFurniture'
+import type { FloorFurniture } from '../FloorFurniture';
+import type { WallFurniture } from '../WallFurniture';
 
 /**
  * FurnitureVisualization class for the furniture visualization.
@@ -14,13 +14,13 @@ export class FurnitureVisualization {
    * @member {FloorFurniture | WallFurniture}
    * @private
    */
-  private readonly _furniture: FloorFurniture | WallFurniture
+  private readonly _furniture: FloorFurniture | WallFurniture;
 
   /**
    * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
    */
   constructor(furniture: FloorFurniture | WallFurniture) {
-    this._furniture = furniture
+    this._furniture = furniture;
   }
 
   /**
@@ -31,6 +31,6 @@ export class FurnitureVisualization {
    * @public
    */
   public get furniture(): FloorFurniture | WallFurniture {
-    return this._furniture
+    return this._furniture;
   }
 }

@@ -11,13 +11,13 @@ export class Logger {
    * @member {string}
    * @private
    */
-  private readonly _name: string
+  private readonly _name: string;
 
   /**
    * @param {string} [name] - The logger name.
    */
   constructor(name: string) {
-    this._name = name
+    this._name = name;
   }
 
   /**
@@ -28,7 +28,7 @@ export class Logger {
    * @public
    */
   public log(message: string): void {
-    this._log('#078000', '#FFFFFF', message)
+    this._log('#078000', '#FFFFFF', message);
   }
 
   /**
@@ -39,7 +39,7 @@ export class Logger {
    * @public
    */
   public error(message: string): void {
-    this._log('#E86C5D', '#FFFFFF', message)
+    this._log('#E86C5D', '#FFFFFF', message);
   }
 
   /**
@@ -50,7 +50,7 @@ export class Logger {
    * @public
    */
   public warn(message: string): void {
-    this._log('#FFD100', '#000000', message)
+    this._log('#FFD100', '#000000', message);
   }
 
   /**
@@ -61,7 +61,7 @@ export class Logger {
    * @public
    */
   public info(message: string): void {
-    this._log('#EC3262', '#FFFFFF', message)
+    this._log('#EC3262', '#FFFFFF', message);
   }
 
   /**
@@ -79,7 +79,7 @@ export class Logger {
       `background: #FFFFFF; color: #000000;`,
       `background: #000000;`,
       `background: ${backgroundColor}; color: ${textColor};`
-    )
+    );
   }
 
   /**
@@ -90,8 +90,8 @@ export class Logger {
    * @public
    */
   public get time(): string {
-    const date: Date = new Date()
-    return String(date.getHours()) + ':' + String(date.getMinutes()) + ':' + String(date.getSeconds())
+    const date: Date = new Date();
+    return String(date.getHours()) + ':' + String(date.getMinutes()) + ':' + String(date.getSeconds());
   }
 
   /**
@@ -102,6 +102,6 @@ export class Logger {
    * @public
    */
   public get name(): string {
-    return this._name
+    return this._name;
   }
 }

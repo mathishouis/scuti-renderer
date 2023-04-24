@@ -1,7 +1,7 @@
-import type { Ticker } from 'pixi.js'
-import { Container } from 'pixi.js'
+import type { Ticker } from 'pixi.js';
+import { Container } from 'pixi.js';
 
-import type { Room } from './Room'
+import type { Room } from './Room';
 
 /**
  * RoomObject class that is extended by the avatars or furnitures.
@@ -16,7 +16,7 @@ export class RoomObject extends Container {
    * @member {void}
    * @public
    */
-  public start!: () => void
+  public start!: () => void;
 
   /**
    * Stop the animation of the room object.
@@ -24,7 +24,7 @@ export class RoomObject extends Container {
    * @member {void}
    * @public
    */
-  public stop!: () => void
+  public stop!: () => void;
 
   /**
    * The room instance that will be managed by the camera.
@@ -32,7 +32,7 @@ export class RoomObject extends Container {
    * @member {Room}
    * @private
    */
-  private _room!: Room
+  private _room!: Room;
 
   /**
    * Destroy the room object and remove it from the canvas
@@ -52,7 +52,7 @@ export class RoomObject extends Container {
    * @public
    */
   public get room(): Room {
-    return this._room
+    return this._room;
   }
 
   /**
@@ -62,7 +62,7 @@ export class RoomObject extends Container {
    * @public
    */
   public set room(room: Room) {
-    this._room = room
+    this._room = room;
   }
 
   /**
@@ -73,6 +73,6 @@ export class RoomObject extends Container {
    * @public
    */
   public get animationTicker(): Ticker {
-    return this._room.view.animationTicker
+    return this._room.view.animationTicker;
   }
 }

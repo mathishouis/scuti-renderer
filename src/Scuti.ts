@@ -1,11 +1,11 @@
-import { Application, BaseTexture, Container, SCALE_MODES, settings } from 'pixi.js'
-import { PixiPlugin } from 'gsap/PixiPlugin'
-import { gsap } from 'gsap'
-import { Stage } from '@pixi/layers'
+import { Application, BaseTexture, Container, SCALE_MODES, settings } from 'pixi.js';
+import { PixiPlugin } from 'gsap/PixiPlugin';
+import { gsap } from 'gsap';
+import { Stage } from '@pixi/layers';
 
-import { Logger } from './utilities/Logger'
-import type { IRendererConfiguration } from './interfaces/Configuration'
-import { AssetLoader } from './utilities/AssetLoader'
+import { Logger } from './utilities/Logger';
+import type { IRendererConfiguration } from './interfaces/Configuration';
+import { AssetLoader } from './utilities/AssetLoader';
 
 /**
  * Convenience class to create a new Scuti renderer.
@@ -33,7 +33,7 @@ export class Scuti {
    * @member {HTMLElement}
    * @private
    */
-  private readonly _canvas: HTMLElement
+  private readonly _canvas: HTMLElement;
 
   /**
    * The PixiJS application instance that will be used to render everything.
@@ -41,7 +41,7 @@ export class Scuti {
    * @member {Application}
    * @private
    */
-  private readonly _application: Application
+  private readonly _application: Application;
 
   /**
    * The renderer logger instance.
@@ -49,7 +49,7 @@ export class Scuti {
    * @member {Logger}
    * @private
    */
-  private readonly _logger: Logger = new Logger('Scuti')
+  private readonly _logger: Logger = new Logger('Scuti');
 
   /**
    * @param {IRendererConfiguration} [configuration] - The renderer configuration.
@@ -59,15 +59,15 @@ export class Scuti {
    * @param {string} [configuration.resources] - The URL of the resource server.
    **/
   constructor(configuration: IRendererConfiguration) {
-    this._logger.info('⚡ Scuti Renderer - v1.0.0')
+    this._logger.info('⚡ Scuti Renderer - v1.0.0');
 
     /** Change the PixiJS settings and default settings */
-    settings.RESOLUTION = 1
-    Container.defaultSortableChildren = true
-    BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST
+    settings.RESOLUTION = 1;
+    Container.defaultSortableChildren = true;
+    BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
 
     /** Register the plugins */
-    gsap.registerPlugin(PixiPlugin)
+    gsap.registerPlugin(PixiPlugin);
 
     /** Create the PixiJS application */
     this._application = new Application({
@@ -75,13 +75,13 @@ export class Scuti {
       height: configuration.height,
       resolution: 1,
       antialias: false
-    })
-    this._application.stage = new Stage()
-    this._canvas = configuration.canvas
+    });
+    this._application.stage = new Stage();
+    this._canvas = configuration.canvas;
 
     /** Append it to the canvas */
     // @ts-expect-error
-    this._canvas.append(this._application.view)
+    this._canvas.append(this._application.view);
   }
 
   /**
@@ -92,7 +92,7 @@ export class Scuti {
    * @public
    */
   public async loadResources(domain: string = 'http://127.0.0.1:8081/'): Promise<void> {
-    AssetLoader.domain = domain
+    AssetLoader.domain = domain;
 
     /** And now load them */
     await Promise.all([
@@ -107,7 +107,7 @@ export class Scuti {
       AssetLoader.load('figures/actions', 'generic/HabboAvatarActions.json'),
       AssetLoader.load('figures/partsets', 'generic/HabboAvatarPartSets.json'),
       AssetLoader.load('figures/animations', 'generic/HabboAvatarAnimations.json')
-    ])
+    ]);
   }
 
   /**
@@ -118,7 +118,7 @@ export class Scuti {
    * @public
    */
   public get application(): Application {
-    return this._application
+    return this._application;
   }
 
   /**
@@ -129,6 +129,6 @@ export class Scuti {
    * @public
    */
   public get logger(): Logger {
-    return this._logger
+    return this._logger;
   }
 }

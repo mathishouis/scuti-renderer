@@ -1,13 +1,13 @@
-import { gsap } from 'gsap'
+import { gsap } from 'gsap';
 
-import type { Direction } from '../../enums/Direction'
-import { FurnitureData } from './FurnitureData'
-import { RoomObject } from '../rooms/RoomObject'
-import { InteractionManager } from '../interactions/InteractionManager'
-import type { IInteractionEvent } from '../../interfaces/Interaction'
-import { FurnitureView } from './FurnitureView'
-import type { FurnitureVisualization } from './visualizations/FurnitureVisualization'
-import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture'
+import type { Direction } from '../../enums/Direction';
+import { FurnitureData } from './FurnitureData';
+import { RoomObject } from '../rooms/RoomObject';
+import { InteractionManager } from '../interactions/InteractionManager';
+import type { IInteractionEvent } from '../../interfaces/Interaction';
+import { FurnitureView } from './FurnitureView';
+import type { FurnitureVisualization } from './visualizations/FurnitureVisualization';
+import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture';
 
 /**
  * FloorFurniture class that aim to reproduce the floor furnitures on Habbo.
@@ -22,7 +22,7 @@ export class FloorFurniture extends RoomObject {
    * @member {number}
    * @private
    */
-  private readonly _id: number
+  private readonly _id: number;
 
   /**
    * The furniture position in the room.
@@ -30,7 +30,7 @@ export class FloorFurniture extends RoomObject {
    * @member {IFloorPosition}
    * @private
    */
-  private _position: IFloorPosition
+  private _position: IFloorPosition;
 
   /**
    * The furniture direction (0, 2, 4, 6).
@@ -38,7 +38,7 @@ export class FloorFurniture extends RoomObject {
    * @member {Direction}
    * @private
    */
-  private _direction: Direction
+  private _direction: Direction;
 
   /**
    * The furniture state that represent it's current playing animation.
@@ -46,7 +46,7 @@ export class FloorFurniture extends RoomObject {
    * @member {number}
    * @private
    */
-  private _state: number
+  private _state: number;
 
   /**
    * A boolean indicating if we have to apply the wired selection filter to the furniture.
@@ -54,7 +54,7 @@ export class FloorFurniture extends RoomObject {
    * @member {boolean}
    * @private
    */
-  private _selected: boolean = false
+  private _selected: boolean = false;
 
   /**
    * The furniture data.
@@ -62,7 +62,7 @@ export class FloorFurniture extends RoomObject {
    * @member {FurnitureData}
    * @private
    */
-  private readonly _data: FurnitureData
+  private readonly _data: FurnitureData;
 
   /**
    * The furniture view.
@@ -70,7 +70,7 @@ export class FloorFurniture extends RoomObject {
    * @member {FurnitureView}
    * @private
    */
-  private _view: FurnitureView
+  private _view: FurnitureView;
 
   /**
    * The furniture interaction manager to handle all the clicks and taps.
@@ -78,24 +78,24 @@ export class FloorFurniture extends RoomObject {
    * @member {InteractionManager}
    * @private
    */
-  private readonly _interactionManager: InteractionManager = new InteractionManager()
+  private readonly _interactionManager: InteractionManager = new InteractionManager();
 
   /**
    * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.
    */
   constructor(configuration: IFloorFurnitureConfiguration) {
-    super()
+    super();
     /** Store the data */
-    this._id = configuration.id
-    this._position = configuration.position
-    this._direction = configuration.direction
-    this._state = configuration.state ?? 0
-    this._data = new FurnitureData(this)
+    this._id = configuration.id;
+    this._position = configuration.position;
+    this._direction = configuration.direction;
+    this._state = configuration.state ?? 0;
+    this._data = new FurnitureData(this);
     /** Initialise view */
-    this._view = new FurnitureView(this)
-    this.addChild(this._view)
+    this._view = new FurnitureView(this);
+    this.addChild(this._view);
     /** Set the furniture position in the canvas */
-    this._updatePosition()
+    this._updatePosition();
   }
 
   /**
@@ -105,8 +105,8 @@ export class FloorFurniture extends RoomObject {
    * @private
    */
   private _updatePosition(): void {
-    this.x = 32 + 32 * this._position.x - 32 * this._position.y
-    this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z
+    this.x = 32 + 32 * this._position.x - 32 * this._position.y;
+    this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
   }
 
   /**
@@ -118,8 +118,8 @@ export class FloorFurniture extends RoomObject {
   // @ts-expect-error
   public start(): void {
     this.animationTicker.add(() => {
-      return this._view.tick()
-    })
+      return this._view.tick();
+    });
   }
 
   /**
@@ -131,8 +131,8 @@ export class FloorFurniture extends RoomObject {
   // @ts-expect-error
   public stop(): void {
     this.animationTicker.remove(() => {
-      return this._view.tick()
-    })
+      return this._view.tick();
+    });
   }
 
   /**
@@ -150,10 +150,10 @@ export class FloorFurniture extends RoomObject {
       duration,
       ease: 'linear',
       onComplete: () => {
-        this._position = position
+        this._position = position;
       }
-    })
-  }
+    });
+  };
 
   /**
    * Rotate the furniture at the given direction and in time.
@@ -170,17 +170,17 @@ export class FloorFurniture extends RoomObject {
       duration: duration / 2,
       ease: 'easeIn',
       onComplete: () => {
-        this._direction = direction
-        this._view.update()
+        this._direction = direction;
+        this._view.update();
         gsap.to(this, {
           x: 32 + 32 * this._position.x - 32 * this._position.y,
           y: 16 * this._position.x + 16 * this._position.y - 32 * this._position.z,
           duration: duration / 2,
           ease: 'easeOut'
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
   /**
    * Reference to the furniture id from the furni data.
@@ -190,7 +190,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get id(): number {
-    return this._id
+    return this._id;
   }
 
   /**
@@ -201,7 +201,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get roomPosition(): IFloorPosition {
-    return this._position
+    return this._position;
   }
 
   /**
@@ -211,7 +211,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set roomPosition(position: IFloorPosition) {
-    this._position = position
+    this._position = position;
   }
 
   /**
@@ -222,7 +222,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get direction(): Direction {
-    return this._direction
+    return this._direction;
   }
 
   /**
@@ -232,8 +232,8 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set direction(direction: Direction) {
-    this._direction = direction
-    this._view.update()
+    this._direction = direction;
+    this._view.update();
   }
 
   /**
@@ -244,7 +244,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get state(): number {
-    return this._state
+    return this._state;
   }
 
   /**
@@ -254,8 +254,8 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set state(state: number) {
-    this._state = state
-    this._view.update()
+    this._state = state;
+    this._view.update();
   }
 
   /**
@@ -266,7 +266,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get selected(): boolean {
-    return this._selected
+    return this._selected;
   }
 
   /**
@@ -276,8 +276,8 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set selected(selected: boolean) {
-    this._selected = selected
-    this._view.update()
+    this._selected = selected;
+    this._view.update();
   }
 
   /**
@@ -288,7 +288,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get data(): FurnitureData {
-    return this._data
+    return this._data;
   }
 
   /**
@@ -299,7 +299,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get view(): FurnitureView {
-    return this._view
+    return this._view;
   }
 
   /**
@@ -309,7 +309,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set view(view: FurnitureView) {
-    this._view = view
+    this._view = view;
   }
 
   /**
@@ -320,7 +320,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get visualization(): FurnitureVisualization {
-    return this._view.visualization
+    return this._view.visualization;
   }
 
   /**
@@ -331,7 +331,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get interactionManager(): InteractionManager {
-    return this._interactionManager
+    return this._interactionManager;
   }
 
   /**
@@ -342,7 +342,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get onPointerDown(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerDown
+    return this._interactionManager.onPointerDown;
   }
 
   /**
@@ -352,7 +352,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set onPointerDown(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerDown = value
+    this._interactionManager.onPointerDown = value;
   }
 
   /**
@@ -363,7 +363,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get onPointerUp(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerUp
+    return this._interactionManager.onPointerUp;
   }
 
   /**
@@ -373,7 +373,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set onPointerUp(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerUp = value
+    this._interactionManager.onPointerUp = value;
   }
 
   /**
@@ -384,7 +384,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get onPointerMove(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerMove
+    return this._interactionManager.onPointerMove;
   }
 
   /**
@@ -394,7 +394,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set onPointerMove(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerMove = value
+    this._interactionManager.onPointerMove = value;
   }
 
   /**
@@ -405,7 +405,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get onPointerOut(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOut
+    return this._interactionManager.onPointerOut;
   }
 
   /**
@@ -415,7 +415,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set onPointerOut(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOut = value
+    this._interactionManager.onPointerOut = value;
   }
 
   /**
@@ -426,7 +426,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get onPointerOver(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOver
+    return this._interactionManager.onPointerOver;
   }
 
   /**
@@ -436,7 +436,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set onPointerOver(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOver = value
+    this._interactionManager.onPointerOver = value;
   }
 
   /**
@@ -447,7 +447,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get onDoubleClick(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onDoubleClick
+    return this._interactionManager.onDoubleClick;
   }
 
   /**
@@ -457,7 +457,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set onDoubleClick(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onDoubleClick = value
+    this._interactionManager.onDoubleClick = value;
   }
 
   /**
@@ -468,7 +468,7 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public get onLoad(): () => void {
-    return this._view.onLoad
+    return this._view.onLoad;
   }
 
   /**
@@ -478,6 +478,6 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public set onLoad(value: () => void) {
-    this._view.onLoad = value
+    this._view.onLoad = value;
   }
 }

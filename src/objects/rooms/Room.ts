@@ -1,15 +1,15 @@
-import { Container } from 'pixi.js'
+import { Container } from 'pixi.js';
 
-import type { Scuti } from '../../Scuti'
-import type { IRoomConfiguration } from '../../interfaces/Room'
-import { RoomView } from './RoomView'
-import { RoomTileMap } from './RoomTileMap'
-import type { Material } from './materials/Material'
-import { WallMaterial } from './materials/WallMaterial'
-import { FloorMaterial } from './materials/FloorMaterial'
-import { RoomCamera } from './RoomCamera'
-import type { RoomObjectLayer } from './layers/RoomObjectLayer'
-import type { RoomTileLayer } from './layers/RoomTileLayer'
+import type { Scuti } from '../../Scuti';
+import type { IRoomConfiguration } from '../../interfaces/Room';
+import { RoomView } from './RoomView';
+import { RoomTileMap } from './RoomTileMap';
+import type { Material } from './materials/Material';
+import { WallMaterial } from './materials/WallMaterial';
+import { FloorMaterial } from './materials/FloorMaterial';
+import { RoomCamera } from './RoomCamera';
+import type { RoomObjectLayer } from './layers/RoomObjectLayer';
+import type { RoomTileLayer } from './layers/RoomTileLayer';
 
 /**
  * Room class for rendering rooms like the ones on Habbo Hotel.
@@ -24,7 +24,7 @@ export class Room extends Container {
    * @member {Scuti}
    * @private
    */
-  private readonly _engine: Scuti
+  private readonly _engine: Scuti;
 
   /**
    * The room tile map where every informations about the room model is stored.
@@ -32,7 +32,7 @@ export class Room extends Container {
    * @member {RoomTileMap}
    * @private
    */
-  private _tileMap: RoomTileMap
+  private _tileMap: RoomTileMap;
 
   /**
    * The wall material that will be applied in the room, it contains the color and the texture of the wall.
@@ -40,7 +40,7 @@ export class Room extends Container {
    * @member {Material}
    * @private
    */
-  private _wallMaterial: Material
+  private _wallMaterial: Material;
 
   /**
    * The floor material that will be applied in the room, it contains the color and the texture of the wall.
@@ -48,7 +48,7 @@ export class Room extends Container {
    * @member {Material}
    * @private
    */
-  private _floorMaterial: Material
+  private _floorMaterial: Material;
 
   /**
    * The wall thickness of the room.
@@ -56,7 +56,7 @@ export class Room extends Container {
    * @member {number}
    * @private
    */
-  private _wallThickness: number
+  private _wallThickness: number;
 
   /**
    * The floor thickness of the room.
@@ -64,7 +64,7 @@ export class Room extends Container {
    * @member {number}
    * @private
    */
-  private _floorThickness: number
+  private _floorThickness: number;
 
   /**
    * The wall height of the room, the height is added to the base height of the room.
@@ -72,7 +72,7 @@ export class Room extends Container {
    * @member {number}
    * @private
    */
-  private _wallHeight: number
+  private _wallHeight: number;
 
   /**
    * The room view instance, where all the objects like furnitures, avatars or the tiles, walls and stairs are stored.
@@ -80,7 +80,7 @@ export class Room extends Container {
    * @member {RoomView}
    * @private
    */
-  private readonly _view: RoomView
+  private readonly _view: RoomView;
 
   /**
    * The room camera, it manage the room dragging and centering the room when it's out of bounds.
@@ -88,7 +88,7 @@ export class Room extends Container {
    * @member {RoomCamera}
    * @private
    */
-  private readonly _camera: RoomCamera
+  private readonly _camera: RoomCamera;
 
   /**
    * @param {Scuti} [engine] - The Scuti instance that will be used to render the room.
@@ -101,24 +101,24 @@ export class Room extends Container {
    * @param {number} [configuration.wallThickness] - The room wall thickness.
    **/
   constructor(engine: Scuti, configuration: IRoomConfiguration) {
-    super()
+    super();
 
     /** Store variables */
-    this._engine = engine
-    this._wallMaterial = configuration.wallMaterial ?? new WallMaterial(this._engine, 112)
-    this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(this._engine, 111)
-    this._wallThickness = configuration.wallThickness ?? 8
-    this._floorThickness = configuration.floorThickness ?? 8
-    this._wallHeight = configuration.wallHeight ?? 0
+    this._engine = engine;
+    this._wallMaterial = configuration.wallMaterial ?? new WallMaterial(this._engine, 112);
+    this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(this._engine, 111);
+    this._wallThickness = configuration.wallThickness ?? 8;
+    this._floorThickness = configuration.floorThickness ?? 8;
+    this._wallHeight = configuration.wallHeight ?? 0;
 
     /** Initialise everything */
-    this._tileMap = new RoomTileMap(configuration.tileMap)
-    this._view = new RoomView(this)
-    this._camera = new RoomCamera(this)
+    this._tileMap = new RoomTileMap(configuration.tileMap);
+    this._view = new RoomView(this);
+    this._camera = new RoomCamera(this);
 
     /** Add the room view and then the room camera to the PixiJS application */
-    this.addChild(this._view)
-    this._engine.application.stage.addChild(this._camera)
+    this.addChild(this._view);
+    this._engine.application.stage.addChild(this._camera);
   }
 
   /**
@@ -129,7 +129,7 @@ export class Room extends Container {
    * @public
    */
   public get engine(): Scuti {
-    return this._engine
+    return this._engine;
   }
 
   /**
@@ -140,7 +140,7 @@ export class Room extends Container {
    * @public
    */
   public get view(): RoomView {
-    return this._view
+    return this._view;
   }
 
   /**
@@ -152,7 +152,7 @@ export class Room extends Container {
    */
   // @ts-expect-error
   public get tileMap(): RoomTileMap {
-    return this._tileMap
+    return this._tileMap;
   }
 
   /**
@@ -162,8 +162,8 @@ export class Room extends Container {
    * @public
    */
   public set tileMap(tileMap: string) {
-    this._tileMap = new RoomTileMap(tileMap)
-    this._view.update()
+    this._tileMap = new RoomTileMap(tileMap);
+    this._view.update();
   }
 
   /**
@@ -174,7 +174,7 @@ export class Room extends Container {
    * @public
    */
   public get wallMaterial(): Material {
-    return this._wallMaterial
+    return this._wallMaterial;
   }
 
   /**
@@ -184,8 +184,8 @@ export class Room extends Container {
    * @public
    */
   public set wallMaterial(material: Material) {
-    this._wallMaterial = material
-    this._view.update()
+    this._wallMaterial = material;
+    this._view.update();
   }
 
   /**
@@ -196,7 +196,7 @@ export class Room extends Container {
    * @public
    */
   public get floorMaterial(): Material {
-    return this._floorMaterial
+    return this._floorMaterial;
   }
 
   /**
@@ -206,8 +206,8 @@ export class Room extends Container {
    * @public
    */
   public set floorMaterial(material: Material) {
-    this._floorMaterial = material
-    this._view.update()
+    this._floorMaterial = material;
+    this._view.update();
   }
 
   /**
@@ -218,7 +218,7 @@ export class Room extends Container {
    * @public
    */
   public get wallThickness(): number {
-    return this._wallThickness
+    return this._wallThickness;
   }
 
   /**
@@ -228,8 +228,8 @@ export class Room extends Container {
    * @public
    */
   public set wallThickness(thickness: number) {
-    this._wallThickness = thickness
-    this._view.update()
+    this._wallThickness = thickness;
+    this._view.update();
   }
 
   /**
@@ -240,7 +240,7 @@ export class Room extends Container {
    * @public
    */
   public get floorThickness(): number {
-    return this._floorThickness
+    return this._floorThickness;
   }
 
   /**
@@ -250,8 +250,8 @@ export class Room extends Container {
    * @public
    */
   public set floorThickness(thickness: number) {
-    this._floorThickness = thickness
-    this._view.update()
+    this._floorThickness = thickness;
+    this._view.update();
   }
 
   /**
@@ -262,7 +262,7 @@ export class Room extends Container {
    * @public
    */
   public get wallHeight(): number {
-    return this._wallHeight
+    return this._wallHeight;
   }
 
   /**
@@ -272,8 +272,8 @@ export class Room extends Container {
    * @public
    */
   public set wallHeight(height: number) {
-    this._wallHeight = height
-    this._view.update()
+    this._wallHeight = height;
+    this._view.update();
   }
 
   /**
@@ -284,7 +284,7 @@ export class Room extends Container {
    * @public
    */
   public get tiles(): RoomTileLayer {
-    return this._view.tileLayer
+    return this._view.tileLayer;
   }
 
   /**
@@ -295,6 +295,6 @@ export class Room extends Container {
    * @public
    */
   public get objects(): RoomObjectLayer {
-    return this._view.objectLayer
+    return this._view.objectLayer;
   }
 }
