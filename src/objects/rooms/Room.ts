@@ -1,14 +1,15 @@
-import { Scuti } from "../../Scuti";
-import { Container } from "pixi.js";
-import { IRoomConfiguration } from "../../interfaces/Room.interface";
-import { RoomView } from "./RoomView";
-import { RoomTileMap } from "./RoomTileMap";
-import { Material } from "./materials/Material";
-import { WallMaterial } from "./materials/WallMaterial";
-import { FloorMaterial } from "./materials/FloorMaterial";
-import { RoomCamera } from "./RoomCamera";
-import { RoomObjectLayer } from "./layers/RoomObjectLayer";
-import { RoomTileLayer } from "./layers/RoomTileLayer";
+import { Container } from 'pixi.js'
+
+import type { Scuti } from '../../Scuti'
+import type { IRoomConfiguration } from '../../interfaces/Room'
+import { RoomView } from './RoomView'
+import { RoomTileMap } from './RoomTileMap'
+import type { Material } from './materials/Material'
+import { WallMaterial } from './materials/WallMaterial'
+import { FloorMaterial } from './materials/FloorMaterial'
+import { RoomCamera } from './RoomCamera'
+import type { RoomObjectLayer } from './layers/RoomObjectLayer'
+import type { RoomTileLayer } from './layers/RoomTileLayer'
 
 /**
  * Room class for rendering rooms like the ones on Habbo Hotel.
@@ -17,300 +18,283 @@ import { RoomTileLayer } from "./layers/RoomTileLayer";
  * @memberof Scuti
  */
 export class Room extends Container {
+  /**
+   * The game engine instance that the room will be using to render objects.
+   *
+   * @member {Scuti}
+   * @private
+   */
+  private readonly _engine: Scuti
 
-    /**
-     * The game engine instance that the room will be using to render objects.
-     *
-     * @member {Scuti}
-     * @private
-     */
-    private _engine: Scuti;
+  /**
+   * The room tile map where every informations about the room model is stored.
+   *
+   * @member {RoomTileMap}
+   * @private
+   */
+  private _tileMap: RoomTileMap
 
-    /**
-     * The room tile map where every informations about the room model is stored.
-     *
-     * @member {RoomTileMap}
-     * @private
-     */
-    private _tileMap: RoomTileMap;
+  /**
+   * The wall material that will be applied in the room, it contains the color and the texture of the wall.
+   *
+   * @member {Material}
+   * @private
+   */
+  private _wallMaterial: Material
 
-    /**
-     * The wall material that will be applied in the room, it contains the color and the texture of the wall.
-     *
-     * @member {Material}
-     * @private
-     */
-    private _wallMaterial: Material;
+  /**
+   * The floor material that will be applied in the room, it contains the color and the texture of the wall.
+   *
+   * @member {Material}
+   * @private
+   */
+  private _floorMaterial: Material
 
-    /**
-     * The floor material that will be applied in the room, it contains the color and the texture of the wall.
-     *
-     * @member {Material}
-     * @private
-     */
-    private _floorMaterial: Material;
+  /**
+   * The wall thickness of the room.
+   *
+   * @member {number}
+   * @private
+   */
+  private _wallThickness: number
 
-    /**
-     * The wall thickness of the room.
-     *
-     * @member {number}
-     * @private
-     */
-    private _wallThickness: number;
+  /**
+   * The floor thickness of the room.
+   *
+   * @member {number}
+   * @private
+   */
+  private _floorThickness: number
 
-    /**
-     * The floor thickness of the room.
-     *
-     * @member {number}
-     * @private
-     */
-    private _floorThickness: number;
+  /**
+   * The wall height of the room, the height is added to the base height of the room.
+   *
+   * @member {number}
+   * @private
+   */
+  private _wallHeight: number
 
-    /**
-     * The wall height of the room, the height is added to the base height of the room.
-     *
-     * @member {number}
-     * @private
-     */
-    private _wallHeight: number;
+  /**
+   * The room view instance, where all the objects like furnitures, avatars or the tiles, walls and stairs are stored.
+   *
+   * @member {RoomView}
+   * @private
+   */
+  private readonly _view: RoomView
 
-    /**
-     * The room view instance, where all the objects like furnitures, avatars or the tiles, walls and stairs are stored.
-     *
-     * @member {RoomView}
-     * @private
-     */
-    private _view: RoomView;
+  /**
+   * The room camera, it manage the room dragging and centering the room when it's out of bounds.
+   *
+   * @member {RoomCamera}
+   * @private
+   */
+  private readonly _camera: RoomCamera
 
-    /**
-     * The room camera, it manage the room dragging and centering the room when it's out of bounds.
-     *
-     * @member {RoomCamera}
-     * @private
-     */
-    private _camera: RoomCamera;
+  /**
+   * @param {Scuti} [engine] - The Scuti instance that will be used to render the room.
+   * @param {IRoomConfiguration} [configuration] - The room configuration.
+   * @param {string} [configuration.tilemap] - The room tile map that will be parsed.
+   * @param {Material} [configuration.floorMaterial] - The room floor material that will be applied.
+   * @param {number} [configuration.floorThickness] - The room floor thickness.
+   * @param {Material} [configuration.wallMaterial] - The room wall material that will be applied.
+   * @param {number} [configuration.wallHeight] - The room wall height.
+   * @param {number} [configuration.wallThickness] - The room wall thickness.
+   **/
+  constructor(engine: Scuti, configuration: IRoomConfiguration) {
+    super()
 
-    /**
-     * @param {Scuti} [engine] - The Scuti instance that will be used to render the room.
-     * @param {IRoomConfiguration} [configuration] - The room configuration.
-     * @param {string} [configuration.tilemap] - The room tile map that will be parsed.
-     * @param {Material} [configuration.floorMaterial] - The room floor material that will be applied.
-     * @param {number} [configuration.floorThickness] - The room floor thickness.
-     * @param {Material} [configuration.wallMaterial] - The room wall material that will be applied.
-     * @param {number} [configuration.wallHeight] - The room wall height.
-     * @param {number} [configuration.wallThickness] - The room wall thickness.
-     **/
-    constructor(
-        engine: Scuti,
-        configuration: IRoomConfiguration
-    ) {
-        super();
+    /** Store variables */
+    this._engine = engine
+    this._wallMaterial = configuration.wallMaterial ?? new WallMaterial(this._engine, 112)
+    this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(this._engine, 111)
+    this._wallThickness = configuration.wallThickness ?? 8
+    this._floorThickness = configuration.floorThickness ?? 8
+    this._wallHeight = configuration.wallHeight ?? 0
 
-        /** Store variables */
-        this._engine = engine;
-        this._wallMaterial = configuration.wallMaterial ?? new WallMaterial(this._engine, 112);
-        this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(this._engine, 111);
-        this._wallThickness = configuration.wallThickness ?? 8;
-        this._floorThickness = configuration.floorThickness ?? 8;
-        this._wallHeight = configuration.wallHeight ?? 0;
+    /** Initialise everything */
+    this._tileMap = new RoomTileMap(configuration.tileMap)
+    this._view = new RoomView(this)
+    this._camera = new RoomCamera(this)
 
-        /** Initialise everything */
-        this._tileMap = new RoomTileMap(configuration.tileMap);
-        this._view = new RoomView(this);
-        this._camera = new RoomCamera(this);
+    /** Add the room view and then the room camera to the PixiJS application */
+    this.addChild(this._view)
+    this._engine.application.stage.addChild(this._camera)
+  }
 
-        /** Add the room view and then the room camera to the PixiJS application */
-        this.addChild(this._view);
-        this._engine.application.stage.addChild(this._camera);
-    }
+  /**
+   * Reference to the game engine instance.
+   *
+   * @member {Scuti}
+   * @readonly
+   * @public
+   */
+  public get engine(): Scuti {
+    return this._engine
+  }
 
-    /**
-     * Reference to the game engine instance.
-     *
-     * @member {Scuti}
-     * @readonly
-     * @public
-     */
-    public get engine(): Scuti {
-        return this._engine;
-    }
+  /**
+   * Reference to the room view instance.
+   *
+   * @member {RoomView}
+   * @readonly
+   * @public
+   */
+  public get view(): RoomView {
+    return this._view
+  }
 
-    /**
-     * Reference to the room view instance.
-     *
-     * @member {RoomView}
-     * @readonly
-     * @public
-     */
-    public get view(): RoomView {
-        return this._view;
-    }
+  /**
+   * Reference to the room tile map instance.
+   *
+   * @member {RoomTileMap}
+   * @readonly
+   * @public
+   */
+  // @ts-expect-error
+  public get tileMap(): RoomTileMap {
+    return this._tileMap
+  }
 
-    /**
-     * Reference to the room tile map instance.
-     *
-     * @member {RoomTileMap}
-     * @readonly
-     * @public
-     */
-    // @ts-ignore
-    public get tileMap(): RoomTileMap {
-        return this._tileMap;
-    }
+  /**
+   * Update the room tileMap.
+   *
+   * @param {string} [tileMap] - The new room tileMap.
+   * @public
+   */
+  public set tileMap(tileMap: string) {
+    this._tileMap = new RoomTileMap(tileMap)
+    this._view.update()
+  }
 
-    /**
-     * Update the room tileMap.
-     *
-     * @param {string} [tileMap] - The new room tileMap.
-     * @public
-     */
-    public set tileMap(
-      tileMap: string
-    ) {
-        this._tileMap = new RoomTileMap(tileMap);
-        this._view.update();
-    }
+  /**
+   * Reference to the wall material instance.
+   *
+   * @member {Material}
+   * @readonly
+   * @public
+   */
+  public get wallMaterial(): Material {
+    return this._wallMaterial
+  }
 
-    /**
-     * Reference to the wall material instance.
-     *
-     * @member {Material}
-     * @readonly
-     * @public
-     */
-    public get wallMaterial(): Material {
-        return this._wallMaterial;
-    }
+  /**
+   * Update the wall material and rerender the room.
+   *
+   * @param {Material} [material] - The room wall material that will be applied.
+   * @public
+   */
+  public set wallMaterial(material: Material) {
+    this._wallMaterial = material
+    this._view.update()
+  }
 
-    /**
-     * Update the wall material and rerender the room.
-     *
-     * @param {Material} [material] - The room wall material that will be applied.
-     * @public
-     */
-    public set wallMaterial(
-        material: Material
-    ) {
-        this._wallMaterial = material;
-        this._view.update();
-    }
+  /**
+   * Reference to the floor material instance.
+   *
+   * @member {Material}
+   * @readonly
+   * @public
+   */
+  public get floorMaterial(): Material {
+    return this._floorMaterial
+  }
 
-    /**
-     * Reference to the floor material instance.
-     *
-     * @member {Material}
-     * @readonly
-     * @public
-     */
-    public get floorMaterial(): Material {
-        return this._floorMaterial;
-    }
+  /**
+   * Update the floor material and rerender the room.
+   *
+   * @param {Material} [material] - The room floor material that will be applied.
+   * @public
+   */
+  public set floorMaterial(material: Material) {
+    this._floorMaterial = material
+    this._view.update()
+  }
 
-    /**
-     * Update the floor material and rerender the room.
-     *
-     * @param {Material} [material] - The room floor material that will be applied.
-     * @public
-     */
-    public set floorMaterial(
-        material: Material
-    ) {
-        this._floorMaterial = material;
-        this._view.update();
-    }
+  /**
+   * Reference to the wall thickness.
+   *
+   * @member {number}
+   * @readonly
+   * @public
+   */
+  public get wallThickness(): number {
+    return this._wallThickness
+  }
 
-    /**
-     * Reference to the wall thickness.
-     *
-     * @member {number}
-     * @readonly
-     * @public
-     */
-    public get wallThickness(): number {
-        return this._wallThickness;
-    }
+  /**
+   * Update the wall thickness and rerender the room.
+   *
+   * @param {number} [thickness] - The room wall thickness that will be applied.
+   * @public
+   */
+  public set wallThickness(thickness: number) {
+    this._wallThickness = thickness
+    this._view.update()
+  }
 
-    /**
-     * Update the wall thickness and rerender the room.
-     *
-     * @param {number} [thickness] - The room wall thickness that will be applied.
-     * @public
-     */
-    public set wallThickness(
-        thickness: number
-    ) {
-        this._wallThickness = thickness;
-        this._view.update();
-    }
+  /**
+   * Reference to the floor thickness.
+   *
+   * @member {number}
+   * @readonly
+   * @public
+   */
+  public get floorThickness(): number {
+    return this._floorThickness
+  }
 
-    /**
-     * Reference to the floor thickness.
-     *
-     * @member {number}
-     * @readonly
-     * @public
-     */
-    public get floorThickness(): number {
-        return this._floorThickness;
-    }
+  /**
+   * Update the floor thickness and rerender the room.
+   *
+   * @param {number} [thickness] - The room floor thickness that will be applied.
+   * @public
+   */
+  public set floorThickness(thickness: number) {
+    this._floorThickness = thickness
+    this._view.update()
+  }
 
-    /**
-     * Update the floor thickness and rerender the room.
-     *
-     * @param {number} [thickness] - The room floor thickness that will be applied.
-     * @public
-     */
-    public set floorThickness(
-        thickness: number
-    ) {
-        this._floorThickness = thickness;
-        this._view.update();
-    }
+  /**
+   * Reference to the wall height.
+   *
+   * @member {number}
+   * @readonly
+   * @public
+   */
+  public get wallHeight(): number {
+    return this._wallHeight
+  }
 
-    /**
-     * Reference to the wall height.
-     *
-     * @member {number}
-     * @readonly
-     * @public
-     */
-    public get wallHeight(): number {
-        return this._wallHeight;
-    }
+  /**
+   * Update the wall height and rerender the room.
+   *
+   * @param {number} [height] - The room wall height that will be applied.
+   * @public
+   */
+  public set wallHeight(height: number) {
+    this._wallHeight = height
+    this._view.update()
+  }
 
-    /**
-     * Update the wall height and rerender the room.
-     *
-     * @param {number} [height] - The room wall height that will be applied.
-     * @public
-     */
-    public set wallHeight(
-        height: number
-    ) {
-        this._wallHeight = height;
-        this._view.update();
-    }
+  /**
+   * Reference to the object tile container.
+   *
+   * @member {RoomTileLayer}
+   * @readonly
+   * @public
+   */
+  public get tiles(): RoomTileLayer {
+    return this._view.tileLayer
+  }
 
-    /**
-     * Reference to the object tile container.
-     *
-     * @member {RoomTileLayer}
-     * @readonly
-     * @public
-     */
-    public get tiles(): RoomTileLayer {
-        return this._view.tileLayer;
-    }
-
-    /**
-     * Reference to the object layer container.
-     *
-     * @member {RoomObjectLayer}
-     * @readonly
-     * @public
-     */
-    public get objects(): RoomObjectLayer {
-        return this._view.objectLayer;
-    }
-
+  /**
+   * Reference to the object layer container.
+   *
+   * @member {RoomObjectLayer}
+   * @readonly
+   * @public
+   */
+  public get objects(): RoomObjectLayer {
+    return this._view.objectLayer
+  }
 }

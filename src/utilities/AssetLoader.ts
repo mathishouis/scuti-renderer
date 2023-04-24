@@ -1,21 +1,20 @@
-import { Assets } from "pixi.js";
+import { Assets } from 'pixi.js'
+
+const domain = 'http://localhost:8081/'
+
+const load = async (key: string, url: string, onUncached?: () => void): Promise<void> => {
+  if (Assets.get(key) === undefined) {
+    if (onUncached != null) {
+      onUncached()
+    }
+    Assets.add(key, AssetLoader.domain + url)
+    await Assets.load(key)
+  }
+}
 
 /**
  * Loads assets from a certain domain
  *
- * @class
  * @memberof Scuti
  */
-export class AssetLoader {
-    static domain: string = "http://localhost:8081/";
-
-    static async load(key: string, url: string, onUncached?: () => void) {
-        if (Assets.get(key) === undefined) {
-            if (onUncached) {
-                onUncached();
-            }
-            Assets.add(key, AssetLoader.domain + url);
-            await Assets.load(key);
-        }
-    }
-}
+export const AssetLoader = { domain, load }
