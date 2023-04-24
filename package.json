@@ -12,9 +12,11 @@
   ],
   "scripts": {
     "start": "parcel public/index.html --no-cache",
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "storybook": "cd storybook && npm start",
-    "tsc-build": "rm -rf dist && tsc"
+    "lint:typescript": "eslint \"**/*.ts\" --ignore-path \".gitignore\" && tsc --noemit",
+    "lint:prettier": "prettier \".\" --check --ignore-path \".gitignore\"",
+    "lint:editorconfig": "editorconfig-checker"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,9 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
+    "@walidoux/prettier-config": "1.0.3",
+    "@walidoux/eslint-config": "1.0.3",
+    "editorconfig-checker": "^5.0.1",
     "parcel": "^2.8.3",
     "process": "^0.11.10",
     "punycode": "^1.4.1",
@@ -35,5 +40,11 @@
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.1.1",
     "typescript": "^4.0.3"
+  },
+  "prettier": "@walidoux/prettier-config",
+  "eslintConfig": {
+    "extends": [
+      "@walidoux/eslint-config"
+    ]
   }
 }
