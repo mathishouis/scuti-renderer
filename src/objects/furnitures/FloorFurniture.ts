@@ -484,4 +484,28 @@ export class FloorFurniture extends RoomObject {
         this._interactionManager.onDoubleClick = value;
     }
 
+
+    /**
+     * Reference to the load event.
+     *
+     * @member {() => void}
+     * @readonly
+     * @public
+     */
+    public get onLoad(): () => void {
+        return this._view.onLoad;
+    }
+
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {() => void} [value] - The event function that will be executed.
+     * @public
+     */
+    public set onLoad(
+      value: () => void
+    ) {
+        this._view.onLoad = value;
+    }
+
 }

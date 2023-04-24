@@ -238,6 +238,16 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         direction: 2,
         state: 1
     });
+    const background = new FloorFurniture({
+        id: 3996,
+        position: {
+            x: 8,
+            y: 5,
+            z: 0
+        },
+        direction: 2,
+        state: 1
+    });
     setTimeout(() => {
         console.log(furniture.position);
         /*furniture.move({
@@ -264,6 +274,14 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         direction: 4,
         state: 3,
     });
+    console.log(background.visualization);
+    background.onLoad = () => {
+        console.log(background.visualization);
+        background.visualization.offsetX = 100;
+        background.visualization.imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png";
+    }
+    room.objects.add(background);
+    //background.visualization.imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png";
     room.objects.add(wallFurniture);
     room.objects.add(wallFurniture3);
     room.objects.add(furniture);

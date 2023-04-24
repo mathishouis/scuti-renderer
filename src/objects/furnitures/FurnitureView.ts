@@ -7,6 +7,7 @@ import { FurnitureLayer } from "./FurnitureLayer";
 import { FurnitureGuildCustomizedVisualization } from "./visualizations/FurnitureGuildCustomizedVisualization";
 import { FurnitureVisualization } from "./visualizations/FurnitureVisualization";
 import { AssetLoader } from "../../utilities/AssetLoader";
+import {FurnitureRoomBackgroundVisualization} from "./visualizations/FurnitureRoomBackgroundVisualization";
 
 /**
  * FurnitureView class that manage all the rendering part of the furniture.
@@ -57,6 +58,14 @@ export class FurnitureView extends Container {
     private _visualization!: FurnitureVisualization;
 
     /**
+     * The load event.
+     *
+     * @member {() => void}
+     * @private
+     */
+    private _onLoad!: () => void;
+
+    /**
      * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance to render.
      */
     constructor(
@@ -73,6 +82,7 @@ export class FurnitureView extends Container {
             // @ts-ignore
             this._property = this._spritesheet.data["furniProperty"];
             this._initialiseVisualization();
+            if(this._onLoad) this._onLoad();
             this._draw();
         });
     }
@@ -86,6 +96,8 @@ export class FurnitureView extends Container {
     private _initialiseVisualization(): void {
         // @ts-ignore
         if(this._property.infos.visualization === "furniture_guild_customized") this._visualization = new FurnitureGuildCustomizedVisualization(this._furniture);
+        // @ts-ignore
+        if(this._property.infos.visualization === "furniture_bg") this._visualization = new FurnitureRoomBackgroundVisualization(this._furniture);
     }
 
     /**
@@ -220,6 +232,29 @@ export class FurnitureView extends Container {
      */
     public get visualization(): FurnitureVisualization {
         return this._visualization;
+    }
+
+    /**
+     * Reference to the load event.
+     *
+     * @member {() => void}
+     * @readonly
+     * @public
+     */
+    public get onLoad(): () => void {
+        return this._onLoad;
+    }
+
+    /**
+     * Update the event function that will be executed.
+     *
+     * @param {() => void} [value] - The event function that will be executed.
+     * @public
+     */
+    public set onLoad(
+      value: () => void
+    ) {
+        this._onLoad = value;
     }
 
 }

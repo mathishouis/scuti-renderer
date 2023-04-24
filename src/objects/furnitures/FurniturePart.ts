@@ -1,9 +1,10 @@
-import { BLEND_MODES, Container, Spritesheet } from "pixi.js";
-import { FloorFurniture } from "./FloorFurniture";
-import { WallFurniture } from "./WallFurniture";
-import { FurnitureLayer } from "./FurnitureLayer";
-import { IFurnitureVisualization } from "../../interfaces/Furniture.interface";
-import { FurnitureGuildCustomizedVisualization } from "./visualizations/FurnitureGuildCustomizedVisualization";
+import {BLEND_MODES, Container, Spritesheet, Texture} from "pixi.js";
+import {FloorFurniture} from "./FloorFurniture";
+import {WallFurniture} from "./WallFurniture";
+import {FurnitureLayer} from "./FurnitureLayer";
+import {IFurnitureVisualization} from "../../interfaces/Furniture.interface";
+import {FurnitureGuildCustomizedVisualization} from "./visualizations/FurnitureGuildCustomizedVisualization";
+import {FurnitureRoomBackgroundVisualization} from "./visualizations/FurnitureRoomBackgroundVisualization";
 
 /**
  * FurniturePart class that represent a furniture layer.
@@ -109,7 +110,7 @@ export class FurniturePart extends Container {
         if(spritesheet.data.frames[name] !== undefined) flip = spritesheet.data.frames[name]['flipH'];
         /** Create the layer */
         // @ts-ignore
-        this.addChild(new FurnitureLayer(this._furniture, {
+        const layer = this.addChild(new FurnitureLayer(this._furniture, {
             layer: String.fromCharCode(97 + Number(this._layer)),
             alpha: alpha,
             // @ts-ignore
@@ -124,6 +125,14 @@ export class FurniturePart extends Container {
             // @ts-ignore
             tag: tag
         }));
+        if(this._furniture.view.visualization !== undefined) {
+            if (this._furniture.view.visualization instanceof FurnitureRoomBackgroundVisualization) {
+                if(this._furniture.view.visualization.imageUrl.length > 0) layer.texture = Texture.from(this._furniture.view.visualization.imageUrl);
+                layer.x += this._furniture.view.visualization.offsetX;
+                layer.y += this._furniture.view.visualization.offsetY;
+                layer.zIndex += this._furniture.view.visualization.offsetZ;
+            }
+        }
     }
 
     /**
