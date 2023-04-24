@@ -10,3 +10,4 @@ dist/*
 .proxyrc.js
 git
 .npmrc
+.DS_Store
