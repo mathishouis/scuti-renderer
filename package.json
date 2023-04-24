@@ -1,8 +1,9 @@
 {
   "name": "scuti-renderer",
   "version": "2.0.2",
-  "main": "dist/index.js",
-  "source": "src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "source": "./src/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/kozennnn/scuti-renderer.git"
@@ -12,9 +13,11 @@
   ],
   "scripts": {
     "start": "parcel public/index.html --no-cache",
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "storybook": "cd storybook && npm start",
-    "tsc-build": "rm -rf dist && tsc"
+    "postinstall": "tsc",
+    "lint:typescript": "eslint \"**/*.ts\" --ignore-path \".gitignore\" && tsc --noemit",
+    "lint:prettier": "prettier \".\" --check --ignore-path \".gitignore\""
   },
   "keywords": [],
   "author": "",
@@ -27,6 +30,8 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
+    "@walidoux/eslint-config": "1.0.3",
+    "editorconfig-checker": "^5.0.1",
     "parcel": "^2.8.3",
     "process": "^0.11.10",
     "punycode": "^1.4.1",
@@ -35,5 +40,21 @@
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.1.1",
     "typescript": "^4.0.3"
+  },
+  "prettier": {
+    "trailingComma": "none",
+    "jsxSingleQuote": true,
+    "semi": true,
+    "singleQuote": true,
+    "bracketSameLine": true,
+    "printWidth": 120
+  },
+  "eslintConfig": {
+    "extends": [
+      "@walidoux/eslint-config"
+    ],
+    "ignorePatterns": [
+      "storybook/**/*.ts"
+    ]
   }
 }

@@ -1,20 +1,15 @@
-import {AvatarAction} from "../actions/AvatarAction";
-import {IAnimationDefinition, IAnimationFrameData} from "../../../interfaces/Avatar.interface";
+import type { AvatarAction } from '../actions/AvatarAction';
+import type { IAnimationDefinition, IAnimationFrameData } from '../../../interfaces/Avatar';
 
 export class AvatarAnimation {
+  constructor(_action: AvatarAction, private readonly _definition: IAnimationDefinition) {}
 
-    constructor(
-        private _action: AvatarAction,
-        private _definition: IAnimationDefinition
-    ) {}
+  public getFrame(frame: number, type: string): IAnimationFrameData {
+    // @ts-expect-error
+    return this._definition.frames[frame].bodyparts[type];
+  }
 
-    public getFrame(frame: number, type: string): IAnimationFrameData {
-        // @ts-ignore
-        return this._definition.frames[frame].bodyparts[type];
-    }
-
-    public getFrameCount(): number {
-        return this._definition.frames.length;
-    }
-
+  public getFrameCount(): number {
+    return this._definition.frames.length;
+  }
 }

@@ -1,4 +1,4 @@
-import { Filter, utils } from "pixi.js";
+import { Filter, utils } from 'pixi.js';
 
 /** The shader vertex */
 const vertex: string = `
@@ -38,19 +38,14 @@ const fragment: string = `
  * @memberof Scuti
  */
 export class WiredSelectionFilter extends Filter {
-
-    /**
-     * @param {number} [lineColor] - The color of the furniture border when selected.
-     * @param {number} [backgroundColor] - The main color of the furniture when selected.
-     **/
-    constructor(
-        lineColor: number,
-        backgroundColor: number
-    ) {
-        super(vertex, fragment);
-        /** Set the colors */
-        this.uniforms.lineColor = utils.hex2rgb(lineColor);
-        this.uniforms.backgroundColor = utils.hex2rgb(backgroundColor);
-    }
-
+  /**
+   * @param {number} [lineColor] - The color of the furniture border when selected.
+   * @param {number} [backgroundColor] - The main color of the furniture when selected.
+   **/
+  constructor(lineColor: number, backgroundColor: number) {
+    super(vertex, fragment);
+    /** Set the colors */
+    this.uniforms.lineColor = utils.hex2rgb(lineColor);
+    this.uniforms.backgroundColor = utils.hex2rgb(backgroundColor);
+  }
 }
