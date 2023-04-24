@@ -4,7 +4,7 @@ import { FloorMaterial, WallMaterial, type Scuti, Room, Avatar, AvatarAction, Fl
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/vue/writing-stories/introduction
 const meta: Meta<typeof Renderer> = {
-  title: 'Scuti/Room',
+  title: 'Scuti/Room/General',
   component: Renderer,
   tags: ['autodocs'],
   argTypes: {

@@ -18,11 +18,11 @@
         const container = containerRef.value;
 
         if (container == null) return;
-
+        console.log(containerRef.value?.offsetWidth);
         scuti = new Scuti({
           canvas: container,
-          width: window.innerWidth / 2,
-          height: window.innerHeight / 2,
+          width: containerRef.value?.offsetWidth ?? 1400,
+          height: 500,
           resources: './resources'
         });
         await scuti.loadResources("https://kozennnn.github.io/scuti-resources/");
