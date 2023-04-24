@@ -238,14 +238,54 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         direction: 2,
         state: 1
     });
-    const background = new FloorFurniture({
+    const background1 = new FloorFurniture({
+        id: 3996,
+        position: {
+            x: 20,
+            y: 19,
+            z: 0
+        },
+        direction: 1,
+        state: 1
+    });
+    const background2 = new FloorFurniture({
+        id: 3996,
+        position: {
+            x: 12,
+            y: 11,
+            z: 1
+        },
+        direction: 1,
+        state: 1
+    });
+    const background3 = new FloorFurniture({
+        id: 3996,
+        position: {
+            x: 12,
+            y: 11,
+            z: 0
+        },
+        direction: 1,
+        state: 1
+    });
+    const background4 = new FloorFurniture({
+        id: 3996,
+        position: {
+            x: 11,
+            y: 10,
+            z: 0
+        },
+        direction: 1,
+        state: 1
+    });
+    const background5 = new FloorFurniture({
         id: 3996,
         position: {
             x: 8,
             y: 5,
             z: 0
         },
-        direction: 2,
+        direction: 1,
         state: 1
     });
     setTimeout(() => {
@@ -274,13 +314,54 @@ import {AvatarAction} from "../src/objects/avatars/actions/AvatarAction";
         direction: 4,
         state: 3,
     });
-    console.log(background.visualization);
-    background.onLoad = () => {
-        console.log(background.visualization);
-        background.visualization.offsetX = 100;
-        background.visualization.imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png";
+    background1.onLoad = () => {
+        background1.move({
+            x: 20,
+            y: 19,
+            z: 0,
+        }, 0);
+        background1.visualization.offsetX = -720;
+        background1.visualization.offsetY = 190;
+        background1.visualization.offsetZ = 8700;
+        background1.visualization.imageUrl = "/images/room_ads/wl15/wl15_a.png";
     }
-    room.objects.add(background);
+    room.objects.add(background1);
+    background2.onLoad = () => {
+        background2.move({
+            x: 12,
+            y: 11,
+            z: 1,
+        }, 0)
+        background2.visualization.offsetX = -253;
+        background2.visualization.offsetY = 446;
+        background2.visualization.offsetZ = 8700;
+        background2.visualization.imageUrl = "/images/room_ads/wl15/wl15_d.png";
+    }
+    room.objects.add(background2);
+    background3.onLoad = () => {
+        background3.move({
+            x: 12,
+            y: 11,
+            z: 0,
+        }, 0)
+        background3.visualization.offsetX = -704;
+        background3.visualization.offsetY = 155;
+        background3.visualization.offsetZ = 8700;
+        background3.visualization.imageUrl = "/images/room_ads/wl15/wl15_c.png";
+    }
+    room.objects.add(background3);
+    background4.onLoad = () => {
+        background4.move({
+            x: 11,
+            y: 10,
+            z: 0,
+        }, 0)
+        background4.visualization.offsetX = -253;
+        background4.visualization.offsetY = 187;
+        background4.visualization.offsetZ = 9995;
+        background4.visualization.imageUrl = "/images/room_ads/wl15/wl15_b.png";
+    }
+    room.objects.add(background4);
     //background.visualization.imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png";
     room.objects.add(wallFurniture);
     room.objects.add(wallFurniture3);

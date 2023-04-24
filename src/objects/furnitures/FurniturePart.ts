@@ -1,10 +1,11 @@
-import {BLEND_MODES, Container, Spritesheet, Texture} from "pixi.js";
+import {Assets, BLEND_MODES, Container, Spritesheet, Texture} from "pixi.js";
 import {FloorFurniture} from "./FloorFurniture";
 import {WallFurniture} from "./WallFurniture";
 import {FurnitureLayer} from "./FurnitureLayer";
 import {IFurnitureVisualization} from "../../interfaces/Furniture.interface";
 import {FurnitureGuildCustomizedVisualization} from "./visualizations/FurnitureGuildCustomizedVisualization";
 import {FurnitureRoomBackgroundVisualization} from "./visualizations/FurnitureRoomBackgroundVisualization";
+import {AssetLoader} from "../../utilities/AssetLoader";
 
 /**
  * FurniturePart class that represent a furniture layer.
@@ -126,11 +127,17 @@ export class FurniturePart extends Container {
             tag: tag
         }));
         if(this._furniture.view.visualization !== undefined) {
-            if (this._furniture.view.visualization instanceof FurnitureRoomBackgroundVisualization) {
-                if(this._furniture.view.visualization.imageUrl.length > 0) layer.texture = Texture.from(this._furniture.view.visualization.imageUrl);
-                layer.x += this._furniture.view.visualization.offsetX;
-                layer.y += this._furniture.view.visualization.offsetY;
-                layer.zIndex += this._furniture.view.visualization.offsetZ;
+            if (this._furniture.view.visualization instanceof FurnitureRoomBackgroundVisualization && this._furniture.view.visualization.imageUrl.length > 0) {
+                AssetLoader.load(this._furniture.view.visualization.imageUrl, this._furniture.view.visualization.imageUrl).then(() => {
+                    const visualization: FurnitureRoomBackgroundVisualization = this._furniture.view.visualization as FurnitureRoomBackgroundVisualization;
+                    // @ts-ignore
+                    layer.texture = Assets.get(visualization.imageUrl);
+                    layer.x += visualization.offsetX;
+                    // @ts-ignore
+                    layer.y += visualization.offsetY - layer.texture.height;
+                    layer.zIndex += visualization.offsetZ;
+                    // TODO: Implement the offsets for all the directions
+                });
             }
         }
     }
