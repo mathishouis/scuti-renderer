@@ -92,14 +92,17 @@ export class RoomView extends Container {
     this._room = room;
     this._tileLayer = new RoomTileLayer(this._room);
     this._objectLayer = new RoomObjectLayer(this._room);
+
     /** Add layers to the visualization */
     this.addChild(this._wallLayer);
     this.addChild(this._tileLayer);
     this.addChild(this._objectLayer);
+
     /** Start the animation ticker */
     //this._animationTicker.maxFPS = 15.666;
     this._animationTicker.maxFPS = 4;
     this._animationTicker.start();
+
     /** Render everything */
     this._draw();
   }
@@ -112,17 +115,11 @@ export class RoomView extends Container {
    */
   private _draw(): void {
     this._destroyParts();
+
     for (let y = 0; y < this._room.tileMap.tileMap.length; y++) {
       for (let x = 0; x < this._room.tileMap.tileMap[y].length; x++) {
-        const tileInfo: ITileInfo = this._room.tileMap.getTileInfo({
-          x,
-          y
-        });
-        this._createPart(tileInfo, {
-          x,
-          y,
-          z: tileInfo.height
-        });
+        const tileInfo: ITileInfo = this._room.tileMap.getTileInfo({ x, y });
+        this._createPart(tileInfo, { x, y, z: tileInfo.height });
       }
     }
   }
@@ -200,13 +197,11 @@ export class RoomView extends Container {
   private _createCursor(position: IPosition3D): void {
     if (this._cursor != null) {
       this._cursor.visible = true;
-      this._cursor.moveTo(position);
-      return;
+      return this._cursor.moveTo(position);
     }
+
     this._destroyCursor();
-    const cursor = new Cursor(this._room, {
-      position
-    });
+    const cursor = new Cursor(this._room, { position });
     this._objectLayer.addChild(cursor);
     this._cursor = cursor;
   }
@@ -233,32 +228,28 @@ export class RoomView extends Container {
   private _createTile(position: IPosition3D, tileInfo: ITileInfo): void {
     const tile = new Tile(
       this._room,
-      {
-        position,
-        material: this._room.floorMaterial,
-        thickness: this._room.floorThickness
-      },
+      { position, material: this._room.floorMaterial, thickness: this._room.floorThickness },
       tileInfo
     );
     /** Register interactions */
-    tile.onPointerDown = (event: IInteractionEvent): void => {
+    tile.onPointerDown = (event): void => {
       if (this._tileLayer.onPointerDown != null) this._tileLayer.onPointerDown(event);
     };
-    tile.onPointerUp = (event: IInteractionEvent): void => {
+    tile.onPointerUp = (event): void => {
       if (this._tileLayer.onPointerUp != null) this._tileLayer.onPointerUp(event);
     };
-    tile.onPointerMove = (event: IInteractionEvent): void => {
+    tile.onPointerMove = (event): void => {
       if (this._tileLayer.onPointerMove != null) this._tileLayer.onPointerMove(event);
     };
-    tile.onPointerOut = (event: IInteractionEvent): void => {
+    tile.onPointerOut = (event): void => {
       if (this._tileLayer.onPointerOut != null) this._tileLayer.onPointerOut(event);
       this._destroyCursor();
     };
-    tile.onPointerOver = (event: IInteractionEvent): void => {
+    tile.onPointerOver = (event): void => {
       if (this._tileLayer.onPointerOver != null) this._tileLayer.onPointerOver(event);
       this._createCursor(position);
     };
-    tile.onDoubleClick = (event: IInteractionEvent): void => {
+    tile.onDoubleClick = (event): void => {
       if (this._tileLayer.onDoubleClick != null) this._tileLayer.onDoubleClick(event);
     };
     this._tileLayer.addChild(tile);
@@ -273,30 +264,27 @@ export class RoomView extends Container {
    * @private
    */
   private _createDoor(position: IPosition3D): void {
-    const tile = new Tile(this._room, {
-      position,
-      material: this._room.floorMaterial,
-      thickness: 0
-    });
+    const tile = new Tile(this._room, { position, material: this._room.floorMaterial, thickness: 0 });
+
     /** Register interactions */
-    tile.onPointerDown = (event: IInteractionEvent): void => {
+    tile.onPointerDown = (event): void => {
       if (this._tileLayer.onPointerDown != null) this._tileLayer.onPointerDown(event);
     };
-    tile.onPointerUp = (event: IInteractionEvent): void => {
+    tile.onPointerUp = (event): void => {
       if (this._tileLayer.onPointerUp != null) this._tileLayer.onPointerUp(event);
     };
-    tile.onPointerMove = (event: IInteractionEvent): void => {
+    tile.onPointerMove = (event): void => {
       if (this._tileLayer.onPointerMove != null) this._tileLayer.onPointerMove(event);
     };
-    tile.onPointerOut = (event: IInteractionEvent): void => {
+    tile.onPointerOut = (event): void => {
       if (this._tileLayer.onPointerOut != null) this._tileLayer.onPointerOut(event);
       this._destroyCursor();
     };
-    tile.onPointerOver = (event: IInteractionEvent): void => {
+    tile.onPointerOver = (event): void => {
       if (this._tileLayer.onPointerOver != null) this._tileLayer.onPointerOver(event);
       this._createCursor(position);
     };
-    tile.onDoubleClick = (event: IInteractionEvent): void => {
+    tile.onDoubleClick = (event): void => {
       if (this._tileLayer.onDoubleClick != null) this._tileLayer.onDoubleClick(event);
     };
     this._tileLayer.addChild(tile);

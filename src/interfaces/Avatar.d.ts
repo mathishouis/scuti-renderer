@@ -18,10 +18,7 @@ export interface IAvatarPart {
   colorindex: number;
   id: number;
   index: number;
-  lib: {
-    id: string;
-    revision: string;
-  };
+  lib: { id: string; revision: string };
   type: string;
 }
 
@@ -85,4 +82,10 @@ export interface IAvatarLayerConfiguration {
   direction: Direction;
   frame: number;
   alpha?: number;
+}
+
+export interface LayerFrame {
+  action: AvatarAction;
+  frame: number;
+  repeat: number;
 }

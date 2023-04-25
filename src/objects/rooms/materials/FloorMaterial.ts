@@ -29,6 +29,7 @@ export class FloorMaterial extends Material {
 
     this._engine = engine;
     this._id = id;
+
     /** Load the material */
     this._load();
   }
@@ -40,9 +41,10 @@ export class FloorMaterial extends Material {
    * @private
    */
   private _load(): void {
-    const materials: { floorData: { textures: [] } } = Assets.get('room/materials');
-    // @ts-expect-error
-    const material: { id: string; visualizations: [] } = materials.floorData.floors.find((material) => {
+    const materials: { floorData: { textures: []; floors: Array<{ id: string }> } } = Assets.get('room/materials');
+    console.log(materials);
+
+    const material = materials.floorData.floors.find((material) => {
       return material.id === this._id.toString();
     });
     // @ts-expect-error

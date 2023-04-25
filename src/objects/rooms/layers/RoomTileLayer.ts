@@ -1,10 +1,10 @@
 import { Container, Point } from 'pixi.js';
 
 import type { Room } from '../Room';
-import type { IInteractionEvent } from '../../../interfaces/Interaction';
 import { InteractionManager } from '../../interactions/InteractionManager';
 import type { Tile } from '../parts/Tile';
 import type { Stair } from '../parts/Stair';
+import type { IInteractionEvent } from '../../../interfaces/Interaction';
 import type { IPosition2D } from '../../../interfaces/Room';
 
 /**
@@ -48,12 +48,12 @@ export class RoomTileLayer extends Container {
    * @public
    */
   public getTileFromGlobal(position: IPosition2D): Tile | Stair {
-    // @ts-expect-error
-    const container = this.children.find((container: Container) => {
-      const point: Point = new Point(position.x, position.y);
-      // @ts-expect-error
-      if (container.hitArea.contains(container.toLocal(point).x, container.toLocal(point).y)) return container;
+    const container = this.children.find((container) => {
+      const point = new Point(position.x, position.y);
+      if (Boolean(container.hitArea?.contains(container.toLocal(point).x, container.toLocal(point).y)))
+        return container;
     });
+
     // @ts-expect-error
     return container;
   }

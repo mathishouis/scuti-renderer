@@ -59,18 +59,22 @@ export class RoomCamera extends Container {
     super();
 
     this._room = room;
+
     /** Initialise the view container */
     this._viewContainer = new Container();
+
     /** Initialise the room container */
     this._roomContainer = new Container();
     this._roomContainer.addChild(this._room);
     this._viewContainer.addChild(this._roomContainer);
     this.addChild(this._viewContainer);
+
     /** Handle interactions */
     this._room.engine.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
     this._room.engine.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
     // @ts-expect-error
     this._room.engine.application.renderer.events.domElement.addEventListener('pointermove', this._dragMove);
+
     /** Handle tile interactions */
     this._room.engine.application.renderer.events.domElement.addEventListener('pointerdown', this._tilePointerDown);
     this._room.engine.application.renderer.events.domElement.addEventListener('pointerup', this._tilePointerUp);

@@ -35,9 +35,11 @@ export class Cursor extends Container {
    **/
   constructor(room: Room, configuration: ICursorConfiguration) {
     super();
+
     /** Store the configuration */
     this._room = room;
     this._position = configuration.position;
+
     /** Draw the cursor */
     this._draw();
   }

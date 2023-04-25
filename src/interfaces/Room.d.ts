@@ -59,3 +59,43 @@ export interface ITileInfo {
   stairType: { type: StairType; direction: Direction } | undefined;
   wallType: WallType | undefined;
 }
+
+// missing types here
+export interface RoomMaterial {
+  assets: { x: string; y: string; source?: string; flipH?: boolean };
+  floorData: {
+    floors: Array<{
+      id: string;
+      visualizations: Array<{ size: number; layers: Array<{ color: number; materialId: string }> }>;
+    }>;
+  };
+  materials: Array<{
+    id: string;
+    matrices: Array<{ columns: Array<{ width: number; cells: Array<{ textureId: string }> }> }>;
+  }>;
+  textures: Array<{ id: string; bitmaps: Array<{ assetName: string }> }>;
+  wallData: Array<{
+    materials: Array<{
+      id: string;
+      matrices: Array<{ columns: Array<{ width: number; cells: Array<{ textureId: string }> }> }>;
+    }>;
+    textures: Array<{ id: string; bitmaps: Array<{ assetName: string }> }>;
+    walls: Array<{
+      id: string;
+      visualizations: Array<{ size: number; layers: Array<{ color: number; materialId: string }> }>;
+    }>;
+  }>;
+  landscapeData: object;
+  // ...
+  visualizationType: string;
+  type: string;
+  logicType: string;
+  spritesheet: string;
+  name: string;
+  maskData: {
+    masks: Array<{
+      id: string;
+      visualizations: Array<{ size: number; layers: Array<{ color: number; materialId: string }> }>;
+    }>;
+  };
+}
