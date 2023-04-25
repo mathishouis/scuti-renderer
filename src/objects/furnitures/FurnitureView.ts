@@ -4,12 +4,12 @@ import { Assets, Container, Sprite } from 'pixi.js';
 import { FurniturePart } from './FurniturePart';
 import type { FloorFurniture } from './FloorFurniture';
 import type { WallFurniture } from './WallFurniture';
+import type { IFurnitureProperty } from '../../interfaces/Furniture';
 import { FurnitureLayer } from './FurnitureLayer';
 import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization';
 import type { FurnitureVisualization } from './visualizations/FurnitureVisualization';
 import { AssetLoader } from '../../utilities/AssetLoader';
 import { FurnitureRoomBackgroundVisualization } from './visualizations/FurnitureRoomBackgroundVisualization';
-import type { IFurnitureProperty } from '../../interfaces/Furniture';
 
 /**
  * FurnitureView class that manage all the rendering part of the furniture.
@@ -71,8 +71,10 @@ export class FurnitureView extends Container {
    */
   constructor(furniture: FloorFurniture | WallFurniture) {
     super();
+
     /** Store data */
     this._furniture = furniture;
+
     /** Load the spritesheet */
     AssetLoader.load(
       'furnitures/' + this._furniture.data.baseName,
@@ -86,7 +88,9 @@ export class FurnitureView extends Container {
         // @ts-expect-error
         this._property = this._spritesheet.data.furniProperty;
         this._initialiseVisualization();
+
         if (this._onLoad != null) this._onLoad();
+
         this._draw();
       })
       .catch((error) => {
@@ -101,10 +105,9 @@ export class FurnitureView extends Container {
    * @private
    */
   private _initialiseVisualization(): void {
-    // @ts-expect-error
     if (this._property.infos.visualization === 'furniture_guild_customized')
       this._visualization = new FurnitureGuildCustomizedVisualization(this._furniture);
-    // @ts-expect-error
+
     if (this._property.infos.visualization === 'furniture_bg')
       this._visualization = new FurnitureRoomBackgroundVisualization(this._furniture);
   }
@@ -118,7 +121,7 @@ export class FurnitureView extends Container {
   private _draw(): void {
     this._destroyParts();
     this._createShadow();
-    for (let i: number = 0; i < this._property.visualization.layerCount; i++) {
+    for (let i = 0; i < this._property.visualization.layerCount; i++) {
       this._createPart(i);
     }
   }
@@ -167,7 +170,7 @@ export class FurnitureView extends Container {
    * @private
    */
   private _createPart(layer: number): void {
-    const part: FurniturePart = new FurniturePart(this._furniture, layer);
+    const part = new FurniturePart(this._furniture, layer);
     this._parts.push(part);
     this.addChild(part);
   }
@@ -179,7 +182,7 @@ export class FurnitureView extends Container {
    * @private
    */
   private _createPlaceholder(): void {
-    const placeholder: Sprite = new Sprite(
+    const placeholder = new Sprite(
       Assets.get('furnitures/floor/placeholder').textures['place_holder_furniture_64.png']
     );
     this.addChild(placeholder);

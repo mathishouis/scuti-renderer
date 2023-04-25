@@ -3,6 +3,7 @@ import { Assets } from 'pixi.js';
 
 import { FloorFurniture } from './FloorFurniture';
 import { WallFurniture } from './WallFurniture';
+import type { IFurnitureData } from '../../interfaces/Furniture.interface';
 
 /**
  * FurnitureData class that manage the data of a furniture.

@@ -1,5 +1,5 @@
 import type { Spritesheet } from 'pixi.js';
-import { BLEND_MODES, Container } from 'pixi.js';
+import { Assets, BLEND_MODES, Container } from 'pixi.js';
 
 import type { FloorFurniture } from './FloorFurniture';
 import type { WallFurniture } from './WallFurniture';
@@ -12,8 +12,8 @@ import { AssetLoader } from '../../utilities/AssetLoader';
 /**
  * FurniturePart class that represent a furniture layer.
  *
- * @classScuti
- * @memberof
+ * @class
+ * @memberof Scuti
  */
 export class FurniturePart extends Container {
   /**
@@ -62,18 +62,21 @@ export class FurniturePart extends Container {
   private _draw(): void {
     /** Remove the old layer */
     this.removeChild(this.children[0]);
+
     /** Needed resources */
     const visualization: IFurnitureVisualization = this._furniture.view.property.visualization;
     const spritesheet: Spritesheet = this._furniture.view.spritesheet;
+
     /** Layer data */
-    let alpha: number = 1;
+    let alpha = 1;
     let tint: number;
-    let z: number = 0;
+    let z = 0;
     let blendMode: BLEND_MODES;
-    let flip: boolean = false;
-    let frame: number = 0;
-    let ignoreMouse: boolean = false;
+    let flip = false;
+    let frame = 0;
+    let ignoreMouse = false;
     let tag: string;
+
     /** Check if the furniture support the current direction */
     if (!visualization.directions.includes(this._furniture.direction))
       this._furniture.direction = visualization.directions[0];
@@ -166,8 +169,8 @@ export class FurniturePart extends Container {
       ) {
         AssetLoader.load(this._furniture.view.visualization.imageUrl, this._furniture.view.visualization.imageUrl)
           .then(() => {
-            const visualization: FurnitureRoomBackgroundVisualization = this._furniture.view
-              .visualization as FurnitureRoomBackgroundVisualization;
+            const visualization = this._furniture.view.visualization as FurnitureRoomBackgroundVisualization;
+
             // @ts-expect-error
             layer.texture = Assets.get(visualization.imageUrl);
             layer.x += visualization.offsetX;
@@ -191,7 +194,6 @@ export class FurniturePart extends Container {
    */
   public nextFrame(): void {
     const visualization: IFurnitureVisualization = this._furniture.view.property.visualization;
-
     if (
       // @ts-expect-error
       visualization.animation[String(this._furniture.state)] !== undefined &&
@@ -201,14 +203,12 @@ export class FurniturePart extends Container {
       // @ts-expect-error
       const frameSequence: number[] = visualization.animation[String(this._furniture.state)][this._layer].frameSequence;
       const currentFrame: number = this._frame;
-
       if (frameSequence.length > 1) {
         if (frameSequence.length - 1 > currentFrame) {
           this._frame = currentFrame + 1;
         } else {
           this._frame = 0;
         }
-
         this._draw();
       } else {
         this._draw();

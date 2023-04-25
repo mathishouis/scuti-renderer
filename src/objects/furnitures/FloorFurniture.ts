@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 
+import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture';
 import type { Direction } from '../../enums/Direction';
 import { FurnitureData } from './FurnitureData';
 import { RoomObject } from '../rooms/RoomObject';
@@ -7,7 +8,6 @@ import { InteractionManager } from '../interactions/InteractionManager';
 import type { IInteractionEvent } from '../../interfaces/Interaction';
 import { FurnitureView } from './FurnitureView';
 import type { FurnitureVisualization } from './visualizations/FurnitureVisualization';
-import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture';
 
 /**
  * FloorFurniture class that aim to reproduce the floor furnitures on Habbo.
@@ -458,26 +458,5 @@ export class FloorFurniture extends RoomObject {
    */
   public set onDoubleClick(value: (event: IInteractionEvent) => void) {
     this._interactionManager.onDoubleClick = value;
-  }
-
-  /**
-   * Reference to the load event.
-   *
-   * @member {() => void}
-   * @readonly
-   * @public
-   */
-  public get onLoad(): () => void {
-    return this._view.onLoad;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {() => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onLoad(value: () => void) {
-    this._view.onLoad = value;
   }
 }
