@@ -51,7 +51,7 @@ export interface IFurnitureData {
 }
 
 export interface IFurnitureProperty {
-  infos: object;
+  infos: { logic: string; visualization: string };
   visualization: IFurnitureVisualization;
 }
 
