@@ -1,9 +1,7 @@
 import type { Texture } from 'pixi.js';
 import { Assets, Container, Sprite } from 'pixi.js';
 
-import type { Room } from '../Room';
-import type { ICursorConfiguration, IPosition3D } from '../../../interfaces/Room';
-import type { RoomObjectLayer } from '../layers/RoomObjectLayer';
+import type { IPosition3D } from '../../../interfaces/Room';
 
 /**
  * Cursor class that show up when we move the cursor on a room tile.
@@ -12,22 +10,6 @@ import type { RoomObjectLayer } from '../layers/RoomObjectLayer';
  * @memberof Scuti
  */
 export class Cursor extends Container {
-  /**
-   * The room tile cursor instance.
-   *
-   * @member {Cursor}
-   * @private
-   */
-  private _cursor!: Cursor;
-
-  /**
-   * The room instance where the cursor will be drawn.
-   *
-   * @member {Room}
-   * @private
-   */
-  private readonly _room: Room;
-
   /**
    * The cursor position.
    *
@@ -41,12 +23,11 @@ export class Cursor extends Container {
    * @param {ICursorConfiguration} [configuration] - The tile configuration.
    * @param {IPosition3D} [configuration.position] - The cursor position.
    **/
-  constructor(room: Room, configuration?: ICursorConfiguration) {
+  constructor(position: IPosition3D) {
     super();
 
     /** Store the configuration */
-    this._room = room;
-    this._position = configuration?.position;
+    this._position = position;
 
     /** Draw the cursor */
     this._draw();
@@ -76,41 +57,11 @@ export class Cursor extends Container {
    *
    * @param {IPosition3D} [position] - The cursor position.
    * @return {void}
-   * @private
+   * @public
    */
-  private moveTo(position: IPosition3D): void {
+  public moveTo(position: IPosition3D): void {
     this._position = position;
     this.x = 32 * this._position.x - 32 * this._position.y;
     this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
-  }
-
-  /**
-   * Destroy the room cursor
-   *
-   * @return {void}
-   * @public
-   */
-  public destroyCursor(): void {
-    if (this != null) this.visible = false;
-  }
-
-  /**
-   * Destroy the current cursor and draw a new one at the new position in its container.
-   *
-   * @param {IPosition3D} [position] - The cursor position.
-   * @param {RoomObjectLayer} [objectLayer] - The container which renders the cursor.
-   * @return {void}
-   * @oublic
-   */
-  public createCursor(position: IPosition3D, objectLayer: RoomObjectLayer): void {
-    if (this._cursor != null) {
-      this._cursor.visible = true;
-      return this._cursor.moveTo(position);
-    }
-
-    this.destroyCursor();
-    const cursor = new Cursor(this._room, { position });
-    this._cursor = cursor;
-    objectLayer.addChild(cursor);
   }
 }

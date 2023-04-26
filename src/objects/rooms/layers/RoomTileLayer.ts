@@ -19,7 +19,7 @@ export class RoomTileLayer extends Container {
    * @member {InteractionManager}
    * @private
    */
-  private readonly _interactionManager: InteractionManager = new InteractionManager();
+  private readonly _interactionManager = new InteractionManager();
 
   /**
    * Return the tile or the stair at the specified screen position.
