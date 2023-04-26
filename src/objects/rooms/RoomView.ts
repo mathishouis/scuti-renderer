@@ -33,7 +33,7 @@ export class RoomView extends Container {
    * @member {Container}
    * @private
    */
-  private readonly _wallLayer: Container = new Container();
+  private readonly _wallLayer = new Container();
 
   /**
    * The container that will contains all the tiles objects.
@@ -73,7 +73,7 @@ export class RoomView extends Container {
    * @member {Cursor}
    * @private
    */
-  private _cursor!: Cursor;
+  private readonly _cursor!: Cursor;
 
   /**
    * The room animation ticker instance that will manage all the objects animations
@@ -81,7 +81,7 @@ export class RoomView extends Container {
    * @member {Ticker}
    * @private
    */
-  private readonly _animationTicker: Ticker = new Ticker();
+  private readonly _animationTicker = new Ticker();
 
   /**
    * @param {Room} [room] - The room instance that we want to visualize.
@@ -90,8 +90,9 @@ export class RoomView extends Container {
     super();
 
     this._room = room;
-    this._tileLayer = new RoomTileLayer(this._room);
+    this._tileLayer = new RoomTileLayer();
     this._objectLayer = new RoomObjectLayer(this._room);
+    this._cursor = new Cursor(this._room);
 
     /** Add layers to the visualization */
     this.addChild(this._wallLayer);
@@ -188,37 +189,6 @@ export class RoomView extends Container {
   }
 
   /**
-   * Destroy the current cursor and draw a new one at the new position.
-   *
-   * @param {IPosition3D} [position] - The cursor position.
-   * @return {void}
-   * @private
-   */
-  private _createCursor(position: IPosition3D): void {
-    if (this._cursor != null) {
-      this._cursor.visible = true;
-      return this._cursor.moveTo(position);
-    }
-
-    this._destroyCursor();
-    const cursor = new Cursor(this._room, { position });
-    this._objectLayer.addChild(cursor);
-    this._cursor = cursor;
-  }
-
-  /**
-   * Destroy the room cursor
-   *
-   * @return {void}
-   * @private
-   */
-  private _destroyCursor(): void {
-    if (this._cursor != null) {
-      this._cursor.visible = false;
-    }
-  }
-
-  /**
    * Create a tile.
    *
    * @param {IPosition3D} [position] - The tile position.
@@ -243,11 +213,11 @@ export class RoomView extends Container {
     };
     tile.onPointerOut = (event): void => {
       if (this._tileLayer.onPointerOut != null) this._tileLayer.onPointerOut(event);
-      this._destroyCursor();
+      this._cursor.destroyCursor();
     };
     tile.onPointerOver = (event): void => {
       if (this._tileLayer.onPointerOver != null) this._tileLayer.onPointerOver(event);
-      this._createCursor(position);
+      this._cursor.createCursor(position, this._objectLayer);
     };
     tile.onDoubleClick = (event): void => {
       if (this._tileLayer.onDoubleClick != null) this._tileLayer.onDoubleClick(event);
@@ -278,11 +248,11 @@ export class RoomView extends Container {
     };
     tile.onPointerOut = (event): void => {
       if (this._tileLayer.onPointerOut != null) this._tileLayer.onPointerOut(event);
-      this._destroyCursor();
+      this._cursor.destroyCursor();
     };
     tile.onPointerOver = (event): void => {
       if (this._tileLayer.onPointerOver != null) this._tileLayer.onPointerOver(event);
-      this._createCursor(position);
+      this._cursor.createCursor(position, this._objectLayer);
     };
     tile.onDoubleClick = (event): void => {
       if (this._tileLayer.onDoubleClick != null) this._tileLayer.onDoubleClick(event);
@@ -338,11 +308,11 @@ export class RoomView extends Container {
     };
     stair.onPointerOut = (event: IInteractionEvent): void => {
       if (this._tileLayer.onPointerOut != null) this._tileLayer.onPointerOut(event);
-      this._destroyCursor();
+      this._cursor.destroyCursor();
     };
     stair.onPointerOver = (event: IInteractionEvent): void => {
       if (this._tileLayer.onPointerOver != null) this._tileLayer.onPointerOver(event);
-      this._createCursor(position);
+      this._cursor.createCursor(position, this._objectLayer);
     };
     stair.onDoubleClick = (event: IInteractionEvent): void => {
       if (this._tileLayer.onDoubleClick != null) this._tileLayer.onDoubleClick(event);
