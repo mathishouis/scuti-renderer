@@ -137,15 +137,15 @@ export class Tile extends Container {
       bottomTile = this._room.tileMap.getTileInfo({ x: this._position.x, y: this._position.y + 1 });
     }
 
-    if (typeof this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== undefined) {
+    if (this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== undefined) {
       rightTile = this._room.tileMap.getTileInfo({ x: this._position.x + 1, y: this._position.y });
     }
 
     if (
-      !bottomTile ||
-      bottomTile.stairType ||
-      !bottomTile.tile ||
-      (this._tileInfo != null && bottomTile.height != this._tileInfo.height)
+      !Boolean(bottomTile) ||
+      Boolean(bottomTile?.stairType) ||
+      !Boolean(bottomTile?.tile) ||
+      (this._tileInfo != null && bottomTile?.height !== this._tileInfo.height)
     ) {
       /** Left face */
       const left: Graphics = new Graphics()
@@ -164,10 +164,10 @@ export class Tile extends Container {
     }
 
     if (
-      !rightTile ||
-      rightTile.stairType ||
+      rightTile == null ||
+      rightTile.stairType != null ||
       !rightTile.tile ||
-      (this._tileInfo != null && rightTile.height != this._tileInfo.height)
+      (this._tileInfo != null && rightTile.height !== this._tileInfo.height)
     ) {
       /** Right face */
       const right: Graphics = new Graphics()
