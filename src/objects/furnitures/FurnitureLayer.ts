@@ -156,7 +156,7 @@ export class FurnitureLayer extends HitSprite {
     if (this._alpha !== undefined) this.alpha = this._alpha;
     if (this._flip) this.scale.x = -1;
     if (this._furniture.room !== undefined) this.parentLayer = this._furniture.room.objects.layer;
-    if (this._z != null) this.zOrder = this._z;
+    if (this._z != undefined) this.zOrder = this._z;
     if (this._ignoreMouse !== null && !this._ignoreMouse) this.interactive = true;
     if (this._furniture.selected) this.filters.push(WIRED_SELECTION_FILTER);
     this.on('pointerdown', (event: PointerEvent) => {

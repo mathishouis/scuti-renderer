@@ -18,7 +18,6 @@ export class Cursor extends Container {
    * @member {Room}
    * @private
    */
-  // @ts-expect-error
   private readonly _room: Room;
 
   /**
