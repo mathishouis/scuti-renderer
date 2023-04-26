@@ -1,4 +1,3 @@
-import type { Spritesheet } from 'pixi.js';
 import { Assets, BLEND_MODES, Container } from 'pixi.js';
 
 import type { FloorFurniture } from './FloorFurniture';
@@ -6,7 +5,6 @@ import type { WallFurniture } from './WallFurniture';
 import { FurnitureLayer } from './FurnitureLayer';
 import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization';
 import { FurnitureRoomBackgroundVisualization } from './visualizations/FurnitureRoomBackgroundVisualization';
-import type { IFurnitureVisualization } from '../../interfaces/Furniture';
 import { AssetLoader } from '../../utilities/AssetLoader';
 
 /**
@@ -46,9 +44,11 @@ export class FurniturePart extends Container {
    */
   constructor(furniture: FloorFurniture | WallFurniture, layer: number) {
     super();
+
     /** Store data */
     this._furniture = furniture;
     this._layer = layer;
+
     /** Draw the part */
     this._draw();
   }
@@ -64,8 +64,8 @@ export class FurniturePart extends Container {
     this.removeChild(this.children[0]);
 
     /** Needed resources */
-    const visualization: IFurnitureVisualization = this._furniture.view.property.visualization;
-    const spritesheet: Spritesheet = this._furniture.view.spritesheet;
+    const visualization = this._furniture.view.property.visualization;
+    const spritesheet = this._furniture.view.spritesheet;
 
     /** Layer data */
     let alpha = 1;
@@ -108,7 +108,8 @@ export class FurniturePart extends Container {
       if (visualization.layers[this._layer].z !== undefined) z = visualization.layers[this._layer].z;
       if (visualization.layers[this._layer].alpha !== undefined) alpha = visualization.layers[this._layer].alpha / 255;
       if (visualization.layers[this._layer].ink !== undefined)
-        blendMode = BLEND_MODES[visualization.layers[this._layer].ink as keyof typeof BLEND_MODES];
+        // @ts-expect-error
+        blendMode = BLEND_MODES[visualization.layers[this._layer].ink];
       if (visualization.layers[this._layer].ignoreMouse !== undefined)
         ignoreMouse = visualization.layers[this._layer].ignoreMouse;
       if (visualization.layers[this._layer].tag !== undefined) tag = visualization.layers[this._layer].tag;
@@ -123,7 +124,7 @@ export class FurniturePart extends Container {
       }
     }
 
-    const name: string = [
+    const name = [
       this._furniture.data.baseName,
       this._furniture.data.baseName,
       64,
@@ -169,8 +170,8 @@ export class FurniturePart extends Container {
       ) {
         AssetLoader.load(this._furniture.view.visualization.imageUrl, this._furniture.view.visualization.imageUrl)
           .then(() => {
-            const visualization = this._furniture.view.visualization as FurnitureRoomBackgroundVisualization;
-
+            const visualization: FurnitureRoomBackgroundVisualization = this._furniture.view
+              .visualization as FurnitureRoomBackgroundVisualization;
             // @ts-expect-error
             layer.texture = Assets.get(visualization.imageUrl);
             layer.x += visualization.offsetX;
@@ -193,7 +194,7 @@ export class FurniturePart extends Container {
    * @private
    */
   public nextFrame(): void {
-    const visualization: IFurnitureVisualization = this._furniture.view.property.visualization;
+    const visualization = this._furniture.view.property.visualization;
     if (
       // @ts-expect-error
       visualization.animation[String(this._furniture.state)] !== undefined &&
@@ -202,13 +203,14 @@ export class FurniturePart extends Container {
     ) {
       // @ts-expect-error
       const frameSequence: number[] = visualization.animation[String(this._furniture.state)][this._layer].frameSequence;
-      const currentFrame: number = this._frame;
+      const currentFrame = this._frame;
       if (frameSequence.length > 1) {
         if (frameSequence.length - 1 > currentFrame) {
           this._frame = currentFrame + 1;
         } else {
           this._frame = 0;
         }
+
         this._draw();
       } else {
         this._draw();

@@ -9,7 +9,7 @@ import type { Direction } from '../../enums/Direction';
 import { WiredSelectionFilter } from '../filters/WiredSelectionFilter';
 
 /** The wired selection filter */
-const WIRED_SELECTION_FILTER: WiredSelectionFilter = new WiredSelectionFilter(0xffffff, 0x999999);
+const WIRED_SELECTION_FILTER = new WiredSelectionFilter(0xffffff, 0x999999);
 
 /**
  * FurnitureLayer class.
@@ -104,14 +104,15 @@ export class FurnitureLayer extends HitSprite {
    * @member {string}
    * @private
    */
-  private readonly _tag: string | undefined;
+  private readonly _tag: string;
 
   /**
    * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
    * @param {IFurnitureLayerConfiguration} [configuration] - The layer configuration.
    */
   constructor(furniture: FloorFurniture | WallFurniture, configuration: IFurnitureLayerConfiguration) {
-    super(undefined);
+    // @ts-expect-error
+    super(null);
 
     this._furniture = furniture;
     this._layer = configuration.layer;
@@ -123,6 +124,7 @@ export class FurnitureLayer extends HitSprite {
     this._frame = configuration.frame;
     this._ignoreMouse = configuration.ignoreMouse;
     this._direction = configuration.direction;
+    // @ts-expect-error
     this._tag = configuration.tag;
 
     this._draw();

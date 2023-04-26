@@ -78,7 +78,7 @@ export class FloorFurniture extends RoomObject {
    * @member {InteractionManager}
    * @private
    */
-  private readonly _interactionManager: InteractionManager = new InteractionManager();
+  private readonly _interactionManager = new InteractionManager();
 
   /**
    * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.

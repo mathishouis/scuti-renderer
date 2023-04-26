@@ -115,6 +115,7 @@ export class RoomView extends Container {
    */
   private _draw(): void {
     this._destroyParts();
+    this._destroyCursor();
 
     for (let y = 0; y < this._room.tileMap.tileMap.length; y++) {
       for (let x = 0; x < this._room.tileMap.tileMap[y].length; x++) {

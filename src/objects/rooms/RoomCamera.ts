@@ -128,9 +128,7 @@ export class RoomCamera extends Container {
    */
   private readonly _dragEnd = (): void => {
     this._dragging = false;
-    if (this._isOutOfBounds()) {
-      this._centerCamera();
-    }
+    if (this._isOutOfBounds()) this._centerCamera();
   };
 
   /**

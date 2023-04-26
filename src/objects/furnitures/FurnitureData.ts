@@ -99,6 +99,7 @@ export class FurnitureData {
    * @public
    */
   public get color(): number {
+    // @ts-expect-error
     if (!Boolean(this._data.className.includes('*'))) return null;
     return Number(this._data.className.split('*')[1]);
   }

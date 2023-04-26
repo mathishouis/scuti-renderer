@@ -88,7 +88,6 @@ export class FurnitureView extends Container {
         // @ts-expect-error
         this._property = this._spritesheet.data.furniProperty;
         this._initialiseVisualization();
-
         if (this._onLoad != null) this._onLoad();
 
         this._draw();
