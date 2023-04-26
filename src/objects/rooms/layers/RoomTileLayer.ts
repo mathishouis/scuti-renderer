@@ -1,6 +1,5 @@
 import { Container, Point } from 'pixi.js';
 
-import type { Room } from '../Room';
 import { InteractionManager } from '../../interactions/InteractionManager';
 import type { Tile } from '../parts/Tile';
 import type { Stair } from '../parts/Stair';
@@ -15,30 +14,12 @@ import type { IPosition2D } from '../../../interfaces/Room';
  */
 export class RoomTileLayer extends Container {
   /**
-   * The room instance that will be managed by the camera.
-   *
-   * @member {Room}
-   * @private
-   */
-  // @ts-expect-error
-  private readonly _room: Room;
-
-  /**
    * The room tiles interaction manager.
    *
    * @member {InteractionManager}
    * @private
    */
   private readonly _interactionManager: InteractionManager = new InteractionManager();
-
-  /**
-   * @param {Room} [room] - The room instance that we want to visualize.
-   */
-  constructor(room: Room) {
-    super();
-
-    this._room = room;
-  }
 
   /**
    * Return the tile or the stair at the specified screen position.
