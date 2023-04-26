@@ -274,7 +274,7 @@ export const TestTileClick: Story = {
 
       room.tiles.onPointerDown = (position: any) => {
         console.log('click', position);
-        avatar.pos = position.position;
+        avatar.roomPosition = position.position;
       };
     }
   }

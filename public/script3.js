@@ -157,7 +157,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
   room.objects.add(avatar);
   room.tiles.onPointerDown = (position) => {
     console.log('click', position);
-    avatar.pos = position.position;
+    avatar.roomPosition = position.position;
   };
   room.tiles.onDoubleClick = (position) => {
     console.log('dblclick', position);

@@ -229,11 +229,11 @@ export class Avatar extends RoomObject {
     });
   }
 
-  public get pos(): IFloorPosition {
+  public get roomPosition(): IFloorPosition {
     return this._position;
   }
 
-  public set pos(position: IFloorPosition) {
+  public set roomPosition(position: IFloorPosition) {
     gsap.to(this, {
       x: 32 * position.x - 32 * position.y,
       y: 16 * position.x + 16 * position.y - 32 * position.z,

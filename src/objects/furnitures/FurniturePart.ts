@@ -1,13 +1,14 @@
 import type { Spritesheet } from 'pixi.js';
-import { BLEND_MODES, Container } from 'pixi.js';
+import { Assets, BLEND_MODES, Container } from 'pixi.js';
 
-import type { FloorFurniture } from './FloorFurniture';
-import type { WallFurniture } from './WallFurniture';
+import { FloorFurniture } from './FloorFurniture';
+import { WallFurniture } from './WallFurniture';
 import { FurnitureLayer } from './FurnitureLayer';
 import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization';
 import { FurnitureRoomBackgroundVisualization } from './visualizations/FurnitureRoomBackgroundVisualization';
 import type { IFurnitureVisualization } from '../../interfaces/Furniture';
 import { AssetLoader } from '../../utilities/AssetLoader';
+import { ZOrder } from "../../utilities/ZOrder";
 
 /**
  * FurniturePart class that represent a furniture layer.
@@ -74,6 +75,7 @@ export class FurniturePart extends Container {
     let frame: number = 0;
     let ignoreMouse: boolean = false;
     let tag: string;
+    let zOrder: number = 0;
     /** Check if the furniture support the current direction */
     if (!visualization.directions.includes(this._furniture.direction))
       this._furniture.direction = visualization.directions[0];
@@ -130,11 +132,14 @@ export class FurniturePart extends Container {
     ].join('_');
 
     /** Calculate zOrder */
-    z =
+    /*z =
       (this._furniture.roomPosition.x + this._furniture.roomPosition.y + Math.trunc(z / 100) / 10) * 1000000 +
       // @ts-expect-error
       this._furniture.roomPosition.z * 10000 +
-      10000000 * 11;
+      10000000 * 11;*/
+
+    if (this._furniture instanceof FloorFurniture) zOrder = ZOrder.floorItem(this._furniture.roomPosition, z);
+    if (this._furniture instanceof WallFurniture) zOrder = ZOrder.wallItem(this._furniture.roomPosition, z);
 
     // @ts-expect-error
     if (spritesheet.data.frames[name] !== undefined) flip = spritesheet.data.frames[name].flipH;
@@ -144,18 +149,18 @@ export class FurniturePart extends Container {
       // @ts-expect-error
       new FurnitureLayer(this._furniture, {
         layer: String.fromCharCode(97 + Number(this._layer)),
-        alpha,
+        alpha: alpha,
         // @ts-expect-error
-        tint,
-        z,
+        tint: tint,
+        z: zOrder,
         // @ts-expect-error
-        blendMode,
-        flip,
-        frame,
-        ignoreMouse,
+        blendMode: blendMode,
+        flip: flip,
+        frame: frame,
+        ignoreMouse: ignoreMouse,
         direction: this._furniture.direction,
         // @ts-expect-error
-        tag
+        tag: tag
       })
     );
 
