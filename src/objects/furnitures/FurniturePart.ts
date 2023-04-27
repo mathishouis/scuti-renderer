@@ -1,4 +1,3 @@
-import type { Spritesheet } from 'pixi.js';
 import { Assets, BLEND_MODES, Container } from 'pixi.js';
 
 import { FloorFurniture } from './FloorFurniture';
@@ -7,7 +6,7 @@ import { FurnitureLayer } from './FurnitureLayer';
 import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization';
 import { FurnitureRoomBackgroundVisualization } from './visualizations/FurnitureRoomBackgroundVisualization';
 import { AssetLoader } from '../../utilities/AssetLoader';
-import { ZOrder } from "../../utilities/ZOrder";
+import { ZOrder } from '../../utilities/ZOrder';
 
 /**
  * FurniturePart class that represent a furniture layer.
@@ -79,7 +78,7 @@ export class FurniturePart extends Container {
     let ignoreMouse = false;
     let tag: string;
     let zOrder: number = 0;
-    
+
     /** Check if the furniture support the current direction */
     if (!visualization.directions.includes(this._furniture.direction))
       this._furniture.direction = visualization.directions[0];
@@ -154,18 +153,18 @@ export class FurniturePart extends Container {
       // @ts-expect-error
       new FurnitureLayer(this._furniture, {
         layer: String.fromCharCode(97 + Number(this._layer)),
-        alpha: alpha,
+        alpha,
         // @ts-expect-error
-        tint: tint,
+        tint,
         z: zOrder,
         // @ts-expect-error
-        blendMode: blendMode,
-        flip: flip,
-        frame: frame,
-        ignoreMouse: ignoreMouse,
+        blendMode,
+        flip,
+        frame,
+        ignoreMouse,
         direction: this._furniture.direction,
         // @ts-expect-error
-        tag: tag
+        tag
       })
     );
 

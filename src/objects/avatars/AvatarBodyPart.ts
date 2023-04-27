@@ -9,7 +9,7 @@ import { AvatarLayer } from './AvatarLayer';
 import type { Avatar } from './Avatar';
 import type { AvatarAnimation } from './animations/AvatarAnimation';
 import { AssetLoader } from '../../utilities/AssetLoader';
-import { ZOrder } from "../../utilities/ZOrder";
+import { ZOrder } from '../../utilities/ZOrder';
 
 export class AvatarBodyPart {
   private readonly _avatar: Avatar;
@@ -148,7 +148,7 @@ export class AvatarBodyPart {
         }
       }
 
-      let zOrder: number = ZOrder.avatar(this._avatar.roomPosition, this._getDrawOrder(type, gesture, direction));
+      const zOrder: number = ZOrder.avatar(this._avatar.roomPosition, this._getDrawOrder(type, gesture, direction));
 
       // We create the layer
       if (

@@ -202,7 +202,7 @@ export class RoomView extends Container {
     }
 
     this._destroyCursor();
-    const cursor = new Cursor(position);
+    const cursor = new Cursor(this._room, { position });
     this._objectLayer.addChild(cursor);
     this._cursor = cursor;
   }

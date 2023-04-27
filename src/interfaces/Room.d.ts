@@ -36,6 +36,10 @@ export interface IWallConfiguration {
   door?: boolean;
 }
 
+export interface ICursorConfiguration {
+  position: IPosition3D;
+}
+
 export interface IPosition3D {
   x: number;
   y: number;

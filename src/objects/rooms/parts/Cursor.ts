@@ -1,8 +1,9 @@
 import type { Texture } from 'pixi.js';
 import { Assets, Container, Sprite } from 'pixi.js';
+
 import type { Room } from '../Room';
 import type { ICursorConfiguration, IPosition3D } from '../../../interfaces/Room';
-import { ZOrder } from "../../../utilities/ZOrder";
+import { ZOrder } from '../../../utilities/ZOrder';
 
 /**
  * Cursor class that show up when we move the cursor on a room tile.
