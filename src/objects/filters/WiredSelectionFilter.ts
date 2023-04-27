@@ -1,7 +1,7 @@
 import { Filter, utils } from 'pixi.js';
 
 /** The shader vertex */
-const vertex: string = `
+const vertex = `
     attribute vec2 aVertexPosition;
     attribute vec2 aTextureCoord;
     uniform mat3 projectionMatrix;
@@ -14,7 +14,7 @@ const vertex: string = `
 `;
 
 /** The shader fragment */
-const fragment: string = `
+const fragment = `
     varying vec2 vTextureCoord;
     uniform sampler2D uSampler;
     uniform vec3 lineColor;
@@ -44,6 +44,7 @@ export class WiredSelectionFilter extends Filter {
    **/
   constructor(lineColor: number, backgroundColor: number) {
     super(vertex, fragment);
+
     /** Set the colors */
     this.uniforms.lineColor = utils.hex2rgb(lineColor);
     this.uniforms.backgroundColor = utils.hex2rgb(backgroundColor);

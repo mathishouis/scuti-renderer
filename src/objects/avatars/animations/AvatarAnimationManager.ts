@@ -6,9 +6,9 @@ import type { AvatarAction } from '../actions/AvatarAction';
 import { AvatarAnimation } from './AvatarAnimation';
 
 export class AvatarAnimationManager {
-  private readonly _animations: Map<AvatarAction, AvatarAnimation> = new Map<AvatarAction, AvatarAnimation>();
+  private readonly _animations = new Map<AvatarAction, AvatarAnimation>();
 
-  private readonly _avatarAnimationsLib: IAvatarPartSets = Assets.get('figures/animations');
+  private readonly _avatarAnimationsLib = Assets.get<IAvatarPartSets>('figures/animations');
 
   public registerAnimation(action: AvatarAction): void {
     if (this._avatarAnimationsLib[action] === undefined) return;
@@ -20,7 +20,7 @@ export class AvatarAnimationManager {
   }
 
   public getLayerData(action: AvatarAction, frame: number, type: string): IAnimationFrameData {
-    const animation: AvatarAnimation = this.getAnimation(action);
+    const animation = this.getAnimation(action);
     if (animation === undefined) return;
     return animation.getFrame(frame, type);
   }
