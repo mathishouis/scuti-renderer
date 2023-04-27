@@ -6,15 +6,14 @@ import { WallFurniture } from './WallFurniture';
 import { FurnitureLayer } from './FurnitureLayer';
 import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization';
 import { FurnitureRoomBackgroundVisualization } from './visualizations/FurnitureRoomBackgroundVisualization';
-import type { IFurnitureVisualization } from '../../interfaces/Furniture';
 import { AssetLoader } from '../../utilities/AssetLoader';
 import { ZOrder } from "../../utilities/ZOrder";
 
 /**
  * FurniturePart class that represent a furniture layer.
  *
- * @classScuti
- * @memberof
+ * @class
+ * @memberof Scuti
  */
 export class FurniturePart extends Container {
   /**
@@ -47,9 +46,11 @@ export class FurniturePart extends Container {
    */
   constructor(furniture: FloorFurniture | WallFurniture, layer: number) {
     super();
+
     /** Store data */
     this._furniture = furniture;
     this._layer = layer;
+
     /** Draw the part */
     this._draw();
   }
@@ -63,19 +64,22 @@ export class FurniturePart extends Container {
   private _draw(): void {
     /** Remove the old layer */
     this.removeChild(this.children[0]);
+
     /** Needed resources */
-    const visualization: IFurnitureVisualization = this._furniture.view.property.visualization;
-    const spritesheet: Spritesheet = this._furniture.view.spritesheet;
+    const visualization = this._furniture.view.property.visualization;
+    const spritesheet = this._furniture.view.spritesheet;
+
     /** Layer data */
-    let alpha: number = 1;
+    let alpha = 1;
     let tint: number;
-    let z: number = 0;
+    let z = 0;
     let blendMode: BLEND_MODES;
-    let flip: boolean = false;
-    let frame: number = 0;
-    let ignoreMouse: boolean = false;
+    let flip = false;
+    let frame = 0;
+    let ignoreMouse = false;
     let tag: string;
     let zOrder: number = 0;
+    
     /** Check if the furniture support the current direction */
     if (!visualization.directions.includes(this._furniture.direction))
       this._furniture.direction = visualization.directions[0];
@@ -107,7 +111,8 @@ export class FurniturePart extends Container {
       if (visualization.layers[this._layer].z !== undefined) z = visualization.layers[this._layer].z;
       if (visualization.layers[this._layer].alpha !== undefined) alpha = visualization.layers[this._layer].alpha / 255;
       if (visualization.layers[this._layer].ink !== undefined)
-        blendMode = BLEND_MODES[visualization.layers[this._layer].ink as keyof typeof BLEND_MODES];
+        // @ts-expect-error
+        blendMode = BLEND_MODES[visualization.layers[this._layer].ink];
       if (visualization.layers[this._layer].ignoreMouse !== undefined)
         ignoreMouse = visualization.layers[this._layer].ignoreMouse;
       if (visualization.layers[this._layer].tag !== undefined) tag = visualization.layers[this._layer].tag;
@@ -122,7 +127,7 @@ export class FurniturePart extends Container {
       }
     }
 
-    const name: string = [
+    const name = [
       this._furniture.data.baseName,
       this._furniture.data.baseName,
       64,
@@ -195,8 +200,7 @@ export class FurniturePart extends Container {
    * @private
    */
   public nextFrame(): void {
-    const visualization: IFurnitureVisualization = this._furniture.view.property.visualization;
-
+    const visualization = this._furniture.view.property.visualization;
     if (
       // @ts-expect-error
       visualization.animation[String(this._furniture.state)] !== undefined &&
@@ -205,8 +209,7 @@ export class FurniturePart extends Container {
     ) {
       // @ts-expect-error
       const frameSequence: number[] = visualization.animation[String(this._furniture.state)][this._layer].frameSequence;
-      const currentFrame: number = this._frame;
-
+      const currentFrame = this._frame;
       if (frameSequence.length > 1) {
         if (frameSequence.length - 1 > currentFrame) {
           this._frame = currentFrame + 1;

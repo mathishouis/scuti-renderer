@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 
+import type { IWallFurnitureConfiguration, IWallPosition } from '../../interfaces/Furniture';
 import type { Direction } from '../../enums/Direction';
 import { FurnitureData } from './FurnitureData';
 import { RoomObject } from '../rooms/RoomObject';
@@ -7,7 +8,6 @@ import { InteractionManager } from '../interactions/InteractionManager';
 import type { IInteractionEvent } from '../../interfaces/Interaction';
 import { FurnitureView } from './FurnitureView';
 import type { FurnitureVisualization } from './visualizations/FurnitureVisualization';
-import type { IWallFurnitureConfiguration, IWallPosition } from '../../interfaces/Furniture';
 
 /**
  * WallFurniture class that aim to reproduce the wall furnitures on Habbo.

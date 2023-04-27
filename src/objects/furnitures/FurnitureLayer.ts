@@ -1,16 +1,15 @@
-// @ts-nocheck
 import type { BLEND_MODES } from 'pixi.js';
 import { Assets, utils } from 'pixi.js';
 
 import type { FloorFurniture } from './FloorFurniture';
+import type { IFurnitureLayerConfiguration } from '../../interfaces/Furniture';
 import { HitSprite } from '../interactions/HitSprite';
 import type { WallFurniture } from './WallFurniture';
 import type { Direction } from '../../enums/Direction';
 import { WiredSelectionFilter } from '../filters/WiredSelectionFilter';
-import type { IFurnitureLayerConfiguration } from '../../interfaces/Furniture';
 
 /** The wired selection filter */
-const WIRED_SELECTION_FILTER: WiredSelectionFilter = new WiredSelectionFilter(0xffffff, 0x999999);
+const WIRED_SELECTION_FILTER = new WiredSelectionFilter(0xffffff, 0x999999);
 
 /**
  * FurnitureLayer class.
@@ -18,7 +17,6 @@ const WIRED_SELECTION_FILTER: WiredSelectionFilter = new WiredSelectionFilter(0x
  * @class
  * @memberof Scuti
  */
-// @ts-expect-error
 export class FurnitureLayer extends HitSprite {
   /**
    * The furniture instance.
@@ -159,19 +157,19 @@ export class FurnitureLayer extends HitSprite {
     if (this._z != undefined) this.zOrder = this._z;
     if (this._ignoreMouse !== null && !this._ignoreMouse) this.interactive = true;
     if (this._furniture.selected) this.filters.push(WIRED_SELECTION_FILTER);
-    this.on('pointerdown', (event: PointerEvent) => {
+    this.on('pointerdown', (event) => {
       return this._furniture.interactionManager.handlePointerDown({ mouseEvent: event, tag: this._tag });
     });
-    this.on('pointerup', (event: PointerEvent) => {
+    this.on('pointerup', (event) => {
       return this._furniture.interactionManager.handlePointerUp({ mouseEvent: event, tag: this._tag });
     });
-    this.on('pointermove', (event: PointerEvent) => {
+    this.on('pointermove', (event) => {
       return this._furniture.interactionManager.handlePointerMove({ mouseEvent: event, tag: this._tag });
     });
-    this.on('pointerout', (event: PointerEvent) => {
+    this.on('pointerout', (event) => {
       return this._furniture.interactionManager.handlePointerOut({ mouseEvent: event, tag: this._tag });
     });
-    this.on('pointerover', (event: PointerEvent) => {
+    this.on('pointerover', (event) => {
       return this._furniture.interactionManager.handlePointerOver({ mouseEvent: event, tag: this._tag });
     });
   }

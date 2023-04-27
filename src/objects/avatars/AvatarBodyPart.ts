@@ -67,7 +67,7 @@ export class AvatarBodyPart {
 
     if (part.lib == null) return;
 
-    const spritesheet: Spritesheet = Assets.get('figures/' + part.lib.id);
+    const spritesheet = Assets.get<Spritesheet>('figures/' + part.lib.id);
 
     Object.keys(spritesheet.data.partsType).forEach((type: string) => {
       // We register the part type if it's not already registered
@@ -106,23 +106,17 @@ export class AvatarBodyPart {
         flip = true;
       }
 
+      // const zDirection = direction;
+
       let tempDirection: number = direction;
       if ([4, 5, 6].includes(tempDirection)) tempDirection = 6 - tempDirection;
 
       // If the texture don't exist we reinitalise the gesture and the final action
       if (
         spritesheet.textures[
-          part.lib.id +
-            '_h_' +
-            gesture +
-            '_' +
-            type +
-            '_' +
-            String(part.id) +
-            '_' +
-            String(tempDirection) +
-            '_' +
-            String(frame)
+          // Skipping type checking because we cannot convert
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          part.lib.id + '_h_' + gesture + '_' + type + '_' + part.id + '_' + tempDirection + '_' + frame
         ] === undefined
       ) {
         gesture = 'std';
@@ -159,17 +153,9 @@ export class AvatarBodyPart {
       // We create the layer
       if (
         spritesheet.textures[
-          part.lib.id +
-            '_h_' +
-            gesture +
-            '_' +
-            type +
-            '_' +
-            String(part.id) +
-            '_' +
-            String(tempDirection) +
-            '_' +
-            String(tempDirection)
+          // Skipping type checking because we cannot convert
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          part.lib.id + '_h_' + gesture + '_' + type + '_' + part.id + '_' + tempDirection + '_' + frame
         ] !== undefined
       ) {
         const layer = new AvatarLayer(this._avatar, {
@@ -200,11 +186,14 @@ export class AvatarBodyPart {
     return this._avatar.actionManager.partSets.activePartSets.head.includes(type);
   }
 
+  // types must be changed here
   private _getColor(type: string, colorId: number): number {
     const figureData: [] = Assets.get('figures/figuredata');
     const paletteId = figureData.settype[type].paletteid;
     const palette = figureData.palette[String(paletteId)];
+
     if (palette[String(colorId)] === undefined) return Number('0xFFFFFF');
+
     return Number('0x' + String(palette[String(colorId)].color));
   }
 

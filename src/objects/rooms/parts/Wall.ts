@@ -83,7 +83,6 @@ export class Wall extends Container {
     this._material = configuration.material ?? new WallMaterial(this._room.engine, 112);
     this._height = configuration.height ?? 0;
     this._type = configuration.type;
-
     /** Draw the wall */
     this._draw();
   }
@@ -228,7 +227,6 @@ export class Wall extends Container {
       .lineTo(points[3].x, points[3].y)
       .lineTo(points[0].x, points[0].y)
       .endFill();
-
     /** Left face */
     const left: Graphics = new Graphics()
       .beginTextureFill({
@@ -257,7 +255,6 @@ export class Wall extends Container {
       )
       .lineTo(points[3].x, points[3].y)
       .endFill();
-
     /** Right face */
     const right: Graphics = new Graphics()
       .beginTextureFill({
@@ -312,12 +309,10 @@ export class Wall extends Container {
         );
     }
     right.lineTo(points[2].x, points[2].y).lineTo(points[3].x, points[3].y).endFill();
-
     /** And we combine everything */
     this.addChild(top);
     this.addChild(left);
     this.addChild(right);
-
     /** Positionate the wall */
     this.x = 32 * this._position.x - 32 * this._position.y;
     this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;

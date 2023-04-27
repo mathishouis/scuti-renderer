@@ -3,17 +3,17 @@ import { gsap } from 'gsap';
 import { Assets } from 'pixi.js';
 
 import { RoomObject } from '../rooms/RoomObject';
+import type { IFloorPosition } from '../../interfaces/Furniture.interface';
 import type { Direction } from '../../enums/Direction';
 import { AvatarAction } from './actions/AvatarAction';
-import type { AvatarFigure, IAvatarConfiguration, IAvatarPart } from '../../interfaces/Avatar';
+import type { AvatarFigure, IAvatarConfiguration, IAvatarPart } from '../../interfaces/Avatar.interface';
 import { AvatarActionManager } from './actions/AvatarActionManager';
 import { AvatarAnimationManager } from './animations/AvatarAnimationManager';
 import { AvatarBodyPart } from './AvatarBodyPart';
 import { AvatarLayer } from './AvatarLayer';
 import { InteractionManager } from '../interactions/InteractionManager';
-import type { IInteractionEvent } from '../../interfaces/Interaction';
+import type { IInteractionEvent } from '../../interfaces/Interaction.interface';
 import { AssetLoader } from '../../utilities/AssetLoader';
-import type { IFloorPosition } from '../../interfaces/Furniture';
 
 export class Avatar extends RoomObject {
   private readonly _figure: AvatarFigure;
@@ -47,7 +47,6 @@ export class Avatar extends RoomObject {
     this._bodyDirection = configuration.bodyDirection;
     this._actions = configuration.actions;
     this._handItem = configuration.handItem;
-
     const assets = [];
 
     if (this._handItem !== 0 || this._handItem !== undefined) {
@@ -185,7 +184,7 @@ export class Avatar extends RoomObject {
     const figureData: [] = Assets.get('figures/figuredata');
     const figureMap: [] = Assets.get('figures/figuremap');
     let parts = [];
-    if (figureData.settype[type]?.set[setId] == null) return parts;
+    if (!Boolean(figureData.settype[type]?.set[setId])) return parts;
     const hiddenLayers: [] = figureData.settype[type]?.set[setId].hiddenLayers;
     const set = figureData.settype[type]?.set[setId];
     set?.parts.forEach((part) => {
@@ -257,7 +256,7 @@ export class Avatar extends RoomObject {
   }
 
   public addAction(action: AvatarAction): void {
-    if (this._animationManager.getAnimation(action) == null) this._animationManager.registerAnimation(action);
+    if (!Boolean(this._animationManager.getAnimation(action))) this._animationManager.registerAnimation(action);
     if (!this._actions.includes(action)) this._actions.push(action);
   }
 

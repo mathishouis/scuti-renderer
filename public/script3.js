@@ -12,9 +12,9 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
     canvas: document.getElementById('app'),
     width: window.innerWidth,
     height: window.innerHeight,
-    resources: './resources'
+    resources: 'https://kozennnn.github.io/scuti-resources/'
   });
-  await renderer.loadResources();
+  await renderer.loadResources('https://kozennnn.github.io/scuti-resources/');
 
   const tileMap =
     'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n' +

@@ -1,5 +1,5 @@
-import type { AvatarAction } from '../actions/AvatarAction';
 import type { IAnimationDefinition, IAnimationFrameData } from '../../../interfaces/Avatar';
+import type { AvatarAction } from '../actions/AvatarAction';
 
 export class AvatarAnimation {
   constructor(_action: AvatarAction, private readonly _definition: IAnimationDefinition) {}

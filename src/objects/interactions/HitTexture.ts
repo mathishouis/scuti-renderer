@@ -1,5 +1,5 @@
 import type { BaseTexture, DisplayObject, ICanvas, Renderer } from 'pixi.js';
-import { BaseImageResource, Extract, Rectangle, RenderTexture, Sprite, Texture } from 'pixi.js';
+import { BaseImageResource, Rectangle, RenderTexture, Sprite, Texture } from 'pixi.js';
 import { CanvasRenderTarget } from '@pixi/utils';
 
 import type { HitSprite } from './HitSprite';
@@ -54,7 +54,7 @@ export class HitTexture {
    * @private
    */
   private _getHitMap(): Uint32Array {
-    if (this._hitMap == null) {
+    if (!Boolean(this._hitMap)) {
       this._hitMap = this._generateHitMap(this._texture.baseTexture);
     }
     return this._hitMap;
@@ -111,8 +111,7 @@ export class HitTexture {
     sprite.texture.trim.x = 0;
     sprite.texture.trim.y = 0;
 
-    let renderTexture = {} as RenderTexture;
-
+    let renderTexture: RenderTexture;
     if (this._sprite instanceof FurnitureLayer) {
       this._sprite.furniture.room.engine.application.stage.addChild(sprite);
       renderTexture = this._sprite.furniture.room.engine.application.renderer.generateTexture(sprite);
@@ -121,9 +120,14 @@ export class HitTexture {
       renderTexture = this._sprite.parent.avatar.room.engine.application.renderer.generateTexture(sprite);
     }
     sprite.destroy();
+
+    // @ts-expect-error
     const image: HTMLImageElement = this._image(renderTexture);
+    // @ts-expect-error
     renderTexture.baseTexture.resource = new BaseImageResource(image);
+    // @ts-expect-error
     const baseTexture: BaseTexture = renderTexture.baseTexture;
+    // @ts-expect-error
     renderTexture.destroy();
 
     return new Texture(baseTexture);
@@ -210,7 +214,7 @@ export class HitTexture {
     let renderTexture: RenderTexture;
     let generated: boolean = false;
 
-    if (target != null) {
+    if (Boolean(target)) {
       if (target instanceof RenderTexture) {
         renderTexture = target;
       } else {
@@ -221,8 +225,10 @@ export class HitTexture {
     }
 
     // @ts-expect-error
-    if (renderTexture != null) {
+    if (Boolean(renderTexture)) {
+      // @ts-expect-error
       resolution = renderTexture.baseTexture.resolution;
+      // @ts-expect-error
       frame = renderTexture.frame;
       flipY = false;
       // @ts-expect-error
@@ -251,15 +257,14 @@ export class HitTexture {
 
     /** Read pixels to the array */
     // @ts-expect-error
-    const gl: any = renderer.gl;
+    const gl = renderer.gl;
 
     gl.readPixels(frame.x * resolution, frame.y * resolution, width, height, gl.RGBA, gl.UNSIGNED_BYTE, webglPixels);
 
     /** Add the pixels to the canvas */
     const canvasData: ImageData = canvasBuffer.context.getImageData(0, 0, width, height);
 
-    // @ts-expect-error
-    Extract.arrayPostDivide(webglPixels, canvasData.data);
+    this.arrayPostDivide(webglPixels, canvasData.data);
 
     canvasBuffer.context.putImageData(canvasData, 0, 0);
 
@@ -283,5 +288,30 @@ export class HitTexture {
 
     /** Send the canvas back... */
     return canvasBuffer.canvas;
+  }
+
+  /**
+   * Takes premultiplied pixel data and produces regular pixel data
+   * @private
+   * @param pixels - array of pixel data
+   * @param out - output array
+   */
+  private arrayPostDivide(
+    pixels: number[] | Uint8Array | Uint8ClampedArray,
+    out: number[] | Uint8Array | Uint8ClampedArray
+  ): void {
+    for (let i = 0; i < pixels.length; i += 4) {
+      const alpha = (out[i + 3] = pixels[i + 3]);
+
+      if (alpha !== 0) {
+        out[i] = Math.round(Math.min((pixels[i] * 255) / alpha, 255));
+        out[i + 1] = Math.round(Math.min((pixels[i + 1] * 255) / alpha, 255));
+        out[i + 2] = Math.round(Math.min((pixels[i + 2] * 255) / alpha, 255));
+      } else {
+        out[i] = pixels[i];
+        out[i + 1] = pixels[i + 1];
+        out[i + 2] = pixels[i + 2];
+      }
+    }
   }
 }

@@ -13,7 +13,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @member {string}
    * @private
    */
-  private _imageUrl: string = '';
+  private _imageUrl = '';
 
   /**
    * The image offset X.
@@ -21,7 +21,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @member {number}
    * @private
    */
-  private _offsetX: number = 0;
+  private _offsetX = 0;
 
   /**
    * The image offset Y.
@@ -29,7 +29,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @member {number}
    * @private
    */
-  private _offsetY: number = 0;
+  private _offsetY = 0;
 
   /**
    * The image offset Z.
@@ -37,7 +37,7 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureVisualization
    * @member {number}
    * @private
    */
-  private _offsetZ: number = 0;
+  private _offsetZ = 0;
 
   /**
    * Reference to the imageUrl.

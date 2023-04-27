@@ -1,6 +1,5 @@
 import type { Texture } from 'pixi.js';
 import { Assets, Container, Sprite } from 'pixi.js';
-
 import type { Room } from '../Room';
 import type { ICursorConfiguration, IPosition3D } from '../../../interfaces/Room';
 import { ZOrder } from "../../../utilities/ZOrder";
@@ -21,12 +20,13 @@ export class Cursor extends Container {
   private readonly _room: Room;
 
   /**
+
    * The cursor position.
    *
    * @member {IPosition3D}
    * @private
    */
-  private _position: IPosition3D;
+  private _position: IPosition3D | undefined;
 
   /**
    * @param {Room} [room] - The room instance where the cursor will be drawn.
@@ -35,10 +35,12 @@ export class Cursor extends Container {
    **/
   constructor(room: Room, configuration: ICursorConfiguration) {
     super();
+
     /** Store the configuration */
     this._room = room;
     this._position = configuration.position;
     this.parentLayer = this._room.objects.layer;
+
     /** Draw the cursor */
     this._draw();
   }
@@ -50,15 +52,25 @@ export class Cursor extends Container {
    * @private
    */
   private _draw(): void {
+    if (this._position == null) return;
+
     /** Creating the sprite */
     const texture: Texture = Assets.get('room/cursors').textures['tile_cursor_64_a_0_0.png'];
-    const sprite: Sprite = new Sprite(texture);
+    const sprite = new Sprite(texture);
     sprite.y = -20;
     this.addChild(sprite);
+
     /** Positionate the cursor */
     this.moveTo(this._position);
   }
 
+  /**
+   * Apply position of the cursor on the x, y axis relative to the local coordinates of the parent.
+   *
+   * @param {IPosition3D} [position] - The cursor position.
+   * @return {void}
+   * @public
+   */
   public moveTo(position: IPosition3D): void {
     this.zOrder = ZOrder.tileCursor(position);
     this._position = position;

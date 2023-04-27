@@ -75,11 +75,13 @@ export class Stair extends Container {
    **/
   constructor(room: Room, configuration: IStairConfiguration) {
     super();
+
     /** Store the configuration */
     this._room = room;
     this._position = configuration.position;
     this._thickness = configuration.thickness ?? 8;
     this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
+
     this._type = configuration.type;
     /** Register interactions */
     this.on('pointerdown', (event) => {
@@ -343,6 +345,7 @@ export class Stair extends Container {
             ]
           );
           break;
+
         /** Draw a north west inner stair */
         case Direction.NORTH_WEST:
           this._drawCornerStair(
@@ -380,10 +383,10 @@ export class Stair extends Container {
    */
   private _drawStair(points: IPosition2D[], offsets: IPosition2D[]): void {
     for (let i: number = 0; i < 4; i++) {
-      const step: Container = new Container();
-
+      const step = new Container();
       /** Top face */
-      const top: Graphics = new Graphics()
+
+      const top = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(1).toNumber(),
@@ -397,7 +400,7 @@ export class Stair extends Container {
         .endFill();
 
       /** Left face */
-      const left: Graphics = new Graphics()
+      const left = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(0.8).toNumber(),
@@ -410,7 +413,7 @@ export class Stair extends Container {
         .endFill();
 
       /** Right face */
-      const right: Graphics = new Graphics()
+      const right = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(0.71).toNumber(),
@@ -435,6 +438,7 @@ export class Stair extends Container {
       /** Add the step to the stair */
       this.addChild(step);
     }
+
     /** Positionate the stair */
     this.x = 32 * this._position.x - 32 * this._position.y + offsets[1].x;
     this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z + offsets[1].y;
@@ -460,10 +464,10 @@ export class Stair extends Container {
    */
   private _drawCornerStair(points: IPosition2D[], pointsOffsets: IPosition2D[], offsets: IPosition2D[]): void {
     for (let i: number = 0; i < 3; i++) {
-      const step: Container = new Container();
-
+      const step = new Container();
       /** Top face */
-      const top: Graphics = new Graphics()
+
+      const top = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(1).toNumber(),
@@ -477,7 +481,7 @@ export class Stair extends Container {
         .endFill();
 
       /** Left face */
-      const left: Graphics = new Graphics()
+      const left = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(0.8).toNumber(),
@@ -496,7 +500,7 @@ export class Stair extends Container {
         .endFill();
 
       /** Right face */
-      const right: Graphics = new Graphics()
+      const right = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(0.71).toNumber(),
@@ -536,11 +540,11 @@ export class Stair extends Container {
       this.addChild(step);
     }
 
-    for (let i: number = 0; i < 4; i++) {
-      const step: Container = new Container();
-      /** Top face */
+    for (let i = 0; i < 4; i++) {
+      const step = new Container();
 
-      const top: Graphics = new Graphics()
+      /** Top face */
+      const top = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(1).toNumber(),
@@ -554,7 +558,7 @@ export class Stair extends Container {
         .endFill();
 
       /** Left face */
-      const left: Container = new Graphics()
+      const left = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(0.8).toNumber(),
@@ -573,7 +577,7 @@ export class Stair extends Container {
         .endFill();
 
       /** Right face */
-      const right: Container = new Graphics()
+      const right = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(0.71).toNumber(),
