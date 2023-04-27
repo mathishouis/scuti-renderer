@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build on Node ${{ matrix.node }}
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -18,17 +18,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3.0.0
-        with:
-          persist-credentials: false
-          fetch-depth: 0
 
-      - name: Use NodeJs
+      - name: Use NodeJs ${{ matrix.node-version }}
         uses: actions/setup-node@v3.1.1
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        uses: npm ci
+        run: npm ci
 
       - name: Build project
         run: npm run build

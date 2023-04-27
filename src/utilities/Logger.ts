@@ -90,7 +90,7 @@ export class Logger {
    * @public
    */
   public get time(): string {
-    const date: Date = new Date();
+    const date = new Date();
     return String(date.getHours()) + ':' + String(date.getMinutes()) + ':' + String(date.getSeconds());
   }
 

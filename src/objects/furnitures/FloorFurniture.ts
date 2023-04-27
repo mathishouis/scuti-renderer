@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 
+import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture';
 import type { Direction } from '../../enums/Direction';
 import { FurnitureData } from './FurnitureData';
 import { RoomObject } from '../rooms/RoomObject';
@@ -7,7 +8,6 @@ import { InteractionManager } from '../interactions/InteractionManager';
 import type { IInteractionEvent } from '../../interfaces/Interaction';
 import { FurnitureView } from './FurnitureView';
 import type { FurnitureVisualization } from './visualizations/FurnitureVisualization';
-import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture';
 
 /**
  * FloorFurniture class that aim to reproduce the floor furnitures on Habbo.
@@ -78,7 +78,7 @@ export class FloorFurniture extends RoomObject {
    * @member {InteractionManager}
    * @private
    */
-  private readonly _interactionManager: InteractionManager = new InteractionManager();
+  private readonly _interactionManager = new InteractionManager();
 
   /**
    * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.

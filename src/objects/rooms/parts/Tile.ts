@@ -62,7 +62,7 @@ export class Tile extends Container {
    * @member {InteractionManager}
    * @private
    */
-  private readonly _interactionManager: InteractionManager = new InteractionManager();
+  private readonly _interactionManager = new InteractionManager();
 
   /**
    * @param {Room} [room] - The room instance where the tile will be drawn.
@@ -111,13 +111,11 @@ export class Tile extends Container {
    */
   private _draw(): void {
     /** Top face */
-    const top: Graphics = new Graphics()
+    const top = new Graphics()
       .beginTextureFill({
         texture: this._material.texture,
         color: new Color(this._material.color).premultiply(1).toNumber(),
-
         //matrix: new Matrix(1, 0.5, 1, -0.5, (this._position.x % 2 === 0 || this._position.y % 2 === 0) && !(this._position.x % 2 === 0 && this._position.y % 2 === 0) ? 32 : 0, (this._position.x % 2 === 0 || this._position.y % 2 === 0) && !(this._position.x % 2 === 0 && this._position.y % 2 === 0) ? 16 : 0)
-
         matrix: new Matrix(1, 0.5, 1, -0.5, this._position.y % 2 === 0 ? 32 : 64, this._position.y % 2 === 0 ? 16 : 0)
       })
       .moveTo(0, 0)
@@ -139,15 +137,15 @@ export class Tile extends Container {
       bottomTile = this._room.tileMap.getTileInfo({ x: this._position.x, y: this._position.y + 1 });
     }
 
-    if (this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== 'undefined') {
+    if (this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== undefined) {
       rightTile = this._room.tileMap.getTileInfo({ x: this._position.x + 1, y: this._position.y });
     }
 
     if (
-      bottomTile == null ||
-      bottomTile.stairType != null ||
-      !bottomTile.tile ||
-      (this._tileInfo != null && bottomTile.height !== this._tileInfo.height)
+      !Boolean(bottomTile) ||
+      Boolean(bottomTile?.stairType) ||
+      !Boolean(bottomTile?.tile) ||
+      (this._tileInfo != null && bottomTile?.height !== this._tileInfo.height)
     ) {
       /** Left face */
       const left: Graphics = new Graphics()
@@ -191,7 +189,6 @@ export class Tile extends Container {
     /** Positionate the wall */
     this.x = 32 * this._position.x - 32 * this._position.y;
     this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
-
     /** Set the hit area */
     this.hitArea = new Polygon(
       new Point(0, 0),

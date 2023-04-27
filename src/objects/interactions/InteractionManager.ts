@@ -13,7 +13,7 @@ export class InteractionManager {
    * @member {boolean}
    * @private
    */
-  private _isDoubleClicking: boolean = false;
+  private _isDoubleClicking = false;
 
   /**
    * The double click timeout that set the _isDoubleClicking boolean value to false after 350ms.
