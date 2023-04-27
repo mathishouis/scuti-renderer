@@ -399,7 +399,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
         } else {
             furniture.direction = 4;
         }*/
-    avatar.pos = {
+    avatar.roomPosition = {
       x: position.x,
       y: position.y,
       z: position.z

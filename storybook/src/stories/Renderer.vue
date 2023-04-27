@@ -22,7 +22,8 @@ export default defineComponent({
         height: 500,
         resources: './resources'
       });
-      await scuti.loadResources('https://kozennnn.github.io/scuti-resources/');
+      //await scuti.loadResources('https://kozennnn.github.io/scuti-resources/');
+      await scuti.loadResources('http://localhost:8081/');
 
       if (props.cb) props.cb(scuti);
     });

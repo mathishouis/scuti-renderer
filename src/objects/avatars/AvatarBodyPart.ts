@@ -9,6 +9,7 @@ import { AvatarLayer } from './AvatarLayer';
 import type { Avatar } from './Avatar';
 import type { AvatarAnimation } from './animations/AvatarAnimation';
 import { AssetLoader } from '../../utilities/AssetLoader';
+import { ZOrder } from "../../utilities/ZOrder";
 
 export class AvatarBodyPart {
   private readonly _avatar: Avatar;
@@ -147,6 +148,8 @@ export class AvatarBodyPart {
         }
       }
 
+      let zOrder: number = ZOrder.avatar(this._avatar.roomPosition, this._getDrawOrder(type, gesture, direction));
+
       // We create the layer
       if (
         spritesheet.textures[
@@ -161,7 +164,7 @@ export class AvatarBodyPart {
           gesture,
           tint:
             part.colorable === 1 && type !== 'ey' ? this._getColor(this._type, this._colors[part.index]) : undefined,
-          z: this._getDrawOrder(type, gesture, direction),
+          z: zOrder,
           flip,
           direction,
           frame

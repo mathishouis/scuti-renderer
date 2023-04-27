@@ -1,7 +1,8 @@
 import type { Texture } from 'pixi.js';
 import { Assets, Container, Sprite } from 'pixi.js';
-
-import type { IPosition3D } from '../../../interfaces/Room';
+import type { Room } from '../Room';
+import type { ICursorConfiguration, IPosition3D } from '../../../interfaces/Room';
+import { ZOrder } from "../../../utilities/ZOrder";
 
 /**
  * Cursor class that show up when we move the cursor on a room tile.
@@ -11,6 +12,15 @@ import type { IPosition3D } from '../../../interfaces/Room';
  */
 export class Cursor extends Container {
   /**
+   * The room instance where the cursor will be drawn.
+   *
+   * @member {Room}
+   * @private
+   */
+  private readonly _room: Room;
+
+  /**
+
    * The cursor position.
    *
    * @member {IPosition3D}
@@ -23,11 +33,13 @@ export class Cursor extends Container {
    * @param {ICursorConfiguration} [configuration] - The tile configuration.
    * @param {IPosition3D} [configuration.position] - The cursor position.
    **/
-  constructor(position: IPosition3D) {
+  constructor(room: Room, configuration: ICursorConfiguration) {
     super();
 
     /** Store the configuration */
-    this._position = position;
+    this._room = room;
+    this._position = configuration.position;
+    this.parentLayer = this._room.objects.layer;
 
     /** Draw the cursor */
     this._draw();
@@ -60,6 +72,7 @@ export class Cursor extends Container {
    * @public
    */
   public moveTo(position: IPosition3D): void {
+    this.zOrder = ZOrder.tileCursor(position);
     this._position = position;
     this.x = 32 * this._position.x - 32 * this._position.y;
     this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;

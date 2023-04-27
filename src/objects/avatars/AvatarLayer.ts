@@ -80,7 +80,8 @@ export class AvatarLayer extends Container {
       ]
     );
     if (this._tint !== undefined) sprite.tint = new Color(this._tint).premultiply(1).toNumber();
-    if (this._z !== undefined) this.zIndex = this._z;
+    if (this._avatar.room !== undefined) this.parentLayer = this._avatar.room.objects.layer;
+    if (this._z !== undefined) this.zOrder = this._z;
     if (this._alpha !== undefined) sprite.alpha = this._alpha;
     //sprite.animationSpeed = 0.167;
     //sprite.play();
