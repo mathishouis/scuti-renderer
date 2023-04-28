@@ -1,14 +1,24 @@
-import { Assets } from 'pixi.js';
+import { Assets, Cache } from 'pixi.js';
 
 const domain = 'http://localhost:8081/';
 
+interface LoadedKeys {
+  [key: string]: Promise<any>;
+}
+const loadedKeys: LoadedKeys = {};
+
 const load = async (key: string, url: string, onUncached?: () => void): Promise<void> => {
-  if (Assets.get(key) === undefined) {
+  if (typeof loadedKeys[key] !== "undefined") {
+    await loadedKeys[key];
+    return;
+  }
+  if (!Cache.has(key)) {
     if (onUncached != null) {
       onUncached();
     }
     Assets.add(key, AssetLoader.domain + url);
-    await Assets.load(key);
+    loadedKeys[key] = Assets.load(key);
+    await loadedKeys[key];
   }
 };
 
