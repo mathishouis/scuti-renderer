@@ -40,9 +40,9 @@ export class RoomObject extends Container {
    * @return {void}
    * @public
    */
-  public destroy(): void {
-    // TODO: Code this part
-  }
+  /*public destroy(): void {
+
+  }*/
 
   /**
    * Reference to the room object room instance.
