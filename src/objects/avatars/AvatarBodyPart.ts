@@ -54,9 +54,7 @@ export class AvatarBodyPart {
   }
 
   private _draw(): void {
-    if (!this.areAllAssetsLoaded) {
-      return;
-    }
+    if (!this.areAllAssetsLoaded) return;
     this._parts.forEach((part: IAvatarPart) => {
       this._createPart(part);
     });
@@ -125,7 +123,7 @@ export class AvatarBodyPart {
       }
 
       if (
-        ((gesture === 'wav' && (type === 'lh' || type === 'ls' || type === 'lcs')) ||
+        ((gesture === 'wav' && (type === 'lh' || type === 'ls' || type === 'lc' || type === 'lcs')) ||
           (gesture === 'drk' && (type === 'rh' || type === 'rs' || type === 'rcs')) ||
           (gesture === 'blw' && type === 'rh') ||
           (gesture === 'sig' && type === 'lh') ||
@@ -200,7 +198,7 @@ export class AvatarBodyPart {
   private _getDrawOrder(type: string, action: string, direction: number): number {
     const drawOrder: [] = Assets.get('figures/draworder');
     const drawOrderList: [string, any] = Object.entries(
-      drawOrder[drawOrder[action] !== undefined ? action : 'std'][direction]
+      drawOrder[drawOrder[action] !== undefined ? action : 'std'][direction] ?? drawOrder['std'][direction]
     ).find((entry) => {
       return entry[1] === type;
     });

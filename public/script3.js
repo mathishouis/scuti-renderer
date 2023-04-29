@@ -133,15 +133,16 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
       y: 4,
       z: 0
     },
-    bodyDirection: 2,
-    headDirection: 2,
+    bodyDirection: 6,
+    headDirection: 6,
     actions: [
       //AvatarAction.Idle,
       //AvatarAction.Walk,
       AvatarAction.Talk,
       AvatarAction.Wave,
       //AvatarAction.Walk,
-      AvatarAction.CarryItem
+      AvatarAction.CarryItem,
+      AvatarAction.Sit,
     ],
     handItem: 55
   });
