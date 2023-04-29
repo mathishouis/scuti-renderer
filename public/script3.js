@@ -254,7 +254,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
       z: 0
     },
     direction: 1,
-    state: 1
+    state: 0
   });
   const background2 = new FloorFurniture({
     id: 3996,
@@ -264,7 +264,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
       z: 1
     },
     direction: 1,
-    state: 1
+    state: 0
   });
   const background3 = new FloorFurniture({
     id: 3996,
@@ -274,7 +274,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
       z: 0
     },
     direction: 1,
-    state: 1
+    state: 0
   });
   const background4 = new FloorFurniture({
     id: 3996,
@@ -284,7 +284,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
       z: 0
     },
     direction: 1,
-    state: 1
+    state: 0
   });
   const background5 = new FloorFurniture({
     id: 3996,
@@ -384,6 +384,10 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
   room.objects.add(background4);
   //background.visualization.imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png";
   room.objects.add(wallFurniture);
+  setInterval(() => {
+    wallFurniture3.state += 1;
+    wallFurniture3.destroy();
+  }, 3000);
   room.objects.add(wallFurniture3);
   room.objects.add(furniture);
   room.objects.add(furniture2);
