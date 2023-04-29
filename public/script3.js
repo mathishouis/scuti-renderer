@@ -143,7 +143,7 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
       AvatarAction.Wave,
       //AvatarAction.Walk,
       AvatarAction.CarryItem,
-      AvatarAction.Sit,
+      AvatarAction.Sit
     ],
     handItem: 55
   });
@@ -202,10 +202,8 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
     direction: 2,
     state: 1
   });
-  setTimeout(() => {
-
-  }, 2000);
-  document.body.addEventListener("keyup", function(event) {
+  setTimeout(() => {}, 2000);
+  document.body.addEventListener('keyup', function (event) {
     event.preventDefault();
     if (event.keyCode === 13) {
       room.camera.centerCamera(furniture);
