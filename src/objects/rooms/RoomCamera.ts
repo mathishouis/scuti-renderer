@@ -1,6 +1,7 @@
-import { Container, EventBoundary, FederatedPointerEvent } from 'pixi.js';
+import { Container, EventBoundary, FederatedPointerEvent, Point } from 'pixi.js';
 import { gsap } from 'gsap';
 
+import type { RoomObject } from './RoomObject';
 import type { Room } from './Room';
 import type { Tile } from './parts/Tile';
 import type { Stair } from './parts/Stair';
@@ -90,7 +91,7 @@ export class RoomCamera extends Container {
     this._room.engine.application.renderer.events.domElement.addEventListener('pointermove', this._tilePointerMove);
 
     this._updateBounds();
-    this._centerCamera();
+    this.centerCamera();
   }
 
   /**
@@ -108,15 +109,27 @@ export class RoomCamera extends Container {
    * Tween the room container at the center of the PixiJS view.
    *
    * @return {void}
-   * @private
+   * @public
    */
-  private _centerCamera(): void {
-    gsap.to(this._roomContainer, {
-      x: Math.floor(this._room.engine.application.view.width / 2 - this._room.view.width / 2),
-      y: Math.floor(this._room.engine.application.view.height / 2 - this._room.view.height / 2),
-      duration: 0.8,
-      ease: 'easeOut'
-    });
+  public centerCamera(object?: RoomObject): void {
+    if (object === null || object === undefined)
+      gsap.to(this._roomContainer, {
+        x: Math.floor(this._room.engine.application.view.width / 2 - this._room.view.width / 2),
+        y: Math.floor(this._room.engine.application.view.height / 2 - this._room.view.height / 2),
+        duration: 0.8,
+        ease: 'easeOut'
+      });
+    else {
+      const globalPos: Point = object.getGlobalPosition(new Point(object.width / 2, object.height / 2));
+      const diffX: number = globalPos.x - this._room.engine.application.view.width / 2;
+      const diffY: number = globalPos.y - this._room.engine.application.view.height / 2;
+      gsap.to(this._roomContainer, {
+        x: Math.floor(this._roomContainer.x - diffX),
+        y: Math.floor(this._roomContainer.y - diffY),
+        duration: 0.8,
+        ease: 'easeOut'
+      });
+    }
   }
 
   /**
@@ -137,7 +150,7 @@ export class RoomCamera extends Container {
    */
   private readonly _dragEnd = (): void => {
     this._dragging = false;
-    if (this._isOutOfBounds()) this._centerCamera();
+    if (this._isOutOfBounds()) this.centerCamera();
   };
 
   /**
@@ -225,7 +238,7 @@ export class RoomCamera extends Container {
    * Zoom the room container.
    *
    * @return {void}
-   * @private
+   * @public
    */
   public set zoomLevel(zoomLevel: number) {
     const origWidth: number = this.width / this._zoomLevel;
