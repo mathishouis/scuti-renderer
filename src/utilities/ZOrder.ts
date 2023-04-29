@@ -23,11 +23,12 @@ const COMPARABLE_Z = 10000;
  * @return {number}
  * @private
  */
-const avatar = function (position: IPosition3D): number {
+const avatar = function (position: IPosition3D, z: number): number {
   return (
     (Math.floor(position.x) + Math.floor(position.y)) * COMPARABLE_X_Y +
     (position.z + 0.001 * COMPARABLE_Z) +
-    PRIORITY_MULTIPLIER * PRIORITY_ROOM_AVATAR
+    PRIORITY_MULTIPLIER * PRIORITY_ROOM_AVATAR +
+    z
   );
 };
 

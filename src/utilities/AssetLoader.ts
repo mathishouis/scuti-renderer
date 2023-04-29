@@ -8,7 +8,7 @@ interface LoadedKeys {
 const loadedKeys: LoadedKeys = {};
 
 const load = async (key: string, url: string, onUncached?: () => void): Promise<void> => {
-  if (typeof loadedKeys[key] !== "undefined") {
+  if (loadedKeys[key] !== undefined) {
     await loadedKeys[key];
     return;
   }
