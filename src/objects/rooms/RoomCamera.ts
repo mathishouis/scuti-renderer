@@ -235,10 +235,10 @@ export class RoomCamera extends Container {
     this.scale.y = zoomLevel;
     const diffWidth: number = origWidth - this.width;
     const diffHeight: number = origHeight - this.height;
-    const offsetX: number = (this._room.engine.application.view.width / 2) - (this.x + (origWidth / 2));
-    const offsetY: number = (this._room.engine.application.view.height / 2) - (this.y + (origHeight / 2));
-    this.x += Math.floor((diffWidth / 2) + offsetX);
-    this.y += Math.floor((diffHeight / 2) + offsetY);
+    const offsetX: number = this._room.engine.application.view.width / 2 - (this.x + origWidth / 2);
+    const offsetY: number = this._room.engine.application.view.height / 2 - (this.y + origHeight / 2);
+    this.x += Math.floor(diffWidth / 2 + offsetX);
+    this.y += Math.floor(diffHeight / 2 + offsetY);
   }
 
   /**
