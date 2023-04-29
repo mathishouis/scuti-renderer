@@ -53,12 +53,21 @@ export class RoomCamera extends Container {
   private _selectedTile!: Tile | Stair;
 
   /**
+   * The current zoom level.
+   *
+   * @member {number}
+   * @private
+   */
+  private _zoomLevel: number;
+
+  /**
    * @param {Room} [room] - The room instance that will be managed by this camera.
    */
   constructor(room: Room) {
     super();
 
     this._room = room;
+    this._zoomLevel = 1;
 
     /** Initialise the view container */
     this._viewContainer = new Container();
@@ -140,8 +149,8 @@ export class RoomCamera extends Container {
    */
   private readonly _dragMove = (event: FederatedPointerEvent): void => {
     if (this._dragging) {
-      this._roomContainer.x = Math.floor(this._roomContainer.x + event.movementX);
-      this._roomContainer.y = Math.floor(this._roomContainer.y + event.movementY);
+      this._roomContainer.x = Math.floor(this._roomContainer.x + event.movementX * (1 / this._zoomLevel));
+      this._roomContainer.y = Math.floor(this._roomContainer.y + event.movementY * (1 / this._zoomLevel));
     }
   };
 
@@ -211,4 +220,35 @@ export class RoomCamera extends Container {
       this._selectedTile = object;
     }
   };
+
+  /**
+   * Zoom the room container.
+   *
+   * @return {void}
+   * @private
+   */
+  public set zoomLevel(zoomLevel: number) {
+    const origWidth: number = this.width / this._zoomLevel;
+    const origHeight: number = this.height / this._zoomLevel;
+    this._zoomLevel = zoomLevel;
+    this.scale.x = zoomLevel;
+    this.scale.y = zoomLevel;
+    const diffWidth: number = origWidth - this.width;
+    const diffHeight: number = origHeight - this.height;
+    const offsetX: number = this._room.engine.application.view.width / 2 - (this.x + origWidth / 2);
+    const offsetY: number = this._room.engine.application.view.height / 2 - (this.y + origHeight / 2);
+    this.x += Math.floor(diffWidth / 2 + offsetX);
+    this.y += Math.floor(diffHeight / 2 + offsetY);
+  }
+
+  /**
+   * Return the zoom level of the room container.
+   *
+   * @member {Application}
+   * @readonly
+   * @public
+   */
+  public get zoomLevel(): number {
+    return this._zoomLevel;
+  }
 }

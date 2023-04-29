@@ -121,8 +121,27 @@ import { AvatarAction } from '../src/objects/avatars/actions/AvatarAction';
     wallMaterial: new WallMaterial(renderer, 1601)
   });
   setTimeout(() => {
-    room.tileMap = tileMapUpdated;
-  }, 5000);
+    //room.tileMap = tileMapUpdated;
+    //room.camera._centerCamera();
+  }, 2000);
+  setTimeout(() => {
+    room.camera.zoomLevel = 0.5;
+  }, 2000);
+  setTimeout(() => {
+    room.camera.zoomLevel = 0.25;
+  }, 4000);
+  setTimeout(() => {
+    room.camera.zoomLevel = 1;
+  }, 6000);
+  setTimeout(() => {
+    room.camera.zoomLevel = 2;
+  }, 8000);
+  setTimeout(() => {
+    room.camera.zoomLevel = 3;
+  }, 10000);
+  setTimeout(() => {
+    room.camera.zoomLevel = 4;
+  }, 12000);
   const avatar = new Avatar({
     //figure: "hr-100-61.hd-180-7.ch-210-66.lg-270-82.sh-290-80",
     // police figure: "hr-892-46.hd-209-8.ch-225-81.lg-270-64.sh-300-64.ca-1804-64.wa-2012",

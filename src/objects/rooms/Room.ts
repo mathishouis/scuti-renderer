@@ -297,4 +297,15 @@ export class Room extends Container {
   public get objects(): RoomObjectLayer {
     return this._view.objectLayer;
   }
+
+  /**
+   * Reference to the room camera.
+   *
+   * @member {RoomCamera}
+   * @readonly
+   * @public
+   */
+  public get camera(): RoomCamera {
+    return this._camera;
+  }
 }

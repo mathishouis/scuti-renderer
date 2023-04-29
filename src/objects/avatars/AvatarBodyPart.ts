@@ -198,7 +198,7 @@ export class AvatarBodyPart {
   private _getDrawOrder(type: string, action: string, direction: number): number {
     const drawOrder: [] = Assets.get('figures/draworder');
     const drawOrderList: [string, any] = Object.entries(
-      drawOrder[drawOrder[action] !== undefined ? action : 'std'][direction] ?? drawOrder['std'][direction]
+      drawOrder[drawOrder[action] !== undefined ? action : 'std'][direction] ?? drawOrder.std[direction]
     ).find((entry) => {
       return entry[1] === type;
     });
