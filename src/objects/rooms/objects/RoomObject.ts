@@ -316,9 +316,6 @@ export abstract class RoomObject {
       onUpdate: () => {
         this._visualization.updatePosition();
       },
-      onComplete: () => {
-        this._position = position;
-      }
     });
   }
 

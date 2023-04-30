@@ -81,6 +81,10 @@ import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture';
   furniture3.onLoadComplete = () => {
     console.log("loaded!")
   }
+  room.tiles.onPointerDown = (event) => {
+    furniture.move(event.position);
+    //room.tileMap = tileMap;
+  }
   //dice(room, 5, 5, 2);
   document.onkeydown = (e) => {
     e = e || window.event;
