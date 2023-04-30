@@ -75,3 +75,17 @@ export interface IFurnitureLayerConfiguration {
   direction: Direction;
   tag?: string;
 }
+
+
+export interface IFurnitureLayerData {
+  layer: number | string;
+  alpha: number;
+  tint?: number;
+  z: number;
+  blendMode: BLEND_MODES;
+  flip: boolean;
+  frame: number;
+  ignoreMouse: boolean;
+  direction: Direction;
+  tag?: string;
+}

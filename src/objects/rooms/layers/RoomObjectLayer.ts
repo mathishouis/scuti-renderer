@@ -33,6 +33,7 @@ export class RoomObjectLayer extends Container {
   constructor(room: Room) {
     super();
 
+    this.sortableChildren = true;
     this._room = room;
     this._room.engine.application.stage.addChild(this._layer);
     this._layer.group.enableSort = true;
@@ -49,7 +50,7 @@ export class RoomObjectLayer extends Container {
   public add(object: RoomObject): void {
     object.room = this._room;
     object.start();
-    this.addChild(object);
+    //this.addChild(object);
   }
 
   /**

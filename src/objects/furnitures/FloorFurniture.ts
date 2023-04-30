@@ -3,11 +3,13 @@ import { gsap } from 'gsap';
 import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture';
 import type { Direction } from '../../enums/Direction';
 import { FurnitureData } from './FurnitureData';
-import { RoomObject } from '../rooms/RoomObject';
 import { InteractionManager } from '../interactions/InteractionManager';
 import type { IInteractionEvent } from '../../interfaces/Interaction';
 import { FurnitureView } from './FurnitureView';
-import type { FurnitureVisualization } from './visualizations/FurnitureVisualization';
+import type { FurnitureVisualization } from './FurnitureVisualization';
+import {AssetLoader} from "../../utilities/AssetLoader";
+import {FurnitureAnimatedVisualization} from "./visualizations/FurnitureAnimatedVisualization";
+import {RoomObject} from "./RoomObject";
 
 /**
  * FloorFurniture class that aim to reproduce the floor furnitures on Habbo.
@@ -64,13 +66,7 @@ export class FloorFurniture extends RoomObject {
    */
   private readonly _data: FurnitureData;
 
-  /**
-   * The furniture view.
-   *
-   * @member {FurnitureView}
-   * @private
-   */
-  private _view: FurnitureView;
+  private _visualization!: FurnitureVisualization;
 
   /**
    * The furniture interaction manager to handle all the clicks and taps.
@@ -91,11 +87,21 @@ export class FloorFurniture extends RoomObject {
     this._direction = configuration.direction;
     this._state = configuration.state ?? 0;
     this._data = new FurnitureData(this);
+    this._loadAssets().then(() => {
+      this._visualization = new FurnitureAnimatedVisualization(this);
+    });
     /** Initialise view */
-    this._view = new FurnitureView(this);
-    this.addChild(this._view);
+    //this._view = new FurnitureView(this);
+    //this.addChild(this._view);
     /** Set the furniture position in the canvas */
     this._updatePosition();
+  }
+
+  private _loadAssets(): Promise<void> {
+    return AssetLoader.load(
+      'furnitures/' + this._data.baseName,
+      'furniture/' + this._data.baseName + '/' + this._data.baseName + '.json'
+    );
   }
 
   /**
@@ -105,8 +111,8 @@ export class FloorFurniture extends RoomObject {
    * @private
    */
   private _updatePosition(): void {
-    this.x = 32 + 32 * this._position.x - 32 * this._position.y;
-    this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
+    //this.x = 32 + 32 * this._position.x - 32 * this._position.y;
+    //this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
   }
 
   /**
@@ -115,10 +121,9 @@ export class FloorFurniture extends RoomObject {
    * @return {void}
    * @public
    */
-  // @ts-expect-error
   public start(): void {
-    this.animationTicker.add(() => {
-      return this._view.tick();
+    this.room.view.animationTicker.add(() => {
+      return this._visualization.update();
     });
   }
 
@@ -128,10 +133,9 @@ export class FloorFurniture extends RoomObject {
    * @return {void}
    * @public
    */
-  // @ts-expect-error
   public stop(): void {
-    this.animationTicker.remove(() => {
-      return this._view.tick();
+    this.room.view.animationTicker.remove(() => {
+      return this._visualization.update();
     });
   }
 
@@ -171,7 +175,7 @@ export class FloorFurniture extends RoomObject {
       ease: 'easeIn',
       onComplete: () => {
         this._direction = direction;
-        this._view.update();
+        this._visualization.render();
         gsap.to(this, {
           x: 32 + 32 * this._position.x - 32 * this._position.y,
           y: 16 * this._position.x + 16 * this._position.y - 32 * this._position.z,
@@ -233,7 +237,7 @@ export class FloorFurniture extends RoomObject {
    */
   public set direction(direction: Direction) {
     this._direction = direction;
-    this._view.update();
+    this._visualization.render();
   }
 
   /**
@@ -255,7 +259,7 @@ export class FloorFurniture extends RoomObject {
    */
   public set state(state: number) {
     this._state = state;
-    this._view.update();
+    this._visualization.render();
   }
 
   /**
@@ -277,7 +281,7 @@ export class FloorFurniture extends RoomObject {
    */
   public set selected(selected: boolean) {
     this._selected = selected;
-    this._view.update();
+    this._visualization.render();
   }
 
   /**
