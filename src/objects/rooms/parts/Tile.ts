@@ -5,7 +5,7 @@ import type { Room } from '../Room';
 import type { ITileConfiguration, ITileInfo } from '../../../interfaces/Room';
 import type { Material } from '../materials/Material';
 import { FloorMaterial } from '../materials/FloorMaterial';
-import { InteractionManager } from '../../interactions/InteractionManager';
+import { EventManager } from '../../interactions/EventManager';
 import type { IInteractionEvent } from '../../../interfaces/Interaction';
 import type { IFloorPosition } from '../../../interfaces/Furniture';
 
@@ -59,10 +59,10 @@ export class Tile extends Container {
   /**
    * The tile interaction manager.
    *
-   * @member {InteractionManager}
+   * @member {EventManager}
    * @private
    */
-  private readonly _interactionManager = new InteractionManager();
+  private readonly _interactionManager = new EventManager();
 
   /**
    * @param {Room} [room] - The room instance where the tile will be drawn.

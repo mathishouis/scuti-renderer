@@ -170,19 +170,19 @@ export class FurnitureLayer extends HitSprite {
     if (this._ignoreMouse !== null && !this._ignoreMouse) this.interactive = true;
     if (this._furniture.selected) this.filters.push(WIRED_SELECTION_FILTER);
     this.on('pointerdown', (event) => {
-      return this._furniture.interactionManager.handlePointerDown({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerDown({ mouseEvent: event, tag: this._tag });
     });
     this.on('pointerup', (event) => {
-      return this._furniture.interactionManager.handlePointerUp({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerUp({ mouseEvent: event, tag: this._tag });
     });
     this.on('pointermove', (event) => {
-      return this._furniture.interactionManager.handlePointerMove({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerMove({ mouseEvent: event, tag: this._tag });
     });
     this.on('pointerout', (event) => {
-      return this._furniture.interactionManager.handlePointerOut({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerOut({ mouseEvent: event, tag: this._tag });
     });
     this.on('pointerover', (event) => {
-      return this._furniture.interactionManager.handlePointerOver({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerOver({ mouseEvent: event, tag: this._tag });
     });
   }
 

@@ -4,7 +4,7 @@ import type { IWallFurnitureConfiguration, IWallPosition } from '../../interface
 import type { Direction } from '../../enums/Direction';
 import { FurnitureData } from './FurnitureData';
 import { RoomObject } from '../rooms/RoomObject';
-import { InteractionManager } from '../interactions/InteractionManager';
+import { EventManager } from '../interactions/EventManager';
 import type { IInteractionEvent } from '../../interfaces/Interaction';
 import { FurnitureView } from './FurnitureView';
 import type { FurnitureVisualization } from './visualizations/FurnitureVisualization';
@@ -75,10 +75,10 @@ export class WallFurniture extends RoomObject {
   /**
    * The furniture interaction manager to handle all the clicks and taps.
    *
-   * @member {InteractionManager}
+   * @member {EventManager}
    * @private
    */
-  private readonly _interactionManager: InteractionManager = new InteractionManager();
+  private readonly _interactionManager: EventManager = new EventManager();
 
   /**
    * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.
@@ -345,11 +345,11 @@ export class WallFurniture extends RoomObject {
   /**
    * Reference to the furniture interaction manager.
    *
-   * @member {InteractionManager}
+   * @member {EventManager}
    * @readonly
    * @public
    */
-  public get interactionManager(): InteractionManager {
+  public get interactionManager(): EventManager {
     return this._interactionManager;
   }
 

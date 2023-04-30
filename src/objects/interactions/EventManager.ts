@@ -1,4 +1,5 @@
 import type { IInteractionEvent } from '../../interfaces/Interaction';
+import {Room} from "../rooms/Room";
 
 /**
  * InteractionManager class for interaction handling.
@@ -6,7 +7,7 @@ import type { IInteractionEvent } from '../../interfaces/Interaction';
  * @class
  * @memberof Scuti
  */
-export class InteractionManager {
+export class EventManager {
   /**
    * A boolean indicating if the user have clicked at least one time, indicating that the second click is a double click.
    *
@@ -70,6 +71,30 @@ export class InteractionManager {
    * @private
    */
   private _onDoubleClick!: (event: IInteractionEvent) => void;
+
+  /**
+   * The assets starting load event.
+   *
+   * @member {() => void}
+   * @private
+   */
+  private _onLoad!: () => void;
+
+  /**
+   * The assets ending load event.
+   *
+   * @member {() => void}
+   * @private
+   */
+  private _onLoadComplete!: () => void;
+
+  /**
+   * The room add event.
+   *
+   * @member {(room: Room) => void}
+   * @private
+   */
+  private _onRoomAdded!: (room: Room) => void;
 
   /**
    * Reference to the pointer down event.
@@ -198,6 +223,69 @@ export class InteractionManager {
   }
 
   /**
+   * Reference to the assets starting load event.
+   *
+   * @member {() => void}
+   * @readonly
+   * @public
+   */
+  public get onLoad(): () => void {
+    return this._onLoad;
+  }
+
+  /**
+   * Update the event function that will be executed.
+   *
+   * @param {() => void} [value] - The event function that will be executed.
+   * @public
+   */
+  public set onLoad(value: () => void) {
+    this._onLoad = value;
+  }
+
+  /**
+   * Reference to the assets ending load event.
+   *
+   * @member {() => void}
+   * @readonly
+   * @public
+   */
+  public get onLoadComplete(): () => void {
+    return this._onLoadComplete;
+  }
+
+  /**
+   * Update the event function that will be executed.
+   *
+   * @param {() => void} [value] - The event function that will be executed.
+   * @public
+   */
+  public set onLoadComplete(value: () => void) {
+    this._onLoadComplete = value;
+  }
+
+  /**
+   * Reference to the room add event.
+   *
+   * @member {(room: Room) => void}
+   * @readonly
+   * @public
+   */
+  public get onRoomAdded(): (room: Room) => void {
+    return this._onRoomAdded;
+  }
+
+  /**
+   * Update the event function that will be executed.
+   *
+   * @param {(room: Room) => void} [value] - The event function that will be executed.
+   * @public
+   */
+  public set onRoomAdded(value: (room: Room) => void) {
+    this._onRoomAdded = value;
+  }
+
+  /**
    * Handle the pointer down event.
    *
    * @return {void}
@@ -255,5 +343,35 @@ export class InteractionManager {
    */
   public handlePointerOver(event: IInteractionEvent): void {
     if (this.onPointerOver !== undefined) this._onPointerOver(event);
+  }
+
+  /**
+   * Handle the assets load start event.
+   *
+   * @return {void}
+   * @public
+   */
+  public handleLoad(): void {
+    if (this.onLoad !== undefined) this._onLoad();
+  }
+
+  /**
+   * Handle the assets load end event.
+   *
+   * @return {void}
+   * @public
+   */
+  public handleLoadComplete(): void {
+    if (this.onLoadComplete !== undefined) this._onLoadComplete();
+  }
+
+  /**
+   * Handle the room add event.
+   *
+   * @return {void}
+   * @public
+   */
+  public handleRoomAdded(room: Room): void {
+    if (this.onRoomAdded !== undefined) this._onRoomAdded(room);
   }
 }

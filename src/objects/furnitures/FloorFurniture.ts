@@ -3,13 +3,13 @@ import { gsap } from 'gsap';
 import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture';
 import type { Direction } from '../../enums/Direction';
 import { FurnitureData } from './FurnitureData';
-import { InteractionManager } from '../interactions/InteractionManager';
+import { EventManager } from '../interactions/EventManager';
 import type { IInteractionEvent } from '../../interfaces/Interaction';
 import { FurnitureView } from './FurnitureView';
 import type { FurnitureVisualization } from './FurnitureVisualization';
 import {AssetLoader} from "../../utilities/AssetLoader";
 import {FurnitureAnimatedVisualization} from "./visualizations/FurnitureAnimatedVisualization";
-import {RoomObject} from "./RoomObject";
+import {RoomObject} from "../rooms/objects/RoomObject";
 
 /**
  * FloorFurniture class that aim to reproduce the floor furnitures on Habbo.
@@ -69,14 +69,6 @@ export class FloorFurniture extends RoomObject {
   private _visualization!: FurnitureVisualization;
 
   /**
-   * The furniture interaction manager to handle all the clicks and taps.
-   *
-   * @member {InteractionManager}
-   * @private
-   */
-  private readonly _interactionManager = new InteractionManager();
-
-  /**
    * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.
    */
   constructor(configuration: IFloorFurnitureConfiguration) {
@@ -87,14 +79,12 @@ export class FloorFurniture extends RoomObject {
     this._direction = configuration.direction;
     this._state = configuration.state ?? 0;
     this._data = new FurnitureData(this);
-    this._loadAssets().then(() => {
-      this._visualization = new FurnitureAnimatedVisualization(this);
-    });
+    this._visualization = new FurnitureAnimatedVisualization(this);
     /** Initialise view */
     //this._view = new FurnitureView(this);
     //this.addChild(this._view);
     /** Set the furniture position in the canvas */
-    this._updatePosition();
+    //this._updatePosition();
   }
 
   private _loadAssets(): Promise<void> {
@@ -122,9 +112,13 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   public start(): void {
-    this.room.view.animationTicker.add(() => {
-      return this._visualization.update();
-    });
+    if (this._visualization.loaded) {
+      this.room.view.animationTicker.add(() => {
+        return this._visualization.update();
+      });
+    } else {
+      this.eventManager.onLoadComplete
+    }
   }
 
   /**
@@ -325,163 +319,5 @@ export class FloorFurniture extends RoomObject {
    */
   public get visualization(): FurnitureVisualization {
     return this._view.visualization;
-  }
-
-  /**
-   * Reference to the furniture interaction manager.
-   *
-   * @member {InteractionManager}
-   * @readonly
-   * @public
-   */
-  public get interactionManager(): InteractionManager {
-    return this._interactionManager;
-  }
-
-  /**
-   * Reference to the pointer down event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerDown(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerDown;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerDown(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerDown = value;
-  }
-
-  /**
-   * Reference to the pointer up event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerUp(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerUp;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerUp(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerUp = value;
-  }
-
-  /**
-   * Reference to the pointer move event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerMove(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerMove;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerMove(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerMove = value;
-  }
-
-  /**
-   * Reference to the pointer out event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerOut(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOut;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerOut(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOut = value;
-  }
-
-  /**
-   * Reference to the pointer over event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerOver(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOver;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerOver(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOver = value;
-  }
-
-  /**
-   * Reference to the pointer double click event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onDoubleClick(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onDoubleClick;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onDoubleClick(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onDoubleClick = value;
-  }
-
-  /**
-   * Reference to the load event.
-   *
-   * @member {() => void}
-   * @readonly
-   * @public
-   */
-  public get onLoad(): () => void {
-    return this._view.onLoad;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {() => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onLoad(value: () => void) {
-    this._view.onLoad = value;
   }
 }

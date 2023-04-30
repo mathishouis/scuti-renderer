@@ -1,6 +1,6 @@
 import { Container, Point } from 'pixi.js';
 
-import { InteractionManager } from '../../interactions/InteractionManager';
+import { EventManager } from '../../interactions/EventManager';
 import type { Tile } from '../parts/Tile';
 import type { Stair } from '../parts/Stair';
 import type { IInteractionEvent } from '../../../interfaces/Interaction';
@@ -16,10 +16,10 @@ export class RoomTileLayer extends Container {
   /**
    * The room tiles interaction manager.
    *
-   * @member {InteractionManager}
+   * @member {EventManager}
    * @private
    */
-  private readonly _interactionManager = new InteractionManager();
+  private readonly _interactionManager = new EventManager();
 
   /**
    * Return the tile or the stair at the specified screen position.

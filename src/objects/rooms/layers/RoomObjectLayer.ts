@@ -1,7 +1,7 @@
 import { Container } from 'pixi.js';
 import { Layer } from '@pixi/layers';
 
-import type { RoomObject } from '../RoomObject';
+import type { RoomObject } from '../objects/RoomObject';
 import type { Room } from '../Room';
 
 /**
@@ -49,7 +49,8 @@ export class RoomObjectLayer extends Container {
    */
   public add(object: RoomObject): void {
     object.room = this._room;
-    object.start();
+    object.onRoomAdded(this._room);
+    //object.start();
     //this.addChild(object);
   }
 
@@ -61,7 +62,7 @@ export class RoomObjectLayer extends Container {
    * @public
    */
   public remove(object: RoomObject): void {
-    object.stop();
+    //object.stop();
     this.removeChild(object);
   }
 

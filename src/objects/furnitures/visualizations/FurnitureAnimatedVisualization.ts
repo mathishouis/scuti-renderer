@@ -1,8 +1,7 @@
 import { FurnitureVisualization } from "../FurnitureVisualization";
 import { FloorFurniture } from "../FloorFurniture";
 import { WallFurniture } from "../WallFurniture";
-import { Assets, Spritesheet } from "pixi.js";
-import { IFurnitureLayerData, IFurnitureProperty, IFurnitureVisualization } from "../../../interfaces/Furniture";
+import { IFurnitureLayerData, IFurnitureVisualization } from "../../../interfaces/Furniture";
 import { FurnitureLayer } from "../FurnitureLayer";
 
 export class FurnitureAnimatedVisualization extends FurnitureVisualization {
@@ -17,26 +16,20 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
   }
 
   public render(): void {
-    const spritesheet: Spritesheet = Assets.get('furnitures/' + this._furniture.data.baseName);
-    // @ts-ignore
-    const properties: IFurnitureProperty = spritesheet.data.furniProperty as IFurnitureProperty;
     this.destroy();
-    for (let i = 0; i < properties.visualization.layerCount; i++) {
+    for (let i = 0; i < this._properties.visualization.layerCount; i++) {
       this.renderLayer(i, this._frames.get(i) ?? 0);
     }
   }
 
   public renderLayer(layer: number, frame: number): void {
-    const spritesheet: Spritesheet = Assets.get('furnitures/' + this._furniture.data.baseName);
-    // @ts-ignore
-    const properties: IFurnitureProperty = spritesheet.data.furniProperty as IFurnitureProperty;
-    const visualization: IFurnitureVisualization = properties.visualization;
+    const visualization: IFurnitureVisualization = this._properties.visualization;
     const furnitureLayer: FurnitureLayer | undefined = this._layers.get(layer);
 
     if (furnitureLayer) furnitureLayer.destroy();
 
     if (
-      properties.infos.visualization === 'furniture_animated' &&
+      this._properties.infos.visualization === 'furniture_animated' &&
       visualization.animation[this._furniture.state] === undefined
     ) {
       this._furniture.state = Number(Object.keys(visualization.animation)[0]);
@@ -85,11 +78,8 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
   }
 
   public update(): void {
-    const spritesheet: Spritesheet = Assets.get('furnitures/' + this._furniture.data.baseName);
-    // @ts-ignore
-    const properties: IFurnitureProperty = spritesheet.data.furniProperty as IFurnitureProperty;
-    const visualization: IFurnitureVisualization = properties.visualization;
-    for (let i = 0; i < properties.visualization.layerCount; i++) {
+    const visualization: IFurnitureVisualization = this._properties.visualization;
+    for (let i = 0; i < this._properties.visualization.layerCount; i++) {
       if (
         // @ts-expect-error
         visualization.animation[String(this._furniture.state)] !== undefined &&

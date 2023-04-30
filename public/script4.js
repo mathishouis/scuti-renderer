@@ -9,9 +9,9 @@ import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture';
     canvas: document.getElementById('app'),
     width: window.innerWidth,
     height: window.innerHeight,
-    resources: 'http://localhost:8081/'
+    resources: 'https://kozennnn.github.io/scuti-resources/'
   });
-  await renderer.loadResources('http://localhost:8081/');
+  await renderer.loadResources('https://kozennnn.github.io/scuti-resources/');
 
   const tileMap =
     '000000\n' +
@@ -76,6 +76,30 @@ import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture';
   room.objects.add(furniture2);
   room.objects.add(wallFurniture);
   dice(room, 5, 5, 2);
+  document.onkeydown = (e) => {
+    e = e || window.event;
+
+    if (e.keyCode == '38') {
+      if (room.camera.zoomLevel <= 1) {
+        room.camera.zoomLevel = room.camera.zoomLevel * 2;
+      } else {
+        room.camera.zoomLevel += 1;
+      }
+    }
+    else if (e.keyCode == '40') {
+      if (room.camera.zoomLevel <= 1) {
+        room.camera.zoomLevel = room.camera.zoomLevel / 2;
+      } else {
+        room.camera.zoomLevel -= 1;
+      }
+    }
+    else if (e.keyCode == '37') {
+      // left arrow
+    }
+    else if (e.keyCode == '39') {
+      // right arrow
+    }
+  }
 })();
 
 function dice(room, x, y, z) {

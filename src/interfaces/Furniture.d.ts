@@ -66,7 +66,7 @@ export interface IFurnitureVisualization {
 export interface IFurnitureLayerConfiguration {
   layer: number | string;
   alpha: number;
-  tint: number;
+  tint?: number | undefined;
   z: number;
   blendMode: BLEND_MODES;
   flip: boolean;
@@ -80,7 +80,7 @@ export interface IFurnitureLayerConfiguration {
 export interface IFurnitureLayerData {
   layer: number | string;
   alpha: number;
-  tint?: number;
+  tint?: number | undefined;
   z: number;
   blendMode: BLEND_MODES;
   flip: boolean;

@@ -7,7 +7,7 @@ import type { Material } from '../materials/Material';
 import { StairType } from '../../../enums/StairType';
 import { Direction } from '../../../enums/Direction';
 import { FloorMaterial } from '../materials/FloorMaterial';
-import { InteractionManager } from '../../interactions/InteractionManager';
+import { EventManager } from '../../interactions/EventManager';
 import type { IInteractionEvent } from '../../../interfaces/Interaction';
 
 /**
@@ -60,10 +60,10 @@ export class Stair extends Container {
   /**
    * The stair interaction manager.
    *
-   * @member {InteractionManager}
+   * @member {EventManager}
    * @private
    */
-  private readonly _interactionManager: InteractionManager = new InteractionManager();
+  private readonly _interactionManager: EventManager = new EventManager();
 
   /**
    * @param {Room} [room] - The room instance where the stair will be drawn.
