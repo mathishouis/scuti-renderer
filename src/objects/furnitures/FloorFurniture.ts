@@ -1,7 +1,9 @@
-import type {IFloorFurnitureConfiguration} from '../../interfaces/Furniture';
+import type { IFloorFurnitureConfiguration } from '../../interfaces/Furniture';
 import { FurnitureData } from './FurnitureData';
-import {FurnitureAnimatedVisualization} from "./visualizations/FurnitureAnimatedVisualization";
-import {RoomObject} from "../rooms/objects/RoomObject";
+import { FurnitureAnimatedVisualization } from "./visualizations/FurnitureAnimatedVisualization";
+import { RoomObject } from "../rooms/objects/RoomObject";
+import { IFloorPosition, IWallPosition } from "../../interfaces/Furniture";
+import { gsap } from "gsap";
 
 /**
  * FloorFurniture class that aim to reproduce the floor furnitures on Habbo.
@@ -10,6 +12,15 @@ import {RoomObject} from "../rooms/objects/RoomObject";
  * @memberof Scuti
  */
 export class FloorFurniture extends RoomObject {
+
+  /**
+   * The furniture position in the room.
+   *
+   * @member {IFloorPosition}
+   * @private
+   */
+  public _position: IFloorPosition;
+
   /**
    * The furniture id that represent the one in furnidata.
    *
@@ -38,6 +49,38 @@ export class FloorFurniture extends RoomObject {
     this._state = configuration.state ?? 0;
     this._data = new FurnitureData(this);
     this._visualization = new FurnitureAnimatedVisualization(this);
+  }
+
+  /**
+   * Reference to the furniture position in the room.
+   *
+   * @member {IFloorPosition}
+   * @readonly
+   * @public
+   */
+  public get position(): IFloorPosition {
+    return this._position;
+  }
+
+  /**
+   * Move the furniture at the given position and in time.
+   *
+   * @param {IFloorPosition} [position] - The position where we want to move the furniture.
+   * @param {number} [duration] - The time to move the furniture to the given position.
+   * @return {void}
+   * @public
+   */
+  move(position: IFloorPosition | IWallPosition, duration: number = 0.5): void {
+    if (!this._visualization) return;
+    gsap.to(this._position, {
+      x: position.x,
+      y: position.y,
+      duration: duration,
+      ease: 'linear',
+      onUpdate: () => {
+        this._visualization.updatePosition();
+      },
+    });
   }
 
   /**

@@ -1,24 +1,24 @@
-import {FloorFurniture} from "./FloorFurniture";
-import {WallFurniture} from "./WallFurniture";
-import {Assets, BLEND_MODES, Spritesheet} from "pixi.js";
-import {IFurnitureLayerData, IFurnitureProperty, IFurnitureVisualization} from "../../interfaces/Furniture";
-import {Direction} from "../../enums/Direction";
-import {ZOrder} from "../../utilities/ZOrder";
-import {HitSprite} from "../interactions/HitSprite";
-import {AssetLoader} from "../../utilities/AssetLoader";
-import {Room} from "../rooms/Room";
-import {FurnitureLayer} from "./FurnitureLayer";
-import {RoomObjectVisualization} from "../rooms/objects/RoomObjectVisualization";
+import { FloorFurniture } from "./FloorFurniture";
+import { WallFurniture } from "./WallFurniture";
+import { Assets, BLEND_MODES, Spritesheet } from "pixi.js";
+import { IFurnitureLayerData, IFurnitureProperty, IFurnitureVisualization } from "../../interfaces/Furniture";
+import { Direction } from "../../enums/Direction";
+import { ZOrder } from "../../utilities/ZOrder";
+import { HitSprite } from "../interactions/HitSprite";
+import { AssetLoader } from "../../utilities/AssetLoader";
+import { Room } from "../rooms/Room";
+import { FurnitureLayer } from "./FurnitureLayer";
+import { RoomObjectVisualization } from "../rooms/objects/RoomObjectVisualization";
 
 export abstract class FurnitureVisualization extends RoomObjectVisualization {
   public _layers: Map<number, FurnitureLayer> = new Map<number, FurnitureLayer>();
   public _placeholder!: HitSprite;
-  public _spritesheet: Spritesheet;
-  public _properties: IFurnitureProperty;
-  public _furniture: FloorFurniture
+  public _spritesheet!: Spritesheet;
+  public _properties!: IFurnitureProperty;
+  public _furniture: FloorFurniture | WallFurniture;
 
   protected constructor(
-    furniture: FloorFurniture
+    furniture: FloorFurniture | WallFurniture
   ) {
     super();
     this._furniture = furniture;
@@ -47,6 +47,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
     ).then(() => {
       if (this._furniture.onLoadComplete) this._furniture.onLoadComplete();
       this._spritesheet = Assets.get('furnitures/' + name);
+      // @ts-ignore
       this._properties = this._spritesheet.data.furniProperty as IFurnitureProperty;
       this._loaded = true;
       this._placeholder.destroy();
@@ -60,6 +61,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
     if (this._furniture instanceof FloorFurniture) {
       this._layers.forEach((layer: FurnitureLayer) => {
         layer.x = layer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y;
+        // @ts-ignore
         layer.y = layer.texture.orig.y + 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 * this._furniture.position.z;
       });
     } else if (this._furniture instanceof WallFurniture) {
@@ -71,6 +73,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
     const furnitureLayer: FurnitureLayer | undefined = this._layers.get(layer);
     if (!furnitureLayer) return;
     furnitureLayer.x = furnitureLayer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y;
+    // @ts-ignore
     furnitureLayer.y = furnitureLayer.texture.orig.y + 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 * this._furniture.position.z;
   }
 
@@ -78,6 +81,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
     this._placeholder = new HitSprite(
       Assets.get('furnitures/floor/placeholder').textures['place_holder_furniture_64.png']
     );
+    // @ts-ignore
     if (this._furniture.room) this._furniture.room.objects.addChild(this._placeholder);
     this._placeholder.x = -32;
     this._placeholder.y = -50;
@@ -101,7 +105,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
     }
 
     if (!visualization.directions.includes(this._furniture.direction))
-      this._furniture.direction = visualization.directions[0];
+      this._furniture.rotate(visualization.directions[0], 0);
 
     layerData.direction = this._furniture.direction;
 
@@ -136,6 +140,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
     ].join('_');
 
     if (this._furniture instanceof FloorFurniture) layerData.z = ZOrder.floorItem(this._furniture.position, layerData.z);
+    // @ts-ignore
     if (this._furniture instanceof WallFurniture) layerData.z = ZOrder.wallItem(this._furniture.position, layerData.z);
 
     // @ts-ignore

@@ -37,7 +37,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
     const layerData: IFurnitureLayerData = this.layerData(layer, frame);
 
     if (!visualization.directions.includes(this._furniture.direction))
-      this._furniture.direction = visualization.directions[0];
+      this._furniture.rotate(visualization.directions[0], 0);
 
     if (
       visualization.animation[this._furniture.state] !== undefined &&
@@ -51,8 +51,6 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
       visualization.animation[this._furniture.state][layer] !== undefined
     )
       layerData.frame = visualization.animation[this._furniture.state][layer].frameSequence[layerData.frame] ?? 0;
-
-    //console.log("frame:", layer, layerData.frame);
 
     const layerContainer = new FurnitureLayer(this._furniture, {
       layer: layerData.layer,

@@ -1,13 +1,12 @@
 import { Room } from "../Room";
-import {EventManager} from "../../interactions/EventManager";
-import {IInteractionEvent} from "../../../interfaces/Interaction";
-import {Logger} from "../../../utilities/Logger";
-import {IPosition3D} from "../../../interfaces/Room";
-import {Direction} from "../../../enums/Direction";
-import {RoomObjectVisualization} from "./RoomObjectVisualization";
-import {IFloorPosition, IWallPosition} from "../../../interfaces/Furniture";
-import {gsap} from "gsap";
-import {FurnitureData} from "../../furnitures/FurnitureData";
+import { EventManager } from "../../interactions/EventManager";
+import { IInteractionEvent } from "../../../interfaces/Interaction";
+import { Logger } from "../../../utilities/Logger";
+import { Direction } from "../../../enums/Direction";
+import { RoomObjectVisualization } from "./RoomObjectVisualization";
+import { IFloorPosition, IWallPosition } from "../../../interfaces/Furniture";
+import { gsap } from "gsap";
+import { FurnitureData } from "../../furnitures/FurnitureData";
 
 /**
  * RoomObject class that is extended by the avatars or furnitures.
@@ -19,10 +18,10 @@ export abstract class RoomObject {
   /**
    * The furniture position in the room.
    *
-   * @member {IFloorPosition}
+   * @member {IFloorPosition | IWallPosition}
    * @private
    */
-  public _position: IFloorPosition | IWallPosition;
+  abstract _position: IFloorPosition | IWallPosition;
 
   /**
    * The furniture direction (0, 2, 4, 6).
@@ -30,7 +29,7 @@ export abstract class RoomObject {
    * @member {Direction}
    * @private
    */
-  public _direction: Direction;
+  public _direction!: Direction;
 
   /**
    * The furniture state that represent it's current playing animation.
@@ -38,7 +37,7 @@ export abstract class RoomObject {
    * @member {number}
    * @private
    */
-  public _state: number;
+  public _state!: number;
 
   /**
    * The furniture visualization.
@@ -54,7 +53,7 @@ export abstract class RoomObject {
    * @member {FurnitureData}
    * @private
    */
-  public _data: FurnitureData;
+  public _data!: FurnitureData;
 
   /**
    * The room object logger instance.
@@ -351,30 +350,17 @@ export abstract class RoomObject {
    * @readonly
    * @public
    */
-  public get position(): IFloorPosition | IWallPosition {
-    return this._position;
-  }
+  abstract get position(): IFloorPosition | IWallPosition;
 
   /**
    * Move the furniture at the given position and in time.
    *
-   * @param {IFloorPosition} [position] - The position where we want to move the furniture.
+   * @param {IFloorPosition | IWallPosition} [position] - The position where we want to move the furniture.
    * @param {number} [duration] - The time to move the furniture to the given position.
    * @return {void}
    * @public
    */
-  move(position: IFloorPosition | IWallPosition, duration: number = 0.5): void {
-    if (!this._visualization) return;
-    gsap.to(this._position, {
-      x: position.x,
-      y: position.y,
-      duration: duration,
-      ease: 'linear',
-      onUpdate: () => {
-        this._visualization.updatePosition();
-      },
-    });
-  }
+  abstract move(position: IFloorPosition | IWallPosition, duration: number): void;
 
   /**
    * Reference to the furniture direction.
@@ -452,7 +438,6 @@ export abstract class RoomObject {
   public get visualization(): RoomObjectVisualization {
     return this._visualization;
   }
-
 
   /**
    * Reference to the furniture data.

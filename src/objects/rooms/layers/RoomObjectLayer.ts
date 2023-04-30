@@ -1,5 +1,4 @@
 import { Container } from 'pixi.js';
-import { Layer } from '@pixi/layers';
 
 import type { RoomObject } from '../objects/RoomObject';
 import type { Room } from '../Room';
@@ -20,13 +19,11 @@ export class RoomObjectLayer extends Container {
   private readonly _room: Room;
 
   /**
-   * The object layer.
+   * The object list.
    *
-   * @member {Layer}
+   * @member {RoomObject[]}
    * @private
    */
-  private readonly _layer: Layer = new Layer();
-
   private _objects: RoomObject[] = [];
 
   /**
@@ -34,12 +31,8 @@ export class RoomObjectLayer extends Container {
    */
   constructor(room: Room) {
     super();
-
     this.sortableChildren = true;
     this._room = room;
-    this._room.engine.application.stage.addChild(this._layer);
-    this._layer.group.enableSort = true;
-    this._layer.zIndex = 1000;
   }
 
   /**
@@ -69,16 +62,5 @@ export class RoomObjectLayer extends Container {
     object.room = undefined;
     this._objects = this._objects.filter((fObject: RoomObject) => fObject !== object);
     object.destroy();
-  }
-
-  /**
-   * Reference to the pixi layer.
-   *
-   * @member {Layer}
-   * @readonly
-   * @public
-   */
-  public get layer(): Layer {
-    return this._layer;
   }
 }
