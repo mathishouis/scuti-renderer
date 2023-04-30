@@ -16,6 +16,7 @@ import {gsap} from "gsap";
  */
 export abstract class RoomObject {
   public _position: IFloorPosition | IWallPosition;
+  public _direction: Direction;
   public _visualization!: RoomObjectVisualization;
 
   /**
@@ -306,7 +307,11 @@ export abstract class RoomObject {
     return this._visualization;
   }
 
-  move(position: IFloorPosition | IWallPosition, duration?: number = 0.5): void {
+  public get position(): IFloorPosition | IWallPosition {
+    return this._position;
+  }
+
+  move(position: IFloorPosition | IWallPosition, duration: number = 0.5): void {
     if (!this._visualization) return;
     gsap.to(this._position, {
       x: position.x,
@@ -319,8 +324,31 @@ export abstract class RoomObject {
     });
   }
 
-  rotate(direction: Direction, duration?: number = 0): void {
+  public get direction(): Direction {
+    return this._direction
+  }
+
+  rotate(direction: Direction, duration: number = 0): void {
     if (!this._visualization) return;
+    gsap.to(this._position, {
+      x: this._position.x,
+      y: this._position.y - 6.25,
+      duration: duration / 2,
+      ease: 'easeIn',
+      onComplete: () => {
+        this._direction = direction;
+        this._visualization.render();
+        gsap.to(this._position, {
+          x: this._position.x,
+          y: this._position.y,
+          duration: duration / 2,
+          ease: 'easeOut',
+          onComplete: () => {
+            this._visualization.render();
+          }
+        });
+      }
+    });
   }
 
   destroy(): void {

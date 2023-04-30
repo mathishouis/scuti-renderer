@@ -104,7 +104,7 @@ import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture';
       }
     }
     else if (e.keyCode == '37') {
-      // left arrow
+      furniture.rotate(4);
     }
     else if (e.keyCode == '39') {
       // right arrow

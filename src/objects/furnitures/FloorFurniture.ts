@@ -40,7 +40,7 @@ export class FloorFurniture extends RoomObject {
    * @member {Direction}
    * @private
    */
-  private _direction: Direction;
+
 
   /**
    * The furniture state that represent it's current playing animation.
@@ -87,12 +87,7 @@ export class FloorFurniture extends RoomObject {
     //this._updatePosition();
   }
 
-  private _loadAssets(): Promise<void> {
-    return AssetLoader.load(
-      'furnitures/' + this._data.baseName,
-      'furniture/' + this._data.baseName + '/' + this._data.baseName + '.json'
-    );
-  }
+
 
   /**
    * Update the furniture position in the canvas.
@@ -100,10 +95,7 @@ export class FloorFurniture extends RoomObject {
    * @return {void}
    * @private
    */
-  private _updatePosition(): void {
-    //this.x = 32 + 32 * this._position.x - 32 * this._position.y;
-    //this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
-  }
+
 
   /**
    * Add the furniture to the ticker to start the animation.
@@ -111,15 +103,6 @@ export class FloorFurniture extends RoomObject {
    * @return {void}
    * @public
    */
-  public start(): void {
-    if (this._visualization.loaded) {
-      this.room.view.animationTicker.add(() => {
-        return this._visualization.update();
-      });
-    } else {
-      this.eventManager.onLoadComplete
-    }
-  }
 
   /**
    * Remove the furniture from the ticker to stop the animation.
@@ -127,11 +110,6 @@ export class FloorFurniture extends RoomObject {
    * @return {void}
    * @public
    */
-  public stop(): void {
-    this.room.view.animationTicker.remove(() => {
-      return this._visualization.update();
-    });
-  }
 
   /**
    * Move the furniture at the given position and in time.
@@ -161,24 +139,7 @@ export class FloorFurniture extends RoomObject {
    * @return {void}
    * @public
    */
-  public rotate = (direction: Direction, duration: number = 0.2): void => {
-    gsap.to(this, {
-      x: 32 + 32 * this._position.x - 32 * this._position.y,
-      y: 16 * this._position.x + 16 * this._position.y - 32 * this._position.z - 6.25,
-      duration: duration / 2,
-      ease: 'easeIn',
-      onComplete: () => {
-        this._direction = direction;
-        this._visualization.render();
-        gsap.to(this, {
-          x: 32 + 32 * this._position.x - 32 * this._position.y,
-          y: 16 * this._position.x + 16 * this._position.y - 32 * this._position.z,
-          duration: duration / 2,
-          ease: 'easeOut'
-        });
-      }
-    });
-  };
+
 
   /**
    * Reference to the furniture id from the furni data.
@@ -198,9 +159,7 @@ export class FloorFurniture extends RoomObject {
    * @readonly
    * @public
    */
-  public get roomPosition(): IFloorPosition | IWallPosition {
-    return this._position;
-  }
+
 
   /**
    * Update the furniture position.
@@ -208,9 +167,7 @@ export class FloorFurniture extends RoomObject {
    * @param {IFloorPosition} [position] - The new furniture position.
    * @public
    */
-  public set roomPosition(position: IFloorPosition | IWallPosition) {
-    this._position = position;
-  }
+
 
   /**
    * Reference to the furniture direction.
@@ -219,9 +176,9 @@ export class FloorFurniture extends RoomObject {
    * @readonly
    * @public
    */
-  public get direction(): Direction {
+  /*public get direction(): Direction {
     return this._direction;
-  }
+  }*/
 
   /**
    * Update the furniture direction.
@@ -229,10 +186,10 @@ export class FloorFurniture extends RoomObject {
    * @param {Direction} [direction] - The new furniture direction.
    * @public
    */
-  public set direction(direction: Direction) {
+  /*public set direction(direction: Direction) {
     this._direction = direction;
     this._visualization.render();
-  }
+  }*/
 
   /**
    * Reference to the furniture state.
@@ -288,36 +245,4 @@ export class FloorFurniture extends RoomObject {
   public get data(): FurnitureData {
     return this._data;
   }
-
-  /**
-   * Reference to the furniture view.
-   *
-   * @member {FurnitureView}
-   * @readonly
-   * @public
-   */
-  public get view(): FurnitureView {
-    return this._view;
-  }
-
-  /**
-   * Update the furniture view.
-   *
-   * @param {FurnitureView} [view] - The new furniture view.
-   * @public
-   */
-  public set view(view: FurnitureView) {
-    this._view = view;
-  }
-
-  /**
-   * Reference to the furniture visualization.
-   *
-   * @member {FurnitureVisualization}
-   * @readonly
-   * @public
-   */
-  /*public get visualization(): FurnitureVisualization {
-    return this._view.visualization;
-  }*/
 }
