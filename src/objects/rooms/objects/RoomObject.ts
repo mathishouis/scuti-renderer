@@ -7,6 +7,7 @@ import {Direction} from "../../../enums/Direction";
 import {RoomObjectVisualization} from "./RoomObjectVisualization";
 import {IFloorPosition, IWallPosition} from "../../../interfaces/Furniture";
 import {gsap} from "gsap";
+import {FurnitureData} from "../../furnitures/FurnitureData";
 
 /**
  * RoomObject class that is extended by the avatars or furnitures.
@@ -39,8 +40,21 @@ export abstract class RoomObject {
    */
   public _state: number;
 
-
+  /**
+   * The furniture visualization.
+   *
+   * @member {FurnitureData}
+   * @private
+   */
   public _visualization!: RoomObjectVisualization;
+
+  /**
+   * The furniture data.
+   *
+   * @member {FurnitureData}
+   * @private
+   */
+  public _data: FurnitureData;
 
   /**
    * The room object logger instance.
@@ -437,5 +451,17 @@ export abstract class RoomObject {
    */
   public get visualization(): RoomObjectVisualization {
     return this._visualization;
+  }
+
+
+  /**
+   * Reference to the furniture data.
+   *
+   * @member {FurnitureData}
+   * @readonly
+   * @public
+   */
+  public get data(): FurnitureData {
+    return this._data;
   }
 }

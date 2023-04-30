@@ -1,5 +1,4 @@
-import type {IFloorFurnitureConfiguration, IFloorPosition} from '../../interfaces/Furniture';
-import type { Direction } from '../../enums/Direction';
+import type {IFloorFurnitureConfiguration} from '../../interfaces/Furniture';
 import { FurnitureData } from './FurnitureData';
 import {FurnitureAnimatedVisualization} from "./visualizations/FurnitureAnimatedVisualization";
 import {RoomObject} from "../rooms/objects/RoomObject";
@@ -28,16 +27,6 @@ export class FloorFurniture extends RoomObject {
   private _selected: boolean = false;
 
   /**
-   * The furniture data.
-   *
-   * @member {FurnitureData}
-   * @private
-   */
-  private readonly _data: FurnitureData;
-
-  //private _visualization!: FurnitureVisualization;
-
-  /**
    * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.
    */
   constructor(configuration: IFloorFurnitureConfiguration) {
@@ -49,15 +38,7 @@ export class FloorFurniture extends RoomObject {
     this._state = configuration.state ?? 0;
     this._data = new FurnitureData(this);
     this._visualization = new FurnitureAnimatedVisualization(this);
-    /** Initialise view */
-    //this._view = new FurnitureView(this);
-    //this.addChild(this._view);
-    /** Set the furniture position in the canvas */
-    //this._updatePosition();
   }
-
-
-
 
   /**
    * Reference to the furniture id from the furni data.
@@ -90,16 +71,5 @@ export class FloorFurniture extends RoomObject {
   public set selected(selected: boolean) {
     this._selected = selected;
     this._visualization.render();
-  }
-
-  /**
-   * Reference to the furniture data.
-   *
-   * @member {FurnitureData}
-   * @readonly
-   * @public
-   */
-  public get data(): FurnitureData {
-    return this._data;
   }
 }
