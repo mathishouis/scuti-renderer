@@ -82,10 +82,10 @@ export class FurniturePart extends Container {
     // TODO: Create FurnitureAnimatedVisualization
     /** We set the state to 0 if it don't exist to avoid any issue */
     if (
-      visualization.animation[this._furniture.state] === undefined &&
-      this._furniture.view.property.infos.visualization === 'furniture_animated'
+      this._furniture.view.property.infos.visualization === 'furniture_animated' &&
+      visualization.animation[this._furniture.state] === undefined
     ) {
-      this._furniture.state = 0;
+      this._furniture.state = Number(Object.keys(visualization.animation)[0]);
       return;
     }
 
