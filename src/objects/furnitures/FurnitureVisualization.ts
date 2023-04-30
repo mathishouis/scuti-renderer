@@ -56,11 +56,29 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
     });
   }
 
+  updatePosition(): void {
+    if (this._furniture instanceof FloorFurniture) {
+      this._layers.forEach((layer: FurnitureLayer) => {
+        layer.x = layer.texture.orig.x + 32 + 32 * this._furniture.roomPosition.x - 32 * this._furniture.roomPosition.y;
+        layer.y = layer.texture.orig.y + 16 * this._furniture.roomPosition.x + 16 * this._furniture.roomPosition.y - 32 * this._furniture.roomPosition.z;
+      });
+    } else if (this._furniture instanceof WallFurniture) {
+      // TODO: Refactor wall items
+    }
+  }
+
+  updateLayerPosition(layer: number): void {
+    const furnitureLayer: FurnitureLayer | undefined = this._layers.get(layer);
+    if (!furnitureLayer) return;
+    furnitureLayer.x = furnitureLayer.texture.orig.x + 32 + 32 * this._furniture.roomPosition.x - 32 * this._furniture.roomPosition.y;
+    furnitureLayer.y = furnitureLayer.texture.orig.y + 16 * this._furniture.roomPosition.x + 16 * this._furniture.roomPosition.y - 32 * this._furniture.roomPosition.z;
+  }
+
   renderPlaceholder(): void {
     this._placeholder = new HitSprite(
       Assets.get('furnitures/floor/placeholder').textures['place_holder_furniture_64.png']
     );
-    this._furniture.room.objects.addChild(this._placeholder);
+    if (this._furniture.room) this._furniture.room.objects.addChild(this._placeholder);
     this._placeholder.x = -32;
     this._placeholder.y = -50;
   }

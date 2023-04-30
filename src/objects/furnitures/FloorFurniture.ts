@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 
-import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture';
+import type {IFloorFurnitureConfiguration, IFloorPosition, IWallPosition} from '../../interfaces/Furniture';
 import type { Direction } from '../../enums/Direction';
 import { FurnitureData } from './FurnitureData';
 import { EventManager } from '../interactions/EventManager';
@@ -32,7 +32,7 @@ export class FloorFurniture extends RoomObject {
    * @member {IFloorPosition}
    * @private
    */
-  private _position: IFloorPosition;
+
 
   /**
    * The furniture direction (0, 2, 4, 6).
@@ -141,7 +141,7 @@ export class FloorFurniture extends RoomObject {
    * @return {void}
    * @public
    */
-  public move = (position: IFloorPosition, duration: number = 0.5): void => {
+  /*public move = (position: IFloorPosition, duration: number = 0.5): void => {
     gsap.to(this, {
       x: 32 + 32 * position.x - 32 * position.y,
       y: 16 * position.x + 16 * position.y - 32 * position.z,
@@ -151,7 +151,7 @@ export class FloorFurniture extends RoomObject {
         this._position = position;
       }
     });
-  };
+  };*/
 
   /**
    * Rotate the furniture at the given direction and in time.
@@ -194,11 +194,11 @@ export class FloorFurniture extends RoomObject {
   /**
    * Reference to the furniture position in the room.
    *
-   * @member {IFloorPosition}
+   * @member {IFloorPosition | IWallPosition}
    * @readonly
    * @public
    */
-  public get roomPosition(): IFloorPosition {
+  public get roomPosition(): IFloorPosition | IWallPosition {
     return this._position;
   }
 
@@ -208,7 +208,7 @@ export class FloorFurniture extends RoomObject {
    * @param {IFloorPosition} [position] - The new furniture position.
    * @public
    */
-  public set roomPosition(position: IFloorPosition) {
+  public set roomPosition(position: IFloorPosition | IWallPosition) {
     this._position = position;
   }
 

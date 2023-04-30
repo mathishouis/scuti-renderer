@@ -72,15 +72,16 @@ import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture';
     direction: 2,
     state: 1,
   });
-  room.objects.add(furniture3);
-  room.objects.add(furniture2);
-  room.objects.add(wallFurniture);
-  setTimeout(() => furniture.destroy(), 3000);
-  setTimeout(() => room.objects.add(furniture), 6000);
+  //room.objects.add(furniture3);
+  //room.objects.add(furniture2);
+  //room.objects.add(wallFurniture);
+  setTimeout(() => furniture.move({ x: 0, y: 0, z: 0}), 3000);
+  setTimeout(() => furniture.move({ x: 5, y: 4, z: 0}), 5000);
+  //setTimeout(() => room.objects.add(furniture), 6000);
   furniture3.onLoadComplete = () => {
     console.log("loaded!")
   }
-  dice(room, 5, 5, 2);
+  //dice(room, 5, 5, 2);
   document.onkeydown = (e) => {
     e = e || window.event;
 

@@ -67,14 +67,14 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
       tag: layerData.tag,
     });
     layerContainer.zIndex = layerData.z;
-    if (this._furniture.room)
+    this._layers.set(layer, layerContainer);
+    if (this._furniture.room) {
       this._furniture.room.objects.addChild(
         // @ts-expect-error
         layerContainer
       );
-      layerContainer.x += 32 + 32 * this._furniture.roomPosition.x - 32 * this._furniture.roomPosition.y;
-      layerContainer.y += 16 * this._furniture.roomPosition.x + 16 * this._furniture.roomPosition.y - 32 * this._furniture.roomPosition.z;
-    this._layers.set(layer, layerContainer);
+      this.updateLayerPosition(layer);
+    }
   }
 
   public update(): void {

@@ -5,6 +5,8 @@ import {Logger} from "../../../utilities/Logger";
 import {IPosition3D} from "../../../interfaces/Room";
 import {Direction} from "../../../enums/Direction";
 import {RoomObjectVisualization} from "./RoomObjectVisualization";
+import {IFloorPosition, IWallPosition} from "../../../interfaces/Furniture";
+import {gsap} from "gsap";
 
 /**
  * RoomObject class that is extended by the avatars or furnitures.
@@ -13,6 +15,7 @@ import {RoomObjectVisualization} from "./RoomObjectVisualization";
  * @memberof Scuti
  */
 export abstract class RoomObject {
+  public _position: IFloorPosition | IWallPosition;
   public _visualization!: RoomObjectVisualization;
 
   /**
@@ -303,8 +306,20 @@ export abstract class RoomObject {
     return this._visualization;
   }
 
-  move(position: IPosition3D, duration?: number = 0): void {
+  move(position: IFloorPosition | IWallPosition, duration?: number = 0.5): void {
     if (!this._visualization) return;
+    gsap.to(this._position, {
+      x: position.x,
+      y: position.y,
+      duration: duration,
+      ease: 'linear',
+      onUpdate: () => {
+        this._visualization.updatePosition();
+      },
+      onComplete: () => {
+        this._position = position;
+      }
+    });
   }
 
   rotate(direction: Direction, duration?: number = 0): void {
