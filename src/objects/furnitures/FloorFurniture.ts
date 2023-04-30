@@ -1,13 +1,6 @@
-import { gsap } from 'gsap';
-
-import type {IFloorFurnitureConfiguration, IFloorPosition, IWallPosition} from '../../interfaces/Furniture';
+import type {IFloorFurnitureConfiguration, IFloorPosition} from '../../interfaces/Furniture';
 import type { Direction } from '../../enums/Direction';
 import { FurnitureData } from './FurnitureData';
-import { EventManager } from '../interactions/EventManager';
-import type { IInteractionEvent } from '../../interfaces/Interaction';
-import { FurnitureView } from './FurnitureView';
-import type { FurnitureVisualization } from './FurnitureVisualization';
-import {AssetLoader} from "../../utilities/AssetLoader";
 import {FurnitureAnimatedVisualization} from "./visualizations/FurnitureAnimatedVisualization";
 import {RoomObject} from "../rooms/objects/RoomObject";
 
@@ -25,30 +18,6 @@ export class FloorFurniture extends RoomObject {
    * @private
    */
   private readonly _id: number;
-
-  /**
-   * The furniture position in the room.
-   *
-   * @member {IFloorPosition}
-   * @private
-   */
-
-
-  /**
-   * The furniture direction (0, 2, 4, 6).
-   *
-   * @member {Direction}
-   * @private
-   */
-
-
-  /**
-   * The furniture state that represent it's current playing animation.
-   *
-   * @member {number}
-   * @private
-   */
-  private _state: number;
 
   /**
    * A boolean indicating if we have to apply the wired selection filter to the furniture.
@@ -89,57 +58,6 @@ export class FloorFurniture extends RoomObject {
 
 
 
-  /**
-   * Update the furniture position in the canvas.
-   *
-   * @return {void}
-   * @private
-   */
-
-
-  /**
-   * Add the furniture to the ticker to start the animation.
-   *
-   * @return {void}
-   * @public
-   */
-
-  /**
-   * Remove the furniture from the ticker to stop the animation.
-   *
-   * @return {void}
-   * @public
-   */
-
-  /**
-   * Move the furniture at the given position and in time.
-   *
-   * @param {IFloorPosition} [position] - The position where we want to move the furniture.
-   * @param {number} [duration] - The time to move the furniture to the given position.
-   * @return {void}
-   * @public
-   */
-  /*public move = (position: IFloorPosition, duration: number = 0.5): void => {
-    gsap.to(this, {
-      x: 32 + 32 * position.x - 32 * position.y,
-      y: 16 * position.x + 16 * position.y - 32 * position.z,
-      duration,
-      ease: 'linear',
-      onComplete: () => {
-        this._position = position;
-      }
-    });
-  };*/
-
-  /**
-   * Rotate the furniture at the given direction and in time.
-   *
-   * @param {Direction} [direction] - The new direction of the furniture.
-   * @param {number} [duration] - The time to rotate the furniture at the given direction.
-   * @return {void}
-   * @public
-   */
-
 
   /**
    * Reference to the furniture id from the furni data.
@@ -150,67 +68,6 @@ export class FloorFurniture extends RoomObject {
    */
   public get id(): number {
     return this._id;
-  }
-
-  /**
-   * Reference to the furniture position in the room.
-   *
-   * @member {IFloorPosition | IWallPosition}
-   * @readonly
-   * @public
-   */
-
-
-  /**
-   * Update the furniture position.
-   *
-   * @param {IFloorPosition} [position] - The new furniture position.
-   * @public
-   */
-
-
-  /**
-   * Reference to the furniture direction.
-   *
-   * @member {Direction}
-   * @readonly
-   * @public
-   */
-  /*public get direction(): Direction {
-    return this._direction;
-  }*/
-
-  /**
-   * Update the furniture direction.
-   *
-   * @param {Direction} [direction] - The new furniture direction.
-   * @public
-   */
-  /*public set direction(direction: Direction) {
-    this._direction = direction;
-    this._visualization.render();
-  }*/
-
-  /**
-   * Reference to the furniture state.
-   *
-   * @member {number}
-   * @readonly
-   * @public
-   */
-  public get state(): number {
-    return this._state;
-  }
-
-  /**
-   * Update the furniture state (so the animation).
-   *
-   * @param {number} [state] - The new furniture state.
-   * @public
-   */
-  public set state(state: number) {
-    this._state = state;
-    this._visualization.render();
   }
 
   /**

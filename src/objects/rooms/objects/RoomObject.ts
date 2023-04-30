@@ -15,8 +15,31 @@ import {gsap} from "gsap";
  * @memberof Scuti
  */
 export abstract class RoomObject {
+  /**
+   * The furniture position in the room.
+   *
+   * @member {IFloorPosition}
+   * @private
+   */
   public _position: IFloorPosition | IWallPosition;
+
+  /**
+   * The furniture direction (0, 2, 4, 6).
+   *
+   * @member {Direction}
+   * @private
+   */
   public _direction: Direction;
+
+  /**
+   * The furniture state that represent it's current playing animation.
+   *
+   * @member {number}
+   * @private
+   */
+  public _state: number;
+
+
   public _visualization!: RoomObjectVisualization;
 
   /**
@@ -286,31 +309,46 @@ export abstract class RoomObject {
   }
 
   /**
-   * Reference to the room object logger instance.
+   * Reference to the furniture state.
    *
-   * @member {Logger}
+   * @member {number}
    * @readonly
    * @public
    */
-  public get logger(): Logger {
-    return this._logger;
+  public get state(): number {
+    return this._state;
   }
 
   /**
-   * Reference to the visualization instance.
+   * Update the furniture state (so the animation).
    *
-   * @member {RoomObjectVisualization}
+   * @param {number} [state] - The new furniture state.
+   * @public
+   */
+  public set state(state: number) {
+    this._state = state;
+    this._visualization.render();
+  }
+
+  /**
+   * Reference to the furniture position in the room.
+   *
+   * @member {IFloorPosition | IWallPosition}
    * @readonly
    * @public
    */
-  public get visualization(): RoomObjectVisualization {
-    return this._visualization;
-  }
-
   public get position(): IFloorPosition | IWallPosition {
     return this._position;
   }
 
+  /**
+   * Move the furniture at the given position and in time.
+   *
+   * @param {IFloorPosition} [position] - The position where we want to move the furniture.
+   * @param {number} [duration] - The time to move the furniture to the given position.
+   * @return {void}
+   * @public
+   */
   move(position: IFloorPosition | IWallPosition, duration: number = 0.5): void {
     if (!this._visualization) return;
     gsap.to(this._position, {
@@ -324,10 +362,25 @@ export abstract class RoomObject {
     });
   }
 
+  /**
+   * Reference to the furniture direction.
+   *
+   * @member {Direction}
+   * @readonly
+   * @public
+   */
   public get direction(): Direction {
     return this._direction
   }
 
+  /**
+   * Rotate the furniture at the given direction and in time.
+   *
+   * @param {Direction} [direction] - The new direction of the furniture.
+   * @param {number} [duration] - The time to rotate the furniture at the given direction.
+   * @return {void}
+   * @public
+   */
   rotate(direction: Direction, duration: number = 0): void {
     if (!this._visualization) return;
     gsap.to(this._position, {
@@ -351,10 +404,38 @@ export abstract class RoomObject {
     });
   }
 
+  /**
+   * Destroy the room object from the room.
+   *
+   * @return {void}
+   * @public
+   */
   destroy(): void {
     if (!this._visualization) return;
     this._visualization.destroy();
     if (!this._room) return;
     this._room.objects.remove(this);
+  }
+
+  /**
+   * Reference to the room object logger instance.
+   *
+   * @member {Logger}
+   * @readonly
+   * @public
+   */
+  public get logger(): Logger {
+    return this._logger;
+  }
+
+  /**
+   * Reference to the visualization instance.
+   *
+   * @member {RoomObjectVisualization}
+   * @readonly
+   * @public
+   */
+  public get visualization(): RoomObjectVisualization {
+    return this._visualization;
   }
 }
