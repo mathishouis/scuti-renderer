@@ -27,6 +27,8 @@ export class RoomObjectLayer extends Container {
    */
   private readonly _layer: Layer = new Layer();
 
+  private _objects: RoomObject[] = [];
+
   /**
    * @param {Room} [room] - The room instance that we want to visualize.
    */
@@ -49,9 +51,10 @@ export class RoomObjectLayer extends Container {
    */
   public add(object: RoomObject): void {
     object.room = this._room;
-    object.onRoomAdded(this._room);
-    //object.start();
-    //this.addChild(object);
+    this._objects.push(object);
+    if (object.onRoomAdded) object.onRoomAdded(this._room);
+    if (object.visualization.loaded) object.visualization.render();
+    else object.visualization.renderPlaceholder();
   }
 
   /**
@@ -62,8 +65,10 @@ export class RoomObjectLayer extends Container {
    * @public
    */
   public remove(object: RoomObject): void {
-    //object.stop();
-    this.removeChild(object);
+    if (object.onRoomRemoved) object.onRoomRemoved(this._room);
+    object.room = undefined;
+    this._objects = this._objects.filter((fObject: RoomObject) => fObject !== object);
+    object.destroy();
   }
 
   /**

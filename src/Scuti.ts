@@ -76,6 +76,7 @@ export class Scuti {
       resolution: 1,
       antialias: false
     });
+    (globalThis as any).__PIXI_APP__ = this._application; // Support for PIXI.js dev-tool.
     this._application.stage = new Stage();
     this._canvas = configuration.canvas;
 

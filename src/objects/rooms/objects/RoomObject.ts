@@ -2,6 +2,9 @@ import { Room } from "../Room";
 import {EventManager} from "../../interactions/EventManager";
 import {IInteractionEvent} from "../../../interfaces/Interaction";
 import {Logger} from "../../../utilities/Logger";
+import {IPosition3D} from "../../../interfaces/Room";
+import {Direction} from "../../../enums/Direction";
+import {RoomObjectVisualization} from "./RoomObjectVisualization";
 
 /**
  * RoomObject class that is extended by the avatars or furnitures.
@@ -10,6 +13,7 @@ import {Logger} from "../../../utilities/Logger";
  * @memberof Scuti
  */
 export abstract class RoomObject {
+  public _visualization!: RoomObjectVisualization;
 
   /**
    * The room object logger instance.
@@ -30,10 +34,10 @@ export abstract class RoomObject {
   /**
    * The room instance that will be managed by the camera.
    *
-   * @member {Room}
+   * @member {Room | undefined}
    * @private
    */
-  private _room!: Room;
+  private _room!: Room | undefined;
 
   /**
    * Reference to the object event manager.
@@ -49,21 +53,21 @@ export abstract class RoomObject {
   /**
    * Reference to the room object room instance.
    *
-   * @member {Room}
+   * @member {Room | undefined}
    * @readonly
    * @public
    */
-  get room(): Room {
+  get room(): Room | undefined {
     return this._room;
   }
 
   /**
    * Update the current room instance.
    *
-   * @param {Room} [room] - The new room instance.
+   * @param {Room | undefined} [room] - The new room instance.
    * @public
    */
-  set room(room: Room) {
+  set room(room: Room | undefined) {
     this._room = room;
   }
 
@@ -257,6 +261,27 @@ export abstract class RoomObject {
   }
 
   /**
+   * Reference to the room remove event.
+   *
+   * @member {(room: Room) => void}
+   * @readonly
+   * @public
+   */
+  get onRoomRemoved(): (event: Room) => void {
+    return this._eventManager.onRoomRemoved;
+  }
+
+  /**
+   * Update the event function that will be executed.
+   *
+   * @param {(room: Room) => void} [value] - The event function that will be executed.
+   * @public
+   */
+  set onRoomRemoved(value: (room: Room) => void) {
+    this._eventManager.onRoomRemoved = value;
+  }
+
+  /**
    * Reference to the room object logger instance.
    *
    * @member {Logger}
@@ -265,5 +290,31 @@ export abstract class RoomObject {
    */
   public get logger(): Logger {
     return this._logger;
+  }
+
+  /**
+   * Reference to the visualization instance.
+   *
+   * @member {RoomObjectVisualization}
+   * @readonly
+   * @public
+   */
+  public get visualization(): RoomObjectVisualization {
+    return this._visualization;
+  }
+
+  move(position: IPosition3D, duration?: number = 0): void {
+    if (!this._visualization) return;
+  }
+
+  rotate(direction: Direction, duration?: number = 0): void {
+    if (!this._visualization) return;
+  }
+
+  destroy(): void {
+    if (!this._visualization) return;
+    this._visualization.destroy();
+    if (!this._room) return;
+    this._room.objects.remove(this);
   }
 }

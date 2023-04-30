@@ -30,8 +30,8 @@ import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture';
     //id: 1619,
     id: 4967,
     position: {
-      x: 8,
-      y: 5,
+      x: 5,
+      y: 4,
       z: 0
     },
     direction: 2,
@@ -75,6 +75,11 @@ import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture';
   room.objects.add(furniture3);
   room.objects.add(furniture2);
   room.objects.add(wallFurniture);
+  setTimeout(() => furniture.destroy(), 3000);
+  setTimeout(() => room.objects.add(furniture), 6000);
+  furniture3.onLoadComplete = () => {
+    console.log("loaded!")
+  }
   dice(room, 5, 5, 2);
   document.onkeydown = (e) => {
     e = e || window.event;

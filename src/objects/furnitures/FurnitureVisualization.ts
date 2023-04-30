@@ -7,26 +7,35 @@ import {ZOrder} from "../../utilities/ZOrder";
 import {HitSprite} from "../interactions/HitSprite";
 import {AssetLoader} from "../../utilities/AssetLoader";
 import {Room} from "../rooms/Room";
+import {FurnitureLayer} from "./FurnitureLayer";
+import {RoomObjectVisualization} from "../rooms/objects/RoomObjectVisualization";
 
-export abstract class FurnitureVisualization {
-  public _loaded: boolean = false;
+export abstract class FurnitureVisualization extends RoomObjectVisualization {
+  public _layers: Map<number, FurnitureLayer> = new Map<number, FurnitureLayer>();
   public _placeholder!: HitSprite;
   public _spritesheet: Spritesheet;
   public _properties: IFurnitureProperty;
   public _furniture: FloorFurniture
 
-  constructor(
+  protected constructor(
     furniture: FloorFurniture
   ) {
+    super();
     this._furniture = furniture;
     this._loadAssets(this._furniture.data.baseName);
     this._furniture.onRoomAdded = (room: Room) => {
-      if (!this._loaded) this.renderPlaceholder();
-      else room.view.animationTicker.add(() => this.update());
+      if (this._loaded) room.view.animationTicker.add(() => this.update());
     };
   }
 
-  abstract destroy(): void;
+  destroy(): void {
+    if (this._placeholder.parent !== null) this._placeholder.destroy();
+    this._layers.forEach((layer: FurnitureLayer) => {
+      layer.destroy();
+    });
+    this._layers = new Map<number, FurnitureLayer>();
+  }
+
   abstract render(): void;
   abstract renderLayer(layer: number, frame: number): void;
 
@@ -37,7 +46,7 @@ export abstract class FurnitureVisualization {
       'furniture/' + name + '/' + name + '.json',
     ).then(() => {
       if (this._furniture.onLoadComplete) this._furniture.onLoadComplete();
-      this._spritesheet = Assets.get('furnituresa/' + name);
+      this._spritesheet = Assets.get('furnitures/' + name);
       this._properties = this._spritesheet.data.furniProperty as IFurnitureProperty;
       this._loaded = true;
       this._placeholder.destroy();
@@ -112,10 +121,6 @@ export abstract class FurnitureVisualization {
     // @ts-ignore
     if (spritesheet.data.frames[name] !== undefined) layerData.flip = spritesheet.data.frames[name].flipH;
     return layerData;
-  }
-
-  get loaded(): boolean {
-    return this._loaded;
   }
 
   abstract update(): void;

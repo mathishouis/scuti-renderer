@@ -97,6 +97,14 @@ export class EventManager {
   private _onRoomAdded!: (room: Room) => void;
 
   /**
+   * The room remove event.
+   *
+   * @member {(room: Room) => void}
+   * @private
+   */
+  private _onRoomRemoved!: (room: Room) => void;
+
+  /**
    * Reference to the pointer down event.
    *
    * @member {(event: IInteractionEvent) => void}
@@ -286,6 +294,27 @@ export class EventManager {
   }
 
   /**
+   * Reference to the room remove event.
+   *
+   * @member {(room: Room) => void}
+   * @readonly
+   * @public
+   */
+  public get onRoomRemoved(): (room: Room) => void {
+    return this._onRoomRemoved;
+  }
+
+  /**
+   * Update the event function that will be executed.
+   *
+   * @param {(room: Room) => void} [value] - The event function that will be executed.
+   * @public
+   */
+  public set onRoomRemoved(value: (room: Room) => void) {
+    this._onRoomRemoved = value;
+  }
+
+  /**
    * Handle the pointer down event.
    *
    * @return {void}
@@ -373,5 +402,15 @@ export class EventManager {
    */
   public handleRoomAdded(room: Room): void {
     if (this.onRoomAdded !== undefined) this._onRoomAdded(room);
+  }
+
+  /**
+   * Handle the room remove event.
+   *
+   * @return {void}
+   * @public
+   */
+  public handleRoomRemoved(room: Room): void {
+    if (this.onRoomRemoved !== undefined) this._onRoomRemoved(room);
   }
 }

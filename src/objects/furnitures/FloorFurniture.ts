@@ -66,7 +66,7 @@ export class FloorFurniture extends RoomObject {
    */
   private readonly _data: FurnitureData;
 
-  private _visualization!: FurnitureVisualization;
+  //private _visualization!: FurnitureVisualization;
 
   /**
    * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.
@@ -317,7 +317,7 @@ export class FloorFurniture extends RoomObject {
    * @readonly
    * @public
    */
-  public get visualization(): FurnitureVisualization {
+  /*public get visualization(): FurnitureVisualization {
     return this._view.visualization;
-  }
+  }*/
 }

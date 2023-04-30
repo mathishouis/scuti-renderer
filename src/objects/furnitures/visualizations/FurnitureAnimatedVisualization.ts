@@ -7,7 +7,6 @@ import { FurnitureLayer } from "../FurnitureLayer";
 export class FurnitureAnimatedVisualization extends FurnitureVisualization {
 
   private _frames: Map<number, number> = new Map();
-  private _layers: Map<number, FurnitureLayer> = new Map();
 
   constructor(
     furniture: FloorFurniture | WallFurniture
@@ -68,12 +67,13 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
       tag: layerData.tag,
     });
     layerContainer.zIndex = layerData.z;
-    this._furniture.room.objects.addChild(
-      // @ts-expect-error
-      layerContainer
-    );
-    layerContainer.x += 32 + 32 * this._furniture.roomPosition.x - 32 * this._furniture.roomPosition.y;
-    layerContainer.y += 16 * this._furniture.roomPosition.x + 16 * this._furniture.roomPosition.y - 32 * this._furniture.roomPosition.z;
+    if (this._furniture.room)
+      this._furniture.room.objects.addChild(
+        // @ts-expect-error
+        layerContainer
+      );
+      layerContainer.x += 32 + 32 * this._furniture.roomPosition.x - 32 * this._furniture.roomPosition.y;
+      layerContainer.y += 16 * this._furniture.roomPosition.x + 16 * this._furniture.roomPosition.y - 32 * this._furniture.roomPosition.z;
     this._layers.set(layer, layerContainer);
   }
 
@@ -103,12 +103,5 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
         if (!this._layers.get(i)) this.renderLayer(i, 0);
       }
     }
-  }
-
-  public destroy(): void {
-    this._layers.forEach((layer: FurnitureLayer) => {
-      layer.destroy();
-    });
-    this._layers = new Map<number, FurnitureLayer>();
   }
 }
