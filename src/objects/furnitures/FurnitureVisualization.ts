@@ -113,12 +113,27 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
   }
 
   renderPlaceholder(): void {
-    this._placeholder = new Sprite(
-      Assets.get('furnitures/floor/placeholder').textures['place_holder_furniture_64.png']
-    );
-    if (this._furniture.room != null) this._furniture.room.objects.addChild(this._placeholder);
-    this._placeholder.x = -32;
-    this._placeholder.y = -50;
+    if (this._furniture instanceof FloorFurniture) {
+      this._placeholder = new Sprite(
+        Assets.get('furnitures/floor/placeholder').textures['place_holder_furniture_64.png']
+      );
+      if (this._furniture.room != null) this._furniture.room.objects.addChild(this._placeholder);
+      this._placeholder.x = 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y - 32;
+      this._placeholder.y = 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 * this._furniture.position.z - 50;
+    } else {
+      this._placeholder = new Sprite(
+        Assets.get('furnitures/wall/placeholder').textures['place_holder_wall_item_64.png']
+      );
+      if (this._furniture.room != null) this._furniture.room.objects.addChild(this._placeholder);
+      if (this._furniture.direction === Direction.EAST) {
+        this._placeholder.x = 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y + this._furniture.position.offsetX * 2 - 1;
+        this._placeholder.y = 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 + this._furniture.position.offsetY * 2 + 31 - 50;
+      } else if (this._furniture.direction === Direction.SOUTH) {
+        this._placeholder.scale.x = -1;
+        this._placeholder.x = 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y + this._furniture.position.offsetX * 2 - 32;
+        this._placeholder.y = 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 + this._furniture.position.offsetY * 2 + 31 - 50;
+      }
+    }
   }
 
   layerData(layer: number, frame: number = 0): IFurnitureLayerData {
