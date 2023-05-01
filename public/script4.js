@@ -15,7 +15,7 @@ import {WallFurniture} from "../src";
   });
   await renderer.loadResources('https://kozennnn.github.io/scuti-resources/');
 
-  const tileMap = '000000\n' + '000000\n' + '000000\n' + '000000\n' + '000000\n';
+  const tileMap = 'x1110001\n' + 'x0000000\n' + '00000000\n' + 'x0000000\n' + 'x0000000\n';
 
   const room = new Room(renderer, {
     tileMap: tileMap,

@@ -64,7 +64,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
     layerContainer.zIndex = layerData.z;
     this._layers.set(layer, layerContainer);
     if (this._furniture.room != null) {
-      this._furniture.room.objects.addChild(
+      this._furniture.room.visualization.objectContainer.addChild(
         // @ts-expect-error
         layerContainer
       );

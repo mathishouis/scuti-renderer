@@ -101,8 +101,8 @@ export class RoomCamera extends Container {
    * @private
    */
   private _updateBounds(): void {
-    this._roomContainer.pivot.x = this._room.visualization.wallLayer.getBounds().x;
-    this._roomContainer.pivot.y = this._room.visualization.wallLayer.getBounds().y;
+    this._roomContainer.pivot.x = this._room.visualization.objectContainer.getBounds().x;
+    this._roomContainer.pivot.y = this._room.visualization.objectContainer.getBounds().y;
   }
 
   /**
@@ -194,7 +194,7 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _tilePointerDown = (event: PointerEvent): void => {
-    const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
+    const tile = this._room.parts.getFromGlobal({ x: event.clientX, y: event.clientY });
 
     if (tile != null) tile.emit('pointerdown', new FederatedPointerEvent(new EventBoundary()));
   };
@@ -206,7 +206,7 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _tilePointerUp = (event: PointerEvent): void => {
-    const tile = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
+    const tile = this._room.parts.getFromGlobal({ x: event.clientX, y: event.clientY });
 
     if (tile != null) tile.emit('pointerup', new FederatedPointerEvent(new EventBoundary()));
   };
@@ -218,7 +218,7 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _tilePointerMove = (event: PointerEvent): void => {
-    const object: Tile | Stair = this._room.tiles.getTileFromGlobal({ x: event.clientX, y: event.clientY });
+    const object: Tile | Stair = this._room.parts.getFromGlobal({ x: event.clientX, y: event.clientY });
 
     if (object === undefined) return;
 

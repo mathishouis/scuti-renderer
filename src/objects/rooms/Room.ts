@@ -9,7 +9,8 @@ import { WallMaterial } from './materials/WallMaterial';
 import { FloorMaterial } from './materials/FloorMaterial';
 import { RoomCamera } from './RoomCamera';
 import type { RoomObjectLayer } from './layers/RoomObjectLayer';
-import type { RoomTileLayer } from './layers/RoomTileLayer';
+import {RoomPartLayer} from "./layers/RoomPartLayer";
+import {EventManager} from "../interactions/EventManager";
 
 /**
  * Room class for rendering rooms like the ones on Habbo Hotel.
@@ -277,14 +278,14 @@ export class Room extends Container {
   }
 
   /**
-   * Reference to the object tile container.
+   * Reference to the tile event manager.
    *
-   * @member {RoomTileLayer}
+   * @member {EventManager}
    * @readonly
    * @public
    */
-  public get tiles(): RoomTileLayer {
-    return this._visualization.tileLayer;
+  public get tiles(): EventManager {
+    return this._visualization.partLayer.tiles;
   }
 
   /**
@@ -296,6 +297,17 @@ export class Room extends Container {
    */
   public get objects(): RoomObjectLayer {
     return this._visualization.objectLayer;
+  }
+
+  /**
+   * Reference to the part layer container.
+   *
+   * @member {RoomPartLayer}
+   * @readonly
+   * @public
+   */
+  public get parts(): RoomPartLayer {
+    return this._visualization.partLayer;
   }
 
   /**

@@ -84,7 +84,7 @@ export abstract class RoomObject {
   /**
    * The room object filters.
    *
-   * @member {Filter[]}
+   * @member {Filter[]}n
    * @private
    */
   private _filters: Filter[] = [];

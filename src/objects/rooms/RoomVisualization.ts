@@ -9,8 +9,9 @@ import { WallType } from '../../enums/WallType';
 import type { StairType } from '../../enums/StairType';
 import { Cursor } from './parts/Cursor';
 import { RoomObjectLayer } from './layers/RoomObjectLayer';
-import { RoomTileLayer } from './layers/RoomTileLayer';
 import type { IInteractionEvent } from '../../interfaces/Interaction';
+import {RoomObjectContainer} from "./objects/RoomObjectContainer";
+import {RoomPartLayer} from "./layers/RoomPartLayer";
 
 /**
  * RoomView class that manage all the rendering part of the room.
@@ -28,28 +29,20 @@ export class RoomVisualization extends Container {
   private readonly _room: Room;
 
   /**
-   * The container that will contains all the walls objects.
-   *
-   * @member {Container}
-   * @private
-   */
-  private readonly _wallLayer = new Container();
-
-  /**
-   * The container that will contains all the tiles objects.
-   *
-   * @member {RoomTileLayer}
-   * @private
-   */
-  private readonly _tileLayer: RoomTileLayer;
-
-  /**
    * The container that will contains all the objects like avatars or furnitures.
    *
    * @member {RoomObjectLayer}
    * @private
    */
   private readonly _objectLayer: RoomObjectLayer;
+
+  /**
+   * The container that will contains all the parts like tiles, walls and stairs.
+   *
+   * @member {RoomPartLayer}
+   * @private
+   */
+  private readonly _partLayer: RoomPartLayer;
 
   /**
    * List containing all the walls instances.
@@ -75,6 +68,8 @@ export class RoomVisualization extends Container {
    */
   private _cursor!: Cursor;
 
+  private _objectContainer!: RoomObjectContainer;
+
   /**
    * The room animation ticker instance that will manage all the objects animations
    *
@@ -90,13 +85,13 @@ export class RoomVisualization extends Container {
     super();
 
     this._room = room;
-    this._tileLayer = new RoomTileLayer();
     this._objectLayer = new RoomObjectLayer(this._room);
+    this._partLayer = new RoomPartLayer(this._room);
+
+    this._objectContainer = new RoomObjectContainer();
 
     /** Add layers to the visualization */
-    this.addChild(this._wallLayer);
-    this.addChild(this._tileLayer);
-    this.addChild(this._objectLayer);
+    this.addChild(this._objectContainer);
 
     /** Start the animation ticker */
     this._animationTicker.maxFPS = 4;
@@ -202,7 +197,7 @@ export class RoomVisualization extends Container {
 
     this._destroyCursor();
     const cursor = new Cursor(this._room, { position });
-    this._objectLayer.addChild(cursor);
+    this._objectContainer.addChild(cursor);
     this._cursor = cursor;
   }
 
@@ -234,26 +229,26 @@ export class RoomVisualization extends Container {
     );
     /** Register interactions */
     tile.onPointerDown = (event): void => {
-      if (this._tileLayer.onPointerDown != null) this._tileLayer.onPointerDown(event);
+      if (this._partLayer.tiles.onPointerDown != null) this._partLayer.tiles.onPointerDown(event);
     };
     tile.onPointerUp = (event): void => {
-      if (this._tileLayer.onPointerUp != null) this._tileLayer.onPointerUp(event);
+      if (this._partLayer.tiles.onPointerUp != null) this._partLayer.tiles.onPointerUp(event);
     };
     tile.onPointerMove = (event): void => {
-      if (this._tileLayer.onPointerMove != null) this._tileLayer.onPointerMove(event);
+      if (this._partLayer.tiles.onPointerMove != null) this._partLayer.tiles.onPointerMove(event);
     };
     tile.onPointerOut = (event): void => {
-      if (this._tileLayer.onPointerOut != null) this._tileLayer.onPointerOut(event);
+      if (this._partLayer.tiles.onPointerOut != null) this._partLayer.tiles.onPointerOut(event);
       this._destroyCursor();
     };
     tile.onPointerOver = (event): void => {
-      if (this._tileLayer.onPointerOver != null) this._tileLayer.onPointerOver(event);
+      if (this._partLayer.tiles.onPointerOver != null) this._partLayer.tiles.onPointerOver(event);
       this._createCursor(position);
     };
     tile.onDoubleClick = (event): void => {
-      if (this._tileLayer.onDoubleClick != null) this._tileLayer.onDoubleClick(event);
+      if (this._partLayer.tiles.onDoubleClick != null) this._partLayer.tiles.onDoubleClick(event);
     };
-    this._tileLayer.addChild(tile);
+    this._objectContainer.addChild(tile);
     this._tiles.push(tile);
   }
 
@@ -269,26 +264,26 @@ export class RoomVisualization extends Container {
 
     /** Register interactions */
     tile.onPointerDown = (event): void => {
-      if (this._tileLayer.onPointerDown != null) this._tileLayer.onPointerDown(event);
+      if (this._partLayer.tiles.onPointerDown != null) this._partLayer.tiles.onPointerDown(event);
     };
     tile.onPointerUp = (event): void => {
-      if (this._tileLayer.onPointerUp != null) this._tileLayer.onPointerUp(event);
+      if (this._partLayer.tiles.onPointerUp != null) this._partLayer.tiles.onPointerUp(event);
     };
     tile.onPointerMove = (event): void => {
-      if (this._tileLayer.onPointerMove != null) this._tileLayer.onPointerMove(event);
+      if (this._partLayer.tiles.onPointerMove != null) this._partLayer.tiles.onPointerMove(event);
     };
     tile.onPointerOut = (event): void => {
-      if (this._tileLayer.onPointerOut != null) this._tileLayer.onPointerOut(event);
+      if (this._partLayer.tiles.onPointerOut != null) this._partLayer.tiles.onPointerOut(event);
       this._destroyCursor();
     };
     tile.onPointerOver = (event): void => {
-      if (this._tileLayer.onPointerOver != null) this._tileLayer.onPointerOver(event);
+      if (this._partLayer.tiles.onPointerOver != null) this._partLayer.tiles.onPointerOver(event);
       this._createCursor(position);
     };
     tile.onDoubleClick = (event): void => {
-      if (this._tileLayer.onDoubleClick != null) this._tileLayer.onDoubleClick(event);
+      if (this._partLayer.tiles.onDoubleClick != null) this._partLayer.tiles.onDoubleClick(event);
     };
-    this._tileLayer.addChild(tile);
+    this._objectContainer.addChild(tile);
     this._tiles.push(tile);
   }
 
@@ -308,7 +303,7 @@ export class RoomVisualization extends Container {
       height: this._room.wallHeight,
       type
     });
-    this._wallLayer.addChild(wall);
+    this._objectContainer.addChild(wall);
     this._walls.push(wall);
   }
 
@@ -329,26 +324,26 @@ export class RoomVisualization extends Container {
     });
     /** Register interactions */
     stair.onPointerDown = (event: IInteractionEvent): void => {
-      if (this._tileLayer.onPointerDown != null) this._tileLayer.onPointerDown(event);
+      if (this._partLayer.tiles.onPointerDown != null) this._partLayer.tiles.onPointerDown(event);
     };
     stair.onPointerUp = (event: IInteractionEvent): void => {
-      if (this._tileLayer.onPointerUp != null) this._tileLayer.onPointerUp(event);
+      if (this._partLayer.tiles.onPointerUp != null) this._partLayer.tiles.onPointerUp(event);
     };
     stair.onPointerMove = (event: IInteractionEvent): void => {
-      if (this._tileLayer.onPointerMove != null) this._tileLayer.onPointerMove(event);
+      if (this._partLayer.tiles.onPointerMove != null) this._partLayer.tiles.onPointerMove(event);
     };
     stair.onPointerOut = (event: IInteractionEvent): void => {
-      if (this._tileLayer.onPointerOut != null) this._tileLayer.onPointerOut(event);
+      if (this._partLayer.tiles.onPointerOut != null) this._partLayer.tiles.onPointerOut(event);
       this._destroyCursor();
     };
     stair.onPointerOver = (event: IInteractionEvent): void => {
-      if (this._tileLayer.onPointerOver != null) this._tileLayer.onPointerOver(event);
+      if (this._partLayer.tiles.onPointerOver != null) this._partLayer.tiles.onPointerOver(event);
       this._createCursor(position);
     };
     stair.onDoubleClick = (event: IInteractionEvent): void => {
-      if (this._tileLayer.onDoubleClick != null) this._tileLayer.onDoubleClick(event);
+      if (this._partLayer.tiles.onDoubleClick != null) this._partLayer.tiles.onDoubleClick(event);
     };
-    this._tileLayer.addChild(stair);
+    this._objectContainer.addChild(stair);
     this._tiles.push(stair);
   }
 
@@ -364,28 +359,6 @@ export class RoomVisualization extends Container {
   }
 
   /**
-   * Reference to the tile layer container.
-   *
-   * @member {RoomTileLayer}
-   * @readonly
-   * @public
-   */
-  public get tileLayer(): RoomTileLayer {
-    return this._tileLayer;
-  }
-
-  /**
-   * Reference to the wall layer container.
-   *
-   * @member {Container}
-   * @readonly
-   * @public
-   */
-  public get wallLayer(): Container {
-    return this._wallLayer;
-  }
-
-  /**
    * Reference to the object layer container.
    *
    * @member {RoomObjectLayer}
@@ -394,6 +367,29 @@ export class RoomVisualization extends Container {
    */
   public get objectLayer(): RoomObjectLayer {
     return this._objectLayer;
+  }
+
+  /**
+   * Reference to the part layer container.
+   *
+   * @member {RoomObjectLayer}
+   * @readonly
+   * @public
+   */
+  public get partLayer(): RoomPartLayer {
+    return this._partLayer;
+  }
+
+
+  /**
+   * Reference to the object container.
+   *
+   * @member {RoomObjectContainer}
+   * @readonly
+   * @public
+   */
+  public get objectContainer(): RoomObjectContainer {
+    return this._objectContainer;
   }
 
   /**
