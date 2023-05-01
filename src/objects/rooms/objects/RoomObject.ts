@@ -1,12 +1,14 @@
-import { Room } from "../Room";
-import { EventManager } from "../../interactions/EventManager";
-import { IInteractionEvent } from "../../../interfaces/Interaction";
-import { Logger } from "../../../utilities/Logger";
-import { Direction } from "../../../enums/Direction";
-import { RoomObjectVisualization } from "./RoomObjectVisualization";
-import { IFloorPosition, IWallPosition } from "../../../interfaces/Furniture";
-import { gsap } from "gsap";
-import { FurnitureData } from "../../furnitures/FurnitureData";
+import { gsap } from 'gsap';
+
+import { EventManager } from '../../interactions/EventManager';
+import { Logger } from '../../../utilities/Logger';
+import type { Room } from '../Room';
+import type { IInteractionEvent } from '../../../interfaces/Interaction';
+import type { Direction } from '../../../enums/Direction';
+import type { RoomObjectVisualization } from './RoomObjectVisualization';
+import type { IFloorPosition, IWallPosition } from '../../../interfaces/Furniture';
+import type { FurnitureData } from '../../furnitures/FurnitureData';
+import {Filter} from "pixi.js";
 
 /**
  * RoomObject class that is extended by the avatars or furnitures.
@@ -78,6 +80,14 @@ export abstract class RoomObject {
    * @private
    */
   private _room!: Room | undefined;
+
+  /**
+   * The room object filters.
+   *
+   * @member {Filter[]}
+   * @private
+   */
+  private _filters: Filter[] = [];
 
   /**
    * Reference to the object event manager.
@@ -344,6 +354,40 @@ export abstract class RoomObject {
   }
 
   /**
+   * Reference the filters list.
+   *
+   * @member {Filter[]}
+   * @readonly
+   * @public
+   */
+  public get filters(): Filter[] {
+    return this._filters;
+  }
+
+  /**
+   * Add a filter to the room object.
+   *
+   * @param {Filter} [filter] - The filter.
+   * @public
+   */
+  public addFilter(filter: Filter): void {
+    if (this._filters.includes(filter)) return;
+    this._filters.push(filter);
+    this._visualization.render();
+  }
+
+  /**
+   * Remove filter from the room object.
+   *
+   * @param {Filter} [filter] - The filter.
+   * @public
+   */
+  public removeFilter(filter: Filter): void {
+    this._filters = this._filters.filter((fFilter: Filter) => fFilter !== filter);
+    this._visualization.render();
+  }
+
+  /**
    * Reference to the furniture position in the room.
    *
    * @member {IFloorPosition | IWallPosition}
@@ -370,7 +414,7 @@ export abstract class RoomObject {
    * @public
    */
   public get direction(): Direction {
-    return this._direction
+    return this._direction;
   }
 
   /**
@@ -382,7 +426,7 @@ export abstract class RoomObject {
    * @public
    */
   rotate(direction: Direction, duration: number = 0): void {
-    if (!this._visualization) return;
+    if (this._visualization === undefined) return;
     gsap.to(this._position, {
       x: this._position.x,
       y: this._position.y - 6.25,
@@ -411,9 +455,9 @@ export abstract class RoomObject {
    * @public
    */
   destroy(): void {
-    if (!this._visualization) return;
+    if (this._visualization === undefined) return;
     this._visualization.destroy();
-    if (!this._room) return;
+    if (this._room == null) return;
     this._room.objects.remove(this);
   }
 

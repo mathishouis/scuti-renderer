@@ -1,14 +1,16 @@
-import { FloorFurniture } from "./FloorFurniture";
-import { WallFurniture } from "./WallFurniture";
-import { Assets, BLEND_MODES, Spritesheet } from "pixi.js";
-import { IFurnitureLayerData, IFurnitureProperty, IFurnitureVisualization } from "../../interfaces/Furniture";
-import { Direction } from "../../enums/Direction";
-import { ZOrder } from "../../utilities/ZOrder";
-import { HitSprite } from "../interactions/HitSprite";
-import { AssetLoader } from "../../utilities/AssetLoader";
-import { Room } from "../rooms/Room";
-import { FurnitureLayer } from "./FurnitureLayer";
-import { RoomObjectVisualization } from "../rooms/objects/RoomObjectVisualization";
+import type { Spritesheet } from 'pixi.js';
+import { Assets, BLEND_MODES } from 'pixi.js';
+
+import { FloorFurniture } from './FloorFurniture';
+import { WallFurniture } from './WallFurniture';
+import type { IFurnitureLayerData, IFurnitureProperty, IFurnitureVisualization } from '../../interfaces/Furniture';
+import { Direction } from '../../enums/Direction';
+import { ZOrder } from '../../utilities/ZOrder';
+import { HitSprite } from '../interactions/HitSprite';
+import { AssetLoader } from '../../utilities/AssetLoader';
+import type { Room } from '../rooms/Room';
+import type { FurnitureLayer } from './FurnitureLayer';
+import { RoomObjectVisualization } from '../rooms/objects/RoomObjectVisualization';
 
 export abstract class FurnitureVisualization extends RoomObjectVisualization {
   public _layers: Map<number, FurnitureLayer> = new Map<number, FurnitureLayer>();
@@ -17,14 +19,15 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
   public _properties!: IFurnitureProperty;
   public _furniture: FloorFurniture | WallFurniture;
 
-  protected constructor(
-    furniture: FloorFurniture | WallFurniture
-  ) {
+  protected constructor(furniture: FloorFurniture | WallFurniture) {
     super();
     this._furniture = furniture;
     this._loadAssets(this._furniture.data.baseName);
     this._furniture.onRoomAdded = (room: Room) => {
-      if (this._loaded) room.view.animationTicker.add(() => this.update());
+      if (this._loaded)
+        room.view.animationTicker.add(() => {
+          return this.update();
+        });
     };
   }
 
@@ -40,29 +43,39 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
   abstract renderLayer(layer: number, frame: number): void;
 
   private _loadAssets(name: string): void {
-    if (this._furniture.onLoad) this._furniture.onLoad();
-    AssetLoader.load(
-      'furnitures/' + name,
-      'furniture/' + name + '/' + name + '.json',
-    ).then(() => {
-      if (this._furniture.onLoadComplete) this._furniture.onLoadComplete();
-      this._spritesheet = Assets.get('furnitures/' + name);
-      // @ts-ignore
-      this._properties = this._spritesheet.data.furniProperty as IFurnitureProperty;
-      this._loaded = true;
-      this._placeholder.destroy();
-      if (this._furniture.room) this._furniture.room.view.animationTicker.add(() => this.update());
-    }).catch(() => {
-      this._furniture.logger.error('Unable to load the assets "' + name + '". It can be an invalid file, an invalid json format or just it don\t exist!');
-    });
+    if (this._furniture.onLoad !== undefined) this._furniture.onLoad();
+    AssetLoader.load('furnitures/' + name, 'furniture/' + name + '/' + name + '.json')
+      .then(() => {
+        if (this._furniture.onLoadComplete !== undefined) this._furniture.onLoadComplete();
+        this._spritesheet = Assets.get('furnitures/' + name);
+        // @ts-expect-error
+        this._properties = this._spritesheet.data.furniProperty as IFurnitureProperty;
+        this._loaded = true;
+        this._placeholder.destroy();
+        if (this._furniture.room != null)
+          this._furniture.room.view.animationTicker.add(() => {
+            return this.update();
+          });
+      })
+      .catch(() => {
+        this._furniture.logger.error(
+          'Unable to load the assets "' +
+            name +
+            '". It can be an invalid file, an invalid json format or just it don\t exist!'
+        );
+      });
   }
 
   updatePosition(): void {
     if (this._furniture instanceof FloorFurniture) {
       this._layers.forEach((layer: FurnitureLayer) => {
         layer.x = layer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y;
-        // @ts-ignore
-        layer.y = layer.texture.orig.y + 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 * this._furniture.position.z;
+        layer.y =
+          layer.texture.orig.y +
+          16 * this._furniture.position.x +
+          16 * this._furniture.position.y -
+          // @ts-expect-error
+          32 * this._furniture.position.z;
       });
     } else if (this._furniture instanceof WallFurniture) {
       // TODO: Refactor wall items
@@ -71,29 +84,34 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
 
   updateLayerPosition(layer: number): void {
     const furnitureLayer: FurnitureLayer | undefined = this._layers.get(layer);
-    if (!furnitureLayer) return;
-    furnitureLayer.x = furnitureLayer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y;
-    // @ts-ignore
-    furnitureLayer.y = furnitureLayer.texture.orig.y + 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 * this._furniture.position.z;
+    if (furnitureLayer == null) return;
+    furnitureLayer.x =
+      furnitureLayer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y;
+    furnitureLayer.y =
+      furnitureLayer.texture.orig.y +
+      16 * this._furniture.position.x +
+      16 * this._furniture.position.y -
+      // @ts-expect-error
+      32 * this._furniture.position.z;
   }
 
   renderPlaceholder(): void {
     this._placeholder = new HitSprite(
       Assets.get('furnitures/floor/placeholder').textures['place_holder_furniture_64.png']
     );
-    // @ts-ignore
-    if (this._furniture.room) this._furniture.room.objects.addChild(this._placeholder);
+    // @ts-expect-error
+    if (this._furniture.room != null) this._furniture.room.objects.addChild(this._placeholder);
     this._placeholder.x = -32;
     this._placeholder.y = -50;
   }
 
   layerData(layer: number, frame: number = 0): IFurnitureLayerData {
     const spritesheet: Spritesheet = Assets.get('furnitures/' + this._furniture.data.baseName);
-    // @ts-ignore
+    // @ts-expect-error
     const properties: IFurnitureProperty = spritesheet.data.furniProperty as IFurnitureProperty;
     const visualization: IFurnitureVisualization = properties.visualization;
     const layerData: IFurnitureLayerData = {
-      layer: layer,
+      layer,
       alpha: 1,
       z: 0,
       blendMode: BLEND_MODES.NORMAL,
@@ -101,8 +119,8 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
       frame: 0,
       ignoreMouse: false,
       direction: Direction.NORTH,
-      tag: "",
-    }
+      tag: ''
+    };
 
     if (!visualization.directions.includes(this._furniture.direction))
       this._furniture.rotate(visualization.directions[0], 0);
@@ -139,11 +157,12 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
       frame
     ].join('_');
 
-    if (this._furniture instanceof FloorFurniture) layerData.z = ZOrder.floorItem(this._furniture.position, layerData.z);
-    // @ts-ignore
+    if (this._furniture instanceof FloorFurniture)
+      layerData.z = ZOrder.floorItem(this._furniture.position, layerData.z);
+    // @ts-expect-error
     if (this._furniture instanceof WallFurniture) layerData.z = ZOrder.wallItem(this._furniture.position, layerData.z);
 
-    // @ts-ignore
+    // @ts-expect-error
     if (spritesheet.data.frames[name] !== undefined) layerData.flip = spritesheet.data.frames[name].flipH;
     return layerData;
   }

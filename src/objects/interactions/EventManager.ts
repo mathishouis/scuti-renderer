@@ -1,5 +1,5 @@
 import type { IInteractionEvent } from '../../interfaces/Interaction';
-import {Room} from "../rooms/Room";
+import type { Room } from '../rooms/Room';
 
 /**
  * InteractionManager class for interaction handling.

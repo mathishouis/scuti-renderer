@@ -149,7 +149,7 @@ export class FurnitureLayer extends HitSprite {
         String(this._direction) +
         '_' +
         String(this._frame)
-    ]
+    ];
     /*console.log(
     this._furniture.data.baseName +
     '_' +

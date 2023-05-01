@@ -1,9 +1,9 @@
-import type { IFloorFurnitureConfiguration } from '../../interfaces/Furniture';
+import { gsap } from 'gsap';
+
+import type { IFloorFurnitureConfiguration, IFloorPosition, IWallPosition } from '../../interfaces/Furniture';
 import { FurnitureData } from './FurnitureData';
-import { FurnitureAnimatedVisualization } from "./visualizations/FurnitureAnimatedVisualization";
-import { RoomObject } from "../rooms/objects/RoomObject";
-import { IFloorPosition, IWallPosition } from "../../interfaces/Furniture";
-import { gsap } from "gsap";
+import { FurnitureAnimatedVisualization } from './visualizations/FurnitureAnimatedVisualization';
+import { RoomObject } from '../rooms/objects/RoomObject';
 
 /**
  * FloorFurniture class that aim to reproduce the floor furnitures on Habbo.
@@ -12,7 +12,6 @@ import { gsap } from "gsap";
  * @memberof Scuti
  */
 export class FloorFurniture extends RoomObject {
-
   /**
    * The furniture position in the room.
    *
@@ -28,14 +27,6 @@ export class FloorFurniture extends RoomObject {
    * @private
    */
   private readonly _id: number;
-
-  /**
-   * A boolean indicating if we have to apply the wired selection filter to the furniture.
-   *
-   * @member {boolean}
-   * @private
-   */
-  private _selected: boolean = false;
 
   /**
    * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.
@@ -71,15 +62,15 @@ export class FloorFurniture extends RoomObject {
    * @public
    */
   move(position: IFloorPosition | IWallPosition, duration: number = 0.5): void {
-    if (!this._visualization) return;
+    if (this._visualization === undefined) return;
     gsap.to(this._position, {
       x: position.x,
       y: position.y,
-      duration: duration,
+      duration,
       ease: 'linear',
       onUpdate: () => {
         this._visualization.updatePosition();
-      },
+      }
     });
   }
 
@@ -92,27 +83,5 @@ export class FloorFurniture extends RoomObject {
    */
   public get id(): number {
     return this._id;
-  }
-
-  /**
-   * Reference to the furniture selection state.
-   *
-   * @member {boolean}
-   * @readonly
-   * @public
-   */
-  public get selected(): boolean {
-    return this._selected;
-  }
-
-  /**
-   * Update the furniture selection state (add the wired selection filter to the furniture).
-   *
-   * @param {boolean} [selected] - The new furniture selection state.
-   * @public
-   */
-  public set selected(selected: boolean) {
-    this._selected = selected;
-    this._visualization.render();
   }
 }

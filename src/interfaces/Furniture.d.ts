@@ -76,7 +76,6 @@ export interface IFurnitureLayerConfiguration {
   tag?: string;
 }
 
-
 export interface IFurnitureLayerData {
   layer: number | string;
   alpha: number;

@@ -90,7 +90,7 @@ export class FurniturePart extends Container {
     }
 
     /** Check if the furniture support the current direction */
-    if (!visualization.directions.includes(this._furniture.direction))
+    if (visualization.directions.includes(this._furniture.direction) === undefined)
       this._furniture.direction = visualization.directions[0];
 
     if (

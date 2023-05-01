@@ -7,7 +7,7 @@ import { EventManager } from '../interactions/EventManager';
 import type { IInteractionEvent } from '../../interfaces/Interaction';
 import { FurnitureView } from './FurnitureView';
 import type { FurnitureVisualization } from './visualizations/FurnitureVisualization';
-import {RoomObject} from "../rooms/objects/RoomObject";
+import { RoomObject } from '../rooms/objects/RoomObject';
 
 /**
  * WallFurniture class that aim to reproduce the wall furnitures on Habbo.
@@ -104,17 +104,6 @@ export class WallFurniture extends RoomObject {
    * @return {void}
    * @private
    */
-  private _updatePosition(): void {
-    this.x = 32 + 32 * this._position.x - 32 * this._position.y;
-    this.y = 16 * this._position.x + 16 * this._position.y - 32;
-    if (this._direction === 2) {
-      this.x = this.x + this._position.offsetX * 2;
-      this.y = this.y + this._position.offsetY * 2 - 84;
-    } else {
-      this.x = this.x + this._position.offsetX * 2 - 32;
-      this.y = this.y + this._position.offsetY * 2 - 84;
-    }
-  }
 
   /**
    * Add the furniture to the ticker to start the animation.

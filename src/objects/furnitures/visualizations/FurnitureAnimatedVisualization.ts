@@ -1,16 +1,13 @@
-import { FurnitureVisualization } from "../FurnitureVisualization";
+import { FurnitureVisualization } from '../FurnitureVisualization';
+import { FurnitureLayer } from '../FurnitureLayer';
+import type { IFurnitureLayerData, IFurnitureVisualization } from '../../../interfaces/Furniture';
 import { FloorFurniture } from "../FloorFurniture";
 import { WallFurniture } from "../WallFurniture";
-import { IFurnitureLayerData, IFurnitureVisualization } from "../../../interfaces/Furniture";
-import { FurnitureLayer } from "../FurnitureLayer";
 
 export class FurnitureAnimatedVisualization extends FurnitureVisualization {
+  private readonly _frames: Map<number, number> = new Map();
 
-  private _frames: Map<number, number> = new Map();
-
-  constructor(
-    furniture: FloorFurniture | WallFurniture
-  ) {
+  constructor(furniture: FloorFurniture | WallFurniture) {
     super(furniture);
   }
 
@@ -25,7 +22,7 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
     const visualization: IFurnitureVisualization = this._properties.visualization;
     const furnitureLayer: FurnitureLayer | undefined = this._layers.get(layer);
 
-    if (furnitureLayer) furnitureLayer.destroy();
+    if (furnitureLayer != null) furnitureLayer.destroy();
 
     if (
       this._properties.infos.visualization === 'furniture_animated' &&
@@ -62,17 +59,18 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
       frame: layerData.frame,
       ignoreMouse: layerData.ignoreMouse,
       direction: this._furniture.direction,
-      tag: layerData.tag,
+      tag: layerData.tag
     });
     layerContainer.zIndex = layerData.z;
     this._layers.set(layer, layerContainer);
-    if (this._furniture.room) {
+    if (this._furniture.room != null) {
       this._furniture.room.objects.addChild(
         // @ts-expect-error
         layerContainer
       );
       this.updateLayerPosition(layer);
     }
+    layerContainer.filters = this._furniture.filters; // TODO: Move this to global
   }
 
   public update(): void {
@@ -95,10 +93,10 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
           }
           this.renderLayer(i, this._frames.get(i) ?? 0);
         } else {
-          if (!this._layers.get(i)) this.renderLayer(i, 0);
+          if (this._layers.get(i) == null) this.renderLayer(i, 0);
         }
       } else {
-        if (!this._layers.get(i)) this.renderLayer(i, 0);
+        if (this._layers.get(i) == null) this.renderLayer(i, 0);
       }
     }
   }

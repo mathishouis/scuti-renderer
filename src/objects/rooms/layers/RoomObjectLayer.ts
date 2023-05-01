@@ -45,7 +45,7 @@ export class RoomObjectLayer extends Container {
   public add(object: RoomObject): void {
     object.room = this._room;
     this._objects.push(object);
-    if (object.onRoomAdded) object.onRoomAdded(this._room);
+    if (object.onRoomAdded !== undefined) object.onRoomAdded(this._room);
     if (object.visualization.loaded) object.visualization.render();
     else object.visualization.renderPlaceholder();
   }
@@ -58,9 +58,11 @@ export class RoomObjectLayer extends Container {
    * @public
    */
   public remove(object: RoomObject): void {
-    if (object.onRoomRemoved) object.onRoomRemoved(this._room);
+    if (object.onRoomRemoved !== undefined) object.onRoomRemoved(this._room);
     object.room = undefined;
-    this._objects = this._objects.filter((fObject: RoomObject) => fObject !== object);
+    this._objects = this._objects.filter((fObject: RoomObject) => {
+      return fObject !== object;
+    });
     object.destroy();
   }
 }
