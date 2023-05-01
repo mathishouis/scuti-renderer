@@ -1,10 +1,10 @@
-import { Container, EventBoundary, FederatedPointerEvent, Point } from 'pixi.js';
+import { Container, EventBoundary, FederatedPointerEvent } from 'pixi.js';
 import { gsap } from 'gsap';
 
-import type { RoomObject } from './RoomObject';
 import type { Room } from './Room';
 import type { Tile } from './parts/Tile';
 import type { Stair } from './parts/Stair';
+import {RoomObject} from "./objects/RoomObject";
 
 /**
  * RoomCamera class that manage things like the room dragging or detecting if the room is out of bounds.
@@ -101,8 +101,8 @@ export class RoomCamera extends Container {
    * @private
    */
   private _updateBounds(): void {
-    this._roomContainer.pivot.x = this._room.view.wallLayer.getBounds().x;
-    this._roomContainer.pivot.y = this._room.view.wallLayer.getBounds().y;
+    this._roomContainer.pivot.x = this._room.visualization.wallLayer.getBounds().x;
+    this._roomContainer.pivot.y = this._room.visualization.wallLayer.getBounds().y;
   }
 
   /**
@@ -114,12 +114,13 @@ export class RoomCamera extends Container {
   public centerCamera(object?: RoomObject): void {
     if (object === null || object === undefined)
       gsap.to(this._roomContainer, {
-        x: Math.floor(this._room.engine.application.view.width / 2 - this._room.view.width / 2),
-        y: Math.floor(this._room.engine.application.view.height / 2 - this._room.view.height / 2),
+        x: Math.floor(this._room.engine.application.view.width / 2 - this._room.visualization.width / 2),
+        y: Math.floor(this._room.engine.application.view.height / 2 - this._room.visualization.height / 2),
         duration: 0.8,
         ease: 'easeOut'
       });
-    else {
+    // TODO: Reimplement this part with the new room object
+    /*else {
       const globalPos: Point = object.getGlobalPosition(new Point(object.width / 2, object.height / 2));
       const diffX: number = globalPos.x - this._room.engine.application.view.width / 2;
       const diffY: number = globalPos.y - this._room.engine.application.view.height / 2;
@@ -129,7 +130,7 @@ export class RoomCamera extends Container {
         duration: 0.8,
         ease: 'easeOut'
       });
-    }
+    }*/
   }
 
   /**

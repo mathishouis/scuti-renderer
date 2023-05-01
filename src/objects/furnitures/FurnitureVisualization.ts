@@ -24,7 +24,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
     this._loadAssets(this._furniture.data.baseName);
     this._furniture.onRoomAdded = (room: Room) => {
       if (this._loaded)
-        room.view.animationTicker.add(() => {
+        room.visualization.animationTicker.add(() => {
           return this.update();
         });
     };
@@ -52,7 +52,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
         this._loaded = true;
         if (this._placeholder !== undefined) this._placeholder.destroy();
         if (this._furniture.room != null)
-          this._furniture.room.view.animationTicker.add(() => {
+          this._furniture.room.visualization.animationTicker.add(() => {
             return this.update();
           });
       })

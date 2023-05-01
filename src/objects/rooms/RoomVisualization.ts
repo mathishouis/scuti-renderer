@@ -18,7 +18,7 @@ import type { IInteractionEvent } from '../../interfaces/Interaction';
  * @class
  * @memberof Scuti
  */
-export class RoomView extends Container {
+export class RoomVisualization extends Container {
   /**
    * The room instance that will be managed by the camera.
    *
