@@ -76,6 +76,7 @@ export class Scuti {
       resolution: 1,
       antialias: false
     });
+    (globalThis as any).__PIXI_APP__ = this._application; // Support for PIXI.js dev-tool.
     this._application.stage = new Stage();
     this._canvas = configuration.canvas;
 
@@ -100,6 +101,7 @@ export class Scuti {
       AssetLoader.load('room/room', 'generic/room/room.json'),
       AssetLoader.load('room/cursors', 'generic/tile_cursor/tile_cursor.json'),
       AssetLoader.load('furnitures/floor/placeholder', 'generic/place_holder/place_holder_furniture.json'),
+      AssetLoader.load('furnitures/wall/placeholder', 'generic/place_holder/place_holder_wall_item.json'),
       AssetLoader.load('furnitures/furnidata', 'gamedata/furnidata.json'),
       AssetLoader.load('figures/figuredata', 'gamedata/figuredata.json'),
       AssetLoader.load('figures/figuremap', 'gamedata/figuremap.json'),

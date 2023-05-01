@@ -33,7 +33,7 @@ export class FurnitureLayer extends HitSprite {
    * @member {number | string}
    * @private
    */
-  private readonly _layer: number | string;
+  private readonly _layer: number;
 
   /**
    * The layer alpha.
@@ -144,34 +144,45 @@ export class FurnitureLayer extends HitSprite {
         '_' +
         this._furniture.data.baseName +
         '_64_' +
-        String(this._layer) +
+        String.fromCharCode(97 + Number(this._layer)) +
         '_' +
         String(this._direction) +
         '_' +
         String(this._frame)
     ];
+    /*console.log(
+    this._furniture.data.baseName +
+    '_' +
+    this._furniture.data.baseName +
+    '_64_' +
+    String.fromCharCode(97 + Number(this._layer)) +
+    '_' +
+    String(this._direction) +
+    '_' +
+    String(this._frame)
+      );*/
     if (this._tint !== undefined) this.tint = new Color(this._tint).premultiply(1).toNumber();
     if (this._blendMode !== undefined) this.blendMode = this._blendMode;
     if (this._alpha !== undefined) this.alpha = this._alpha;
     if (this._flip) this.scale.x = -1;
-    if (this._furniture.room !== undefined) this.parentLayer = this._furniture.room.objects.layer;
-    if (this._z !== undefined) this.zOrder = this._z;
+    //if (this._furniture.room !== undefined) this.parentLayer = this._furniture.room.objects.layer;
+    if (this._z !== undefined) this.zIndex = this._z;
     if (this._ignoreMouse !== null && !this._ignoreMouse) this.interactive = true;
     if (this._furniture.selected) this.filters.push(WIRED_SELECTION_FILTER);
     this.on('pointerdown', (event) => {
-      return this._furniture.interactionManager.handlePointerDown({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerDown({ mouseEvent: event, tag: this._tag });
     });
     this.on('pointerup', (event) => {
-      return this._furniture.interactionManager.handlePointerUp({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerUp({ mouseEvent: event, tag: this._tag });
     });
     this.on('pointermove', (event) => {
-      return this._furniture.interactionManager.handlePointerMove({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerMove({ mouseEvent: event, tag: this._tag });
     });
     this.on('pointerout', (event) => {
-      return this._furniture.interactionManager.handlePointerOut({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerOut({ mouseEvent: event, tag: this._tag });
     });
     this.on('pointerover', (event) => {
-      return this._furniture.interactionManager.handlePointerOver({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerOver({ mouseEvent: event, tag: this._tag });
     });
   }
 
@@ -184,5 +195,9 @@ export class FurnitureLayer extends HitSprite {
    */
   public get furniture(): FloorFurniture | WallFurniture {
     return this._furniture;
+  }
+
+  public get layer(): number {
+    return this._layer;
   }
 }

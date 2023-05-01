@@ -11,7 +11,7 @@ import { AvatarActionManager } from './actions/AvatarActionManager';
 import { AvatarAnimationManager } from './animations/AvatarAnimationManager';
 import { AvatarBodyPart } from './AvatarBodyPart';
 import { AvatarLayer } from './AvatarLayer';
-import { InteractionManager } from '../interactions/InteractionManager';
+import { EventManager } from '../interactions/EventManager';
 import type { IInteractionEvent } from '../../interfaces/Interaction.interface';
 import { AssetLoader } from '../../utilities/AssetLoader';
 
@@ -32,7 +32,7 @@ export class Avatar extends RoomObject {
 
   private readonly _animationManager: AvatarAnimationManager;
 
-  private readonly _interactionManager: InteractionManager = new InteractionManager();
+  private readonly _interactionManager: EventManager = new EventManager();
 
   private readonly _bodyParts: AvatarBodyPart[] = [];
 
@@ -290,7 +290,7 @@ export class Avatar extends RoomObject {
     return this._animationManager;
   }
 
-  public get interactionManager(): InteractionManager {
+  public get interactionManager(): EventManager {
     return this._interactionManager;
   }
 

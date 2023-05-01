@@ -99,7 +99,6 @@ export class RoomView extends Container {
     this.addChild(this._objectLayer);
 
     /** Start the animation ticker */
-    //this._animationTicker.maxFPS = 15.666;
     this._animationTicker.maxFPS = 4;
     this._animationTicker.start();
 
@@ -223,6 +222,7 @@ export class RoomView extends Container {
    * Create a tile.
    *
    * @param {IPosition3D} [position] - The tile position.
+   * @param {ITileInfo} [tileInfo]
    * @return {void}
    * @private
    */

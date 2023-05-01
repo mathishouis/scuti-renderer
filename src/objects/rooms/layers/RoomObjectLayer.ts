@@ -1,7 +1,6 @@
 import { Container } from 'pixi.js';
-import { Layer } from '@pixi/layers';
 
-import type { RoomObject } from '../RoomObject';
+import type { RoomObject } from '../objects/RoomObject';
 import type { Room } from '../Room';
 
 /**
@@ -20,23 +19,20 @@ export class RoomObjectLayer extends Container {
   private readonly _room: Room;
 
   /**
-   * The object layer.
+   * The object list.
    *
-   * @member {Layer}
+   * @member {RoomObject[]}
    * @private
    */
-  private readonly _layer: Layer = new Layer();
+  private _objects: RoomObject[] = [];
 
   /**
    * @param {Room} [room] - The room instance that we want to visualize.
    */
   constructor(room: Room) {
     super();
-
+    this.sortableChildren = true;
     this._room = room;
-    this._room.engine.application.stage.addChild(this._layer);
-    this._layer.group.enableSort = true;
-    this._layer.zIndex = 1000;
   }
 
   /**
@@ -48,8 +44,10 @@ export class RoomObjectLayer extends Container {
    */
   public add(object: RoomObject): void {
     object.room = this._room;
-    object.start();
-    this.addChild(object);
+    this._objects.push(object);
+    if (object.onRoomAdded !== undefined) object.onRoomAdded(this._room);
+    if (object.visualization.loaded) object.visualization.render();
+    else object.visualization.renderPlaceholder();
   }
 
   /**
@@ -60,18 +58,11 @@ export class RoomObjectLayer extends Container {
    * @public
    */
   public remove(object: RoomObject): void {
-    object.stop();
-    this.removeChild(object);
-  }
-
-  /**
-   * Reference to the pixi layer.
-   *
-   * @member {Layer}
-   * @readonly
-   * @public
-   */
-  public get layer(): Layer {
-    return this._layer;
+    if (object.onRoomRemoved !== undefined) object.onRoomRemoved(this._room);
+    object.room = undefined;
+    this._objects = this._objects.filter((fObject: RoomObject) => {
+      return fObject !== object;
+    });
+    object.destroy();
   }
 }
