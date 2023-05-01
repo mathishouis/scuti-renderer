@@ -1,20 +1,19 @@
-import type { Spritesheet } from 'pixi.js';
-import { Assets, BLEND_MODES } from 'pixi.js';
+import type {Spritesheet} from 'pixi.js';
+import {Assets, BLEND_MODES, Sprite} from 'pixi.js';
 
-import { FloorFurniture } from './FloorFurniture';
-import { WallFurniture } from './WallFurniture';
-import type { IFurnitureLayerData, IFurnitureProperty, IFurnitureVisualization } from '../../interfaces/Furniture';
-import { Direction } from '../../enums/Direction';
-import { ZOrder } from '../../utilities/ZOrder';
-import { HitSprite } from '../interactions/HitSprite';
-import { AssetLoader } from '../../utilities/AssetLoader';
-import type { Room } from '../rooms/Room';
-import type { FurnitureLayer } from './FurnitureLayer';
-import { RoomObjectVisualization } from '../rooms/objects/RoomObjectVisualization';
+import {FloorFurniture} from './FloorFurniture';
+import {WallFurniture} from './WallFurniture';
+import type {IFurnitureLayerData, IFurnitureProperty, IFurnitureVisualization} from '../../interfaces/Furniture';
+import {Direction} from '../../enums/Direction';
+import {ZOrder} from '../../utilities/ZOrder';
+import {AssetLoader} from '../../utilities/AssetLoader';
+import type {Room} from '../rooms/Room';
+import type {FurnitureLayer} from './FurnitureLayer';
+import {RoomObjectVisualization} from '../rooms/objects/RoomObjectVisualization';
 
 export abstract class FurnitureVisualization extends RoomObjectVisualization {
   public _layers: Map<number, FurnitureLayer> = new Map<number, FurnitureLayer>();
-  public _placeholder!: HitSprite;
+  public _placeholder!: Sprite;
   public _spritesheet!: Spritesheet;
   public _properties!: IFurnitureProperty;
   public _furniture: FloorFurniture | WallFurniture;
@@ -51,7 +50,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
         // @ts-expect-error
         this._properties = this._spritesheet.data.furniProperty as IFurnitureProperty;
         this._loaded = true;
-        this._placeholder.destroy();
+        if (this._placeholder !== undefined) this._placeholder.destroy();
         if (this._furniture.room != null)
           this._furniture.room.view.animationTicker.add(() => {
             return this.update();
@@ -77,29 +76,46 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
           // @ts-expect-error
           32 * this._furniture.position.z;
       });
-    } else if (this._furniture instanceof WallFurniture) {
+    } else {
       // TODO: Refactor wall items
+      this._layers.forEach((layer: FurnitureLayer) => {
+        if (this._furniture.direction === Direction.EAST) {
+          layer.x = layer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y + this._furniture.position.offsetX * 2 - 1;
+          layer.y = layer.texture.orig.y + 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 + this._furniture.position.offsetY * 2 + 31;
+        } else if (this._furniture.direction === Direction.SOUTH) {
+          layer.x = layer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y + this._furniture.position.offsetX * 2 - 32;
+          layer.y = layer.texture.orig.x + 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 + this._furniture.position.offsetY * 2 + 31;
+        }
+      });
     }
   }
 
   updateLayerPosition(layer: number): void {
     const furnitureLayer: FurnitureLayer | undefined = this._layers.get(layer);
     if (furnitureLayer == null) return;
-    furnitureLayer.x =
-      furnitureLayer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y;
-    furnitureLayer.y =
-      furnitureLayer.texture.orig.y +
-      16 * this._furniture.position.x +
-      16 * this._furniture.position.y -
-      // @ts-expect-error
-      32 * this._furniture.position.z;
+    if (this._furniture instanceof FloorFurniture) {
+      furnitureLayer.x =
+        furnitureLayer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y;
+      furnitureLayer.y =
+        furnitureLayer.texture.orig.y +
+        16 * this._furniture.position.x +
+        16 * this._furniture.position.y -
+        32 * this._furniture.position.z;
+    } else {
+      if (this._furniture.direction === Direction.EAST) {
+        furnitureLayer.x = furnitureLayer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y + this._furniture.position.offsetX * 2 - 1;
+        furnitureLayer.y = furnitureLayer.texture.orig.y + 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 + this._furniture.position.offsetY * 2 + 31;
+      } else if (this._furniture.direction === Direction.SOUTH) {
+        furnitureLayer.x = furnitureLayer.texture.orig.x + 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y + this._furniture.position.offsetX * 2 - 32;
+        furnitureLayer.y = furnitureLayer.texture.orig.x + 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 + this._furniture.position.offsetY * 2 + 31;
+      }
+    }
   }
 
   renderPlaceholder(): void {
-    this._placeholder = new HitSprite(
+    this._placeholder = new Sprite(
       Assets.get('furnitures/floor/placeholder').textures['place_holder_furniture_64.png']
     );
-    // @ts-expect-error
     if (this._furniture.room != null) this._furniture.room.objects.addChild(this._placeholder);
     this._placeholder.x = -32;
     this._placeholder.y = -50;
@@ -159,7 +175,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
 
     if (this._furniture instanceof FloorFurniture)
       layerData.z = ZOrder.floorItem(this._furniture.position, layerData.z);
-    // @ts-expect-error
+
     if (this._furniture instanceof WallFurniture) layerData.z = ZOrder.wallItem(this._furniture.position, layerData.z);
 
     // @ts-expect-error

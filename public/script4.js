@@ -4,6 +4,7 @@ import { FloorMaterial } from '../src/objects/rooms/materials/FloorMaterial';
 import { WallMaterial } from '../src/objects/rooms/materials/WallMaterial';
 import { FloorFurniture } from '../src/objects/furnitures/FloorFurniture';
 import {WiredSelectionFilter} from "../src/objects/filters/WiredSelectionFilter";
+import {WallFurniture} from "../src";
 
 (async () => {
   const renderer = new Scuti({
@@ -57,20 +58,32 @@ import {WiredSelectionFilter} from "../src/objects/filters/WiredSelectionFilter"
     direction: 2,
     state: 1
   });
-  const wallFurniture = new FloorFurniture({
+  const wallFurniture = new WallFurniture({
     id: 4625,
     position: {
-      x: 8,
-      y: 10,
-      offsetX: 0,
-      offsetY: 0
+      x: -1,
+      y: 2,
+      offsetX: 2,
+      offsetY: -25
     },
     direction: 2,
-    state: 1
+    state: 0
   });
-  //room.objects.add(furniture3);
-  //room.objects.add(furniture2);
-  //room.objects.add(wallFurniture);
+  const wallFurniture2 = new WallFurniture({
+    id: 4625,
+    position: {
+      x: 3,
+      y: -1,
+      offsetX: 4,
+      offsetY: -30
+    },
+    direction: 4,
+    state: 0
+  });
+  room.objects.add(furniture3);
+  room.objects.add(furniture2);
+  room.objects.add(wallFurniture);
+  room.objects.add(wallFurniture2);
   setTimeout(() => furniture.move({ x: 0, y: 0, z: 0 }), 3000);
   setTimeout(() => furniture.move({ x: 5, y: 4, z: 0 }), 5000);
   //setTimeout(() => room.objects.add(furniture), 6000);
