@@ -6,6 +6,7 @@ import type { IPosition3D, IPosition2D, IWallConfiguration } from '../../../inte
 import type { Material } from '../materials/Material';
 import { WallType } from '../../../enums/WallType';
 import { WallMaterial } from '../materials/WallMaterial';
+import {ZOrder} from "../../../utilities/ZOrder";
 
 /**
  * Wall class that show up on the sides of the tiles.
@@ -316,5 +317,7 @@ export class Wall extends Container {
     /** Positionate the wall */
     this.x = 32 * this._position.x - 32 * this._position.y;
     this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
+    /** Set the zIndex */
+    this.zIndex = ZOrder.wall(this._position);
   }
 }

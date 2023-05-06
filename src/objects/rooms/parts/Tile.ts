@@ -9,6 +9,7 @@ import { EventManager } from '../../interactions/EventManager';
 import type { IInteractionEvent } from '../../../interfaces/Interaction';
 import type { IFloorPosition } from '../../../interfaces/Furniture';
 import {RoomPart} from "./RoomPart";
+import {ZOrder} from "../../../utilities/ZOrder";
 
 /**
  * Tile class that show up during room rendering.
@@ -198,6 +199,8 @@ export class Tile extends RoomPart {
       new Point(32, 16),
       new Point(0, 0)
     );
+    /** Set the zIndex */
+    this.zIndex = ZOrder.floor(this._position);
   }
 
   /**
