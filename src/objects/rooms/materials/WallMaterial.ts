@@ -1,7 +1,10 @@
+import type { Spritesheet } from 'pixi.js';
 import { Assets, Sprite, Texture } from 'pixi.js';
 
 import { Material } from './Material';
 import type { Scuti } from '../../../Scuti';
+import type { RoomMaterial } from '../../../interfaces/RoomMaterial';
+import { Logger } from '../../../utilities/Logger';
 
 export class WallMaterial extends Material {
   /**
@@ -18,18 +21,18 @@ export class WallMaterial extends Material {
    * @member {number}
    * @private
    */
-  private readonly _id: number;
+  private readonly _id: number | undefined;
 
   /**
    * @param {Scuti} [engine] - The scuti engine instance to use.
    * @param {number} [id] - The id of the material (it can be found into materials.json).
    **/
-  constructor(engine: Scuti, id: number) {
+  constructor(engine: Scuti, id?: number) {
     super(0xffffff, Texture.WHITE);
 
     this._engine = engine;
     this._id = id;
-    /** Load the material */
+
     this._load();
   }
 
@@ -40,22 +43,30 @@ export class WallMaterial extends Material {
    * @private
    */
   private _load(): void {
-    const materials: { wallData: { textures: [] } } = Assets.get('room/materials');
-    // @ts-expect-error
-    const material: { id: string; visualizations: [] } = materials.wallData.walls.find((material) => {
-      return material.id === this._id.toString();
+    const materials = Assets.get<RoomMaterial>('room/materials');
+    const defaultMaterial = materials.wallData.walls[0];
+
+    let material = materials.wallData.walls.find((material) => {
+      if (this._id != null) return material.id === this._id.toString();
+      else return defaultMaterial;
     });
-    // @ts-expect-error
+
+    if (material == null) {
+      const console = new Logger('WallMaterial');
+      this._id != null && console.warn(`Unknown wall id: "${this._id}"`);
+      /** apply default (white) one rather than throwing an error */
+      material = defaultMaterial;
+    }
+
     const { color, materialId } = material.visualizations[0].layers[0];
-    // @ts-expect-error
-    const materialTexture: { id: string; bitmaps: [] } = materials.wallData.textures.find((texture) => {
-      // @ts-expect-error
+    const materialTexture = materials.wallData.textures.find((texture) => {
       return texture.id === materialId.toString();
     });
-    // @ts-expect-error
-    const name: string = materialTexture.bitmaps[0].assetName;
-    const texture: Texture = Assets.get('room/room').textures[`room_${name}.png`];
-    const sprite: Sprite = new Sprite(texture);
+
+    const name = materialTexture?.bitmaps[0].assetName as string;
+    const texture = Assets.get<Spritesheet>('room/room').textures[`room_${name}.png`];
+    const sprite = new Sprite(texture);
+
     this.color = color;
     this.texture = new Texture(this._engine.application.renderer.generateTexture(sprite).baseTexture);
   }

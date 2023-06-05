@@ -1,4 +1,4 @@
-import { Container, Graphics, Matrix, Texture } from 'pixi.js';
+import { Graphics, Matrix, Texture } from 'pixi.js';
 import { Color } from '@pixi/color';
 
 import type { Room } from '../Room';
@@ -6,7 +6,8 @@ import type { IPosition3D, IPosition2D, IWallConfiguration } from '../../../inte
 import type { Material } from '../materials/Material';
 import { WallType } from '../../../enums/WallType';
 import { WallMaterial } from '../materials/WallMaterial';
-import {ZOrder} from "../../../utilities/ZOrder";
+import { ZOrder } from '../../../utilities/ZOrder';
+import { RoomPart } from './RoomPart';
 
 /**
  * Wall class that show up on the sides of the tiles.
@@ -14,8 +15,7 @@ import {ZOrder} from "../../../utilities/ZOrder";
  * @class
  * @memberof Scuti
  */
-// @ts-expect-error
-export class Wall extends Container {
+export class Wall extends RoomPart {
   /**
    * The room instance where the wall will be drawn.
    *
@@ -39,14 +39,6 @@ export class Wall extends Container {
    * @private
    */
   private readonly _material: Material;
-
-  /**
-   * The wall height, the height is added to the base height of the room.
-   *
-   * @member {number}
-   * @private
-   */
-  private readonly _height: number;
 
   /**
    * The wall position.
@@ -81,9 +73,10 @@ export class Wall extends Container {
     this._room = room;
     this._position = configuration.position;
     this._thickness = configuration.thickness ?? 8;
-    this._material = configuration.material ?? new WallMaterial(this._room.engine, 112);
+    this._material = configuration.material ?? new WallMaterial(this._room.engine);
     this._height = configuration.height ?? 0;
     this._type = configuration.type;
+
     /** Draw the wall */
     this._draw();
   }
@@ -217,7 +210,7 @@ export class Wall extends Container {
    */
   private _drawWall(points: IPosition2D[]): void {
     /** Top face */
-    const top: Graphics = new Graphics()
+    const top = new Graphics()
       .beginTextureFill({
         texture: Texture.WHITE,
         color: new Color(this._material.color).premultiply(0.61).toNumber()
@@ -228,8 +221,9 @@ export class Wall extends Container {
       .lineTo(points[3].x, points[3].y)
       .lineTo(points[0].x, points[0].y)
       .endFill();
+
     /** Left face */
-    const left: Graphics = new Graphics()
+    const left = new Graphics()
       .beginTextureFill({
         texture: this._type === WallType.RIGHT_WALL ? this._material.texture : Texture.WHITE,
         color: new Color(this._material.color).premultiply(1).toNumber(),
@@ -256,8 +250,9 @@ export class Wall extends Container {
       )
       .lineTo(points[3].x, points[3].y)
       .endFill();
+
     /** Right face */
-    const right: Graphics = new Graphics()
+    const right = new Graphics()
       .beginTextureFill({
         texture:
           this._type === WallType.LEFT_WALL || this._type === WallType.DOOR_WALL
@@ -309,14 +304,18 @@ export class Wall extends Container {
             this._height * 64
         );
     }
+
     right.lineTo(points[2].x, points[2].y).lineTo(points[3].x, points[3].y).endFill();
+
     /** And we combine everything */
     this.addChild(top);
     this.addChild(left);
     this.addChild(right);
+
     /** Positionate the wall */
     this.x = 32 * this._position.x - 32 * this._position.y;
     this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;
+
     /** Set the zIndex */
     this.zIndex = ZOrder.wall(this._position);
   }
