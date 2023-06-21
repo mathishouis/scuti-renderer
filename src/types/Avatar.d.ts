@@ -1,12 +1,14 @@
 import type { Direction } from '../enums/Direction';
 import type { AvatarAction } from '../objects/avatars/actions/AvatarAction';
-import type { IFloorPosition } from './Furniture';
+import type { Dimension } from './Dimension';
+import type { IRoomObjectConfig } from './Room';
+
+export type IAvatarPosition = Dimension.IPosition3D;
 
 export type AvatarFigure = Map<string, { setId: number; colors: number[] }>;
 
-export interface IAvatarConfiguration {
+export interface IAvatarConfig extends IRoomObjectConfig {
   figure: string;
-  position: IFloorPosition;
   bodyDirection: Direction;
   headDirection: Direction;
   actions: AvatarAction[];
@@ -76,7 +78,7 @@ export interface IAvatarLayerConfiguration {
   type: string;
   part: IAvatarPart;
   gesture: string;
-  tint: number;
+  tint?: number;
   z: number;
   flip: boolean;
   direction: Direction;

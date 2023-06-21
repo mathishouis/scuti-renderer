@@ -2,16 +2,23 @@ import type { StairType } from '../enums/StairType';
 import type { Direction } from '../enums/Direction';
 import type { WallType } from '../enums/WallType';
 import type { Material } from '../objects/rooms/materials/Material';
+import type { IFloorPosition, IWallPosition } from './Furniture';
+import type { IAvatarPosition } from './Avatar';
 
 export type TileMap = string[][];
 
-export interface IRoomConfiguration {
+export interface IRoomConfig {
   tileMap: string;
   floorMaterial?: Material;
   floorThickness?: number;
   wallMaterial?: Material;
   wallHeight?: number;
   wallThickness?: number;
+}
+
+export interface IRoomObjectConfig {
+  position: IWallPosition | IFloorPosition | IAvatarPosition;
+  direction: Direction;
 }
 
 export interface ITileConfiguration {
@@ -56,8 +63,8 @@ export interface ITileInfo {
   tile: boolean;
   door: boolean;
   height: number;
-  stairType: { type: StairType; direction: Direction } | undefined;
-  wallType: WallType | undefined;
+  stairType?: { type: StairType; direction: Direction };
+  wallType?: WallType;
 }
 
 // missing types here
