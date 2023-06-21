@@ -1,5 +1,5 @@
-import type { IPosition2D, IPosition3D } from '../interfaces/Room';
-import type { IFloorPosition, IWallPosition } from '../interfaces/Furniture';
+import type { IPosition2D, IPosition3D } from '../types/Room';
+import type { IFloorPosition, IWallPosition } from '../types/Furniture';
 
 /**
  * Priority values
@@ -55,7 +55,6 @@ const floor = function (position: IPosition2D): number {
 const wall = function (position: IPosition2D): number {
   return (position.x + position.y) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_WALL;
 };
-
 
 /**
  * Return the zOrder of the tile cursor by it's position in the room.

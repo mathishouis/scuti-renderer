@@ -8,14 +8,10 @@ interface LoadedKeys {
 const loadedKeys: LoadedKeys = {};
 
 const load = async (key: string, url: string, onUncached?: () => void): Promise<void> => {
-  if (loadedKeys[key] !== undefined) {
-    await loadedKeys[key];
-    return;
-  }
+  if (loadedKeys[key] !== undefined) return await loadedKeys[key];
+
   if (!Cache.has(key)) {
-    if (onUncached != null) {
-      onUncached();
-    }
+    if (onUncached != null) onUncached();
     Assets.add(key, AssetLoader.domain + url);
     loadedKeys[key] = Assets.load(key);
     await loadedKeys[key];

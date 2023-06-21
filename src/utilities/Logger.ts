@@ -77,7 +77,7 @@ export class Logger {
     console.log(
       `%c ${this.time} %c ${this._name} %c ${message} `,
       `background: #FFFFFF; color: #000000;`,
-      `background: #000000;`,
+      `background: #000000; color: #FFFFFF`,
       `background: ${backgroundColor}; color: ${textColor};`
     );
   }

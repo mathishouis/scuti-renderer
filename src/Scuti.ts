@@ -4,7 +4,7 @@ import { gsap } from 'gsap';
 import { Stage } from '@pixi/layers';
 
 import { Logger } from './utilities/Logger';
-import type { IRendererConfiguration } from './interfaces/Configuration';
+import type { IRendererConfiguration } from './types/Configuration';
 import { AssetLoader } from './utilities/AssetLoader';
 
 /**
@@ -76,13 +76,14 @@ export class Scuti {
       resolution: 1,
       antialias: false
     });
-    (globalThis as any).__PIXI_APP__ = this._application; // Support for PIXI.js dev-tool.
+
+    /** Support for PIXI.js dev-tool */
+    if (process.env.NODE_ENV === 'development') (globalThis as any).__PIXI_APP__ = this._application;
     this._application.stage = new Stage();
     this._canvas = configuration.canvas;
 
     /** Append it to the canvas */
-    // @ts-expect-error
-    this._canvas.append(this._application.view);
+    this._canvas.append(this._application.view as unknown as Node);
   }
 
   /**
