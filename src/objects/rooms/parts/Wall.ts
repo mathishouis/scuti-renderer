@@ -2,7 +2,7 @@ import { Graphics, Matrix, Texture } from 'pixi.js';
 import { Color } from '@pixi/color';
 
 import type { Room } from '../Room';
-import type { IPosition3D, IPosition2D, IWallConfiguration } from '../../../interfaces/Room';
+import type { IPosition3D, IPosition2D, IWallConfiguration } from '../../../types/Room';
 import type { Material } from '../materials/Material';
 import { WallType } from '../../../enums/WallType';
 import { WallMaterial } from '../materials/WallMaterial';
@@ -16,14 +16,6 @@ import { RoomPart } from './RoomPart';
  * @memberof Scuti
  */
 export class Wall extends RoomPart {
-  /**
-   * The room instance where the wall will be drawn.
-   *
-   * @member {Room}
-   * @private
-   */
-  private readonly _room: Room;
-
   /**
    * The thickness of the wall part.
    *
@@ -46,7 +38,7 @@ export class Wall extends RoomPart {
    * @member {IPosition3D}
    * @private
    */
-  private readonly _position: IPosition3D;
+  readonly _position: IPosition3D;
 
   /**
    * The wall type.
@@ -67,13 +59,13 @@ export class Wall extends RoomPart {
    * @param {boolean} [configuration.door] - Is it a door wall?
    **/
   constructor(room: Room, configuration: IWallConfiguration) {
-    super();
+    super(room);
 
     /** Store the configuration */
-    this._room = room;
+    this.room = room;
     this._position = configuration.position;
     this._thickness = configuration.thickness ?? 8;
-    this._material = configuration.material ?? new WallMaterial(this._room.engine);
+    this._material = configuration.material ?? new WallMaterial(this.room.engine);
     this._height = configuration.height ?? 0;
     this._type = configuration.type;
 
@@ -93,18 +85,18 @@ export class Wall extends RoomPart {
       this._drawWall([
         {
           x: -this._thickness,
-          y: -this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._height * 64
+          y: -this._thickness / 2 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 115 - this._height * 64
         },
         {
           x: -this._thickness + 32,
-          y: -this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 131 - this._height * 64
+          y: -this._thickness / 2 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 131 - this._height * 64
         },
         {
           x: -this._thickness + 32 + this._thickness,
           y:
             -this._thickness / 2 +
             this._position.z * 32 -
-            this._room.tileMap.maxZ * 32 -
+            this.room.tileMap.maxZ * 32 -
             131 +
             this._thickness / 2 -
             this._height * 64
@@ -114,7 +106,7 @@ export class Wall extends RoomPart {
           y:
             -this._thickness / 2 +
             this._position.z * 32 -
-            this._room.tileMap.maxZ * 32 -
+            this.room.tileMap.maxZ * 32 -
             115 +
             this._thickness / 2 -
             this._height * 64
@@ -125,19 +117,19 @@ export class Wall extends RoomPart {
       this._drawWall([
         {
           x: 32,
-          y: -16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._height * 64
+          y: -16 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 115 - this._height * 64
         },
         {
           x: 32 + this._thickness,
-          y: -16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._thickness / 2 - this._height * 64
+          y: -16 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 115 - this._thickness / 2 - this._height * 64
         },
         {
           x: 64 + this._thickness,
-          y: -16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 99 - this._thickness / 2 - this._height * 64
+          y: -16 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 99 - this._thickness / 2 - this._height * 64
         },
         {
           x: 64,
-          y: -16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 99 - this._height * 64
+          y: -16 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 99 - this._height * 64
         }
       ]);
     } else if (this._type === WallType.CORNER_WALL) {
@@ -145,25 +137,25 @@ export class Wall extends RoomPart {
       this._drawWall([
         {
           x: 32 - this._thickness,
-          y: -16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._thickness / 2 - this._height * 64
+          y: -16 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 115 - this._thickness / 2 - this._height * 64
         },
         {
           x: 32,
           y:
             -16 +
             this._position.z * 32 -
-            this._room.tileMap.maxZ * 32 -
+            this.room.tileMap.maxZ * 32 -
             115 -
             2 * (this._thickness / 2) -
             this._height * 64
         },
         {
           x: 32 + this._thickness,
-          y: -16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._thickness / 2 - this._height * 64
+          y: -16 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 115 - this._thickness / 2 - this._height * 64
         },
         {
           x: 32,
-          y: -16 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._height * 64
+          y: -16 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 115 - this._height * 64
         }
       ]);
     } else if (this._type === WallType.DOOR_WALL) {
@@ -171,18 +163,18 @@ export class Wall extends RoomPart {
       this._drawWall([
         {
           x: -this._thickness + 32,
-          y: -this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 99 - this._height * 64
+          y: -this._thickness / 2 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 99 - this._height * 64
         },
         {
           x: -this._thickness + 64,
-          y: -this._thickness / 2 + this._position.z * 32 - this._room.tileMap.maxZ * 32 - 115 - this._height * 64
+          y: -this._thickness / 2 + this._position.z * 32 - this.room.tileMap.maxZ * 32 - 115 - this._height * 64
         },
         {
           x: -this._thickness + 64 + this._thickness,
           y:
             -this._thickness / 2 +
             this._position.z * 32 -
-            this._room.tileMap.maxZ * 32 -
+            this.room.tileMap.maxZ * 32 -
             115 +
             this._thickness / 2 -
             this._height * 64
@@ -192,7 +184,7 @@ export class Wall extends RoomPart {
           y:
             -this._thickness / 2 +
             this._position.z * 32 -
-            this._room.tileMap.maxZ * 32 -
+            this.room.tileMap.maxZ * 32 -
             99 +
             this._thickness / 2 -
             this._height * 64
@@ -234,8 +226,8 @@ export class Wall extends RoomPart {
         points[0].x,
         points[0].y +
           115 +
-          this._room.floorThickness +
-          this._room.tileMap.maxZ * 32 -
+          this.room.floorThickness +
+          this.room.tileMap.maxZ * 32 -
           this._position.z * 32 +
           this._height * 64
       )
@@ -243,8 +235,8 @@ export class Wall extends RoomPart {
         points[3].x,
         points[3].y +
           115 +
-          this._room.floorThickness +
-          this._room.tileMap.maxZ * 32 -
+          this.room.floorThickness +
+          this.room.tileMap.maxZ * 32 -
           this._position.z * 32 +
           this._height * 64
       )
@@ -269,8 +261,8 @@ export class Wall extends RoomPart {
           points[3].x,
           points[3].y +
             22 +
-            this._room.floorThickness +
-            this._room.tileMap.maxZ * 32 -
+            this.room.floorThickness +
+            this.room.tileMap.maxZ * 32 -
             this._position.z * 32 +
             this._height * 64
         )
@@ -278,8 +270,8 @@ export class Wall extends RoomPart {
           points[2].x,
           points[2].y +
             22 +
-            this._room.floorThickness +
-            this._room.tileMap.maxZ * 32 -
+            this.room.floorThickness +
+            this.room.tileMap.maxZ * 32 -
             this._position.z * 32 +
             this._height * 64
         );
@@ -289,8 +281,8 @@ export class Wall extends RoomPart {
           points[3].x,
           points[3].y +
             115 +
-            this._room.floorThickness +
-            this._room.tileMap.maxZ * 32 -
+            this.room.floorThickness +
+            this.room.tileMap.maxZ * 32 -
             this._position.z * 32 +
             this._height * 64
         )
@@ -298,8 +290,8 @@ export class Wall extends RoomPart {
           points[2].x,
           points[2].y +
             115 +
-            this._room.floorThickness +
-            this._room.tileMap.maxZ * 32 -
+            this.room.floorThickness +
+            this.room.tileMap.maxZ * 32 -
             this._position.z * 32 +
             this._height * 64
         );

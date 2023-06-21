@@ -2,14 +2,12 @@ import { Graphics, Matrix, Point, Polygon } from 'pixi.js';
 import { Color } from '@pixi/color';
 
 import type { Room } from '../Room';
-import type { ITileConfiguration, ITileInfo } from '../../../interfaces/Room';
+import type { ITileConfiguration, ITileInfo } from '../../../types/Room';
 import type { Material } from '../materials/Material';
 import { FloorMaterial } from '../materials/FloorMaterial';
-import { EventManager } from '../../interactions/EventManager';
-import type { IInteractionEvent } from '../../../interfaces/Interaction';
-import type { IFloorPosition } from '../../../interfaces/Furniture';
-import {RoomPart} from "./RoomPart";
-import {ZOrder} from "../../../utilities/ZOrder";
+import { ZOrder } from '../../../utilities/ZOrder';
+import { RoomPart } from './RoomPart';
+import type { Dimension } from '../../../types/Dimension';
 
 /**
  * Tile class that show up during room rendering.
@@ -18,14 +16,6 @@ import {ZOrder} from "../../../utilities/ZOrder";
  * @memberof Scuti
  */
 export class Tile extends RoomPart {
-  /**
-   * The room instance where the tile will be drawn.
-   *
-   * @member {Room}
-   * @private
-   */
-  private readonly _room: Room;
-
   /**
    * The ITileInfo instance
    *
@@ -53,18 +43,10 @@ export class Tile extends RoomPart {
   /**
    * The tile position.
    *
-   * @member {IFloorPosition}
+   * @member {IPosition3D}
    * @private
    */
-  private readonly _position: IFloorPosition;
-
-  /**
-   * The tile interaction manager.
-   *
-   * @member {EventManager}
-   * @private
-   */
-  private readonly _interactionManager = new EventManager();
+  readonly _position: Dimension.IPosition3D;
 
   /**
    * @param {Room} [room] - The room instance where the tile will be drawn.
@@ -74,31 +56,17 @@ export class Tile extends RoomPart {
    * @param {IPosition3D} [configuration.position] - The tile position.
    **/
   constructor(room: Room, configuration: ITileConfiguration, tileInfo?: ITileInfo) {
-    super();
+    super(room);
 
     /** Store the configuration */
-    this._room = room;
+    this.room = room;
     this._tileInfo = tileInfo;
     this._position = configuration.position;
     this._thickness = configuration.thickness ?? 8;
-    this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
+    this._material = configuration.material ?? new FloorMaterial(this.room.engine, 111);
 
     /** Register interactions */
-    this.on('pointerdown', (event) => {
-      return this._interactionManager.handlePointerDown({ mouseEvent: event, position: this._position });
-    });
-    this.on('pointerup', (event) => {
-      return this._interactionManager.handlePointerUp({ mouseEvent: event, position: this._position });
-    });
-    this.on('pointermove', (event) => {
-      return this._interactionManager.handlePointerMove({ mouseEvent: event, position: this._position });
-    });
-    this.on('pointerout', (event) => {
-      return this._interactionManager.handlePointerOut({ mouseEvent: event, position: this._position });
-    });
-    this.on('pointerover', (event) => {
-      return this._interactionManager.handlePointerOver({ mouseEvent: event, position: this._position });
-    });
+    this.registerInteractions(this._position);
 
     // TODO: Make the method public and use it when adding it to a room, not when instancing the class
     /** Draw the tile */
@@ -133,14 +101,14 @@ export class Tile extends RoomPart {
     let rightTile;
 
     if (
-      this._room.tileMap.tileMap[this._position.y + 1] !== undefined &&
-      this._room.tileMap.tileMap[this._position.y + 1][this._position.x] !== undefined
+      this.room.tileMap.tileMap[this._position.y + 1] !== undefined &&
+      this.room.tileMap.tileMap[this._position.y + 1][this._position.x] !== undefined
     ) {
-      bottomTile = this._room.tileMap.getTileInfo({ x: this._position.x, y: this._position.y + 1 });
+      bottomTile = this.room.tileMap.getTileInfo({ x: this._position.x, y: this._position.y + 1 });
     }
 
-    if (this._room.tileMap.tileMap[this._position.y][this._position.x + 1] !== undefined) {
-      rightTile = this._room.tileMap.getTileInfo({ x: this._position.x + 1, y: this._position.y });
+    if (this.room.tileMap.tileMap[this._position.y][this._position.x + 1] !== undefined) {
+      rightTile = this.room.tileMap.getTileInfo({ x: this._position.x + 1, y: this._position.y });
     }
 
     if (
@@ -150,7 +118,7 @@ export class Tile extends RoomPart {
       (this._tileInfo != null && bottomTile?.height !== this._tileInfo.height)
     ) {
       /** Left face */
-      const left: Graphics = new Graphics()
+      const left = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(0.8).toNumber(),
@@ -172,7 +140,7 @@ export class Tile extends RoomPart {
       (this._tileInfo != null && rightTile.height !== this._tileInfo.height)
     ) {
       /** Right face */
-      const right: Graphics = new Graphics()
+      const right = new Graphics()
         .beginTextureFill({
           texture: this._material.texture,
           color: new Color(this._material.color).premultiply(0.71).toNumber(),
@@ -247,131 +215,5 @@ export class Tile extends RoomPart {
     this._material = material;
     /** Redraw the tile */
     this._draw();
-  }
-
-  /**
-   * Reference to the pointer down event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerDown(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerDown;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerDown(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerDown = value;
-  }
-
-  /**
-   * Reference to the pointer up event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerUp(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerUp;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerUp(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerUp = value;
-  }
-
-  /**
-   * Reference to the pointer move event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerMove(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerMove;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerMove(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerMove = value;
-  }
-
-  /**
-   * Reference to the pointer out event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerOut(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOut;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerOut(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOut = value;
-  }
-
-  /**
-   * Reference to the pointer over event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerOver(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOver;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerOver(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOver = value;
-  }
-
-  /**
-   * Reference to the pointer double click event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onDoubleClick(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onDoubleClick;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onDoubleClick(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onDoubleClick = value;
   }
 }

@@ -1,8 +1,8 @@
-import type { Texture } from 'pixi.js';
-import { Assets, Container, Sprite } from 'pixi.js';
+import type { Spritesheet } from 'pixi.js';
+import { Container, Assets, Sprite } from 'pixi.js';
 
 import type { Room } from '../Room';
-import type { ICursorConfiguration, IPosition3D } from '../../../interfaces/Room';
+import type { ICursorConfiguration, IPosition3D } from '../../../types/Room';
 import { ZOrder } from '../../../utilities/ZOrder';
 
 /**
@@ -13,37 +13,25 @@ import { ZOrder } from '../../../utilities/ZOrder';
  */
 export class Cursor extends Container {
   /**
-   * The room instance where the cursor will be drawn.
-   *
-   * @member {Room}
-   * @private
-   */
-  private readonly _room: Room;
-
-  /**
-
    * The cursor position.
    *
    * @member {IPosition3D}
    * @private
    */
-  private _position: IPosition3D | undefined;
+  private _position: IPosition3D;
 
   /**
-   * @param {Room} [room] - The room instance where the cursor will be drawn.
+   * @param {Room} [_room] - The room instance where the cursor will be drawn.
    * @param {ICursorConfiguration} [configuration] - The tile configuration.
-   * @param {IPosition3D} [configuration.position] - The cursor position.
    **/
-  constructor(room: Room, configuration: ICursorConfiguration) {
+  constructor(_room: Room, configuration: ICursorConfiguration) {
     super();
 
-    /** Store the configuration */
-    this._room = room;
     this._position = configuration.position;
-    this.parentLayer = this._room.objects.layer;
 
     /** Draw the cursor */
     this._draw();
+    // todo!(): create the blue circle 'cursor_64_b' cursor when needed
   }
 
   /**
@@ -53,17 +41,15 @@ export class Cursor extends Container {
    * @private
    */
   private _draw(): void {
-    if (this._position == null) return;
-
     /** Creating the sprite */
-    const texture: Texture = Assets.get('room/cursors').textures['tile_cursor_64_a_0_0.png'];
+    const texture = Assets.get<Spritesheet>('room/cursors').textures['tile_cursor_64_a_0_0.png'];
     const sprite = new Sprite(texture);
+
     sprite.y = -20;
     this.addChild(sprite);
 
-    /** Positionate the cursor */
+    /** Positionate the cursor and its zIndex */
     this.moveTo(this._position);
-    /** Set the zIndex */
     this.zIndex = ZOrder.tileCursor(this._position);
   }
 
@@ -75,7 +61,7 @@ export class Cursor extends Container {
    * @public
    */
   public moveTo(position: IPosition3D): void {
-    this.zOrder = ZOrder.tileCursor(position);
+    // this.zOrder = ZOrder.tileCursor(position);
     this._position = position;
     this.x = 32 * this._position.x - 32 * this._position.y;
     this.y = 16 * this._position.x + 16 * this._position.y - 32 * this._position.z;

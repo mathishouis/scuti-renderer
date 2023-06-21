@@ -2,14 +2,13 @@ import { Container, Graphics, Matrix, Point, Polygon } from 'pixi.js';
 import { Color } from '@pixi/color';
 
 import type { Room } from '../Room';
-import type { IPosition3D, IPosition2D, IStairConfiguration } from '../../../interfaces/Room';
+import type { IPosition3D, IPosition2D, IStairConfiguration } from '../../../types/Room';
 import type { Material } from '../materials/Material';
 import { StairType } from '../../../enums/StairType';
 import { Direction } from '../../../enums/Direction';
 import { FloorMaterial } from '../materials/FloorMaterial';
-import { EventManager } from '../../interactions/EventManager';
-import type { IInteractionEvent } from '../../../interfaces/Interaction';
-import {ZOrder} from "../../../utilities/ZOrder";
+import { ZOrder } from '../../../utilities/ZOrder';
+import { RoomPart } from './RoomPart';
 
 /**
  * Stair class that show up when two tiles side by side have a height difference of one.
@@ -17,15 +16,7 @@ import {ZOrder} from "../../../utilities/ZOrder";
  * @class
  * @memberof Scuti
  */
-export class Stair extends Container {
-  /**
-   * The room instance where the stair will be drawn.
-   *
-   * @member {Room}
-   * @private
-   */
-  private readonly _room: Room;
-
+export class Stair extends RoomPart {
   /**
    * The thickness of the stair part.
    *
@@ -48,7 +39,7 @@ export class Stair extends Container {
    * @member {IPosition3D}
    * @private
    */
-  private readonly _position: IPosition3D;
+  readonly _position: IPosition3D;
 
   /**
    * The stair type.
@@ -59,14 +50,6 @@ export class Stair extends Container {
   private readonly _type: StairType;
 
   /**
-   * The stair interaction manager.
-   *
-   * @member {EventManager}
-   * @private
-   */
-  private readonly _interactionManager: EventManager = new EventManager();
-
-  /**
    * @param {Room} [room] - The room instance where the stair will be drawn.
    * @param {IStairConfiguration} [configuration] - The stair configuration.
    * @param {Material} [configuration.material] - The stair material that will be applied.
@@ -75,46 +58,18 @@ export class Stair extends Container {
    * @param {StairType} [configuration.type] - The stair type.
    **/
   constructor(room: Room, configuration: IStairConfiguration) {
-    super();
+    super(room);
 
     /** Store the configuration */
-    this._room = room;
+    this.room = room;
     this._position = configuration.position;
     this._thickness = configuration.thickness ?? 8;
-    this._material = configuration.material ?? new FloorMaterial(this._room.engine, 111);
+    this._material = configuration.material ?? new FloorMaterial(this.room.engine, 111);
 
     this._type = configuration.type;
+
     /** Register interactions */
-    this.on('pointerdown', (event) => {
-      return this._interactionManager.handlePointerDown({
-        mouseEvent: event,
-        position: { x: this._position.x, y: this._position.y, z: this._position.z }
-      });
-    });
-    this.on('pointerup', (event) => {
-      return this._interactionManager.handlePointerUp({
-        mouseEvent: event,
-        position: { x: this._position.x, y: this._position.y, z: this._position.z }
-      });
-    });
-    this.on('pointermove', (event) => {
-      return this._interactionManager.handlePointerMove({
-        mouseEvent: event,
-        position: { x: this._position.x, y: this._position.y, z: this._position.z }
-      });
-    });
-    this.on('pointerout', (event) => {
-      return this._interactionManager.handlePointerOut({
-        mouseEvent: event,
-        position: { x: this._position.x, y: this._position.y, z: this._position.z }
-      });
-    });
-    this.on('pointerover', (event) => {
-      return this._interactionManager.handlePointerOver({
-        mouseEvent: event,
-        position: { x: this._position.x, y: this._position.y, z: this._position.z }
-      });
-    });
+    this.registerInteractions(this._position);
 
     /** Draw the stair */
     this._draw();
@@ -133,7 +88,7 @@ export class Stair extends Container {
       switch (this._position.direction) {
         /** Draw a north stair */
         case Direction.NORTH:
-          this._drawStair(
+          return this._drawStair(
             [
               { x: 0, y: 0 },
               { x: 8, y: -4 },
@@ -145,11 +100,10 @@ export class Stair extends Container {
               { x: 0, y: 0 }
             ]
           );
-          break;
 
         /** Draw an east stair */
         case Direction.EAST:
-          this._drawStair(
+          return this._drawStair(
             [
               { x: 0, y: 0 },
               { x: 32, y: -16 },
@@ -161,11 +115,10 @@ export class Stair extends Container {
               { x: 0, y: 0 }
             ]
           );
-          break;
 
         /** Draw a south stair */
         case Direction.SOUTH:
-          this._drawStair(
+          return this._drawStair(
             [
               { x: 0, y: 0 },
               { x: 8, y: -4 },
@@ -177,11 +130,10 @@ export class Stair extends Container {
               { x: 24, y: -12 }
             ]
           );
-          break;
 
         /** Draw a west stair */
         case Direction.WEST:
-          this._drawStair(
+          return this._drawStair(
             [
               { x: 0, y: 0 },
               { x: 32, y: -16 },
@@ -193,14 +145,13 @@ export class Stair extends Container {
               { x: 24, y: 12 }
             ]
           );
-          break;
       }
     } else if (this._type === StairType.OUTER_CORNER_STAIR) {
       /** Corner stair */
       switch (this._position.direction) {
         /** Draw a north east stair */
         case Direction.NORTH_EAST:
-          this._drawCornerStair(
+          return this._drawCornerStair(
             [
               { x: 0, y: 0 },
               { x: 8, y: -4 },
@@ -220,11 +171,10 @@ export class Stair extends Container {
               { x: 8, y: -4 }
             ]
           );
-          break;
 
         /** Draw a south east stair */
         case Direction.SOUTH_EAST:
-          this._drawCornerStair(
+          return this._drawCornerStair(
             [
               { x: 0, y: 0 },
               { x: 8, y: -4 },
@@ -244,11 +194,10 @@ export class Stair extends Container {
               { x: 0, y: 0 }
             ]
           );
-          break;
 
         /** Draw a south west stair */
         case Direction.SOUTH_WEST:
-          this._drawCornerStair(
+          return this._drawCornerStair(
             [
               { x: 0, y: 0 },
               { x: 8, y: -4 },
@@ -268,11 +217,10 @@ export class Stair extends Container {
               { x: -16, y: -8 }
             ]
           );
-          break;
 
         /** Draw a north west stair */
         case Direction.NORTH_WEST:
-          this._drawCornerStair(
+          return this._drawCornerStair(
             [
               { x: 0, y: 0 },
               { x: 8, y: -4 },
@@ -292,14 +240,13 @@ export class Stair extends Container {
               { x: -8, y: -12 }
             ]
           );
-          break;
       }
     } else if (this._type === StairType.INNER_CORNER_STAIR) {
       /** Inner corner stair */
       switch (this._position.direction) {
         /** Draw a north east inner stair */
         case Direction.NORTH_EAST:
-          this._drawCornerStair(
+          return this._drawCornerStair(
             [
               { x: 0, y: 0 },
               { x: 8, y: -4 },
@@ -319,13 +266,12 @@ export class Stair extends Container {
               { x: -16, y: 8 }
             ]
           );
-          break;
         case Direction.SOUTH_EAST:
           break;
 
         /** Draw a south west inner stair */
         case Direction.SOUTH_WEST:
-          this._drawCornerStair(
+          return this._drawCornerStair(
             [
               { x: 0, y: 0 },
               { x: 8, y: -4 },
@@ -345,11 +291,10 @@ export class Stair extends Container {
               { x: 8, y: 12 }
             ]
           );
-          break;
 
         /** Draw a north west inner stair */
         case Direction.NORTH_WEST:
-          this._drawCornerStair(
+          return this._drawCornerStair(
             [
               { x: 0, y: 0 },
               { x: 8, y: -4 },
@@ -369,7 +314,6 @@ export class Stair extends Container {
               { x: 0, y: 16 }
             ]
           );
-          break;
       }
     }
   }
@@ -383,7 +327,7 @@ export class Stair extends Container {
    * @private
    */
   private _drawStair(points: IPosition2D[], offsets: IPosition2D[]): void {
-    for (let i: number = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
       const step = new Container();
       /** Top face */
 
@@ -466,7 +410,7 @@ export class Stair extends Container {
    * @private
    */
   private _drawCornerStair(points: IPosition2D[], pointsOffsets: IPosition2D[], offsets: IPosition2D[]): void {
-    for (let i: number = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) {
       const step = new Container();
       /** Top face */
 
@@ -631,131 +575,5 @@ export class Stair extends Container {
     );
     /** Set the zIndex */
     this.zIndex = ZOrder.floor(this._position);
-  }
-
-  /**
-   * Reference to the pointer down event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerDown(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerDown;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerDown(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerDown = value;
-  }
-
-  /**
-   * Reference to the pointer up event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerUp(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerUp;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerUp(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerUp = value;
-  }
-
-  /**
-   * Reference to the pointer move event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerMove(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerMove;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerMove(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerMove = value;
-  }
-
-  /**
-   * Reference to the pointer out event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerOut(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOut;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerOut(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOut = value;
-  }
-
-  /**
-   * Reference to the pointer over event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onPointerOver(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onPointerOver;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onPointerOver(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onPointerOver = value;
-  }
-
-  /**
-   * Reference to the pointer double click event.
-   *
-   * @member {(event: IInteractionEvent) => void}
-   * @readonly
-   * @public
-   */
-  public get onDoubleClick(): (event: IInteractionEvent) => void {
-    return this._interactionManager.onDoubleClick;
-  }
-
-  /**
-   * Update the event function that will be executed.
-   *
-   * @param {(event: IInteractionEvent) => void} [value] - The event function that will be executed.
-   * @public
-   */
-  public set onDoubleClick(value: (event: IInteractionEvent) => void) {
-    this._interactionManager.onDoubleClick = value;
   }
 }
