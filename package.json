@@ -19,19 +19,25 @@
     "lint:typescript": "eslint \"**/*.ts\" --ignore-path \".gitignore\" && tsc --noemit",
     "lint:prettier": "prettier \".\" --check --ignore-path \".gitignore\""
   },
-  "keywords": [],
+  "keywords": [
+    "habbo",
+    "engine",
+    "renderer",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@pixi/layers": "^2.0.1",
     "@pixi/utils": "^7.2.4",
     "gsap": "^3.11.4",
-    "pixi.js": "^7.1.2"
+    "pixi.js": "^7.2.4"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@walidoux/eslint-config": "1.0.3",
     "editorconfig-checker": "^5.0.1",
+    "nano-staged": "^0.8.0",
     "parcel": "^2.8.3",
     "process": "^0.11.10",
     "punycode": "^1.4.1",
@@ -53,8 +59,15 @@
     "extends": [
       "@walidoux/eslint-config"
     ],
+    "rules": {
+      "arrow-body-style": "off",
+      "@typescript-eslint/no-useless-constructor": "off"
+    },
     "ignorePatterns": [
       "storybook/**/*.ts"
     ]
+  },
+  "nano-staged": {
+    "*.{js,ts}": "prettier --write"
   }
 }
