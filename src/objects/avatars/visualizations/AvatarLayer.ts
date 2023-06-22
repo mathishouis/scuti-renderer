@@ -1,10 +1,10 @@
 import { Assets, Container } from 'pixi.js';
 import { Color } from '@pixi/color';
 
-import type { Avatar } from './Avatar';
-import type { IAvatarLayerConfiguration, IAvatarPart } from '../../interfaces/Avatar';
-import { HitSprite } from '../interactions/HitSprite';
-import type { Direction } from '../../enums/Direction';
+import type { Avatar } from '../Avatar';
+import type { IAvatarLayerConfiguration, IAvatarPart } from '../../../types/Avatar';
+import { HitSprite } from '../../interactions/HitSprite';
+import type { Direction } from '../../../enums/Direction';
 
 export class AvatarLayer extends Container {
   private readonly _avatar: Avatar;
@@ -49,14 +49,13 @@ export class AvatarLayer extends Container {
     this._flip = configuration.flip;
     this._direction = configuration.direction;
     this._frame = configuration.frame;
-    // @ts-expect-error
     this._alpha = configuration.alpha;
 
     this._draw();
   }
 
   private _draw(): void {
-    let tempDirection: number = this._direction;
+    let tempDirection = this._direction;
     if (this._flip && [4, 5, 6].includes(tempDirection)) this.scale.x = -1;
     if (this._flip && [4, 5, 6].includes(tempDirection)) this.x = 64;
     if ([4, 5, 6].includes(tempDirection) && this._flip) {
@@ -64,7 +63,7 @@ export class AvatarLayer extends Container {
     }
     // const avatarActions: IActionDefinition[] = Assets.get('figures/actions')
     // if(this._type === "ls" || this._type === "lh" || this._type === "lc") console.log(2, this._part.lib.id + "_h_" + this._gesture + "_" + this._type + "_" + this._part.id + "_" + tempDirection + "_" + this._frame);
-    const sprite: HitSprite = new HitSprite(
+    const sprite = new HitSprite(
       Assets.get('figures/' + this._part.lib.id).textures[
         this._part.lib.id +
           '_h_' +
@@ -87,22 +86,22 @@ export class AvatarLayer extends Container {
     //sprite.play();
     sprite.interactive = true;
     sprite.on('pointerdown', (event) => {
-      return this._avatar.interactionManager.handlePointerDown({ mouseEvent: event });
+      return this._avatar.eventManager.handlePointerDown({ event });
     });
     sprite.on('pointerup', (event) => {
-      return this._avatar.interactionManager.handlePointerUp({ mouseEvent: event });
+      return this._avatar.eventManager.handlePointerUp({ event });
     });
     sprite.on('pointermove', (event) => {
-      return this._avatar.interactionManager.handlePointerMove({ mouseEvent: event });
+      return this._avatar.eventManager.handlePointerMove({ event });
     });
     sprite.on('pointerout', (event) => {
-      return this._avatar.interactionManager.handlePointerOut({ mouseEvent: event });
+      return this._avatar.eventManager.handlePointerOut({ event });
     });
     sprite.on('pointerover', (event) => {
-      return this._avatar.interactionManager.handlePointerOver({ mouseEvent: event });
+      return this._avatar.eventManager.handlePointerOver({ event });
     });
-    // @ts-expect-error
-    this.addChild(sprite);
+
+    this._avatar.addChild(sprite);
   }
 
   public get avatar(): Avatar {

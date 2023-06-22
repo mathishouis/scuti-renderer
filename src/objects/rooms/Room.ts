@@ -1,16 +1,16 @@
 import { Container } from 'pixi.js';
 
 import type { Scuti } from '../../Scuti';
-import type { IRoomConfiguration } from '../../interfaces/Room';
 import { RoomVisualization } from './RoomVisualization';
 import { RoomTileMap } from './RoomTileMap';
 import type { Material } from './materials/Material';
 import { WallMaterial } from './materials/WallMaterial';
 import { FloorMaterial } from './materials/FloorMaterial';
 import { RoomCamera } from './RoomCamera';
+import type { EventManager } from '../interactions/EventManager';
+import type { IRoomConfig } from '../../types/Room';
+import type { RoomPartLayer } from './layers/RoomPartLayer';
 import type { RoomObjectLayer } from './layers/RoomObjectLayer';
-import {RoomPartLayer} from "./layers/RoomPartLayer";
-import {EventManager} from "../interactions/EventManager";
 
 /**
  * Room class for rendering rooms like the ones on Habbo Hotel.
@@ -93,27 +93,27 @@ export class Room extends Container {
 
   /**
    * @param {Scuti} [engine] - The Scuti instance that will be used to render the room.
-   * @param {IRoomConfiguration} [configuration] - The room configuration.
-   * @param {string} [configuration.tilemap] - The room tile map that will be parsed.
-   * @param {Material} [configuration.floorMaterial] - The room floor material that will be applied.
-   * @param {number} [configuration.floorThickness] - The room floor thickness.
-   * @param {Material} [configuration.wallMaterial] - The room wall material that will be applied.
-   * @param {number} [configuration.wallHeight] - The room wall height.
-   * @param {number} [configuration.wallThickness] - The room wall thickness.
+   * @param {IRoomConfig} [config] - The room configuration.
+   * @param {string} [config.tilemap] - The room tile map that will be parsed.
+   * @param {Material} [config.floorMaterial] - The room floor material that will be applied.
+   * @param {number} [config.floorThickness] - The room floor thickness.
+   * @param {Material} [config.wallMaterial] - The room wall material that will be applied.
+   * @param {number} [config.wallHeight] - The room wall height.
+   * @param {number} [config.wallThickness] - The room wall thickness.
    **/
-  constructor(engine: Scuti, configuration: IRoomConfiguration) {
+  constructor(engine: Scuti, config: IRoomConfig) {
     super();
 
     /** Store variables */
     this._engine = engine;
-    this._wallMaterial = configuration.wallMaterial ?? new WallMaterial(this._engine, 112);
-    this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(this._engine, 111);
-    this._wallThickness = configuration.wallThickness ?? 8;
-    this._floorThickness = configuration.floorThickness ?? 8;
-    this._wallHeight = configuration.wallHeight ?? 0;
+    this._wallMaterial = config.wallMaterial ?? new WallMaterial(this._engine);
+    this._floorMaterial = config.floorMaterial ?? new FloorMaterial(this._engine);
+    this._wallThickness = config.wallThickness ?? 8;
+    this._floorThickness = config.floorThickness ?? 8;
+    this._wallHeight = config.wallHeight ?? 0;
 
     /** Initialise everything */
-    this._tileMap = new RoomTileMap(configuration.tileMap);
+    this._tileMap = new RoomTileMap(config.tileMap);
     this._visualization = new RoomVisualization(this);
     this._camera = new RoomCamera(this);
 
@@ -151,7 +151,6 @@ export class Room extends Container {
    * @readonly
    * @public
    */
-  // @ts-expect-error
   public get tileMap(): RoomTileMap {
     return this._tileMap;
   }
@@ -162,8 +161,8 @@ export class Room extends Container {
    * @param {string} [tileMap] - The new room tileMap.
    * @public
    */
-  public set tileMap(tileMap: string) {
-    this._tileMap = new RoomTileMap(tileMap);
+  public set tileMap(tileMap: RoomTileMap) {
+    this._tileMap = tileMap;
     this._visualization.update();
   }
 
@@ -286,6 +285,17 @@ export class Room extends Container {
    */
   public get tiles(): EventManager {
     return this._visualization.partLayer.tiles;
+  }
+
+  /**
+   * Reference to the wall event manager.
+   *
+   * @member {EventManager}
+   * @readonly
+   * @public
+   */
+  public get walls(): EventManager {
+    return this._visualization.partLayer.walls;
   }
 
   /**

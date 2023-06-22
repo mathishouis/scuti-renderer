@@ -1,8 +1,7 @@
-// @ts-nocheck
 import { Assets } from 'pixi.js';
 
 import type { AvatarAction } from './AvatarAction';
-import type { IActionDefinition, IAvatarPartSets } from '../../../interfaces/Avatar';
+import type { IActionDefinition, IAvatarPartSets } from '../../../types/Avatar';
 
 export class AvatarActionManager {
   private readonly _avatarActionsLib: IActionDefinition[] = Assets.get('figures/actions');

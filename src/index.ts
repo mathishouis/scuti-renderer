@@ -6,5 +6,3 @@ export { WallMaterial } from './objects/rooms/materials/WallMaterial';
 export { WallFurniture } from './objects/furnitures/WallFurniture';
 export { Avatar } from './objects/avatars/Avatar';
 export { AvatarAction } from './objects/avatars/actions/AvatarAction';
-export { FurnitureRoomBackgroundVisualization } from './objects/furnitures/visualizations/FurnitureRoomBackgroundVisualization';
-export { FurnitureGuildCustomizedVisualization } from './objects/furnitures/visualizations/FurnitureGuildCustomizedVisualization';

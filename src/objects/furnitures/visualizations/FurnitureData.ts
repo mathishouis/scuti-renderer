@@ -1,9 +1,8 @@
-// @ts-nocheck
 import { Assets } from 'pixi.js';
 
-import { FloorFurniture } from './FloorFurniture';
-import { WallFurniture } from './WallFurniture';
-import type { IFurnitureData } from '../../interfaces/Furniture.interface';
+import type { ISharedFurniData } from '../../../types/Furniture';
+import { FloorFurniture } from '../FloorFurniture';
+import type { WallFurniture } from '../WallFurniture';
 
 /**
  * FurnitureData class that manage the data of a furniture.
@@ -23,10 +22,10 @@ export class FurnitureData {
   /**
    * The furniture data.
    *
-   * @member {IFurnitureData}
+   * @member {ISharedFurniData}
    * @private
    */
-  private _data!: IFurnitureData;
+  private _data!: ISharedFurniData;
 
   /**
    * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
@@ -44,17 +43,10 @@ export class FurnitureData {
    * @private
    */
   private _load(): void {
-    if (this._furniture instanceof FloorFurniture) {
-      // @ts-expect-error
-      this._data = Assets.get('furnitures/furnidata').floorItems.find((item) => {
-        return item.id === this._furniture.id;
-      });
-    } else if (this._furniture instanceof WallFurniture) {
-      // @ts-expect-error
-      this._data = Assets.get('furnitures/furnidata').wallItems.find((item) => {
-        return item.id === this._furniture.id;
-      });
-    }
+    const furniType = this._furniture instanceof FloorFurniture ? 'floorItems' : 'wallItems';
+    this._data = Assets.get('furnitures/furnidata')[furniType].find((item: ISharedFurniData) => {
+      return item.id === this._furniture.id;
+    });
   }
 
   /**
@@ -98,8 +90,7 @@ export class FurnitureData {
    * @readonly
    * @public
    */
-  public get color(): number {
-    // @ts-expect-error
+  public get color(): number | null {
     if (!Boolean(this._data.className.includes('*'))) return null;
     return Number(this._data.className.split('*')[1]);
   }

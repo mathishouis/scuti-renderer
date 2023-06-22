@@ -24,7 +24,6 @@ export class HitSprite extends Sprite {
    * @member {{ x: number, y: number }}
    * @public
    */
-  // @ts-expect-error
   public getGlobalPosition: () => { x: number; y: number };
 
   /**

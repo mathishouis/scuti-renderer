@@ -1,7 +1,7 @@
 import { Container, Ticker } from 'pixi.js';
 
 import type { Room } from './Room';
-import type { IPosition3D, ITileInfo } from '../../interfaces/Room';
+import type { IPosition3D, ITileInfo } from '../../types/Room';
 import { Tile } from './parts/Tile';
 import { Wall } from './parts/Wall';
 import { Stair } from './parts/Stair';
@@ -9,9 +9,7 @@ import { WallType } from '../../enums/WallType';
 import type { StairType } from '../../enums/StairType';
 import { Cursor } from './parts/Cursor';
 import { RoomObjectLayer } from './layers/RoomObjectLayer';
-import type { IInteractionEvent } from '../../interfaces/Interaction';
-import {RoomObjectContainer} from "./objects/RoomObjectContainer";
-import {RoomPartLayer} from "./layers/RoomPartLayer";
+import { RoomPartLayer } from './layers/RoomPartLayer';
 
 /**
  * RoomView class that manage all the rendering part of the room.
@@ -61,14 +59,20 @@ export class RoomVisualization extends Container {
   private _tiles: Array<Tile | Stair> = [];
 
   /**
+   * Infos related to the door tile.
+   *
+   * @member {ITileInfo}
+   * @private
+   */
+  private _doorTile!: ITileInfo;
+
+  /**
    * The room tile cursor instance.
    *
    * @member {Cursor}
    * @private
    */
   private _cursor!: Cursor;
-
-  private _objectContainer!: RoomObjectContainer;
 
   /**
    * The room animation ticker instance that will manage all the objects animations
@@ -87,11 +91,6 @@ export class RoomVisualization extends Container {
     this._room = room;
     this._objectLayer = new RoomObjectLayer(this._room);
     this._partLayer = new RoomPartLayer(this._room);
-
-    this._objectContainer = new RoomObjectContainer();
-
-    /** Add layers to the visualization */
-    this.addChild(this._objectContainer);
 
     /** Start the animation ticker */
     this._animationTicker.maxFPS = 4;
@@ -113,7 +112,12 @@ export class RoomVisualization extends Container {
 
     for (let y = 0; y < this._room.tileMap.tileMap.length; y++) {
       for (let x = 0; x < this._room.tileMap.tileMap[y].length; x++) {
-        const tileInfo: ITileInfo = this._room.tileMap.getTileInfo({ x, y });
+        const tileInfo = this._room.tileMap.getTileInfo({ x, y });
+
+        // todo: avoid duplicate tile doors
+        if (tileInfo.door && this._doorTile != null) tileInfo.door = false;
+        if (tileInfo.door && this._doorTile == null) this._doorTile = tileInfo;
+
         this._createPart(tileInfo, { x, y, z: tileInfo.height });
       }
     }
@@ -126,9 +130,7 @@ export class RoomVisualization extends Container {
    * @private
    */
   private _destroyParts(): void {
-    [...this._tiles, ...this._walls].forEach((part: Tile | Stair | Wall) => {
-      return part.destroy();
-    });
+    [...this._tiles, ...this._walls].forEach((part) => part.destroy());
     this._tiles = [];
     this._walls = [];
   }
@@ -166,12 +168,15 @@ export class RoomVisualization extends Container {
       } else if (tileInfo.wallType === WallType.CORNER_WALL && !this._room.tileMap.hasWall(position).y) {
         this._createWall(position, WallType.RIGHT_WALL);
       }
-      if (tileInfo.wallType === WallType.LEFT_WALL && !this._room.tileMap.hasWall(position).x)
+
+      if (tileInfo.wallType === WallType.LEFT_WALL && !this._room.tileMap.hasWall(position).y)
         this._createWall(position, WallType.LEFT_WALL);
       if (tileInfo.wallType === WallType.RIGHT_WALL && !this._room.tileMap.hasWall(position).y)
         this._createWall(position, WallType.RIGHT_WALL);
+
       if (tileInfo.door) this._createWall(position, WallType.DOOR_WALL);
     }
+
     if (tileInfo.stairType != null) {
       position.direction = tileInfo.stairType.direction;
       this._createStair(position, tileInfo.stairType.type);
@@ -197,7 +202,7 @@ export class RoomVisualization extends Container {
 
     this._destroyCursor();
     const cursor = new Cursor(this._room, { position });
-    this._objectContainer.addChild(cursor);
+    this.addChild(cursor);
     this._cursor = cursor;
   }
 
@@ -208,9 +213,7 @@ export class RoomVisualization extends Container {
    * @private
    */
   private _destroyCursor(): void {
-    if (this._cursor != null) {
-      this._cursor.visible = false;
-    }
+    if (this._cursor != null) this._cursor.visible = false;
   }
 
   /**
@@ -227,28 +230,30 @@ export class RoomVisualization extends Container {
       { position, material: this._room.floorMaterial, thickness: this._room.floorThickness },
       tileInfo
     );
+
     /** Register interactions */
-    tile.onPointerDown = (event): void => {
+    tile.onPointerDown = (event) => {
       if (this._partLayer.tiles.onPointerDown != null) this._partLayer.tiles.onPointerDown(event);
     };
-    tile.onPointerUp = (event): void => {
+    tile.onPointerUp = (event) => {
       if (this._partLayer.tiles.onPointerUp != null) this._partLayer.tiles.onPointerUp(event);
     };
-    tile.onPointerMove = (event): void => {
+    tile.onPointerMove = (event) => {
       if (this._partLayer.tiles.onPointerMove != null) this._partLayer.tiles.onPointerMove(event);
     };
-    tile.onPointerOut = (event): void => {
+    tile.onPointerOut = (event) => {
       if (this._partLayer.tiles.onPointerOut != null) this._partLayer.tiles.onPointerOut(event);
       this._destroyCursor();
     };
-    tile.onPointerOver = (event): void => {
+    tile.onPointerOver = (event) => {
       if (this._partLayer.tiles.onPointerOver != null) this._partLayer.tiles.onPointerOver(event);
       this._createCursor(position);
     };
-    tile.onDoubleClick = (event): void => {
+    tile.onDoubleClick = (event) => {
       if (this._partLayer.tiles.onDoubleClick != null) this._partLayer.tiles.onDoubleClick(event);
     };
-    this._objectContainer.addChild(tile);
+
+    this.addChild(tile);
     this._tiles.push(tile);
   }
 
@@ -260,30 +265,31 @@ export class RoomVisualization extends Container {
    * @private
    */
   private _createDoor(position: IPosition3D): void {
-    const tile = new Tile(this._room, { position, material: this._room.floorMaterial, thickness: 0 });
+    const tile = new Tile(this._room, { position, material: this._room.floorMaterial });
 
     /** Register interactions */
-    tile.onPointerDown = (event): void => {
+    tile.onPointerDown = (event) => {
       if (this._partLayer.tiles.onPointerDown != null) this._partLayer.tiles.onPointerDown(event);
     };
-    tile.onPointerUp = (event): void => {
+    tile.onPointerUp = (event) => {
       if (this._partLayer.tiles.onPointerUp != null) this._partLayer.tiles.onPointerUp(event);
     };
-    tile.onPointerMove = (event): void => {
+    tile.onPointerMove = (event) => {
       if (this._partLayer.tiles.onPointerMove != null) this._partLayer.tiles.onPointerMove(event);
     };
-    tile.onPointerOut = (event): void => {
+    tile.onPointerOut = (event) => {
       if (this._partLayer.tiles.onPointerOut != null) this._partLayer.tiles.onPointerOut(event);
       this._destroyCursor();
     };
-    tile.onPointerOver = (event): void => {
+    tile.onPointerOver = (event) => {
       if (this._partLayer.tiles.onPointerOver != null) this._partLayer.tiles.onPointerOver(event);
       this._createCursor(position);
     };
-    tile.onDoubleClick = (event): void => {
+    tile.onDoubleClick = (event) => {
       if (this._partLayer.tiles.onDoubleClick != null) this._partLayer.tiles.onDoubleClick(event);
     };
-    this._objectContainer.addChild(tile);
+
+    this.addChild(tile);
     this._tiles.push(tile);
   }
 
@@ -303,7 +309,10 @@ export class RoomVisualization extends Container {
       height: this._room.wallHeight,
       type
     });
-    this._objectContainer.addChild(wall);
+
+    // todo!(): register event interactions for walls */
+
+    this.addChild(wall);
     this._walls.push(wall);
   }
 
@@ -322,28 +331,30 @@ export class RoomVisualization extends Container {
       thickness: this._room.floorThickness,
       type
     });
+
     /** Register interactions */
-    stair.onPointerDown = (event: IInteractionEvent): void => {
+    stair.onPointerDown = (event) => {
       if (this._partLayer.tiles.onPointerDown != null) this._partLayer.tiles.onPointerDown(event);
     };
-    stair.onPointerUp = (event: IInteractionEvent): void => {
+    stair.onPointerUp = (event) => {
       if (this._partLayer.tiles.onPointerUp != null) this._partLayer.tiles.onPointerUp(event);
     };
-    stair.onPointerMove = (event: IInteractionEvent): void => {
+    stair.onPointerMove = (event) => {
       if (this._partLayer.tiles.onPointerMove != null) this._partLayer.tiles.onPointerMove(event);
     };
-    stair.onPointerOut = (event: IInteractionEvent): void => {
+    stair.onPointerOut = (event) => {
       if (this._partLayer.tiles.onPointerOut != null) this._partLayer.tiles.onPointerOut(event);
       this._destroyCursor();
     };
-    stair.onPointerOver = (event: IInteractionEvent): void => {
+    stair.onPointerOver = (event) => {
       if (this._partLayer.tiles.onPointerOver != null) this._partLayer.tiles.onPointerOver(event);
       this._createCursor(position);
     };
-    stair.onDoubleClick = (event: IInteractionEvent): void => {
+    stair.onDoubleClick = (event) => {
       if (this._partLayer.tiles.onDoubleClick != null) this._partLayer.tiles.onDoubleClick(event);
     };
-    this._objectContainer.addChild(stair);
+
+    this.addChild(stair);
     this._tiles.push(stair);
   }
 
@@ -378,18 +389,6 @@ export class RoomVisualization extends Container {
    */
   public get partLayer(): RoomPartLayer {
     return this._partLayer;
-  }
-
-
-  /**
-   * Reference to the object container.
-   *
-   * @member {RoomObjectContainer}
-   * @readonly
-   * @public
-   */
-  public get objectContainer(): RoomObjectContainer {
-    return this._objectContainer;
   }
 
   /**
