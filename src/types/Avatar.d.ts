@@ -5,7 +5,7 @@ import type { IRoomObjectConfig } from './Room';
 
 export type IAvatarPosition = Dimension.IPosition3D;
 
-export type AvatarFigure = Map<string, { setId: number; colors: number[] }>;
+export type Figure = Map<string, { setId: number; colors: number[] }>;
 
 export interface IAvatarConfig extends IRoomObjectConfig {
   figure: string;

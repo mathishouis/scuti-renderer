@@ -1,6 +1,6 @@
 export interface IFigureData {
-  palettes: IFigureDataPalette[];
-  setTypes: IFigureDataSetType[];
+  palette: Record<string, Record<string, IFigureDataColor>>;
+  settype: Record<string, IFigureDataSetType>;
 }
 
 export interface IFigureDataPalette {
@@ -8,14 +8,19 @@ export interface IFigureDataPalette {
   color: IFigureDataColor[];
 }
 
+export interface IFigureMap {
+  libs: Array<{ id: string; revision: string }>;
+  parts: Record<string, Record<string, number>>;
+}
+
 export interface IFigureDataSetType {
   type: string;
-  paletteId: number;
-  mandatoryF0: boolean; // has been changed to boolean, can be either 1, 0
-  mandatoryF1: boolean; // has been changed to boolean, can be either 1, 0
-  mandatoryM0: boolean; // has been changed to boolean, can be either 1, 0
-  mandatoryM1: boolean; // has been changed to boolean, can be either 1, 0
-  sets: IFigureDataSet[];
+  paletteid: string;
+  mand_f_0: boolean; // has been changed to boolean, can be either 1, 0
+  mand_f_1: boolean; // has been changed to boolean, can be either 1, 0
+  mand_m_0: boolean; // has been changed to boolean, can be either 1, 0
+  mand_m_1: boolean; // has been changed to boolean, can be either 1, 0
+  set: Record<string, IFigureDataSet>;
 }
 
 export interface IFigureDataColor {
