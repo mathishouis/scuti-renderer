@@ -15,7 +15,7 @@ import {WallFurniture} from "../src";
   });
   await renderer.loadResources('https://kozennnn.github.io/scuti-resources/');
 
-  const tileMap = '000000\n' + '000000\n' + '000000\n' + '000000\n' + '000000\n';
+  const tileMap = 'x1110001\n' + 'x0000000\n' + '00000000\n' + 'x0000000\n' + 'x0000000\n';
 
   const room = new Room(renderer, {
     tileMap: tileMap,
@@ -67,10 +67,10 @@ import {WallFurniture} from "../src";
       offsetY: -25
     },
     direction: 2,
-    state: 0
+    state: 2
   });
   const wallFurniture2 = new WallFurniture({
-    id: 4625,
+    id: 4032,
     position: {
       x: 3,
       y: -1,
@@ -78,14 +78,24 @@ import {WallFurniture} from "../src";
       offsetY: -30
     },
     direction: 4,
-    state: 0
+    state: 1
   });
   room.objects.add(furniture3);
   room.objects.add(furniture2);
   room.objects.add(wallFurniture);
   room.objects.add(wallFurniture2);
-  setTimeout(() => furniture.move({ x: 0, y: 0, z: 0 }), 3000);
-  setTimeout(() => furniture.move({ x: 5, y: 4, z: 0 }), 5000);
+  setTimeout(() => wallFurniture.move({
+    x: -1,
+    y: 3,
+    offsetX: 2,
+    offsetY: -25
+  }), 3000);
+  setTimeout(() => wallFurniture.move({
+    x: -1,
+    y: 5,
+    offsetX: 2,
+    offsetY: -25
+  }), 5000);
   //setTimeout(() => room.objects.add(furniture), 6000);
   furniture3.onLoadComplete = () => {
     console.log('loaded!');

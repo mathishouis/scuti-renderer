@@ -1,4 +1,4 @@
-import { Container, Graphics, Matrix, Point, Polygon } from 'pixi.js';
+import { Graphics, Matrix, Point, Polygon } from 'pixi.js';
 import { Color } from '@pixi/color';
 
 import type { Room } from '../Room';
@@ -8,6 +8,8 @@ import { FloorMaterial } from '../materials/FloorMaterial';
 import { EventManager } from '../../interactions/EventManager';
 import type { IInteractionEvent } from '../../../interfaces/Interaction';
 import type { IFloorPosition } from '../../../interfaces/Furniture';
+import {RoomPart} from "./RoomPart";
+import {ZOrder} from "../../../utilities/ZOrder";
 
 /**
  * Tile class that show up during room rendering.
@@ -15,7 +17,7 @@ import type { IFloorPosition } from '../../../interfaces/Furniture';
  * @class
  * @memberof Scuti
  */
-export class Tile extends Container {
+export class Tile extends RoomPart {
   /**
    * The room instance where the tile will be drawn.
    *
@@ -197,6 +199,8 @@ export class Tile extends Container {
       new Point(32, 16),
       new Point(0, 0)
     );
+    /** Set the zIndex */
+    this.zIndex = ZOrder.floor(this._position);
   }
 
   /**

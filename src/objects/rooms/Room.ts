@@ -2,14 +2,15 @@ import { Container } from 'pixi.js';
 
 import type { Scuti } from '../../Scuti';
 import type { IRoomConfiguration } from '../../interfaces/Room';
-import { RoomView } from './RoomView';
+import { RoomVisualization } from './RoomVisualization';
 import { RoomTileMap } from './RoomTileMap';
 import type { Material } from './materials/Material';
 import { WallMaterial } from './materials/WallMaterial';
 import { FloorMaterial } from './materials/FloorMaterial';
 import { RoomCamera } from './RoomCamera';
 import type { RoomObjectLayer } from './layers/RoomObjectLayer';
-import type { RoomTileLayer } from './layers/RoomTileLayer';
+import {RoomPartLayer} from "./layers/RoomPartLayer";
+import {EventManager} from "../interactions/EventManager";
 
 /**
  * Room class for rendering rooms like the ones on Habbo Hotel.
@@ -77,10 +78,10 @@ export class Room extends Container {
   /**
    * The room view instance, where all the objects like furnitures, avatars or the tiles, walls and stairs are stored.
    *
-   * @member {RoomView}
+   * @member {RoomVisualization}
    * @private
    */
-  private readonly _view: RoomView;
+  private readonly _visualization: RoomVisualization;
 
   /**
    * The room camera, it manage the room dragging and centering the room when it's out of bounds.
@@ -113,11 +114,11 @@ export class Room extends Container {
 
     /** Initialise everything */
     this._tileMap = new RoomTileMap(configuration.tileMap);
-    this._view = new RoomView(this);
+    this._visualization = new RoomVisualization(this);
     this._camera = new RoomCamera(this);
 
     /** Add the room view and then the room camera to the PixiJS application */
-    this.addChild(this._view);
+    this.addChild(this._visualization);
     this._engine.application.stage.addChild(this._camera);
   }
 
@@ -135,12 +136,12 @@ export class Room extends Container {
   /**
    * Reference to the room view instance.
    *
-   * @member {RoomView}
+   * @member {RoomVisualization}
    * @readonly
    * @public
    */
-  public get view(): RoomView {
-    return this._view;
+  public get visualization(): RoomVisualization {
+    return this._visualization;
   }
 
   /**
@@ -163,7 +164,7 @@ export class Room extends Container {
    */
   public set tileMap(tileMap: string) {
     this._tileMap = new RoomTileMap(tileMap);
-    this._view.update();
+    this._visualization.update();
   }
 
   /**
@@ -185,7 +186,7 @@ export class Room extends Container {
    */
   public set wallMaterial(material: Material) {
     this._wallMaterial = material;
-    this._view.update();
+    this._visualization.update();
   }
 
   /**
@@ -207,7 +208,7 @@ export class Room extends Container {
    */
   public set floorMaterial(material: Material) {
     this._floorMaterial = material;
-    this._view.update();
+    this._visualization.update();
   }
 
   /**
@@ -229,7 +230,7 @@ export class Room extends Container {
    */
   public set wallThickness(thickness: number) {
     this._wallThickness = thickness;
-    this._view.update();
+    this._visualization.update();
   }
 
   /**
@@ -251,7 +252,7 @@ export class Room extends Container {
    */
   public set floorThickness(thickness: number) {
     this._floorThickness = thickness;
-    this._view.update();
+    this._visualization.update();
   }
 
   /**
@@ -273,18 +274,18 @@ export class Room extends Container {
    */
   public set wallHeight(height: number) {
     this._wallHeight = height;
-    this._view.update();
+    this._visualization.update();
   }
 
   /**
-   * Reference to the object tile container.
+   * Reference to the tile event manager.
    *
-   * @member {RoomTileLayer}
+   * @member {EventManager}
    * @readonly
    * @public
    */
-  public get tiles(): RoomTileLayer {
-    return this._view.tileLayer;
+  public get tiles(): EventManager {
+    return this._visualization.partLayer.tiles;
   }
 
   /**
@@ -295,7 +296,18 @@ export class Room extends Container {
    * @public
    */
   public get objects(): RoomObjectLayer {
-    return this._view.objectLayer;
+    return this._visualization.objectLayer;
+  }
+
+  /**
+   * Reference to the part layer container.
+   *
+   * @member {RoomPartLayer}
+   * @readonly
+   * @public
+   */
+  public get parts(): RoomPartLayer {
+    return this._visualization.partLayer;
   }
 
   /**

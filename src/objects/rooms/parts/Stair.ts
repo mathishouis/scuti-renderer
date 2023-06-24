@@ -9,6 +9,7 @@ import { Direction } from '../../../enums/Direction';
 import { FloorMaterial } from '../materials/FloorMaterial';
 import { EventManager } from '../../interactions/EventManager';
 import type { IInteractionEvent } from '../../../interfaces/Interaction';
+import {ZOrder} from "../../../utilities/ZOrder";
 
 /**
  * Stair class that show up when two tiles side by side have a height difference of one.
@@ -451,6 +452,8 @@ export class Stair extends Container {
       new Point(32 - offsets[1].x, 16 - offsets[1].y),
       new Point(0 - offsets[1].x, 0 - offsets[1].y)
     );
+    /** Set the zIndex */
+    this.zIndex = ZOrder.floor(this._position);
   }
 
   /**
@@ -626,6 +629,8 @@ export class Stair extends Container {
       new Point(32 - offsets[2].x, 16 - offsets[2].y),
       new Point(0 - offsets[2].x, 0 - offsets[2].y)
     );
+    /** Set the zIndex */
+    this.zIndex = ZOrder.floor(this._position);
   }
 
   /**

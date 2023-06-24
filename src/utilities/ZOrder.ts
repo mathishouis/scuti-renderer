@@ -4,10 +4,14 @@ import type { IFloorPosition, IWallPosition } from '../interfaces/Furniture';
 /**
  * Priority values
  */
+//const PRIORITY_WALL = 6;
+const PRIORITY_WALL = 6;
+const PRIORITY_FLOOR = 6;
 const PRIORITY_TILE_CURSOR = 11;
 const PRIORITY_ROOM_AVATAR = 11;
 const PRIORITY_ROOM_ITEM = 11;
-const PRIORITY_WALL_ITEM = 9;
+//const PRIORITY_WALL_ITEM = 9;
+const PRIORITY_WALL_ITEM = 10;
 const PRIORITY_MULTIPLIER = 10000000;
 
 /**
@@ -33,6 +37,29 @@ const avatar = function (position: IPosition3D, z: number): number {
 };
 
 /**
+ * Return the zOrder of the floor by it's position in the room.
+ *
+ * @param {IPosition2D} [position] - The floor position in the room.
+ * @return {number}
+ * @private
+ */
+const floor = function (position: IPosition2D): number {
+  return (position.x + position.y) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_FLOOR;
+};
+
+/**
+ * Return the zOrder of the wall by it's position in the room.
+ *
+ * @param {IPosition2D} [position] - The wall position in the room.
+ * @return {number}
+ * @private
+ */
+const wall = function (position: IPosition2D): number {
+  return (position.x + position.y) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_WALL;
+};
+
+
+/**
  * Return the zOrder of the tile cursor by it's position in the room.
  *
  * @param {IPosition2D} [position] - The tile cursor position in the room.
@@ -40,7 +67,7 @@ const avatar = function (position: IPosition3D, z: number): number {
  * @private
  */
 const tileCursor = function (position: IPosition2D): number {
-  return (position.x + position.y) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_TILE_CURSOR - 500000;
+  return (position.x + position.y) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_TILE_CURSOR;
 };
 
 /**
@@ -75,4 +102,4 @@ const wallItem = function (position: IWallPosition, z: number): number {
 /**
  * ZOrder variable that manage the z ordering of room objects.
  */
-export const ZOrder = { avatar, tileCursor, floorItem, wallItem };
+export const ZOrder = { avatar, tileCursor, floorItem, wallItem, floor, wall };

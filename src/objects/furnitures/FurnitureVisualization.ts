@@ -24,7 +24,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
     this._loadAssets(this._furniture.data.baseName);
     this._furniture.onRoomAdded = (room: Room) => {
       if (this._loaded)
-        room.view.animationTicker.add(() => {
+        room.visualization.animationTicker.add(() => {
           return this.update();
         });
     };
@@ -52,7 +52,7 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
         this._loaded = true;
         if (this._placeholder !== undefined) this._placeholder.destroy();
         if (this._furniture.room != null)
-          this._furniture.room.view.animationTicker.add(() => {
+          this._furniture.room.visualization.animationTicker.add(() => {
             return this.update();
           });
       })
@@ -117,14 +117,14 @@ export abstract class FurnitureVisualization extends RoomObjectVisualization {
       this._placeholder = new Sprite(
         Assets.get('furnitures/floor/placeholder').textures['place_holder_furniture_64.png']
       );
-      if (this._furniture.room != null) this._furniture.room.objects.addChild(this._placeholder);
+      if (this._furniture.room != null) this._furniture.room.visualization.objectContainer.addChild(this._placeholder);
       this._placeholder.x = 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y - 32;
       this._placeholder.y = 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 * this._furniture.position.z - 50;
     } else {
       this._placeholder = new Sprite(
         Assets.get('furnitures/wall/placeholder').textures['place_holder_wall_item_64.png']
       );
-      if (this._furniture.room != null) this._furniture.room.objects.addChild(this._placeholder);
+      if (this._furniture.room != null) this._furniture.room.visualization.objectContainer.addChild(this._placeholder);
       if (this._furniture.direction === Direction.EAST) {
         this._placeholder.x = 32 + 32 * this._furniture.position.x - 32 * this._furniture.position.y + this._furniture.position.offsetX * 2 - 1;
         this._placeholder.y = 16 * this._furniture.position.x + 16 * this._furniture.position.y - 32 + this._furniture.position.offsetY * 2 + 31 - 50;

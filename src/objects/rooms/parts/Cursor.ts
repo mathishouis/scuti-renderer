@@ -63,6 +63,8 @@ export class Cursor extends Container {
 
     /** Positionate the cursor */
     this.moveTo(this._position);
+    /** Set the zIndex */
+    this.zIndex = ZOrder.tileCursor(this._position);
   }
 
   /**

@@ -9,7 +9,7 @@ import type { Room } from '../Room';
  * @class
  * @memberof Scuti
  */
-export class RoomObjectLayer extends Container {
+export class RoomObjectLayer {
   /**
    * The room instance that will be managed by the camera.
    *
@@ -30,8 +30,6 @@ export class RoomObjectLayer extends Container {
    * @param {Room} [room] - The room instance that we want to visualize.
    */
   constructor(room: Room) {
-    super();
-    this.sortableChildren = true;
     this._room = room;
   }
 

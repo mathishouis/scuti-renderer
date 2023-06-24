@@ -2,7 +2,6 @@
 import { gsap } from 'gsap';
 import { Assets } from 'pixi.js';
 
-import { RoomObject } from '../rooms/RoomObject';
 import type { IFloorPosition } from '../../interfaces/Furniture.interface';
 import type { Direction } from '../../enums/Direction';
 import { AvatarAction } from './actions/AvatarAction';
@@ -15,7 +14,7 @@ import { EventManager } from '../interactions/EventManager';
 import type { IInteractionEvent } from '../../interfaces/Interaction.interface';
 import { AssetLoader } from '../../utilities/AssetLoader';
 
-export class Avatar extends RoomObject {
+export class Avatar {
   private readonly _figure: AvatarFigure;
 
   private _position: IFloorPosition;
@@ -39,8 +38,6 @@ export class Avatar extends RoomObject {
   private areAllAssetsLoaded = false;
 
   constructor(configuration: IAvatarConfiguration) {
-    super();
-
     this._figure = this._parseFigure(configuration.figure);
     this._position = configuration.position;
     this._headDirection = configuration.headDirection;
