@@ -1,4 +1,4 @@
-import type { IAnimationDefinition, IAnimationFrameData } from '../../../interfaces/Avatar';
+import type { IAnimationDefinition, IAnimationFrameData } from '../../../types/Avatar';
 import type { AvatarAction } from '../actions/AvatarAction';
 
 export class AvatarAnimation {

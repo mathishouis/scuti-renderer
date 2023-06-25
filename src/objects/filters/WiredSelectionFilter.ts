@@ -1,4 +1,4 @@
-import { Filter, utils } from 'pixi.js';
+import { Color, Filter } from 'pixi.js';
 
 /** The shader vertex */
 const vertex = `
@@ -46,7 +46,7 @@ export class WiredSelectionFilter extends Filter {
     super(vertex, fragment);
 
     /** Set the colors */
-    this.uniforms.lineColor = utils.hex2rgb(lineColor);
-    this.uniforms.backgroundColor = utils.hex2rgb(backgroundColor);
+    this.uniforms.lineColor = new Color(lineColor).toRgbArray();
+    this.uniforms.backgroundColor = new Color(backgroundColor).toRgbArray();
   }
 }

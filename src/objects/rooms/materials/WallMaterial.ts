@@ -3,7 +3,7 @@ import { Assets, Sprite, Texture } from 'pixi.js';
 
 import { Material } from './Material';
 import type { Scuti } from '../../../Scuti';
-import type { RoomMaterial } from '../../../interfaces/RoomMaterial';
+import type { RoomMaterial } from '../../../types/RoomMaterial';
 import { Logger } from '../../../utilities/Logger';
 
 export class WallMaterial extends Material {

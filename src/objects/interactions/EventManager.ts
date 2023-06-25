@@ -1,4 +1,4 @@
-import type { IInteractionEvent } from '../../interfaces/Interaction';
+import type { IInteractionEvent } from '../../types/Interaction';
 import type { Room } from '../rooms/Room';
 
 /**

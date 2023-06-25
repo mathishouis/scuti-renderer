@@ -1,8 +1,8 @@
 import { gsap } from 'gsap';
 
-import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../interfaces/Furniture';
-import { FurnitureData } from './FurnitureData';
-import { FurnitureAnimatedVisualization } from './visualizations/FurnitureAnimatedVisualization';
+import type { IFloorFurnitureConfiguration, IFloorPosition } from '../../types/Furniture';
+import { FurnitureData } from './visualizations/FurnitureData';
+import { FurnitureVisualization } from './visualizations/FurnitureVisualization';
 import { RoomObject } from '../rooms/objects/RoomObject';
 
 /**
@@ -21,25 +21,15 @@ export class FloorFurniture extends RoomObject {
   private readonly _id: number;
 
   /**
-   * The furniture position in the room.
-   *
-   * @member {IFloorPosition}
-   * @private
+   * @param {IFloorFurnitureConfiguration} [config] - The furniture configuration.
    */
-  public _position: IFloorPosition;
+  constructor(config: IFloorFurnitureConfiguration) {
+    super(config);
 
-  /**
-   * @param {IFloorFurnitureConfiguration} [configuration] - The furniture configuration.
-   */
-  constructor(configuration: IFloorFurnitureConfiguration) {
-    super();
-    /** Store the data */
-    this._id = configuration.id;
-    this._position = configuration.position;
-    this._direction = configuration.direction;
-    this._state = configuration.state ?? 0;
+    this._id = config.id;
+    this._state = config.state ?? 0;
     this._data = new FurnitureData(this);
-    this._visualization = new FurnitureAnimatedVisualization(this);
+    this._visualization = new FurnitureVisualization(this);
   }
 
   /**
@@ -54,17 +44,6 @@ export class FloorFurniture extends RoomObject {
   }
 
   /**
-   * Reference to the furniture position in the room.
-   *
-   * @member {IFloorPosition}
-   * @readonly
-   * @public
-   */
-  public get position(): IFloorPosition {
-    return this._position;
-  }
-
-  /**
    * Move the furniture at the given position and in time.
    *
    * @param {IFloorPosition} [position] - The position where we want to move the furniture.
@@ -74,14 +53,13 @@ export class FloorFurniture extends RoomObject {
    */
   move(position: IFloorPosition, duration: number = 0.5): void {
     if (this._visualization === undefined) return;
-    gsap.to(this._position, {
+    gsap.to(this.position, {
       x: position.x,
       y: position.y,
+      z: position.z,
       duration,
       ease: 'linear',
-      onUpdate: () => {
-        this._visualization.updatePosition();
-      }
+      onUpdate: () => this._visualization.updatePosition()
     });
   }
 }

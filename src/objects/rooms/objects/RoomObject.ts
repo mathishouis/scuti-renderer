@@ -1,14 +1,17 @@
-import { gsap } from 'gsap';
+import type { Filter } from 'pixi.js';
+import { Container } from 'pixi.js';
+import gsap from 'gsap';
 
 import { EventManager } from '../../interactions/EventManager';
 import { Logger } from '../../../utilities/Logger';
 import type { Room } from '../Room';
-import type { IInteractionEvent } from '../../../interfaces/Interaction';
 import type { Direction } from '../../../enums/Direction';
 import type { RoomObjectVisualization } from './RoomObjectVisualization';
-import type { IFloorPosition, IWallPosition } from '../../../interfaces/Furniture';
-import type { FurnitureData } from '../../furnitures/FurnitureData';
-import {Filter} from "pixi.js";
+import type { IFloorPosition, IWallPosition } from '../../../types/Furniture';
+import type { Dimension, IAvatarPosition, IRoomObjectConfig, IInteractionEvent } from '../../../types';
+import type { FurnitureData } from '../../furnitures/visualizations/FurnitureData';
+import { FloorFurniture } from '../../furnitures/FloorFurniture';
+import { WallFurniture } from '../../furnitures/WallFurniture';
 
 /**
  * RoomObject class that is extended by the avatars or furnitures.
@@ -16,25 +19,27 @@ import {Filter} from "pixi.js";
  * @class
  * @memberof Scuti
  */
-export abstract class RoomObject {
+export abstract class RoomObject extends Container {
   /**
-   * The furniture position in the room.
+   * The object's position in the room.
    *
-   * @member {IFloorPosition | IWallPosition}
+   * @member {FloorPosition | IWallPosition | IAvatarPosition}
    * @private
    */
-  abstract _position: IFloorPosition | IWallPosition;
+  private readonly _position: IFloorPosition | IWallPosition | IAvatarPosition;
+
+  private _isAnimating = false;
 
   /**
-   * The furniture direction (0, 2, 4, 6).
+   * The object's direction in the room.
    *
    * @member {Direction}
    * @private
    */
-  public _direction!: Direction;
+  private _direction: Direction;
 
   /**
-   * The furniture state that represent it's current playing animation.
+   * The object's state that represent it's current playing animation.
    *
    * @member {number}
    * @private
@@ -42,7 +47,7 @@ export abstract class RoomObject {
   public _state!: number;
 
   /**
-   * The furniture visualization.
+   * The object's visualization.
    *
    * @member {FurnitureData}
    * @private
@@ -50,7 +55,7 @@ export abstract class RoomObject {
   public _visualization!: RoomObjectVisualization;
 
   /**
-   * The furniture data.
+   * The object's data.
    *
    * @member {FurnitureData}
    * @private
@@ -58,15 +63,15 @@ export abstract class RoomObject {
   public _data!: FurnitureData;
 
   /**
-   * The room object logger instance.
+   * The room object's logger instance.
    *
    * @member {Logger}
    * @private
    */
-  private readonly _logger: Logger = new Logger('Room Object');
+  private readonly _logger = new Logger('RoomObject');
 
   /**
-   * The furniture interaction manager to handle all the clicks and taps.
+   * The object interaction manager to handle all the clicks and taps.
    *
    * @member {EventManager}
    * @private
@@ -76,10 +81,10 @@ export abstract class RoomObject {
   /**
    * The room instance that will be managed by the camera.
    *
-   * @member {Room | undefined}
+   * @member {Room}
    * @private
    */
-  private _room!: Room | undefined;
+  private _room!: Room;
 
   /**
    * The room object filters.
@@ -88,6 +93,90 @@ export abstract class RoomObject {
    * @private
    */
   private _filters: Filter[] = [];
+
+  protected constructor(config: IRoomObjectConfig) {
+    super();
+
+    this._position = config.position;
+    this._direction = config.direction;
+  }
+
+  /**
+   * Move the object at te given position and in time.
+   *
+   * @param {IFloorPosition | IWallPosition | IAvatarPosition} [position] - The position where we want to move the furniture.
+   * @param {number} [duration] - The time to move the furniture to the given position.
+   * @return {void}
+   * @public
+   */
+  abstract move(position: IFloorPosition | IWallPosition | IAvatarPosition, duration: number): void;
+
+  /**
+   * Rotate the furniture at the given direction and in time.
+   *
+   * @param {Direction} [direction] - The new direction of the furniture.
+   * @param {number} [duration] - The time to rotate the furniture at the given direction.
+   * @return {void}
+   * @public
+   */
+  public rotate(direction?: Direction, duration: number = 0.15): void {
+    if (this instanceof FloorFurniture || this instanceof WallFurniture) {
+      if (this._visualization === undefined || this._isAnimating) return;
+
+      const z = (this.position as Dimension.IPosition3D).z;
+
+      gsap.to(this.position, {
+        z: z + 0.5,
+        duration,
+        onStart: () => {
+          this._isAnimating = true;
+        },
+        onUpdate: () => this._visualization.updatePosition(),
+        onComplete: () => {
+          if (direction == null) {
+            const direction = this.visualization.directions.indexOf(this.direction);
+            const nextDirection = (direction + 1) % this.visualization.directions.length;
+
+            this._direction = this.visualization.directions[nextDirection];
+          } else this._direction = direction;
+
+          this._visualization.render();
+          gsap.to(this.position, {
+            z,
+            duration,
+            onComplete: () => {
+              this._visualization.render();
+              this._isAnimating = false;
+            },
+            onUpdate: () => this._visualization.updatePosition()
+          });
+        }
+      });
+    } else {
+      // todo!(): rotate entities (avatar, pet or bot)
+    }
+  }
+
+  /**
+   * Reference to the room object room instance.
+   *
+   * @member {Room | undefined}
+   * @readonly
+   * @public
+   */
+  get room(): Room {
+    return this._room;
+  }
+
+  /**
+   * Update the current room instance.
+   *
+   * @param {Room} [room] - The new room instance.
+   * @public
+   */
+  set room(room: Room) {
+    this._room = room;
+  }
 
   /**
    * Reference to the object event manager.
@@ -98,27 +187,6 @@ export abstract class RoomObject {
    */
   get eventManager(): EventManager {
     return this._eventManager;
-  }
-
-  /**
-   * Reference to the room object room instance.
-   *
-   * @member {Room | undefined}
-   * @readonly
-   * @public
-   */
-  get room(): Room | undefined {
-    return this._room;
-  }
-
-  /**
-   * Update the current room instance.
-   *
-   * @param {Room | undefined} [room] - The new room instance.
-   * @public
-   */
-  set room(room: Room | undefined) {
-    this._room = room;
   }
 
   /**
@@ -360,8 +428,20 @@ export abstract class RoomObject {
    * @readonly
    * @public
    */
+  // @ts-expect-error
   public get filters(): Filter[] {
     return this._filters;
+  }
+
+  /**
+   * Update the filters list.
+   *
+   * @member {Filter[]}
+   * @readonly
+   * @public
+   */
+  public set filters(filters: Filter[]) {
+    this._filters = filters;
   }
 
   /**
@@ -383,34 +463,14 @@ export abstract class RoomObject {
    * @public
    */
   public removeFilter(filter: Filter): void {
-    this._filters = this._filters.filter((fFilter: Filter) => fFilter !== filter);
+    this._filters = this._filters.filter((fFilter) => fFilter !== filter);
     this._visualization.render();
   }
 
   /**
-   * Reference to the furniture position in the room.
-   *
-   * @member {IFloorPosition | IWallPosition}
-   * @readonly
-   * @public
-   */
-  abstract get position(): IFloorPosition | IWallPosition;
-
-  /**
-   * Move the furniture at the given position and in time.
-   *
-   * @param {IFloorPosition | IWallPosition} [position] - The position where we want to move the furniture.
-   * @param {number} [duration] - The time to move the furniture to the given position.
-   * @return {void}
-   * @public
-   */
-  abstract move(position: IFloorPosition | IWallPosition, duration: number): void;
-
-  /**
-   * Reference to the furniture direction.
+   * Reference to the object's direction.
    *
    * @member {Direction}
-   * @readonly
    * @public
    */
   public get direction(): Direction {
@@ -418,34 +478,25 @@ export abstract class RoomObject {
   }
 
   /**
-   * Rotate the furniture at the given direction and in time.
+   * Update the object's direction
    *
-   * @param {Direction} [direction] - The new direction of the furniture.
-   * @param {number} [duration] - The time to rotate the furniture at the given direction.
-   * @return {void}
+   * @member {Direction}
    * @public
    */
-  rotate(direction: Direction, duration: number = 0): void {
-    if (this._visualization === undefined) return;
-    gsap.to(this._position, {
-      x: this._position.x,
-      y: this._position.y - 6.25,
-      duration: duration / 2,
-      ease: 'easeIn',
-      onComplete: () => {
-        this._direction = direction;
-        this._visualization.render();
-        gsap.to(this._position, {
-          x: this._position.x,
-          y: this._position.y,
-          duration: duration / 2,
-          ease: 'easeOut',
-          onComplete: () => {
-            this._visualization.render();
-          }
-        });
-      }
-    });
+  public set direction(direction: Direction) {
+    this._direction = direction;
+  }
+
+  /**
+   * Reference to the furniture position in the room.
+   *
+   * @member {IFloorPosition}
+   * @readonly
+   * @public
+   */
+  // @ts-expect-error
+  public get position(): IFloorPosition | IWallPosition | IAvatarPosition {
+    return this._position;
   }
 
   /**

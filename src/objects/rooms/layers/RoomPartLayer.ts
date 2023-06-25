@@ -1,10 +1,11 @@
+import { Point } from 'pixi.js';
+
 import type { Room } from '../Room';
-import { RoomPart } from "../parts/RoomPart";
-import {EventManager} from "../../interactions/EventManager";
-import {IPosition2D} from "../../../interfaces/Room";
-import {Tile} from "../parts/Tile";
-import {Stair} from "../parts/Stair";
-import {Point} from "pixi.js";
+import type { RoomPart } from '../parts/RoomPart';
+import { EventManager } from '../../interactions/EventManager';
+import type { Tile } from '../parts/Tile';
+import type { Stair } from '../parts/Stair';
+import type { Dimension } from '../../../types/Dimension';
 
 /**
  * RoomPartLayer class that manage all the room parts.
@@ -27,7 +28,7 @@ export class RoomPartLayer {
    * @member {RoomPart[]}
    * @private
    */
-  private _parts: RoomPart[] = [];
+  private readonly _parts: RoomPart[] = [];
 
   /**
    * The room tiles interaction manager.
@@ -61,7 +62,6 @@ export class RoomPartLayer {
    */
   public add(part: RoomPart): void {
     this._parts.push(part);
-    console.log(this._room);
   }
 
   /**
@@ -71,8 +71,8 @@ export class RoomPartLayer {
    * @return {Tile | Stair}
    * @public
    */
-  public getFromGlobal(position: IPosition2D): Tile | Stair {
-    const container = this._room.visualization.objectContainer.children.find((container) => {
+  public getFromGlobal(position: Dimension.IPosition2D): Tile | Stair {
+    const container = this._room.visualization.children.find((container) => {
       const point = new Point(position.x, position.y);
       if (Boolean(container.hitArea?.contains(container.toLocal(point).x, container.toLocal(point).y)))
         return container;

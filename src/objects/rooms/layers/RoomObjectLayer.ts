@@ -1,5 +1,3 @@
-import { Container } from 'pixi.js';
-
 import type { RoomObject } from '../objects/RoomObject';
 import type { Room } from '../Room';
 
@@ -36,31 +34,39 @@ export class RoomObjectLayer {
   /**
    * Add the given room object into the object layer of the room.
    *
-   * @param {RoomObject} [object] - The room object that we want to add.
+   * @param {RoomObject[]} [objects] - The room objects that we want to add.
    * @return {void}
    * @public
    */
-  public add(object: RoomObject): void {
-    object.room = this._room;
-    this._objects.push(object);
-    if (object.onRoomAdded !== undefined) object.onRoomAdded(this._room);
-    if (object.visualization.loaded) object.visualization.render();
-    else object.visualization.renderPlaceholder();
+  public add(...objects: RoomObject[]): void {
+    return objects.forEach((object) => {
+      object.room = this._room;
+      this._objects.push(object);
+      // @ts-expect-error
+      this._room.visualization.addChild(object);
+      if (object.onRoomAdded !== undefined) object.onRoomAdded(this._room);
+      if (object.visualization.loaded) object.visualization.render();
+      else object.visualization.renderPlaceholder();
+    });
   }
 
   /**
    * Remove the given room object into the object layer of the room.
    *
-   * @param {RoomObject} [object] - The room object that we want to remove.
+   * @param {RoomObject[]} [objects] - The room objects that we want to remove.
    * @return {void}
    * @public
    */
-  public remove(object: RoomObject): void {
-    if (object.onRoomRemoved !== undefined) object.onRoomRemoved(this._room);
-    object.room = undefined;
-    this._objects = this._objects.filter((fObject: RoomObject) => {
-      return fObject !== object;
+  public remove(...objects: RoomObject[]): void {
+    return objects.forEach((object) => {
+      if (object.onRoomRemoved !== undefined) object.onRoomRemoved(this._room);
+
+      object.room = undefined;
+      // @ts-expect-error
+      this._room.visualization.removeChild(object);
+      this._objects = this._objects.filter((fObject) => fObject !== object);
+
+      object.destroy();
     });
-    object.destroy();
   }
 }

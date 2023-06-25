@@ -1,15 +1,11 @@
-// @ts-nocheck
-import type { Spritesheet } from 'pixi.js';
 import { Assets } from 'pixi.js';
 
-import type { IAnimationFrameData, IAvatarPart, IBodyPartConfiguration } from '../../interfaces/Avatar';
-import { AvatarAction } from './actions/AvatarAction';
-import type { Direction } from '../../enums/Direction';
+import type { IAvatarPart, IBodyPartConfiguration } from '../../../types/Avatar';
+import { AssetLoader } from '../../../utilities/AssetLoader';
+import { ZOrder } from '../../../utilities/ZOrder';
+import { AvatarAction } from '../actions/AvatarAction';
+import type { Avatar } from '../Avatar';
 import { AvatarLayer } from './AvatarLayer';
-import type { Avatar } from './Avatar';
-import type { AvatarAnimation } from './animations/AvatarAnimation';
-import { AssetLoader } from '../../utilities/AssetLoader';
-import { ZOrder } from '../../utilities/ZOrder';
 
 export class AvatarBodyPart {
   private readonly _avatar: Avatar;
@@ -27,37 +23,31 @@ export class AvatarBodyPart {
   private readonly _frames: Map<number, Map<string, { action: AvatarAction; frame: number; repeat: number }>> =
     new Map();
 
-  private areAllAssetsLoaded: boolean = false;
+  private areAllAssetsLoaded = false;
 
-  constructor(avatar: Avatar, configuration: IBodyPartConfiguration) {
+  constructor(avatar: Avatar, config: IBodyPartConfiguration) {
     this._avatar = avatar;
-    this._type = configuration.type;
-    this._setId = configuration.setId;
-    this._colors = configuration.colors;
-    this._parts = configuration.parts;
-    this._actions = configuration.actions;
+    this._type = config.type;
+    this._setId = config.setId;
+    this._colors = config.colors;
+    this._parts = config.parts;
+    this._actions = config.actions;
+
     const assets: Array<Promise<void>> = [];
 
     this._parts.forEach((part: IAvatarPart) => {
-      if (part.lib != null) {
+      if (part.lib != null)
         assets.push(AssetLoader.load('figures/' + part.lib.id, 'figure/' + part.lib.id + '/' + part.lib.id + '.json'));
-      }
     });
 
     Promise.all(assets)
-      .then(() => {
-        this.areAllAssetsLoaded = true;
-      })
-      .catch((error) => {
-        return console.error(error);
-      });
+      .then(() => (this.areAllAssetsLoaded = true))
+      .catch((error) => this._avatar.logger.error(error));
   }
 
   private _draw(): void {
     if (!this.areAllAssetsLoaded) return;
-    this._parts.forEach((part: IAvatarPart) => {
-      this._createPart(part);
-    });
+    this._parts.forEach((part) => this._createPart(part));
   }
 
   private _createPart(part: IAvatarPart): void {
@@ -65,9 +55,9 @@ export class AvatarBodyPart {
 
     if (part.lib == null) return;
 
-    const spritesheet = Assets.get<Spritesheet>('figures/' + part.lib.id);
+    const spritesheet = Assets.get('figures/' + part.lib.id);
 
-    Object.keys(spritesheet.data.partsType).forEach((type: string) => {
+    Object.keys(spritesheet.data.partsType).forEach((type) => {
       // We register the part type if it's not already registered
       if (!this._frames.get(part.id).has(type))
         this._frames.get(part.id).set(type, {
@@ -75,10 +65,10 @@ export class AvatarBodyPart {
           frame: 0,
           repeat: 0
         });
-      let direction: Direction = this._avatar.bodyDirection;
+      let direction = this._avatar.bodyDirection;
 
       // We get the actions, check if it's valid and if the action is included in the active part set
-      const sortedActions: AvatarAction[] = this._avatar.actionManager.filterActions(this._actions, type);
+      const sortedActions = this._avatar.actionManager.filterActions(this._actions, type);
 
       let finalAction: AvatarAction = this._avatar.actionManager.sortActions(sortedActions)[0];
 
@@ -86,7 +76,7 @@ export class AvatarBodyPart {
       if (this._isHeadPart(type)) direction = this._avatar.headDirection;
 
       // We get the animation gesture and frame
-      const frameData: IAnimationFrameData = this._avatar.animationManager.getLayerData(
+      const frameData = this._avatar.animationManager.getLayerData(
         finalAction,
         this._frames.get(part.id).get(type).frame,
         type
@@ -113,7 +103,6 @@ export class AvatarBodyPart {
       if (
         spritesheet.textures[
           // Skipping type checking because we cannot convert
-          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
           part.lib.id + '_h_' + gesture + '_' + type + '_' + part.id + '_' + tempDirection + '_' + frame
         ] === undefined
       ) {
@@ -146,13 +135,12 @@ export class AvatarBodyPart {
         }
       }
 
-      const zOrder: number = ZOrder.avatar(this._avatar.roomPosition, this._getDrawOrder(type, gesture, direction));
+      const zOrder = ZOrder.avatar(this._avatar.position, this._getDrawOrder(type, gesture, direction));
 
       // We create the layer
       if (
         spritesheet.textures[
           // Skipping type checking because we cannot convert
-          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
           part.lib.id + '_h_' + gesture + '_' + type + '_' + part.id + '_' + tempDirection + '_' + frame
         ] !== undefined
       ) {
@@ -197,7 +185,7 @@ export class AvatarBodyPart {
 
   private _getDrawOrder(type: string, action: string, direction: number): number {
     const drawOrder: [] = Assets.get('figures/draworder');
-    const drawOrderList: [string, any] = Object.entries(
+    const drawOrderList = Object.entries(
       drawOrder[drawOrder[action] !== undefined ? action : 'std'][direction] ?? drawOrder.std[direction]
     ).find((entry) => {
       return entry[1] === type;
@@ -206,32 +194,27 @@ export class AvatarBodyPart {
   }
 
   public updateParts(): void {
-    this._frames.forEach(
-      (types: Map<string, { action: AvatarAction; frame: number; repeat: number }>, partId: number) => {
-        types.forEach((value: { action: AvatarAction; frame: number; repeat: number }, type: string) => {
-          const animation: AvatarAnimation = this._avatar.animationManager.getAnimation(value.action);
-          const frameData: IAnimationFrameData = this._avatar.animationManager.getLayerData(
-            value.action,
-            value.frame,
-            type
-          );
-          if (frameData !== undefined) {
-            const currentFrame = this._frames.get(partId).get(type);
-            if (frameData.repeats !== undefined) {
-              if (currentFrame.repeat >= Number(frameData.repeats)) {
-                currentFrame.repeat = 0;
-                currentFrame.frame = currentFrame.frame >= animation.getFrameCount() - 1 ? 0 : currentFrame.frame + 1;
-              } else {
-                currentFrame.repeat += 1;
-              }
-            } else {
+    this._frames.forEach((types, partId) => {
+      types.forEach((value, type) => {
+        const animation = this._avatar.animationManager.getAnimation(value.action);
+        const frameData = this._avatar.animationManager.getLayerData(value.action, value.frame, type);
+        if (frameData !== undefined) {
+          const currentFrame = this._frames.get(partId).get(type);
+          if (frameData.repeats !== undefined) {
+            if (currentFrame.repeat >= Number(frameData.repeats)) {
+              currentFrame.repeat = 0;
               currentFrame.frame = currentFrame.frame >= animation.getFrameCount() - 1 ? 0 : currentFrame.frame + 1;
+            } else {
+              currentFrame.repeat += 1;
             }
+          } else {
+            currentFrame.frame = currentFrame.frame >= animation.getFrameCount() - 1 ? 0 : currentFrame.frame + 1;
           }
-        });
-      }
-    );
-    this._draw();
+        }
+      });
+    });
+
+    return this._draw();
   }
 
   public get actions(): AvatarAction[] {
@@ -240,5 +223,9 @@ export class AvatarBodyPart {
 
   public set actions(actions: AvatarAction[]) {
     this._actions = actions;
+  }
+
+  public get frames(): Map<number, Map<string, { action: AvatarAction; frame: number; repeat: number }>> {
+    return this._frames;
   }
 }

@@ -2,12 +2,12 @@ import type { BLEND_MODES } from 'pixi.js';
 import { Assets } from 'pixi.js';
 import { Color } from '@pixi/color';
 
-import type { FloorFurniture } from './FloorFurniture';
-import type { IFurnitureLayerConfiguration } from '../../interfaces/Furniture';
-import { HitSprite } from '../interactions/HitSprite';
-import type { WallFurniture } from './WallFurniture';
-import type { Direction } from '../../enums/Direction';
-import { WiredSelectionFilter } from '../filters/WiredSelectionFilter';
+import type { FloorFurniture } from '../FloorFurniture';
+import type { IFurnitureLayerConfiguration } from '../../../types/Furniture';
+import { HitSprite } from '../../interactions/HitSprite';
+import type { WallFurniture } from '../WallFurniture';
+import type { Direction } from '../../../enums/Direction';
+import { WiredSelectionFilter } from '../../filters/WiredSelectionFilter';
 
 /** The wired selection filter */
 const WIRED_SELECTION_FILTER = new WiredSelectionFilter(0xffffff, 0x999999);
@@ -109,24 +109,22 @@ export class FurnitureLayer extends HitSprite {
 
   /**
    * @param {FloorFurniture | WallFurniture} [furniture] - The furniture instance.
-   * @param {IFurnitureLayerConfiguration} [configuration] - The layer configuration.
+   * @param {IFurnitureLayerConfiguration} [config] - The layer configuration.
    */
-  constructor(furniture: FloorFurniture | WallFurniture, configuration: IFurnitureLayerConfiguration) {
-    // @ts-expect-error
-    super(null);
+  constructor(furniture: FloorFurniture | WallFurniture, config: IFurnitureLayerConfiguration) {
+    super(undefined);
 
     this._furniture = furniture;
-    this._layer = configuration.layer;
-    this._alpha = configuration.alpha;
-    this._tint = configuration.tint;
-    this._z = configuration.z;
-    this._blendMode = configuration.blendMode;
-    this._flip = configuration.flip;
-    this._frame = configuration.frame;
-    this._ignoreMouse = configuration.ignoreMouse;
-    this._direction = configuration.direction;
-    // @ts-expect-error
-    this._tag = configuration.tag;
+    this._layer = config.layer;
+    this._alpha = config.alpha;
+    this._tint = config.tint;
+    this._z = config.z;
+    this._blendMode = config.blendMode;
+    this._flip = config.flip;
+    this._frame = config.frame;
+    this._ignoreMouse = config.ignoreMouse;
+    this._direction = config.direction;
+    this._tag = config.tag;
 
     this._draw();
   }
@@ -169,20 +167,21 @@ export class FurnitureLayer extends HitSprite {
     if (this._z !== undefined) this.zIndex = this._z;
     if (this._ignoreMouse !== null && !this._ignoreMouse) this.interactive = true;
     if (this._furniture.selected) this.filters.push(WIRED_SELECTION_FILTER);
+
     this.on('pointerdown', (event) => {
-      return this._furniture.eventManager.handlePointerDown({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerDown({ event, tag: this._tag });
     });
     this.on('pointerup', (event) => {
-      return this._furniture.eventManager.handlePointerUp({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerUp({ event, tag: this._tag });
     });
     this.on('pointermove', (event) => {
-      return this._furniture.eventManager.handlePointerMove({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerMove({ event, tag: this._tag });
     });
     this.on('pointerout', (event) => {
-      return this._furniture.eventManager.handlePointerOut({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerOut({ event, tag: this._tag });
     });
     this.on('pointerover', (event) => {
-      return this._furniture.eventManager.handlePointerOver({ mouseEvent: event, tag: this._tag });
+      return this._furniture.eventManager.handlePointerOver({ event, tag: this._tag });
     });
   }
 

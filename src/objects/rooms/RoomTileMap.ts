@@ -1,4 +1,4 @@
-import type { IPosition2D, ITileInfo, TileMap } from '../../interfaces/Room';
+import type { IPosition2D, ITileInfo, TileMap } from '../../types/Room';
 import { WallType } from '../../enums/WallType';
 import { StairType } from '../../enums/StairType';
 import { Direction } from '../../enums/Direction';
@@ -76,7 +76,7 @@ export class RoomTileMap {
    * @public
    */
   public getTileHeight(position: IPosition2D): number {
-    const tile: string = this.getTile(position);
+    const tile = this.getTile(position);
     return tile === 'x' ? 0 : isNaN(Number(tile)) ? tile.charCodeAt(0) - 96 + 9 : Number(tile);
   }
 
@@ -267,10 +267,10 @@ export class RoomTileMap {
    * @public
    */
   public get maxZ(): number {
-    let z: number = 0;
-    for (let y: number = 0; y < this._tileMap.length; y++) {
-      for (let x: number = 0; x < this._tileMap[y].length; x++) {
-        const height: number = this.getTileHeight({ x, y });
+    let z = 0;
+    for (let y = 0; y < this._tileMap.length; y++) {
+      for (let x = 0; x < this._tileMap[y].length; x++) {
+        const height = this.getTileHeight({ x, y });
         if (height > z) z = height;
       }
     }
@@ -286,8 +286,8 @@ export class RoomTileMap {
    */
   public hasWall(position: IPosition2D): { x: boolean; y: boolean } {
     // TODO: Integrate it in _getWallType()
-    let wallX: boolean = false;
-    let wallY: boolean = false;
+    let wallX = false;
+    let wallY = false;
     for (let i = position.y - 1; i >= 0; i--) {
       const wall: WallType | undefined = this._getWallType({ x: position.x, y: i });
       if (wall) {

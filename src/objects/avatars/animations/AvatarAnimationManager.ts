@@ -1,14 +1,16 @@
-// @ts-nocheck
 import { Assets } from 'pixi.js';
 
-import type { IAvatarPartSets, IAnimationFrameData } from '../../../interfaces/Avatar';
+import type { IAvatarPartSets, IAnimationFrameData } from '../../../types/Avatar';
 import type { AvatarAction } from '../actions/AvatarAction';
 import { AvatarAnimation } from './AvatarAnimation';
 
 export class AvatarAnimationManager {
   private readonly _animations = new Map<AvatarAction, AvatarAnimation>();
-
   private readonly _avatarAnimationsLib = Assets.get<IAvatarPartSets>('figures/animations');
+
+  constructor(actions: AvatarAction[]) {
+    actions.forEach((action) => this.registerAnimation(action));
+  }
 
   public registerAnimation(action: AvatarAction): void {
     if (this._avatarAnimationsLib[action] === undefined) return;

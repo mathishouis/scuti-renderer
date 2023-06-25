@@ -1,10 +1,10 @@
 import { Container, EventBoundary, FederatedPointerEvent } from 'pixi.js';
-import { gsap } from 'gsap';
+import { Expo, gsap } from 'gsap';
 
 import type { Room } from './Room';
 import type { Tile } from './parts/Tile';
 import type { Stair } from './parts/Stair';
-import {RoomObject} from "./objects/RoomObject";
+import type { RoomObject } from './objects/RoomObject';
 
 /**
  * RoomCamera class that manage things like the room dragging or detecting if the room is out of bounds.
@@ -28,22 +28,6 @@ export class RoomCamera extends Container {
    * @private
    */
   private _dragging!: boolean;
-
-  /**
-   * The container that will act as a trigger to drag the room container.
-   *
-   * @member {Container}
-   * @private
-   */
-  private readonly _viewContainer: Container;
-
-  /**
-   * The container that will contain the room.
-   *
-   * @member {Container}
-   * @private
-   */
-  private readonly _roomContainer: Container;
 
   /**
    * The current selected tile.
@@ -70,25 +54,36 @@ export class RoomCamera extends Container {
     this._room = room;
     this._zoomLevel = 1;
 
-    /** Initialise the view container */
-    this._viewContainer = new Container();
-
-    /** Initialise the room container */
-    this._roomContainer = new Container();
-    this._roomContainer.addChild(this._room);
-    this._viewContainer.addChild(this._roomContainer);
-    this.addChild(this._viewContainer);
+    this.addChild(this._room);
 
     /** Handle interactions */
     this._room.engine.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
     this._room.engine.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
-    // @ts-expect-error
     this._room.engine.application.renderer.events.domElement.addEventListener('pointermove', this._dragMove);
 
     /** Handle tile interactions */
     this._room.engine.application.renderer.events.domElement.addEventListener('pointerdown', this._tilePointerDown);
     this._room.engine.application.renderer.events.domElement.addEventListener('pointerup', this._tilePointerUp);
     this._room.engine.application.renderer.events.domElement.addEventListener('pointermove', this._tilePointerMove);
+
+    window.addEventListener(
+      'wheel',
+      (event) => {
+        if (event.ctrlKey) event.preventDefault();
+
+        const delta = Math.sign(event.deltaY);
+        const zoomLevel = parseFloat((-delta / 8).toFixed(2));
+        if (this.zoomLevel + zoomLevel <= 0.8 || this.zoomLevel + zoomLevel >= 2.8) return;
+
+        this.zoomLevel += zoomLevel;
+      },
+      { passive: false }
+    );
+
+    window.addEventListener('resize', () => {
+      this._room.engine.application.view.height = window.innerHeight;
+      this._room.engine.application.view.width = window.innerWidth;
+    });
 
     this._updateBounds();
     this.centerCamera();
@@ -101,8 +96,8 @@ export class RoomCamera extends Container {
    * @private
    */
   private _updateBounds(): void {
-    this._roomContainer.pivot.x = this._room.visualization.objectContainer.getBounds().x;
-    this._roomContainer.pivot.y = this._room.visualization.objectContainer.getBounds().y;
+    this.pivot.x = this._room.visualization.getBounds().x;
+    this.pivot.y = this._room.visualization.getBounds().y;
   }
 
   /**
@@ -113,7 +108,7 @@ export class RoomCamera extends Container {
    */
   public centerCamera(object?: RoomObject): void {
     if (object === null || object === undefined)
-      gsap.to(this._roomContainer, {
+      gsap.to(this, {
         x: Math.floor(this._room.engine.application.view.width / 2 - this._room.visualization.width / 2),
         y: Math.floor(this._room.engine.application.view.height / 2 - this._room.visualization.height / 2),
         duration: 0.8,
@@ -140,6 +135,7 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _dragStart = (): void => {
+    // console.log(event.movementX);
     this._dragging = true;
   };
 
@@ -157,15 +153,14 @@ export class RoomCamera extends Container {
   /**
    * This method is called when the user is moving the dragged room in the canvas.
    *
-   * @param {FederatedPointerEvent} [event] - The mouse event.
+   * @param {PointerEvent} [event] - The mouse event.
    * @return {void}
    * @private
    */
-  private readonly _dragMove = (event: FederatedPointerEvent): void => {
-    if (this._dragging) {
-      this._roomContainer.x = Math.floor(this._roomContainer.x + event.movementX * (1 / this._zoomLevel));
-      this._roomContainer.y = Math.floor(this._roomContainer.y + event.movementY * (1 / this._zoomLevel));
-    }
+  private readonly _dragMove = (event: PointerEvent): void => {
+    if (!this._dragging) return;
+    this.x = Math.floor(this.x + event.movementX * (1 / this._zoomLevel));
+    this.y = Math.floor(this.y + event.movementY * (1 / this._zoomLevel));
   };
 
   /**
@@ -176,13 +171,13 @@ export class RoomCamera extends Container {
    */
   private _isOutOfBounds(): boolean {
     /** Out of bounds on the right */
-    if (this._roomContainer.x > this._room.engine.application.view.width) return true;
+    if (this.x > this._room.engine.application.view.width) return true;
     /** Out of bounds on the left */
-    if (this._roomContainer.x + this._roomContainer.width < 0) return true;
+    if (this.x + this.width < 0) return true;
     /** Out of bounds on the bottom */
-    if (this._roomContainer.y > this._room.engine.application.view.height) return true;
+    if (this.y > this._room.engine.application.view.height) return true;
     /** Out of bounds on the top */
-    if (this._roomContainer.y + this._roomContainer.height < 0) return true;
+    if (this.y + this.height < 0) return true;
     /** It is not out of bounds */
     return false;
   }
@@ -218,41 +213,47 @@ export class RoomCamera extends Container {
    * @private
    */
   private readonly _tilePointerMove = (event: PointerEvent): void => {
-    const object: Tile | Stair = this._room.parts.getFromGlobal({ x: event.clientX, y: event.clientY });
+    const objectPart = this._room.parts.getFromGlobal({ x: event.clientX, y: event.clientY });
 
-    if (object === undefined) return;
-
-    if (this._selectedTile === object) {
-      object.emit('pointermove', new FederatedPointerEvent(new EventBoundary()));
+    if (objectPart == null) return;
+    if (this._selectedTile === objectPart) {
+      objectPart.emit('pointermove', new FederatedPointerEvent(new EventBoundary()));
     } else {
-      if (this._selectedTile !== undefined) {
+      if (this._selectedTile != null)
         this._selectedTile.emit('pointerout', new FederatedPointerEvent(new EventBoundary()));
-      }
-      if (object !== undefined) {
-        object.emit('pointerover', new FederatedPointerEvent(new EventBoundary()));
-      }
-      this._selectedTile = object;
+      if (objectPart != null) objectPart.emit('pointerover', new FederatedPointerEvent(new EventBoundary()));
+      this._selectedTile = objectPart;
     }
   };
 
   /**
    * Zoom the room container.
    *
-   * @return {void}
+   * @param {number} [zoomLevel] - The zoom ratio as a number.
    * @public
    */
   public set zoomLevel(zoomLevel: number) {
-    const origWidth: number = this.width / this._zoomLevel;
-    const origHeight: number = this.height / this._zoomLevel;
+    const origWidth = this.width / this._zoomLevel;
+    const origHeight = this.height / this._zoomLevel;
+
     this._zoomLevel = zoomLevel;
-    this.scale.x = zoomLevel;
-    this.scale.y = zoomLevel;
-    const diffWidth: number = origWidth - this.width;
-    const diffHeight: number = origHeight - this.height;
-    const offsetX: number = this._room.engine.application.view.width / 2 - (this.x + origWidth / 2);
-    const offsetY: number = this._room.engine.application.view.height / 2 - (this.y + origHeight / 2);
-    this.x += Math.floor(diffWidth / 2 + offsetX);
-    this.y += Math.floor(diffHeight / 2 + offsetY);
+
+    // pivot's container property must be changed
+    // because by default things are centered and scaled from the top corner
+    // this.pivot.x = ... / this.pivot.y = ...
+    gsap.set(this.scale, { x: zoomLevel, y: zoomLevel, ease: Expo.easeOut });
+
+    const diffWidth = origWidth - this.width;
+    const diffHeight = origHeight - this.height;
+    const offsetX = this._room.engine.application.view.width / 2 - (this.x + origWidth / 2);
+    const offsetY = this._room.engine.application.view.height / 2 - (this.y + origHeight / 2);
+
+    gsap.to(this, {
+      x: this.x + Math.floor(diffWidth / 2 + offsetX),
+      y: this.y + Math.floor(diffHeight / 2 + offsetY),
+      duration: 0.8,
+      ease: 'easeOut'
+    });
   }
 
   /**
