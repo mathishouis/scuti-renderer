@@ -1,5 +1,6 @@
-import {Application, BaseTexture, Container, SCALE_MODES, settings} from "pixi.js";
-import {RendererConfiguration} from "./interfaces/RendererConfiguration.ts";
+import { Application, BaseTexture, Container, SCALE_MODES, settings } from "pixi.js";
+import { RendererConfiguration } from "./interfaces/RendererConfiguration.ts";
+import {GameObject} from "./objects/GameObject.ts";
 
 export class Scuti {
     public canvas!: HTMLElement;
@@ -32,5 +33,10 @@ export class Scuti {
 
     private async _initializeResources(): Promise<void> {
         console.log("initializing resources...")
+    }
+
+    public add(object: GameObject): void {
+        object.renderer = this;
+        object.render();
     }
 }
