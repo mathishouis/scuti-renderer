@@ -1,60 +1,15 @@
 {
-  "name": "scuti-renderer",
-  "version": "2.0.2",
-  "main": "./dist/index.js",
-  "types": "./dist/types/index.d.ts",
-  "source": "./src/index.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kozennnn/scuti-renderer.git"
-  },
-  "files": [
-    "/dist"
-  ],
+  "name": "my-vue-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "parcel public/index.html --no-cache",
-    "build": "rm -rf dist && tsc",
-    "storybook": "cd storybook && npm start",
-    "postinstall": "tsc",
-    "lint:typescript": "eslint \"**/*.ts\" --ignore-path \".gitignore\" && tsc --noemit",
-    "lint:prettier": "prettier \".\" --check --ignore-path \".gitignore\""
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@pixi/layers": "^2.0.1",
-    "@pixi/utils": "^7.2.4",
-    "gsap": "^3.11.4",
-    "pixi.js": "^7.1.2"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/node": "^18.11.18",
-    "@walidoux/eslint-config": "1.0.3",
-    "editorconfig-checker": "^5.0.1",
-    "parcel": "^2.8.3",
-    "process": "^0.11.10",
-    "punycode": "^1.4.1",
-    "querystring-es3": "^0.2.1",
-    "timers-browserify": "^2.0.12",
-    "ts-node": "^9.0.0",
-    "ts-node-dev": "^1.1.1",
-    "typescript": "^4.0.3"
-  },
-  "prettier": {
-    "trailingComma": "none",
-    "jsxSingleQuote": true,
-    "semi": true,
-    "singleQuote": true,
-    "bracketSameLine": true,
-    "printWidth": 120
-  },
-  "eslintConfig": {
-    "extends": [
-      "@walidoux/eslint-config"
-    ],
-    "ignorePatterns": [
-      "storybook/**/*.ts"
-    ]
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
   }
 }
