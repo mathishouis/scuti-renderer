@@ -7,4 +7,6 @@ export interface RoomConfiguration {
     wallThickness?: number;
     wallHeight?: number;
     wallHidden?: boolean;
+    dragging?: boolean;
+    centerCamera?: boolean;
 }

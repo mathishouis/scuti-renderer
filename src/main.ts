@@ -13,6 +13,8 @@ const renderer: Scuti = new Scuti({
 
 const room: Room = new Room({
     heightMap: "0x00x0",
+    dragging: true,
+    centerCamera: true,
 });
 
 renderer.add(room);

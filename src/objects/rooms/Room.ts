@@ -22,4 +22,12 @@ export class Room extends GameObject {
         this.renderer.application.stage.addChild(this.camera);
     }
 
+    public get dragging(): boolean {
+        return this._configuration.dragging ?? false;
+    }
+
+    public get centerCamera(): boolean {
+        return this._configuration.centerCamera ?? false;
+    }
+
 }
