@@ -1,12 +1,12 @@
-import {Room} from "./Room.ts";
-import {Container, DisplayObject} from "pixi.js";
+import { Room } from "./Room.ts";
+import { Container } from "pixi.js";
 
-export class RoomCamera {
-    public room!: Room;
-    public view: Container;
+export class RoomCamera extends Container {
+    constructor(
+        public room: Room
+    ) {
+        super();
 
-    constructor(room: Room) {
-        this.room = room;
-        this.view = new Container<DisplayObject>();
+        this.addChild(room.visualization);
     }
 }

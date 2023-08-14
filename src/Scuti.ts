@@ -1,6 +1,6 @@
 import { Application, BaseTexture, Container, SCALE_MODES, settings } from "pixi.js";
 import { RendererConfiguration } from "./interfaces/RendererConfiguration.ts";
-import {GameObject} from "./objects/GameObject.ts";
+import { GameObject } from "./objects/GameObject.ts";
 
 export class Scuti {
     public canvas!: HTMLElement;
@@ -27,6 +27,7 @@ export class Scuti {
             resolution: 1,
             antialias: false
         });
+        (globalThis as any).__PIXI_APP__ = this.application; // Support for PIXI.js dev-tool.
         this.canvas = this._configuration.canvas;
         this.canvas.append(this.application.view as HTMLCanvasElement);
     }

@@ -19,7 +19,7 @@ export class Room extends GameObject {
     }
 
     public render(): void {
-        console.log("Rendering room :D")
+        this.renderer.application.stage.addChild(this.camera);
     }
 
 }
