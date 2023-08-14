@@ -26,6 +26,7 @@ export class RoomCamera extends Container {
 
     private _dragEnd = (): void => {
         this.dragging = false;
+        if (this.isOutOfBounds()) this.centerCamera();
     }
 
     private _dragMove = (
@@ -36,5 +37,18 @@ export class RoomCamera extends Container {
             this.x = Math.floor(this.x + x);
             this.y = Math.floor(this.y + y);
         }
+    }
+
+    public isOutOfBounds(): boolean {
+        if (this.x > this.room.renderer.application.view.width) return true;
+        if (this.x + this.width < 0) return true;
+        if (this.y > this.room.renderer.application.view.height) return true;
+        if (this.y + this.height < 0) return true;
+        return false;
+    }
+
+    public centerCamera(): void {
+        this.x = Math.floor(this.room.renderer.application.view.width / 2 - this.room.visualization.width / 2);
+        this.y = Math.floor(this.room.renderer.application.view.height / 2 - this.room.visualization.height / 2);
     }
 }

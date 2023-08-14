@@ -9,7 +9,7 @@ export class RoomVisualization extends Container {
 
         const graphic = new Graphics()
             .beginFill(0xFF0000)
-            .drawRect(100, 100, 200, 150)
+            .drawRect(0, 0, 200, 150)
             .endFill();
 
         this.addChild(graphic);
