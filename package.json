@@ -13,6 +13,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
+    "gsap": "^3.12.2",
     "pixi.js": "^7.2.4"
   }
 }
