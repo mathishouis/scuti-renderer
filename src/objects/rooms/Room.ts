@@ -13,12 +13,12 @@ export class Room extends GameObject {
         private _configuration: RoomConfiguration
     ) {
         super();
-
-        this.visualization = new RoomVisualization(this);
-        this.camera = new RoomCamera(this);
     }
 
     public render(): void {
+        this.visualization = new RoomVisualization(this);
+        this.camera = new RoomCamera(this);
+
         this.renderer.application.stage.addChild(this.camera);
     }
 
