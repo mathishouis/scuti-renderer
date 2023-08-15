@@ -64,19 +64,26 @@ export class RoomCamera extends Container {
         });
     }
 
-    public set zoom(zoom: number) {
+    public zoom(zoom: number, duration: number = 0.8) {
         this._zoom = zoom;
 
-        const originalWidth: number = this.width;
-        const originalHeight: number = this.height;
+        let originalWidth: number = this.width;
+        let originalHeight: number = this.height;
 
-        this.scale.x = zoom;
-        this.scale.y = zoom;
+        gsap.to(this.scale, {
+            x: zoom,
+            y: zoom,
+            duration: duration,
+            onUpdate: () => {
+                const widthDifference: number = this.width - originalWidth;
+                const heightDifference: number = this.height - originalHeight;
 
-        const widthDifference: number = this.width - originalWidth;
-        const heightDifference: number = this.height - originalHeight;
+                this.x = this.x - this.width / ((this.width / widthDifference) * 2);
+                this.y = this.y - this.height / ((this.height / heightDifference) * 2);
 
-        this.x = this.x - this.width / ((this.width / widthDifference) * 2)
-        this.y = this.y - this.height / ((this.height / heightDifference) * 2)
+                originalWidth = this.width;
+                originalHeight = this.height;
+            }
+        });
     }
 }
