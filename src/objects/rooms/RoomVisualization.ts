@@ -1,12 +1,13 @@
-import { Container, Graphics } from "pixi.js";
+import {Container, Graphics} from "pixi.js";
 import { Room } from "./Room.ts";
 import { TilePart } from "./parts/TilePart.ts";
-import {RoomLayer} from "./layers/RoomLayer.ts";
-import {PartLayer} from "./layers/PartLayer.ts";
+import { PartLayer } from "./layers/PartLayer.ts";
+import {RoomPart} from "./parts/RoomPart.ts";
+import {RoomLayers} from "../../interfaces/RoomLayers.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
-    public layers: Map<string, RoomLayer> = new Map();
+    public layers: RoomLayers = {} as RoomLayers;
 
     constructor(
         public room: Room
@@ -14,7 +15,7 @@ export class RoomVisualization {
         this._initializeLayers();
 
         const graphic = new Graphics()
-            .beginFill(0xFF0000)
+            .beginFill(0xFFFFFF)
             .drawRect(0, 0, 200, 150)
             .beginFill(0x00FF00)
             .drawRect(95, 70, 10, 10)
@@ -23,13 +24,27 @@ export class RoomVisualization {
         this.container.addChild(graphic);
         const tilePart = new TilePart({
             material: 0,
-            thickness: 8,
-            position: { x: 0, y: 0, z: 0 }
+            position: { x: 0, y: 0, z: 0 },
+            size: { x: 1, y: 1, z: 1 }
         });
-        tilePart.render();
+        this.add(tilePart);
+        const tilePart2 = new TilePart({
+            material: 0,
+            position: { x: 1, y: 0, z: 0.5 },
+            size: { x: 1, y: 1, z: 1 }
+        });
+        this.add(tilePart2);
     }
 
     private _initializeLayers(): void {
-        this.layers.set("parts", new PartLayer(this.room));
+        this.layers.parts = new PartLayer(this.room);
+    }
+
+    public add(item: RoomPart): void {
+        item.room = this.room;
+        item.render();
+
+        this.container.addChild(item.container);
+        this.layers.parts.add(item);
     }
 }

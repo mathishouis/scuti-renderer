@@ -36,8 +36,8 @@ export class Scuti {
         console.log("initializing resources...")
     }
 
-    public add(object: GameObject): void {
-        object.renderer = this;
-        object.render();
+    public add(item: GameObject): void {
+        item.renderer = this;
+        item.render();
     }
 }

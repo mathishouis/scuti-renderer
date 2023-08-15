@@ -6,7 +6,7 @@ export interface Position3D {
 
 export interface Position2D {
     x: number;
-    z: number;
+    y: number;
 }
 
 export enum Direction {
