@@ -28,6 +28,9 @@ setTimeout(() => room.camera.zoom(2), 5000);
 setTimeout(() => room.camera.zoom(4), 6000);
 setTimeout(() => room.camera.zoom(0.5), 7000);
 
+setTimeout(() => room.camera.zoom(5), 8000);
+
+
 /*setTimeout(() => room.camera.zoom = 3, 3000);
 setTimeout(() => room.camera.zoom = 0.5, 4000);
 setTimeout(() => room.camera.zoom = 2, 5000);

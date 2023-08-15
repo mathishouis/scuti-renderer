@@ -10,7 +10,7 @@ export class Room extends GameObject {
     public camera!: RoomCamera;
 
     constructor(
-        private _configuration: RoomConfiguration
+        public configuration: RoomConfiguration
     ) {
         super();
     }
@@ -21,17 +21,4 @@ export class Room extends GameObject {
 
         this.renderer.application.stage.addChild(this.camera);
     }
-
-    public get dragging(): boolean {
-        return this._configuration.dragging ?? false;
-    }
-
-    public get centerCamera(): boolean {
-        return this._configuration.centerCamera ?? false;
-    }
-
-    public get zoom(): number {
-        return this._configuration.zoom ?? 1;
-    }
-
 }

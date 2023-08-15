@@ -20,7 +20,7 @@ export class RoomCamera extends Container {
     }
 
     private _initializeListeners(): void {
-        if (this.room.dragging) {
+        if (this.room.configuration.dragging) {
             this.room.renderer.application.renderer.events.domElement.addEventListener("pointerdown", this._dragStart)
             this.room.renderer.application.renderer.events.domElement.addEventListener("pointerup", this._dragEnd)
             this.room.renderer.application.renderer.events.domElement.addEventListener("pointermove", (event: PointerEvent) => this._dragMove(event.movementX, event.movementY))
@@ -33,7 +33,7 @@ export class RoomCamera extends Container {
 
     private _dragEnd = (): void => {
         this.dragging = false;
-        if (this.isOutOfBounds() && this.room.centerCamera) this.centerCamera();
+        if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
     }
 
     private _dragMove = (
