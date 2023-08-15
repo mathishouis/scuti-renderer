@@ -30,4 +30,8 @@ export class Room extends GameObject {
         return this._configuration.centerCamera ?? false;
     }
 
+    public get zoom(): number {
+        return this._configuration.zoom ?? 1;
+    }
+
 }

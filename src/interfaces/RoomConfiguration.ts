@@ -9,4 +9,5 @@ export interface RoomConfiguration {
     wallHidden?: boolean;
     dragging?: boolean;
     centerCamera?: boolean;
+    zoom?: number;
 }

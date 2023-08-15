@@ -5,12 +5,16 @@ import { gsap } from "gsap";
 export class RoomCamera extends Container {
     public dragging: boolean = false;
 
+    private _zoom!: number = 1;
+
     constructor(
         public room: Room
     ) {
         super();
 
         this._initializeListeners();
+
+        //this.zoom = room.zoom;
 
         this.addChild(room.visualization);
     }
@@ -58,5 +62,21 @@ export class RoomCamera extends Container {
             duration: 0.8,
             ease: "easeOut"
         });
+    }
+
+    public set zoom(zoom: number) {
+        this._zoom = zoom;
+
+        const originalWidth: number = this.width;
+        const originalHeight: number = this.height;
+
+        this.scale.x = zoom;
+        this.scale.y = zoom;
+
+        const widthDifference: number = this.width - originalWidth;
+        const heightDifference: number = this.height - originalHeight;
+
+        this.x = this.x - this.width / ((this.width / widthDifference) * 2)
+        this.y = this.y - this.height / ((this.height / heightDifference) * 2)
     }
 }
