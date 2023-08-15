@@ -57,8 +57,8 @@ export class RoomCamera extends Container {
 
     public centerCamera(): void {
         gsap.to(this, {
-            x: Math.floor(this.room.renderer.application.view.width / 2 - this.room.visualization.width / 2),
-            y: Math.floor(this.room.renderer.application.view.height / 2 - this.room.visualization.height / 2),
+            x: Math.floor(this.room.renderer.application.view.width / 2 - this.width / 2),
+            y: Math.floor(this.room.renderer.application.view.height / 2 - this.height / 2),
             duration: 0.8,
             ease: "easeOut"
         });
