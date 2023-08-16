@@ -17,7 +17,7 @@ await renderer.load();
 const room: Room = new Room({
     heightMap: "0x00x0",
     dragging: true,
-    centerCamera: true,
+    centerCamera: false,
 });
 
 renderer.add(room);

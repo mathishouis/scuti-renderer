@@ -29,7 +29,7 @@ export class RoomVisualization {
         });
         this.add(tilePart);
         const tilePart2 = new TilePart({
-            material: new FloorMaterial(102),
+            material: new FloorMaterial(111),
             position: { x: 1, y: 0, z: 0.5 },
             size: { x: 10, y: 13, z: 0.25 }
         });
