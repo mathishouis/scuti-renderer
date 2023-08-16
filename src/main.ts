@@ -11,6 +11,8 @@ const renderer: Scuti = new Scuti({
     resources: './resources'
 });
 
+await renderer.load();
+
 const room: Room = new Room({
     heightMap: "0x00x0",
     dragging: true,
