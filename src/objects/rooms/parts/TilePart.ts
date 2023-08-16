@@ -58,17 +58,6 @@ export class TilePart extends RoomPart {
         );
 
         this.container.interactive = true;
-        this.container.onmouseenter = () => console.log("enter");
-        this.container.onmouseleave = () => console.log("leave");
-        this.container.onmousemove = (event) => {
-            const localPosition: Point = this.container.toLocal(event.global);
-            const localX: number = Math.floor(localPosition.x / 64 + localPosition.y / 32),
-                localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64) + this.configuration.size.y;
-            const globalX: number = localX + this.configuration.position.x,
-                globalY: number = localY + this.configuration.position.y;
-            console.log(globalX, globalY);
-        };
-
         this.container.addChild(cube);
         this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.size.y);
         this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.size.y) - 32 * this.configuration.position.z;
