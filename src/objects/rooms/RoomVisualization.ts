@@ -47,16 +47,6 @@ export class RoomVisualization {
             rightCorner: true,
         });
         this.add(stair4);
-        const stair = new StairPart({
-            direction: Direction.NORTH,
-            material: new FloorMaterial(103),
-            thickness: 8,
-            position: { x: 1, y: 1, z: 0 },
-            length: 8,
-            leftCorner: true,
-            rightCorner: true
-        });
-        this.add(stair);
         const stair2 = new StairPart({
             direction: Direction.SOUTH,
             material: new FloorMaterial(103),
@@ -77,6 +67,16 @@ export class RoomVisualization {
             rightCorner: true
         });
         this.add(stair3);
+        const stair = new StairPart({
+            direction: Direction.NORTH,
+            material: new FloorMaterial(103),
+            thickness: 8,
+            position: { x: 1, y: 1, z: 0 },
+            length: 8,
+            leftCorner: true,
+            rightCorner: true
+        });
+        this.add(stair);
         const tilePart = new TilePart({
             material: new FloorMaterial(102),
             position: { x: 2, y: 0, z: 1 },

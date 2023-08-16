@@ -5,6 +5,7 @@ import { FloorMaterial } from "../materials/FloorMaterial.ts";
 import { Cube } from "../../geometry/Cube.ts";
 import { StairConfiguration } from "../../../interfaces/StairConfiguration.ts";
 import { Direction, Position2D, Position3D } from "../../../interfaces/Position.ts";
+import { CubeFace } from "../../../interfaces/CubeFace.ts";
 
 export class StairPart extends RoomPart {
     public room!: Room;
@@ -75,17 +76,38 @@ export class StairPart extends RoomPart {
                 size.y += (8 / 32) * (i - 3);
             }
 
+            const textureOffset: Position2D = {
+                x: 0,
+                y: 0
+            }
+
+            if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
+                textureOffset.x = this.configuration.leftCorner ? (-i) * 8 : 0;
+                textureOffset.y = this.configuration.leftCorner ? (-i) * 4 : 0;
+            } else {
+                textureOffset.x = this.configuration.leftCorner ? (i + 2) * 8 : 0;
+                textureOffset.y = this.configuration.leftCorner ? (-i) * 4 : 0;
+            }
+
             const cube: Cube = new Cube({
                 material: material,
-                size: size
+                size: size,
+                offsets: {
+                    [CubeFace.TOP]: textureOffset,
+                    [CubeFace.LEFT]: textureOffset,
+                    [CubeFace.RIGHT]: textureOffset
+                }
             });
 
+            cube.x = offsets.x * i;
+            cube.y = offsets.y * i;
+
             if (this.configuration.leftCorner && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
-                cube.x = offsets.x * i + 8 * i;
-                cube.y = offsets.y * i + 4 * i;
+                cube.x += 8 * i;
+                cube.y += 4 * i;
             } else if (this.configuration.leftCorner && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
-                cube.x = offsets.x * i + 8 * (3 - i);
-                cube.y = offsets.y * i - 4 * (3 - i);
+                cube.x += 8 * (3 - i);
+                cube.y -= 4 * (3 - i);
             }
 
             if (this.configuration.direction === Direction.EAST) cube.zIndex = -i;
