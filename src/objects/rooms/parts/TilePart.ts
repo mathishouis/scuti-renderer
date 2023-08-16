@@ -1,7 +1,8 @@
 import { RoomPart } from "./RoomPart.ts";
 import { TileConfiguration } from "../../../interfaces/TileConfiguration.ts";
 import { Room } from "../Room.ts";
-import { Color, Container, Graphics, Matrix, Texture } from "pixi.js";
+import { Color, Container, Graphics, Matrix } from "pixi.js";
+import { FloorMaterial } from "../materials/FloorMaterial.ts";
 
 export class TilePart extends RoomPart {
     public room!: Room;
@@ -14,10 +15,11 @@ export class TilePart extends RoomPart {
     }
 
     public render(): void {
+        const material: FloorMaterial = this.configuration.material ?? new FloorMaterial(101);
         const topFace: Graphics = new Graphics()
             .beginTextureFill({
-                texture: Texture.WHITE,
-                color: new Color(0x0000FF).premultiply(1).toNumber(),
+                texture: material.texture,
+                color: new Color(material.color).premultiply(1).toNumber(),
                 matrix: new Matrix(
                     1,
                     0.5,
@@ -32,11 +34,10 @@ export class TilePart extends RoomPart {
             .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)
             .lineTo(0, 0)
             .endFill();
-
         const leftFace: Graphics = new Graphics()
             .beginTextureFill({
-                texture: Texture.WHITE,
-                color: new Color(0x00FF00).premultiply(0.8).toNumber(),
+                texture: material.texture,
+                color: new Color(material.color).premultiply(0.8).toNumber(),
                 matrix: new Matrix(1, 0.5, 0, 1, 0, 0)
             })
             .moveTo(0, 0)
@@ -44,11 +45,10 @@ export class TilePart extends RoomPart {
             .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x + this.configuration.size.z * 32)
             .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)
             .endFill();
-
         const rightFace: Graphics = new Graphics()
             .beginTextureFill({
-                texture: Texture.WHITE,
-                color: new Color(0xFF0000).premultiply(0.71).toNumber(),
+                texture: material.texture,
+                color: new Color(material.color).premultiply(0.71).toNumber(),
                 matrix: new Matrix(1, -0.5, 0, 1, 0, 0)
             })
             .moveTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)

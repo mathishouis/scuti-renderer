@@ -1,9 +1,10 @@
-import {Container, Graphics} from "pixi.js";
+import { Container, Graphics } from "pixi.js";
 import { Room } from "./Room.ts";
 import { TilePart } from "./parts/TilePart.ts";
 import { PartLayer } from "./layers/PartLayer.ts";
-import {RoomPart} from "./parts/RoomPart.ts";
-import {RoomLayers} from "../../interfaces/RoomLayers.ts";
+import { RoomPart } from "./parts/RoomPart.ts";
+import { RoomLayers } from "../../interfaces/RoomLayers.ts";
+import { FloorMaterial } from "./materials/FloorMaterial.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -23,15 +24,14 @@ export class RoomVisualization {
 
         this.container.addChild(graphic);
         const tilePart = new TilePart({
-            material: 0,
             position: { x: 0, y: 0, z: 0 },
-            size: { x: 1, y: 1, z: 1 }
+            size: { x: 1, y: 2, z: 1 }
         });
         this.add(tilePart);
         const tilePart2 = new TilePart({
-            material: 0,
+            material: new FloorMaterial(102),
             position: { x: 1, y: 0, z: 0.5 },
-            size: { x: 1, y: 1, z: 1 }
+            size: { x: 10, y: 13, z: 0.25 }
         });
         this.add(tilePart2);
     }

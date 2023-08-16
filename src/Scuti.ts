@@ -1,7 +1,7 @@
 import { Application, BaseTexture, Container, SCALE_MODES, settings } from "pixi.js";
 import { RendererConfiguration } from "./interfaces/RendererConfiguration.ts";
 import { GameObject } from "./objects/GameObject.ts";
-import {AssetLoader} from "./objects/assets/AssetLoader.ts";
+import { AssetLoader } from "./objects/assets/AssetLoader.ts";
 
 export class Scuti {
     public canvas!: HTMLElement;
@@ -35,7 +35,11 @@ export class Scuti {
     public async load(): Promise<void> {
         await Promise.all([
             AssetLoader.load("rooms/materials/floor", "/rooms/materials/floor/materials.json")
-        ]);
+        ])
+        for (const material of AssetLoader.get("rooms/materials/floor")) {
+            await AssetLoader.load(`rooms/materials/floor/${material.texture}`, `/rooms/materials/floor/textures/${material.texture}.png`);
+        }
+
     }
 
     public add(item: GameObject): void {

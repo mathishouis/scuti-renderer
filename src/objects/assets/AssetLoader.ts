@@ -16,4 +16,8 @@ export class AssetLoader {
             await (AssetLoader.loadedKeys)[key];
         }
     }
+
+    public static get(key: string): any {
+        return Assets.get(key);
+    }
 }
