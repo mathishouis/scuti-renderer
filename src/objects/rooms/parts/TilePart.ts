@@ -19,7 +19,11 @@ export class TilePart extends RoomPart {
         const material: FloorMaterial = this.configuration.material ?? new FloorMaterial(101);
         const cube: Cube = new Cube({
             material: material,
-            size: this.configuration.size
+            size: {
+                x: this.configuration.size.x,
+                y: this.configuration.size.y,
+                z: this.configuration.thickness / 32
+            }
         });
 
         this.container.addChild(cube);

@@ -25,24 +25,79 @@ export class RoomVisualization {
             .endFill();
 
         this.container.addChild(graphic);*/
-        const stair = new StairPart({
-            direction: Direction.SOUTH,
-            material: new FloorMaterial(111),
-            position: { x: 0, y: 0, z: 0 },
-            length: 1
-        });
-        this.add(stair);
         /*const tilePart = new TilePart({
             position: { x: 0, y: 0, z: 0 },
             size: { x: 1, y: 2, z: 1 }
         });
         this.add(tilePart);*/
+        const tilePart4 = new TilePart({
+            material: new FloorMaterial(101),
+            //position: { x: 1, y: -2, z: 1 },
+            position: { x: 0, y: 0, z: 0 },
+            size: { x: 1, y: 1, z: 0 }
+        });
+        this.add(tilePart4);
+        const stair4 = new StairPart({
+            direction: Direction.EAST,
+            material: new FloorMaterial(103),
+            thickness: 8,
+            position: { x: 1, y: 1, z: 0 },
+            length: 7,
+            leftCorner: true,
+            rightCorner: true,
+        });
+        this.add(stair4);
+        const stair = new StairPart({
+            direction: Direction.NORTH,
+            material: new FloorMaterial(103),
+            thickness: 8,
+            position: { x: 1, y: 1, z: 0 },
+            length: 8,
+            leftCorner: true,
+            rightCorner: true
+        });
+        this.add(stair);
+        const stair2 = new StairPart({
+            direction: Direction.SOUTH,
+            material: new FloorMaterial(103),
+            thickness: 8,
+            position: { x: 1, y: -5, z: 0 },
+            length: 8,
+            leftCorner: true,
+            rightCorner: true
+        });
+        this.add(stair2);
+        const stair3 = new StairPart({
+            direction: Direction.WEST,
+            material: new FloorMaterial(103),
+            thickness: 8,
+            position: { x: 8, y: 1, z: 0 },
+            length: 7,
+            leftCorner: true,
+            rightCorner: true
+        });
+        this.add(stair3);
+        const tilePart = new TilePart({
+            material: new FloorMaterial(102),
+            position: { x: 2, y: 0, z: 1 },
+            size: { x: 6, y: 5 },
+            thickness: 8
+        });
+        this.add(tilePart);
         const tilePart2 = new TilePart({
-            material: new FloorMaterial(111),
-            position: { x: 1, y: 0, z: 0 },
-            size: { x: 10, y: 13, z: 0.25 }
+            material: new FloorMaterial(104),
+            position: { x: 2, y: 2, z: 0 },
+            size: { x: 6, y: 1 },
+            thickness: 8
         });
         this.add(tilePart2);
+        const tilePart3 = new TilePart({
+            material: new FloorMaterial(105),
+            position: { x: 0, y: 5, z: 0 },
+            size: { x: 8, y: 4 },
+            thickness: 8,
+        });
+        this.add(tilePart3);
     }
 
     private _initializeLayers(): void {

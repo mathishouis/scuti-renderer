@@ -4,7 +4,7 @@ import { Container } from "pixi.js";
 import { FloorMaterial } from "../materials/FloorMaterial.ts";
 import { Cube } from "../../geometry/Cube.ts";
 import { StairConfiguration } from "../../../interfaces/StairConfiguration.ts";
-import { Direction, Position2D } from "../../../interfaces/Position.ts";
+import { Direction, Position2D, Position3D } from "../../../interfaces/Position.ts";
 
 export class StairPart extends RoomPart {
     public room!: Room;
@@ -43,9 +43,11 @@ export class StairPart extends RoomPart {
                 });
                 break;
             case Direction.EAST:
+                this.container.x += 24;
+                this.container.y -= 12;
                 this._renderStair({
-                    x: 8,
-                    y: -4
+                    x: -8,
+                    y: 4
                 });
                 break;
         }
@@ -55,17 +57,38 @@ export class StairPart extends RoomPart {
         const material: FloorMaterial = this.configuration.material ?? new FloorMaterial(101);
 
         for (let i: number = 0; i < 4; i++) {
+            const size: Position3D = {
+                x: this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH ? this.configuration.length : 8 / 32,
+                y: this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST ? this.configuration.length : 8 / 32,
+                z: this.configuration.thickness / 32
+            }
+
+            if (this.configuration.leftCorner && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+                size.x -= (8 / 32) * i;
+            } else if (this.configuration.leftCorner && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+                size.y -= (8 / 32) * (3 - i);
+            }
+
+            if (this.configuration.rightCorner && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+                size.x -= (8 / 32) * i;
+            } else if (this.configuration.rightCorner && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+                size.y += (8 / 32) * (i - 3);
+            }
+
             const cube: Cube = new Cube({
                 material: material,
-                size: {
-                    x: this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH ? this.configuration.length : 8 / 32,
-                    y: this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST ? this.configuration.length : 8 / 32,
-                    z: 8 / 32
-                }
+                size: size
             });
 
-            cube.x = offsets.x * i;
-            cube.y = offsets.y * i;
+            if (this.configuration.leftCorner && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+                cube.x = offsets.x * i + 8 * i;
+                cube.y = offsets.y * i + 4 * i;
+            } else if (this.configuration.leftCorner && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+                cube.x = offsets.x * i + 8 * (3 - i);
+                cube.y = offsets.y * i - 4 * (3 - i);
+            }
+
+            if (this.configuration.direction === Direction.EAST) cube.zIndex = -i;
 
             this.container.addChild(cube);
         }
