@@ -5,8 +5,7 @@ import {PartLayer} from "./layers/PartLayer.ts";
 import {RoomPart} from "./parts/RoomPart.ts";
 import {RoomLayers} from "../../interfaces/RoomLayers.ts";
 import {FloorMaterial} from "./materials/FloorMaterial.ts";
-import {StairPart} from "./parts/StairPart.ts";
-import {Direction} from "../../interfaces/Position.ts";
+import {TileEvent} from "../../interfaces/Events.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -99,6 +98,9 @@ export class RoomVisualization {
             thickness: 8,
         });
         this.add(tilePart3);
+        tilePart3.eventManager.onPointerMove = (event: TileEvent) => {
+            console.log(event.position);
+        }
     }
 
     private _initializeLayers(): void {
