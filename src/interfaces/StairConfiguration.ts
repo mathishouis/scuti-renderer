@@ -1,5 +1,6 @@
 import { Direction, Position3D } from "./Position.ts";
 import { FloorMaterial } from "../objects/rooms/materials/FloorMaterial.ts";
+import { StairCorner } from "./StairCorner.ts";
 
 export interface StairConfiguration {
     material?: FloorMaterial;
@@ -7,6 +8,6 @@ export interface StairConfiguration {
     thickness: number;
     length: number;
     direction: Direction;
-    leftCorner?: boolean;
-    rightCorner?: boolean;
+    leftCorner?: StairCorner;
+    rightCorner?: StairCorner;
 }

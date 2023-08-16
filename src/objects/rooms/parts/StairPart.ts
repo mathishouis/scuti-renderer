@@ -6,6 +6,7 @@ import { Cube } from "../../geometry/Cube.ts";
 import { StairConfiguration } from "../../../interfaces/StairConfiguration.ts";
 import { Direction, Position2D, Position3D } from "../../../interfaces/Position.ts";
 import { CubeFace } from "../../../interfaces/CubeFace.ts";
+import { StairCorner } from "../../../interfaces/StairCorner.ts";
 
 export class StairPart extends RoomPart {
     public room!: Room;
@@ -23,13 +24,16 @@ export class StairPart extends RoomPart {
 
         switch (this.configuration.direction) {
             case Direction.NORTH:
+                this.container.x -= 32;
+                this.container.y += 16;
                 this._renderStair({
                     x: 8,
                     y: -12
                 });
                 break;
             case Direction.WEST:
-                this.container.y -= 24;
+                this.container.y -= 8;
+                this.container.x -= 32;
                 this._renderStair({
                     x: 8,
                     y: 12
@@ -44,8 +48,8 @@ export class StairPart extends RoomPart {
                 });
                 break;
             case Direction.EAST:
-                this.container.x += 24;
-                this.container.y -= 12;
+                this.container.y += 4;
+                this.container.x -= 8;
                 this._renderStair({
                     x: -8,
                     y: 4
@@ -64,16 +68,28 @@ export class StairPart extends RoomPart {
                 z: this.configuration.thickness / 32
             }
 
-            if (this.configuration.leftCorner && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+            if (this.configuration.leftCorner == StairCorner.OUTER && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 size.x -= (8 / 32) * i;
-            } else if (this.configuration.leftCorner && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+            } else if (this.configuration.leftCorner == StairCorner.OUTER && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 size.y -= (8 / 32) * (3 - i);
             }
 
-            if (this.configuration.rightCorner && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+            if (this.configuration.rightCorner == StairCorner.OUTER && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 size.x -= (8 / 32) * i;
-            } else if (this.configuration.rightCorner && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+            } else if (this.configuration.rightCorner == StairCorner.OUTER && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 size.y += (8 / 32) * (i - 3);
+            }
+
+            if (this.configuration.leftCorner == StairCorner.INNER && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+                size.x += (8 / 32) * (i - 3);
+            } else if (this.configuration.leftCorner == StairCorner.INNER && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+                size.y -= (8 / 32) * i;
+            }
+
+            if (this.configuration.rightCorner == StairCorner.INNER && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+                size.x += (8 / 32) * (i - 3);
+            } else if (this.configuration.rightCorner == StairCorner.INNER && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+                size.y -= (8 / 32) * i;
             }
 
             const textureOffset: Position2D = {
@@ -82,11 +98,35 @@ export class StairPart extends RoomPart {
             }
 
             if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
-                textureOffset.x = this.configuration.leftCorner ? (-i) * 8 : 0;
-                textureOffset.y = this.configuration.leftCorner ? (-i) * 4 : 0;
+                switch (this.configuration.leftCorner) {
+                    case StairCorner.NONE:
+                        textureOffset.x = 0;
+                        textureOffset.y = 0;
+                        break;
+                    case StairCorner.OUTER:
+                        textureOffset.x = -i * 8;
+                        textureOffset.y = -i * 4;
+                        break;
+                    case StairCorner.INNER:
+                        textureOffset.x = (i + 1) * 8;
+                        textureOffset.y = (i + 1) * 4;
+                        break;
+                }
             } else {
-                textureOffset.x = this.configuration.leftCorner ? (i + 2) * 8 : 0;
-                textureOffset.y = this.configuration.leftCorner ? (-i) * 4 : 0;
+                switch (this.configuration.leftCorner) {
+                    case StairCorner.NONE:
+                        textureOffset.x = 8;
+                        textureOffset.y = 4;
+                        break;
+                    case StairCorner.OUTER:
+                        textureOffset.x = (i + 2) * 8;
+                        textureOffset.y = -i * 4;
+                        break;
+                    case StairCorner.INNER:
+                        textureOffset.x = -i * 8;
+                        textureOffset.y = (i + 2) * 4;
+                        break;
+                }
             }
 
             const cube: Cube = new Cube({
@@ -102,12 +142,20 @@ export class StairPart extends RoomPart {
             cube.x = offsets.x * i;
             cube.y = offsets.y * i;
 
-            if (this.configuration.leftCorner && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+            if (this.configuration.leftCorner == StairCorner.OUTER && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 cube.x += 8 * i;
                 cube.y += 4 * i;
-            } else if (this.configuration.leftCorner && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+            } else if (this.configuration.leftCorner == StairCorner.OUTER && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 cube.x += 8 * (3 - i);
                 cube.y -= 4 * (3 - i);
+            }
+
+            if (this.configuration.leftCorner == StairCorner.INNER && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+                cube.x += 8 * (3 - i);
+                cube.y += 4 * (3 - i);
+            } else if (this.configuration.leftCorner == StairCorner.INNER && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+                cube.x += 8 * i;
+                cube.y -= 4 * i;
             }
 
             if (this.configuration.direction === Direction.EAST) cube.zIndex = -i;

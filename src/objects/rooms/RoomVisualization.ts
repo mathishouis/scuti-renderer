@@ -8,6 +8,7 @@ import {FloorMaterial} from "./materials/FloorMaterial.ts";
 import {TileEvent} from "../../interfaces/Events.ts";
 import {StairPart} from "./parts/StairPart.ts";
 import {Direction} from "../../interfaces/Position.ts";
+import {StairCorner} from "../../interfaces/StairCorner.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -65,20 +66,27 @@ export class RoomVisualization {
             thickness: 8,
             position: { x: 0, y: 0, z: 0 },
             length: 7,
-            leftCorner: true,
-            rightCorner: true
+            leftCorner: StairCorner.INNER,
+            rightCorner: StairCorner.INNER
         });
         this.add(stair3);
-        const stair = new StairPart({
+        const tilePart5 = new TilePart({
+            material: new FloorMaterial(111),
+            position: { x: 0, y: 0, z: 1 },
+            size: { x: 1, y: 1 },
+            thickness: 8
+        });
+        this.add(tilePart5);
+        /*const stair = new StairPart({
             direction: Direction.NORTH,
             material: new FloorMaterial(111),
             thickness: 8,
-            position: { x: 0, y: 0, z: 0 },
+            position: { x: 0, y: -1, z: 0 },
             length: 8,
-            leftCorner: true,
-            rightCorner: true
+            leftCorner: StairCorner.INNER,
+            rightCorner: StairCorner.NONE
         });
-        this.add(stair);
+        this.add(stair);*/
         const tilePart = new TilePart({
             material: new FloorMaterial(111),
             position: { x: 2, y: 0, z: 0 },
