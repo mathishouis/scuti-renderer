@@ -61,15 +61,18 @@ export class RoomVisualization {
         });
         this.add(stair2);*/
         const stair3 = new StairPart({
-            direction: Direction.EAST,
+            direction: Direction.WEST,
             material: new FloorMaterial(111),
             thickness: 8,
-            position: { x: 0, y: 0, z: 0 },
+            position: { x: 0, y: 10, z: 0 },
             length: 7,
-            leftCorner: StairCorner.INNER,
+            leftCorner: StairCorner.NONE,
             rightCorner: StairCorner.INNER
         });
         this.add(stair3);
+        stair3.eventManager.onPointerMove = (event: TileEvent) => {
+            console.log(event.position);
+        }
         const tilePart5 = new TilePart({
             material: new FloorMaterial(111),
             position: { x: 0, y: 0, z: 1 },

@@ -1,21 +1,43 @@
-import {RoomPart} from "./RoomPart.ts";
-import {Room} from "../Room.ts";
-import {Container} from "pixi.js";
-import {FloorMaterial} from "../materials/FloorMaterial.ts";
-import {Cube} from "../../geometry/Cube.ts";
-import {StairConfiguration} from "../../../interfaces/StairConfiguration.ts";
-import {Direction, Position2D, Position3D} from "../../../interfaces/Position.ts";
-import {CubeFace} from "../../../interfaces/CubeFace.ts";
-import {StairCorner} from "../../../interfaces/StairCorner.ts";
+import { RoomPart } from "./RoomPart.ts";
+import { Room } from "../Room.ts";
+import {Container, FederatedPointerEvent, Graphics, Point, Polygon} from "pixi.js";
+import { FloorMaterial } from "../materials/FloorMaterial.ts";
+import { Cube } from "../../geometry/Cube.ts";
+import { StairConfiguration } from "../../../interfaces/StairConfiguration.ts";
+import { Direction, Position2D, Position3D } from "../../../interfaces/Position.ts";
+import { CubeFace } from "../../../interfaces/CubeFace.ts";
+import { StairCorner } from "../../../interfaces/StairCorner.ts";
+import { EventManager } from "../../events/EventManager.ts";
 
 export class StairPart extends RoomPart {
     public room!: Room;
     public container: Container = new Container();
+    public eventManager: EventManager = new EventManager();
 
     constructor(
         public configuration: StairConfiguration
     ) {
         super();
+
+        this._registerEvents();
+    }
+
+    private _registerEvents(): void {
+        this.container.onpointerdown = (event: FederatedPointerEvent) => this.eventManager.handlePointerDown({
+            position: this.getGlobalTilePosition(event.global),
+        });
+        this.container.onpointerup = (event: FederatedPointerEvent) => this.eventManager.handlePointerUp({
+            position: this.getGlobalTilePosition(event.global),
+        });
+        this.container.onpointermove = (event: FederatedPointerEvent) => this.eventManager.handlePointerMove({
+            position: this.getGlobalTilePosition(event.global),
+        });
+        this.container.onpointerout = (event: FederatedPointerEvent) => this.eventManager.handlePointerOut({
+            position: this.getGlobalTilePosition(event.global),
+        });
+        this.container.onpointerover = (event: FederatedPointerEvent) => this.eventManager.handlePointerOver({
+            position: this.getGlobalTilePosition(event.global),
+        });
     }
 
     public render(): void {
@@ -60,6 +82,26 @@ export class StairPart extends RoomPart {
                 });
                 break;
         }
+
+        if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
+            this.container.hitArea = new Polygon(
+                new Point(0, 0),
+                new Point(32 * 1, -16 * 1),
+                new Point(32 * (this.configuration.length + 1) + 32 * (1 - 1), -16 * (1 - 1) + 16 * (this.configuration.length - 1)),
+                new Point(32 * this.configuration.length, 16 * this.configuration.length),
+                new Point(0, 0)
+            );
+        } else {
+            this.container.hitArea = new Polygon(
+                new Point(0, 32),
+                new Point(32 * this.configuration.length, -16 * this.configuration.length + 32),
+                new Point(64 + 32 * (this.configuration.length - 1), -16 * (this.configuration.length - 1) + 32),
+                new Point(32, 48),
+                new Point(0, 32)
+            );
+        }
+
+        this.container.eventMode = "static";
     }
 
     private _renderStair(offsets: Position2D): void {
@@ -165,6 +207,22 @@ export class StairPart extends RoomPart {
             if (this.configuration.direction === Direction.EAST) cube.zIndex = -i;
 
             this.container.addChild(cube);
+        }
+    }
+
+    public getGlobalTilePosition(point: Point): Position3D {
+        const localPosition: Point = this.container.toLocal(point);
+        let localX: number = Math.floor(localPosition.x / 64 + localPosition.y / 32),
+            localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64);
+        if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
+            localY += 1;
+        } else {
+            localY += this.configuration.length;
+        }
+        return {
+            x: localX + this.configuration.position.x,
+            y: localY + this.configuration.position.y,
+            z: this.configuration.position.z
         }
     }
 }
