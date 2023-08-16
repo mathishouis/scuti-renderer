@@ -61,7 +61,7 @@ export class RoomVisualization {
         });
         this.add(stair2);*/
         const stair3 = new StairPart({
-            direction: Direction.WEST,
+            direction: Direction.EAST,
             material: new FloorMaterial(111),
             thickness: 8,
             position: { x: 0, y: 0, z: 0 },

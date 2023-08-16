@@ -1,12 +1,12 @@
-import { RoomPart } from "./RoomPart.ts";
-import { Room } from "../Room.ts";
-import { Container } from "pixi.js";
-import { FloorMaterial } from "../materials/FloorMaterial.ts";
-import { Cube } from "../../geometry/Cube.ts";
-import { StairConfiguration } from "../../../interfaces/StairConfiguration.ts";
-import { Direction, Position2D, Position3D } from "../../../interfaces/Position.ts";
-import { CubeFace } from "../../../interfaces/CubeFace.ts";
-import { StairCorner } from "../../../interfaces/StairCorner.ts";
+import {RoomPart} from "./RoomPart.ts";
+import {Room} from "../Room.ts";
+import {Container} from "pixi.js";
+import {FloorMaterial} from "../materials/FloorMaterial.ts";
+import {Cube} from "../../geometry/Cube.ts";
+import {StairConfiguration} from "../../../interfaces/StairConfiguration.ts";
+import {Direction, Position2D, Position3D} from "../../../interfaces/Position.ts";
+import {CubeFace} from "../../../interfaces/CubeFace.ts";
+import {StairCorner} from "../../../interfaces/StairCorner.ts";
 
 export class StairPart extends RoomPart {
     public room!: Room;
@@ -19,8 +19,13 @@ export class StairPart extends RoomPart {
     }
 
     public render(): void {
-        this.container.x = 32 * this.configuration.position.x - 32 * this.configuration.position.y;
-        this.container.y = 16 * this.configuration.position.x + 16 * this.configuration.position.y - 32 * this.configuration.position.z;
+        if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
+            this.container.x = 32 * this.configuration.position.x - 32 * this.configuration.position.y;
+            this.container.y = 16 * this.configuration.position.x + 16 * this.configuration.position.y - 32 * this.configuration.position.z;
+        } else {
+            this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.length);
+            this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.length) - 32 * this.configuration.position.z;
+        }
 
         switch (this.configuration.direction) {
             case Direction.NORTH:
@@ -32,8 +37,7 @@ export class StairPart extends RoomPart {
                 });
                 break;
             case Direction.WEST:
-                this.container.y -= 8;
-                this.container.x -= 32;
+                this.container.y -= 24;
                 this._renderStair({
                     x: 8,
                     y: 12
@@ -48,8 +52,8 @@ export class StairPart extends RoomPart {
                 });
                 break;
             case Direction.EAST:
-                this.container.y += 4;
-                this.container.x -= 8;
+                this.container.x += 24;
+                this.container.y -= 12;
                 this._renderStair({
                     x: -8,
                     y: 4
