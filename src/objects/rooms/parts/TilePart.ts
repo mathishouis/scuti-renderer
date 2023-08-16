@@ -57,7 +57,7 @@ export class TilePart extends RoomPart {
             new Point(0, 0)
         );
 
-        this.container.interactive = true;
+        this.container.eventMode = "static";
         this.container.addChild(cube);
         this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.size.y);
         this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.size.y) - 32 * this.configuration.position.z;
