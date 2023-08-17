@@ -1,13 +1,6 @@
-export interface Position3D {
-    x: number;
-    y: number;
-    z: number;
-}
+export type Position3D = Record<"x" | "y" | "z", number>
 
-export interface Position2D {
-    x: number;
-    y: number;
-}
+export type Position2D = Omit<Position3D, "z">;
 
 export enum Direction {
     NORTH,

@@ -1,6 +1,6 @@
 import { RoomPart } from "./RoomPart.ts";
 import { Room } from "../Room.ts";
-import {Container, FederatedPointerEvent, Graphics, Point, Polygon} from "pixi.js";
+import { Container, FederatedPointerEvent, Point, Polygon } from "pixi.js";
 import { FloorMaterial } from "../materials/FloorMaterial.ts";
 import { Cube } from "../../geometry/Cube.ts";
 import { StairConfiguration } from "../../../interfaces/StairConfiguration.ts";

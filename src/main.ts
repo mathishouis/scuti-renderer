@@ -14,8 +14,20 @@ const renderer: Scuti = new Scuti({
 
 await renderer.load();
 
+const heightMap: string =
+    'x0000000000000000x\n' +
+    'x0000000000000000x\n' +
+    'x0000011111000000x\n' +
+    '00000011111000000x\n' +
+    'x0000011111000000x\n' +
+    'x0000000000000000x\n' +
+    'x0000000001234000x\n' +
+    'x0000000000000000x\n' +
+    'x0000000000000000x\n' +
+    'x0000000000000000x\n';
+
 const room: Room = new Room({
-    heightMap: "0x00x0",
+    heightMap: heightMap,
     dragging: true,
     centerCamera: false,
 });

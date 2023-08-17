@@ -120,6 +120,11 @@ export class RoomVisualization {
         this.layers.parts = new PartLayer(this.room);
     }
 
+    public render(): void {
+        // TODO: Destroy parts
+
+    }
+
     public add(item: RoomPart): void {
         item.room = this.room;
         item.render();
