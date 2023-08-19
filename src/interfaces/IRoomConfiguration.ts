@@ -1,8 +1,10 @@
+import { FloorMaterial } from "../objects/rooms/materials/FloorMaterial.ts";
+
 export interface IRoomConfiguration {
     heightMap: string;
-    floorMaterial?: number;
+    floorMaterial?: FloorMaterial;
     floorThickness?: number;
-    floorHidden?: number;
+    floorHidden?: boolean;
     wallMaterial?: number;
     wallThickness?: number;
     wallHeight?: number;
