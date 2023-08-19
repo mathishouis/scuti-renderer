@@ -1,14 +1,14 @@
-import { RoomPart } from "./RoomPart.ts";
-import { Room } from "../Room.ts";
-import {Container, FederatedPointerEvent, Graphics, Point, Polygon} from "pixi.js";
-import { FloorMaterial } from "../materials/FloorMaterial.ts";
-import { Cube } from "../../geometry/Cube.ts";
-import { IStairConfiguration } from "../../../interfaces/IStairConfiguration.ts";
-import { Vector2D, Vector3D } from "../../../types/Vector.ts";
-import { CubeFace } from "../../../enums/CubeFace.ts";
-import { EventManager } from "../../events/EventManager.ts";
-import { StairType } from "../../../enums/StairType.ts";
-import { Direction } from "../../../enums/Direction.ts";
+import {RoomPart} from "./RoomPart.ts";
+import {Room} from "../Room.ts";
+import {Container, FederatedPointerEvent, Point, Polygon} from "pixi.js";
+import {FloorMaterial} from "../materials/FloorMaterial.ts";
+import {Cube} from "../../geometry/Cube.ts";
+import {IStairConfiguration} from "../../../interfaces/IStairConfiguration.ts";
+import {Vector2D, Vector3D} from "../../../types/Vector.ts";
+import {CubeFace} from "../../../enums/CubeFace.ts";
+import {EventManager} from "../../events/EventManager.ts";
+import {StairType} from "../../../enums/StairType.ts";
+import {Direction} from "../../../enums/Direction.ts";
 
 export class StairPart extends RoomPart {
     public room!: Room;
@@ -199,9 +199,27 @@ export class StairPart extends RoomPart {
                 }
             }
 
+            const zOrders = {
+                [CubeFace.TOP]: this.configuration.position.z,
+                [CubeFace.LEFT]: this.configuration.position.z - 1,
+                [CubeFace.RIGHT]: this.configuration.position.z - 2
+            }
+
+            if (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST) {
+                zOrders[CubeFace.TOP]= this.configuration.position.z + (3 - i) * 100;
+                zOrders[CubeFace.LEFT]= -(this.room.heightMap.heightMap[0].length - this.configuration.length) + this.configuration.position.y + (3 - i) * 100;
+                zOrders[CubeFace.RIGHT]= -(this.room.heightMap.heightMap.length - 1) + this.configuration.position.x + (3 - i) * 100;
+                // I ft descendre
+            } else {
+                zOrders[CubeFace.TOP]= this.configuration.position.z + (i * 100);
+                zOrders[CubeFace.LEFT]= -(this.room.heightMap.heightMap[0].length - 1) + this.configuration.position.y + (i * 100);
+                zOrders[CubeFace.RIGHT]= -(this.room.heightMap.heightMap.length - this.configuration.length) + this.configuration.position.x + (i * 100);
+                // I ft monter
+            }
+
             const cube: Cube = new Cube({
                 layer: this.room.renderer.layer,
-                zOrder: this.configuration.position.z,
+                zOrders: zOrders,
                 material: material,
                 size: size,
                 offsets: {

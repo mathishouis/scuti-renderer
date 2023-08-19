@@ -74,11 +74,11 @@ export class Cube extends Container {
 
         if (this.configuration.layer) {
             topFace.parentLayer = this.configuration.layer;
-            topFace.zOrder = this.configuration.zOrder ?? 0;
+            topFace.zOrder = this.configuration.zOrders?.[CubeFace.TOP] ?? 0;
             leftFace.parentLayer = this.configuration.layer;
-            leftFace.zOrder = (this.configuration.zOrder ?? 0) - 1;
+            leftFace.zOrder = this.configuration.zOrders?.[CubeFace.LEFT] ?? 0;
             rightFace.parentLayer = this.configuration.layer;
-            rightFace.zOrder = (this.configuration.zOrder ?? 0) - 2;
+            rightFace.zOrder = this.configuration.zOrders?.[CubeFace.RIGHT] ?? 0;
         }
 
         this.addChild(topFace);

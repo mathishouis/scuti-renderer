@@ -6,6 +6,6 @@ export interface ICubeConfiguration {
     material?: FloorMaterial;
     size: Vector3D;
     offsets?: Record<number, Vector2D>;
+    zOrders?: Record<number, number>;
     layer?: Layer;
-    zOrder?: number;
 }
