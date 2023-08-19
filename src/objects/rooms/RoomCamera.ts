@@ -1,5 +1,5 @@
 import { Room } from "./Room.ts";
-import {Container} from "pixi.js";
+import { Container } from "pixi.js";
 import { gsap } from "gsap";
 
 export class RoomCamera extends Container {

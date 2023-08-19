@@ -2,7 +2,6 @@ import {RoomHeightmap} from "./RoomHeightmap.ts";
 import {Direction, Position2D, Position3D} from "../../interfaces/Position.ts";
 import {Stair} from "../../interfaces/Stair.ts";
 import {StairType} from "../../interfaces/StairType.ts";
-import {StairCorner} from "../../interfaces/StairCorner.ts";
 
 // TODO: REFACTOR EVERYTHING HERE!!!!!!!
 export class GreedyMesher {
@@ -63,8 +62,8 @@ export class GreedyMesher {
             startPos: Position3D,
             length: number,
             direction: Direction,
-            leftCorner: StairCorner,
-            rightCorner: StairCorner
+            leftCorner: StairType,
+            rightCorner: StairType
         }> = [];
 
         const rowStairSizes: Record<number, Record<number, Position3D | undefined>> = {};
@@ -130,8 +129,6 @@ export class GreedyMesher {
                 if (rowStairSizes[y][x] && stair) {
                     let length: number = Number(rowStairSizes[y][x]!.x);
                     let direction: Direction = stair.direction;
-                    let leftCorner: StairCorner = StairCorner.NONE;
-                    let rightCorner: StairCorner = StairCorner.NONE;
 
                     if (direction === Direction.NORTH_WEST || direction === Direction.NORTH_EAST) direction = Direction.NORTH;
                     if (direction === Direction.SOUTH_WEST || direction === Direction.SOUTH_EAST) direction = Direction.SOUTH;
@@ -140,15 +137,11 @@ export class GreedyMesher {
                         x: Number(x) - rowStairSizes[y][x]!.x + 1,
                         y: Number(y) - rowStairSizes[y][x]!.y + 1
                     })?.type;
-                    if (leftType === StairType.OUTER_CORNER_STAIR) leftCorner = StairCorner.OUTER;
-                    if (leftType === StairType.INNER_CORNER_STAIR) leftCorner = StairCorner.INNER;
 
                     const rightType: StairType | undefined = this.heightMap.getStair({
                         x: Number(x),
                         y: Number(y)
                     })?.type;
-                    if (rightType === StairType.OUTER_CORNER_STAIR) rightCorner = StairCorner.OUTER;
-                    if (rightType === StairType.INNER_CORNER_STAIR) rightCorner = StairCorner.INNER;
 
                     stairs.push({
                         startPos: {
@@ -158,8 +151,8 @@ export class GreedyMesher {
                         },
                         length: length,
                         direction: direction,
-                        leftCorner: leftCorner,
-                        rightCorner: rightCorner
+                        leftCorner: leftType ?? StairType.STAIR,
+                        rightCorner: rightType ?? StairType.STAIR
                     });
                 }
             }
@@ -171,8 +164,6 @@ export class GreedyMesher {
                 if (columnStairSizes[y][x] && stair) {
                     let length: number = Number(columnStairSizes[y][x]!.y);
                     let direction: Direction = stair.direction;
-                    let leftCorner: StairCorner = StairCorner.NONE;
-                    let rightCorner: StairCorner = StairCorner.NONE;
 
                     if (direction === Direction.NORTH_WEST || direction === Direction.SOUTH_WEST) direction = Direction.WEST;
                     if (direction === Direction.SOUTH_EAST || direction === Direction.NORTH_EAST) direction = Direction.EAST;
@@ -181,15 +172,11 @@ export class GreedyMesher {
                         x: Number(x),
                         y: Number(y)
                     })?.type;
-                    if (leftType === StairType.OUTER_CORNER_STAIR) leftCorner = StairCorner.OUTER;
-                    if (leftType === StairType.INNER_CORNER_STAIR) leftCorner = StairCorner.INNER;
 
                     const rightType: StairType | undefined = this.heightMap.getStair({
                         x: Number(x) - columnStairSizes[y][x]!.x + 1,
                         y: Number(y) - columnStairSizes[y][x]!.y + 1
                     })?.type;
-                    if (rightType === StairType.OUTER_CORNER_STAIR) rightCorner = StairCorner.OUTER;
-                    if (rightType === StairType.INNER_CORNER_STAIR) rightCorner = StairCorner.INNER;
 
                     stairs.push({
                         startPos: {
@@ -199,8 +186,8 @@ export class GreedyMesher {
                         },
                         length: length,
                         direction: direction,
-                        leftCorner: leftCorner,
-                        rightCorner: rightCorner
+                        leftCorner: leftType ?? StairType.STAIR,
+                        rightCorner: rightType ?? StairType.STAIR
                     });
                 }
             }

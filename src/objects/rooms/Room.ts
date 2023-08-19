@@ -26,4 +26,12 @@ export class Room extends GameObject {
 
         this.renderer.application.stage.addChild(this.camera);
     }
+
+    public get tiles() {
+
+    }
+
+    public get walls() {
+
+    }
 }
