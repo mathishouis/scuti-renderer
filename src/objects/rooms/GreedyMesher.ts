@@ -3,6 +3,7 @@ import {Vector2D, Vector3D} from "../../types/Vector.ts";
 import {Stair} from "../../types/Stair.ts";
 import {StairType} from "../../enums/StairType.ts";
 import {Direction} from "../../enums/Direction.ts";
+import {TileMesh, StairMesh} from "../../types/Mesh.ts";
 
 // TODO: REFACTOR EVERYTHING HERE!!!!!!!
 export class GreedyMesher {
@@ -13,7 +14,7 @@ export class GreedyMesher {
 
     public getParts() {
         const sizes: Record<number, Record<number, Vector3D | undefined>> = {};
-        const blocks: Array<Record<'startPos' | 'size', Vector2D | Vector3D>> = [];
+        const tiles: Array<TileMesh> = [];
 
         for (let y = 0; y < this.heightMap.heightMap.length; y++) {
             sizes[y] = {}
@@ -48,24 +49,18 @@ export class GreedyMesher {
         for (const y in sizes) {
             for (const x in sizes[y]) {
                 if (sizes[y][x])
-                    blocks.push({
-                        startPos: { x: Number(x) - sizes[y][x]!.x + 1, y: Number(y) - sizes[y][x]!.y + 1, z: sizes[y][x]!.z },
+                    tiles.push({
+                        position: { x: Number(x) - sizes[y][x]!.x + 1, y: Number(y) - sizes[y][x]!.y + 1, z: sizes[y][x]!.z },
                         size: sizes[y][x] as Vector2D
                     })
             }
         }
 
-        return blocks;
+        return tiles;
     }
 
     public getStairs() {
-        const stairs: Array<{
-            startPos: Vector3D,
-            length: number,
-            direction: Direction,
-            leftCorner: StairType,
-            rightCorner: StairType
-        }> = [];
+        const stairs: Array<StairMesh> = [];
 
         const rowStairSizes: Record<number, Record<number, Vector3D | undefined>> = {};
         const columnStairSizes: Record<number, Record<number, Vector3D | undefined>> = {};
@@ -145,15 +140,17 @@ export class GreedyMesher {
                     })?.type;
 
                     stairs.push({
-                        startPos: {
+                        position: {
                             x: Number(x) - rowStairSizes[y][x]!.x + 1,
                             y: Number(y) - rowStairSizes[y][x]!.y + 1,
                             z: rowStairSizes[y][x]!.z
                         },
                         length: length,
                         direction: direction,
-                        leftCorner: leftType ?? StairType.STAIR,
-                        rightCorner: rightType ?? StairType.STAIR
+                        corners: {
+                            left: leftType ?? StairType.STAIR,
+                            right: rightType ?? StairType.STAIR
+                        }
                     });
                 }
             }
@@ -180,15 +177,17 @@ export class GreedyMesher {
                     })?.type;
 
                     stairs.push({
-                        startPos: {
+                        position: {
                             x: Number(x) - columnStairSizes[y][x]!.x + 1,
                             y: Number(y) - columnStairSizes[y][x]!.y + 1,
                             z: columnStairSizes[y][x]!.z
                         },
                         length: length,
                         direction: direction,
-                        leftCorner: leftType ?? StairType.STAIR,
-                        rightCorner: rightType ?? StairType.STAIR
+                        corners: {
+                            left: leftType ?? StairType.STAIR,
+                            right: rightType ?? StairType.STAIR
+                        }
                     });
                 }
             }

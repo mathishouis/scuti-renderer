@@ -9,6 +9,8 @@ export interface IStairConfiguration {
     thickness: number;
     length: number;
     direction: Direction;
-    leftCorner?: StairType;
-    rightCorner?: StairType;
+    corners: {
+        left: StairType;
+        right: StairType;
+    };
 }

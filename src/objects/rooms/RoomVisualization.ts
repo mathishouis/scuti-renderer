@@ -5,10 +5,8 @@ import { PartLayer } from "./layers/PartLayer.ts";
 import { RoomPart } from "./parts/RoomPart.ts";
 import { IRoomLayers } from "../../interfaces/IRoomLayers.ts";
 import { StairPart } from "./parts/StairPart.ts";
-import { Vector2D, Vector3D } from "../../types/Vector.ts";
 import { GreedyMesher } from "./GreedyMesher.ts";
-import { StairType } from "../../enums/StairType.ts";
-import { Direction } from "../../enums/Direction.ts";
+import { StairMesh, TileMesh } from "../../types/Mesh.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -25,33 +23,28 @@ export class RoomVisualization {
     }
 
     public render(): void {
-        const greedyMesher = new GreedyMesher(this.room.heightMap);
-        greedyMesher.getParts().forEach((block: Record<'startPos' | 'size', Vector2D | Vector3D>) => {
-            const tilePart = new TilePart({
+        const greedyMesher: GreedyMesher = new GreedyMesher(this.room.heightMap);
+
+        greedyMesher.getParts().forEach((tile: TileMesh): void => {
+            const part: TilePart = new TilePart({
                 material: this.room.configuration.floorMaterial,
-                position: block.startPos as Vector3D,
-                size: block.size as Vector2D,
+                position: tile.position,
+                size: tile.size,
                 thickness: this.room.configuration.floorThickness,
             });
-            this.add(tilePart);
+            this.add(part);
         });
-        greedyMesher.getStairs().forEach((block: {
-            startPos: Vector3D,
-            length: number,
-            direction: Direction,
-            leftCorner: StairType,
-            rightCorner: StairType
-        }) => {
-            const stair = new StairPart({
+
+        greedyMesher.getStairs().forEach((stair: StairMesh): void => {
+            const part: StairPart = new StairPart({
                 material: this.room.configuration.floorMaterial,
-                position: block.startPos,
-                length: block.length,
+                position: stair.position,
+                length: stair.length,
                 thickness: this.room.configuration.floorThickness,
-                direction: block.direction,
-                leftCorner: block.leftCorner,
-                rightCorner: block.rightCorner
+                direction: stair.direction,
+                corners: stair.corners
             });
-            this.add(stair);
+            this.add(part);
         });
     }
 

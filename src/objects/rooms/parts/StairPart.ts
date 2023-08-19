@@ -117,27 +117,27 @@ export class StairPart extends RoomPart {
                 z: this.configuration.thickness / 32
             }
 
-            if (this.configuration.leftCorner === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+            if (this.configuration.corners.left === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 size.x -= (8 / 32) * i;
-            } else if (this.configuration.leftCorner === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+            } else if (this.configuration.corners.left === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 size.y -= (8 / 32) * (3 - i);
             }
 
-            if (this.configuration.rightCorner == StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+            if (this.configuration.corners.right == StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 size.x -= (8 / 32) * i;
-            } else if (this.configuration.rightCorner === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+            } else if (this.configuration.corners.right === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 size.y += (8 / 32) * (i - 3);
             }
 
-            if (this.configuration.leftCorner === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+            if (this.configuration.corners.left === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 size.x += (8 / 32) * (i - 3);
-            } else if (this.configuration.leftCorner === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+            } else if (this.configuration.corners.left === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 size.y -= (8 / 32) * i;
             }
 
-            if (this.configuration.rightCorner === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+            if (this.configuration.corners.right === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 size.x += (8 / 32) * (i - 3);
-            } else if (this.configuration.rightCorner === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+            } else if (this.configuration.corners.right === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 size.y -= (8 / 32) * i;
             }
 
@@ -147,7 +147,7 @@ export class StairPart extends RoomPart {
             }
 
             if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
-                switch (this.configuration.leftCorner) {
+                switch (this.configuration.corners.left) {
                     case StairType.STAIR:
                         textureOffset.x = 0;
                         textureOffset.y = 0;
@@ -162,7 +162,7 @@ export class StairPart extends RoomPart {
                         break;
                 }
             } else {
-                switch (this.configuration.leftCorner) {
+                switch (this.configuration.corners.left) {
                     case StairType.STAIR:
                         textureOffset.x = 8;
                         textureOffset.y = 4;
@@ -193,18 +193,18 @@ export class StairPart extends RoomPart {
             cube.x = offsets.x * i;
             cube.y = offsets.y * i;
 
-            if (this.configuration.leftCorner === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+            if (this.configuration.corners.left === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 cube.x += 8 * i;
                 cube.y += 4 * i;
-            } else if (this.configuration.leftCorner === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+            } else if (this.configuration.corners.left === StairType.OUTER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 cube.x += 8 * (3 - i);
                 cube.y -= 4 * (3 - i);
             }
 
-            if (this.configuration.leftCorner === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
+            if (this.configuration.corners.left === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 cube.x += 8 * (3 - i);
                 cube.y += 4 * (3 - i);
-            } else if (this.configuration.leftCorner === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
+            } else if (this.configuration.corners.left === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 cube.x += 8 * i;
                 cube.y -= 4 * i;
             }
