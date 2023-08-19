@@ -7,7 +7,7 @@ import { IRoomLayers } from "../../interfaces/IRoomLayers.ts";
 import { StairPart } from "./parts/StairPart.ts";
 import { GreedyMesher } from "./GreedyMesher.ts";
 import { StairMesh, TileMesh } from "../../types/Mesh.ts";
-import {FloorMaterial} from "./materials/FloorMaterial.ts";
+import { ITileEvent } from "../../interfaces/IEvents.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -23,34 +23,35 @@ export class RoomVisualization {
         this.layers.parts = new PartLayer(this.room);
     }
 
+    private _registerFloorPart(part: TilePart | StairPart): void {
+        this.add(part);
+
+        part.eventManager.onPointerDown = (event: ITileEvent): void => { if (this.room.events.tiles.onPointerDown) this.room.events.tiles.onPointerDown(event); };
+        part.eventManager.onPointerUp = (event: ITileEvent): void => { if (this.room.events.tiles.onPointerUp) this.room.events.tiles.onPointerUp(event); };
+        part.eventManager.onPointerMove = (event: ITileEvent): void => { if (this.room.events.tiles.onPointerMove) this.room.events.tiles.onPointerMove(event); };
+        part.eventManager.onPointerOut = (event: ITileEvent): void => { if (this.room.events.tiles.onPointerOut) this.room.events.tiles.onPointerOut(event); };
+        part.eventManager.onPointerOver = (event: ITileEvent): void => { if (this.room.events.tiles.onPointerOver) this.room.events.tiles.onPointerOver(event); };
+        part.eventManager.onDoublePointerDown = (event: ITileEvent): void => { if (this.room.events.tiles.onDoublePointerDown) this.room.events.tiles.onDoublePointerDown(event); };
+    }
+
     public render(): void {
         const greedyMesher: GreedyMesher = new GreedyMesher(this.room.heightMap);
 
-        greedyMesher.tiles.forEach((tile: TileMesh): void => {
-            const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
-            const part: TilePart = new TilePart({
-                //material: this.room.configuration.floorMaterial,
-                material: new FloorMaterial(random),
-                position: tile.position,
-                size: tile.size,
-                thickness: this.room.configuration.floorThickness,
-            });
-            this.add(part);
-        });
+        greedyMesher.tiles.forEach((tile: TileMesh): void => this._registerFloorPart(new TilePart({
+            material: this.room.configuration.floorMaterial,
+            position: tile.position,
+            size: tile.size,
+            thickness: this.room.configuration.floorThickness,
+        })));
 
-        greedyMesher.stairs.forEach((stair: StairMesh): void => {
-            const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
-            const part: StairPart = new StairPart({
-                //material: this.room.configuration.floorMaterial,
-                material: new FloorMaterial(random),
-                position: stair.position,
-                length: stair.length,
-                thickness: this.room.configuration.floorThickness,
-                direction: stair.direction,
-                corners: stair.corners
-            });
-            this.add(part);
-        });
+        greedyMesher.stairs.forEach((stair: StairMesh): void => this._registerFloorPart(new StairPart({
+            material: this.room.configuration.floorMaterial,
+            position: stair.position,
+            length: stair.length,
+            thickness: this.room.configuration.floorThickness,
+            direction: stair.direction,
+            corners: stair.corners
+        })));
     }
 
     public update(): void {

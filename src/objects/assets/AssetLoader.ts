@@ -11,7 +11,7 @@ export class AssetLoader {
         }
         if (!Cache.has(key)) {
             if (onUncached != null) onUncached();
-            Assets.add(key, "http://localhost:8081" + path);
+            Assets.add(key, "http://192.168.1.127:8081" + path);
             (AssetLoader.loadedKeys)[key] = Assets.load(key);
             await (AssetLoader.loadedKeys)[key];
         }

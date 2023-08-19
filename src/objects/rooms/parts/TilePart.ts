@@ -23,18 +23,23 @@ export class TilePart extends RoomPart {
     private _registerEvents(): void {
         this.container.onpointerdown = (event: FederatedPointerEvent) => this.eventManager.handlePointerDown({
             position: this.getGlobalTilePosition(event.global),
+            dragging: this.room.camera.hasDragged,
         });
         this.container.onpointerup = (event: FederatedPointerEvent) => this.eventManager.handlePointerUp({
             position: this.getGlobalTilePosition(event.global),
+            dragging: this.room.camera.hasDragged,
         });
         this.container.onpointermove = (event: FederatedPointerEvent) => this.eventManager.handlePointerMove({
             position: this.getGlobalTilePosition(event.global),
+            dragging: this.room.camera.hasDragged,
         });
         this.container.onpointerout = (event: FederatedPointerEvent) => this.eventManager.handlePointerOut({
             position: this.getGlobalTilePosition(event.global),
+            dragging: this.room.camera.hasDragged,
         });
         this.container.onpointerover = (event: FederatedPointerEvent) => this.eventManager.handlePointerOver({
             position: this.getGlobalTilePosition(event.global),
+            dragging: this.room.camera.hasDragged,
         });
     }
 

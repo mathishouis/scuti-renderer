@@ -2,6 +2,7 @@ import "./style.css";
 import {Scuti} from "./Scuti.ts";
 import {Room} from "./objects/rooms/Room.ts";
 import {FloorMaterial} from "./objects/rooms/materials/FloorMaterial.ts";
+import {ITileEvent} from "./interfaces/IEvents.ts";
 
 console.log("Hello Word");
 
@@ -14,67 +15,33 @@ const renderer: Scuti = new Scuti({
 
 await renderer.load();
 
-const heightMap: string =`qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqxonmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqxppppppppppponmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqooooooooooooonmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqnnnnnnnnnnnnnnmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqmmmmmmmmmmmmmmmlkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqllllllllllllllllkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqkkkkkkkkkkkkkkkkkjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqjjjjjjjjjjjjjjjjjjihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqiiiiiiiiiiiiiiiiiiihgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqhhhhhhhhhhhhhhhhhhhhgfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqgggggggggggggggggggggfedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqffffffffffffffffffffffedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqeeeeeeeeffffffffffffeeedcbaxxppppppppppppppppppppppqqq
-qqqqqqqqddddddddffffffffffffddddcbaxxppppppppppppppppppppppqqq
-qqqqqqqqccccccccffffffffffffcccccbaxxppppppppppppppppppppppqqq
-qqqqqqqqbbbbbbbbffffffffffffbbbbbbaxxppppppppppppppppppppppqqq
-qqqppxxxaaaaaaaaffffffffffffaaaaaaaxxppppppppppppppppppppppqqq
-qqqppxxx99999999ffffffffffff9999999xxppppppppppppppppppppppqqq
-qqqppxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxppppppppppppppppppppppqqq
-qqqppxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppp555555553ppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppp555555553ppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppp555555553ppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppp555555553ppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppp555555553ppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppp555555553ppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppp555555553ppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppp333333333ppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqppppppppppppppppppppppppppppppppppppppppppppppppppppppppqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+const heightMap: string =`xxxxxxxxxxxxxxxxxxxxxxxxxxx
+x2222xx1111111111xx11111111
+x2222xx1111111111xx11111111
+222222111111111111111111111
+x22222111111111111111111111
+x22222111111111111111111111
+x22222111111111111111111111
+x2222xx1111111111xx11111111
+x2222xx1111111111xx11111111
+x2222xx1111111111xxxx1111xx
+x2222xx1111111111xxxx0000xx
+xxxxxxx1111111111xx00000000
+xxxxxxx1111111111xx00000000
+x22222111111111111000000000
+x22222111112111111000000000
+x22222111122211111000000000
+x22222111112111111000000000
+x2222xx1111111111xx00000000
+x2222xx1111111111xx00000000
+x2222xxxx1111xxxxxxxxxxxxxx
+x2222xxxx0000xxxxxxxxxxxxxx
+x2222x0000000000xxxxxxxxxxx
+x2222x0000000000xxxxxxxxxxx
+x2222x0000000000xxxxxxxxxxx
+x2222x0000000000xxxxxxxxxxx
+x2222x0000000000xxxxxxxxxxx
+x2222x0000000000xxxxxxxxxxx
 `;
 const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
 const room: Room = new Room({
@@ -88,15 +55,19 @@ const room: Room = new Room({
 renderer.add(room);
 
 room.camera.zoom(1);
+room.camera.centerCamera(0);
 
 setInterval(() => {
     const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
     room.configuration.floorMaterial = new FloorMaterial(random)
-    //room.configuration.floorThickness = Math.floor(Math.random() * (32 - 0 + 1)) + 0;
     room.configuration.floorThickness = 8;
 }, 1000);
 
 new FloorMaterial(101);
+
+room.events.tiles.onPointerUp = (event: ITileEvent) => {
+    console.log(event);
+};
 
 /*setTimeout(() => room.camera.zoom(2), 1000);
 setTimeout(() => room.camera.zoom(4), 2000);

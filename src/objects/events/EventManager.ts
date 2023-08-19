@@ -9,17 +9,17 @@ export class EventManager {
     public onPointerMove!: (event: ITileEvent) => void;
     public onPointerOut!: (event: ITileEvent) => void;
     public onPointerOver!: (event: ITileEvent) => void;
-    public onDoubleClick!: (event: ITileEvent) => void;
+    public onDoublePointerDown!: (event: ITileEvent) => void;
 
     public handlePointerDown(event: ITileEvent): void {
         if (!this._isDoubleClicking) {
-            if (this.onPointerDown !== undefined) this.onPointerDown(event);
+            if (this.onPointerDown) this.onPointerDown(event);
             this._isDoubleClicking = true;
             this._doubleClickTimeout = window.setTimeout(() => {
                 return (this._isDoubleClicking = false);
             }, 350);
         } else {
-            if (this.onDoubleClick !== undefined) this.onDoubleClick(event);
+            if (this.onDoublePointerDown) this.onDoublePointerDown(event);
             this._isDoubleClicking = false;
             window.clearTimeout(this._doubleClickTimeout);
         }

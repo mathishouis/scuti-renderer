@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 
 export class RoomCamera extends Container {
     public dragging: boolean = false;
+    public hasDragged: boolean = false;
 
     constructor(
         public room: Room
@@ -28,6 +29,7 @@ export class RoomCamera extends Container {
     }
 
     private _dragEnd = (): void => {
+        this.hasDragged = false;
         this.dragging = false;
         if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
     }
@@ -36,11 +38,14 @@ export class RoomCamera extends Container {
         x: number,
         y: number
     ): void => {
-        if (this.dragging) gsap.to(this, {
-            x: Math.floor(this.x + x),
-            y: Math.floor(this.y + y),
-            duration: 0
-        });
+        if (this.dragging) {
+            this.hasDragged = true;
+            gsap.to(this, {
+                x: Math.floor(this.x + x),
+                y: Math.floor(this.y + y),
+                duration: 0
+            });
+        }
     }
 
     public isOutOfBounds(): boolean {
@@ -51,11 +56,11 @@ export class RoomCamera extends Container {
         return false;
     }
 
-    public centerCamera(): void {
+    public centerCamera(duration: number = 0.8): void {
         gsap.to(this, {
-            x: Math.floor(this.room.renderer.application.view.width / 2 - this.width / 2),
+            x: Math.floor(this.room.renderer.application.view.width / 2),
             y: Math.floor(this.room.renderer.application.view.height / 2 - this.height / 2),
-            duration: 0.8,
+            duration: duration,
             ease: "easeOut"
         });
     }
@@ -70,7 +75,7 @@ export class RoomCamera extends Container {
             x: zoom,
             y: zoom,
             duration: duration,
-            onUpdate: () => {
+            onUpdate: (): void => {
                 const widthDifference: number = this.width - originalWidth;
                 const heightDifference: number = this.height - originalHeight;
 

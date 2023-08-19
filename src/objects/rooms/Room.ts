@@ -4,7 +4,8 @@ import { RoomVisualization } from "./RoomVisualization.ts";
 import { RoomCamera } from "./RoomCamera.ts";
 import { GameObject } from "../GameObject.ts";
 import { RoomHeightmap } from "./RoomHeightmap.ts";
-import {RoomConfiguration} from "./RoomConfiguration.ts";
+import { RoomConfiguration } from "./RoomConfiguration.ts";
+import {RoomEvents} from "./RoomEvents.ts";
 
 export class Room extends GameObject {
     public renderer!: Scuti;
@@ -12,6 +13,7 @@ export class Room extends GameObject {
     public visualization!: RoomVisualization;
     public camera!: RoomCamera;
     public configuration: RoomConfiguration;
+    public events!: RoomEvents;
 
     constructor(
         configuration: IRoomConfiguration
@@ -25,6 +27,7 @@ export class Room extends GameObject {
         this.heightMap = new RoomHeightmap(this.configuration.heightMap);
         this.visualization = new RoomVisualization(this);
         this.camera = new RoomCamera(this);
+        this.events = new RoomEvents();
 
         this.visualization.render();
 
@@ -34,13 +37,5 @@ export class Room extends GameObject {
     public update(): void {
         this.heightMap = new RoomHeightmap(this.configuration.heightMap);
         this.visualization.update();
-    }
-
-    public get tiles() {
-
-    }
-
-    public get walls() {
-
     }
 }
