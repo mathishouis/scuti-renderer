@@ -102,7 +102,8 @@ export class StairPart extends RoomPart {
         }
 
         this.container.eventMode = "static";
-        this.container.zIndex = (this.configuration.position.x + this.configuration.position.y) * 1000000 + 10000000 * 6;
+
+        this.room.visualization.container.addChild(this.container);
     }
 
     private _renderStair(offsets: Position2D): void {
@@ -177,6 +178,8 @@ export class StairPart extends RoomPart {
             }
 
             const cube: Cube = new Cube({
+                layer: this.room.renderer.layer,
+                zOrder: this.configuration.position.z,
                 material: material,
                 size: size,
                 offsets: {

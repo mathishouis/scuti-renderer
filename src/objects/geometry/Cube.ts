@@ -4,7 +4,6 @@ import { CubeConfiguration } from "../../interfaces/CubeConfiguration.ts";
 import { CubeFace } from "../../interfaces/CubeFace.ts";
 
 export class Cube extends Container {
-
     constructor(
         public configuration: CubeConfiguration
     ) {
@@ -72,6 +71,15 @@ export class Cube extends Container {
             .lineTo(32 * (this.configuration.size.x + 1) + 32 * (this.configuration.size.y - 1), -16 * (this.configuration.size.y - 1) + 16 * (this.configuration.size.x - 1))
             .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)
             .endFill();
+
+        if (this.configuration.layer) {
+            topFace.parentLayer = this.configuration.layer;
+            topFace.zOrder = this.configuration.zOrder ?? 0;
+            leftFace.parentLayer = this.configuration.layer;
+            leftFace.zOrder = (this.configuration.zOrder ?? 0) - 1;
+            rightFace.parentLayer = this.configuration.layer;
+            rightFace.zOrder = (this.configuration.zOrder ?? 0) - 2;
+        }
 
         this.addChild(topFace);
         this.addChild(leftFace);

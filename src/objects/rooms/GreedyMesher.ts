@@ -1,20 +1,15 @@
 import {RoomHeightmap} from "./RoomHeightmap.ts";
-import {GreedyMesherPart} from "../../interfaces/GreedyMesherPart.ts";
 import {Direction, Position2D, Position3D} from "../../interfaces/Position.ts";
 import {Stair} from "../../interfaces/Stair.ts";
 import {StairType} from "../../interfaces/StairType.ts";
 import {StairCorner} from "../../interfaces/StairCorner.ts";
 
+// TODO: REFACTOR EVERYTHING HERE!!!!!!!
 export class GreedyMesher {
-
-    public visited: Position2D[] = [];
-    public parts: GreedyMesherPart[] = [];
 
     constructor(
         public heightMap: RoomHeightmap
-    ) {
-
-    }
+    ) {}
 
     public getParts() {
         const sizes: Record<number, Record<number, Position3D | undefined>> = {};
@@ -64,7 +59,7 @@ export class GreedyMesher {
     }
 
     public getStairs() {
-        const rowStairs: Array<{
+        const stairs: Array<{
             startPos: Position3D,
             length: number,
             direction: Direction,
@@ -155,7 +150,7 @@ export class GreedyMesher {
                     if (rightType === StairType.OUTER_CORNER_STAIR) rightCorner = StairCorner.OUTER;
                     if (rightType === StairType.INNER_CORNER_STAIR) rightCorner = StairCorner.INNER;
 
-                    rowStairs.push({
+                    stairs.push({
                         startPos: {
                             x: Number(x) - rowStairSizes[y][x]!.x + 1,
                             y: Number(y) - rowStairSizes[y][x]!.y + 1,
@@ -196,7 +191,7 @@ export class GreedyMesher {
                     if (rightType === StairType.OUTER_CORNER_STAIR) rightCorner = StairCorner.OUTER;
                     if (rightType === StairType.INNER_CORNER_STAIR) rightCorner = StairCorner.INNER;
 
-                    rowStairs.push({
+                    stairs.push({
                         startPos: {
                             x: Number(x) - columnStairSizes[y][x]!.x + 1,
                             y: Number(y) - columnStairSizes[y][x]!.y + 1,
@@ -211,7 +206,7 @@ export class GreedyMesher {
             }
         }
 
-        return rowStairs;
+        return stairs;
     }
 
 }

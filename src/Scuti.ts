@@ -2,10 +2,12 @@ import { Application, BaseTexture, Container, SCALE_MODES, settings } from "pixi
 import { RendererConfiguration } from "./interfaces/RendererConfiguration.ts";
 import { GameObject } from "./objects/GameObject.ts";
 import { AssetLoader } from "./objects/assets/AssetLoader.ts";
+import {Layer, Stage} from "@pixi/layers";
 
 export class Scuti {
     public canvas!: HTMLElement;
     public application!: Application;
+    public layer: Layer = new Layer();
 
     constructor(
         private _configuration: RendererConfiguration
@@ -27,9 +29,13 @@ export class Scuti {
             resolution: 1,
             antialias: false
         });
+        this.application.stage = new Stage();
         (globalThis as any).__PIXI_APP__ = this.application; // Support for PIXI.js dev-tool.
         this.canvas = this._configuration.canvas;
         this.canvas.append(this.application.view as HTMLCanvasElement);
+
+        this.layer.group.enableSort = true;
+        this.application.stage.addChild(this.layer);
     }
 
     public async load(): Promise<void> {

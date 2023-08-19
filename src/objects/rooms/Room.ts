@@ -3,7 +3,7 @@ import { RoomConfiguration } from "../../interfaces/RoomConfiguration.ts";
 import { RoomVisualization } from "./RoomVisualization.ts";
 import { RoomCamera } from "./RoomCamera.ts";
 import { GameObject } from "../GameObject.ts";
-import {RoomHeightmap} from "./RoomHeightmap.ts";
+import { RoomHeightmap } from "./RoomHeightmap.ts";
 
 export class Room extends GameObject {
     public renderer!: Scuti;
@@ -21,6 +21,8 @@ export class Room extends GameObject {
         this.heightMap = new RoomHeightmap(this.configuration.heightMap);
         this.visualization = new RoomVisualization(this);
         this.camera = new RoomCamera(this);
+
+        this.visualization.render();
 
         this.renderer.application.stage.addChild(this.camera);
     }
