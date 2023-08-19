@@ -7,6 +7,7 @@ import { IRoomLayers } from "../../interfaces/IRoomLayers.ts";
 import { StairPart } from "./parts/StairPart.ts";
 import { GreedyMesher } from "./GreedyMesher.ts";
 import { StairMesh, TileMesh } from "../../types/Mesh.ts";
+import {FloorMaterial} from "./materials/FloorMaterial.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -25,9 +26,11 @@ export class RoomVisualization {
     public render(): void {
         const greedyMesher: GreedyMesher = new GreedyMesher(this.room.heightMap);
 
-        greedyMesher.getParts().forEach((tile: TileMesh): void => {
+        greedyMesher.tiles.forEach((tile: TileMesh): void => {
+            const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
             const part: TilePart = new TilePart({
-                material: this.room.configuration.floorMaterial,
+                //material: this.room.configuration.floorMaterial,
+                material: new FloorMaterial(random),
                 position: tile.position,
                 size: tile.size,
                 thickness: this.room.configuration.floorThickness,
@@ -35,9 +38,11 @@ export class RoomVisualization {
             this.add(part);
         });
 
-        greedyMesher.getStairs().forEach((stair: StairMesh): void => {
+        greedyMesher.stairs.forEach((stair: StairMesh): void => {
+            const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
             const part: StairPart = new StairPart({
-                material: this.room.configuration.floorMaterial,
+                //material: this.room.configuration.floorMaterial,
+                material: new FloorMaterial(random),
                 position: stair.position,
                 length: stair.length,
                 thickness: this.room.configuration.floorThickness,

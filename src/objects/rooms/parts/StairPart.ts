@@ -7,8 +7,8 @@ import { IStairConfiguration } from "../../../interfaces/IStairConfiguration.ts"
 import { Vector2D, Vector3D } from "../../../types/Vector.ts";
 import { CubeFace } from "../../../enums/CubeFace.ts";
 import { EventManager } from "../../events/EventManager.ts";
-import {StairType} from "../../../enums/StairType.ts";
-import {Direction} from "../../../enums/Direction.ts";
+import { StairType } from "../../../enums/StairType.ts";
+import { Direction } from "../../../enums/Direction.ts";
 
 export class StairPart extends RoomPart {
     public room!: Room;
