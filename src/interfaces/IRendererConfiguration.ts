@@ -1,4 +1,4 @@
-export interface RendererConfiguration {
+export interface IRendererConfiguration {
     canvas: HTMLElement;
     width: number;
     height: number;

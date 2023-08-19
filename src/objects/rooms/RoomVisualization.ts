@@ -3,16 +3,17 @@ import { Room } from "./Room.ts";
 import { TilePart } from "./parts/TilePart.ts";
 import { PartLayer } from "./layers/PartLayer.ts";
 import { RoomPart } from "./parts/RoomPart.ts";
-import { RoomLayers } from "../../interfaces/RoomLayers.ts";
+import { IRoomLayers } from "../../interfaces/IRoomLayers.ts";
 import { FloorMaterial } from "./materials/FloorMaterial.ts";
 import { StairPart } from "./parts/StairPart.ts";
-import { Direction, Position2D, Position3D } from "../../interfaces/Position.ts";
-import { StairCorner } from "../../interfaces/StairCorner.ts";
+import { Vector2D, Vector3D } from "../../types/Vector.ts";
 import { GreedyMesher } from "./GreedyMesher.ts";
+import {StairType} from "../../enums/StairType.ts";
+import {Direction} from "../../enums/Direction.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
-    public layers: RoomLayers = {} as RoomLayers;
+    public layers: IRoomLayers = {} as IRoomLayers;
 
     constructor(
         public room: Room
@@ -28,22 +29,22 @@ export class RoomVisualization {
         this.destroy();
 
         const greedyMesher = new GreedyMesher(this.room.heightMap);
-        greedyMesher.getParts().forEach((block: Record<'startPos' | 'size', Position2D | Position3D>) => {
+        greedyMesher.getParts().forEach((block: Record<'startPos' | 'size', Vector2D | Vector3D>) => {
             //const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
             const tilePart = new TilePart({
                 material: new FloorMaterial(111),
-                position: block.startPos as Position3D,
-                size: block.size as Position2D,
+                position: block.startPos as Vector3D,
+                size: block.size as Vector2D,
                 thickness: 8,
             });
             this.add(tilePart);
         });
         greedyMesher.getStairs().forEach((block: {
-            startPos: Position3D,
+            startPos: Vector3D,
             length: number,
             direction: Direction,
-            leftCorner: StairCorner,
-            rightCorner: StairCorner
+            leftCorner: StairType,
+            rightCorner: StairType
         }) => {
             //const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
             const stair = new StairPart({

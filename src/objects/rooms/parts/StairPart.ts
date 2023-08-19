@@ -3,11 +3,12 @@ import { Room } from "../Room.ts";
 import { Container, FederatedPointerEvent, Point, Polygon } from "pixi.js";
 import { FloorMaterial } from "../materials/FloorMaterial.ts";
 import { Cube } from "../../geometry/Cube.ts";
-import { StairConfiguration } from "../../../interfaces/StairConfiguration.ts";
-import { Direction, Position2D, Position3D } from "../../../interfaces/Position.ts";
-import { CubeFace } from "../../../interfaces/CubeFace.ts";
+import { IStairConfiguration } from "../../../interfaces/IStairConfiguration.ts";
+import { Vector2D, Vector3D } from "../../../types/Vector.ts";
+import { CubeFace } from "../../../enums/CubeFace.ts";
 import { EventManager } from "../../events/EventManager.ts";
-import {StairType} from "../../../interfaces/StairType.ts";
+import {StairType} from "../../../enums/StairType.ts";
+import {Direction} from "../../../enums/Direction.ts";
 
 export class StairPart extends RoomPart {
     public room!: Room;
@@ -15,7 +16,7 @@ export class StairPart extends RoomPart {
     public eventManager: EventManager = new EventManager();
 
     constructor(
-        public configuration: StairConfiguration
+        public configuration: IStairConfiguration
     ) {
         super();
 
@@ -106,11 +107,11 @@ export class StairPart extends RoomPart {
         this.room.visualization.container.addChild(this.container);
     }
 
-    private _renderStair(offsets: Position2D): void {
+    private _renderStair(offsets: Vector2D): void {
         const material: FloorMaterial = this.configuration.material ?? new FloorMaterial(101);
 
         for (let i: number = 0; i < 4; i++) {
-            const size: Position3D = {
+            const size: Vector3D = {
                 x: this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH ? this.configuration.length : 8 / 32,
                 y: this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST ? this.configuration.length : 8 / 32,
                 z: this.configuration.thickness / 32
@@ -140,7 +141,7 @@ export class StairPart extends RoomPart {
                 size.y -= (8 / 32) * i;
             }
 
-            const textureOffset: Position2D = {
+            const textureOffset: Vector2D = {
                 x: 0,
                 y: 0
             }
@@ -214,7 +215,7 @@ export class StairPart extends RoomPart {
         }
     }
 
-    public getGlobalTilePosition(point: Point): Position3D {
+    public getGlobalTilePosition(point: Point): Vector3D {
         const localPosition: Point = this.container.toLocal(point);
         let localX: number = Math.floor(localPosition.x / 64 + localPosition.y / 32),
             localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64);

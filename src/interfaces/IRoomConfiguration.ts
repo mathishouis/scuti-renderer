@@ -1,4 +1,4 @@
-export interface RoomConfiguration {
+export interface IRoomConfiguration {
     heightMap: string;
     floorMaterial?: number;
     floorThickness?: number;

@@ -1,8 +1,8 @@
-import { LoadedKeys } from "../../interfaces/LoadedKeys.ts";
+import { ILoadedKeys } from "../../interfaces/ILoadedKeys.ts";
 import { Assets, Cache } from "pixi.js";
 
 export class AssetLoader {
-    static loadedKeys: LoadedKeys = {};
+    static loadedKeys: ILoadedKeys = {};
 
     public static async load(key: string, path: string, onUncached?: () => void): Promise<void> {
         if ((AssetLoader.loadedKeys)[key] !== undefined) {

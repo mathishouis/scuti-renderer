@@ -1,11 +1,11 @@
 import { RoomPart } from "./RoomPart.ts";
-import { TileConfiguration } from "../../../interfaces/TileConfiguration.ts";
+import { ITileConfiguration } from "../../../interfaces/ITileConfiguration.ts";
 import { Room } from "../Room.ts";
 import { Container, FederatedPointerEvent, Point, Polygon } from "pixi.js";
 import { FloorMaterial } from "../materials/FloorMaterial.ts";
 import { Cube } from "../../geometry/Cube.ts";
 import { EventManager } from "../../events/EventManager.ts";
-import { Position3D } from "../../../interfaces/Position.ts";
+import { Vector3D } from "../../../types/Vector.ts";
 
 export class TilePart extends RoomPart {
     public room!: Room;
@@ -13,7 +13,7 @@ export class TilePart extends RoomPart {
     public eventManager: EventManager = new EventManager();
 
     constructor(
-        public configuration: TileConfiguration
+        public configuration: ITileConfiguration
     ) {
         super();
 
@@ -67,7 +67,7 @@ export class TilePart extends RoomPart {
         this.room.visualization.container.addChild(this.container);
     }
 
-    public getGlobalTilePosition(point: Point): Position3D {
+    public getGlobalTilePosition(point: Point): Vector3D {
         const localPosition: Point = this.container.toLocal(point);
         const localX: number = Math.floor(localPosition.x / 64 + localPosition.y / 32),
             localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64) + this.configuration.size.y;

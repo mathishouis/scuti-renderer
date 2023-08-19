@@ -1,5 +1,5 @@
 import { Application, BaseTexture, Container, SCALE_MODES, settings } from "pixi.js";
-import { RendererConfiguration } from "./interfaces/RendererConfiguration.ts";
+import { IRendererConfiguration } from "./interfaces/IRendererConfiguration.ts";
 import { GameObject } from "./objects/GameObject.ts";
 import { AssetLoader } from "./objects/assets/AssetLoader.ts";
 import {Layer, Stage} from "@pixi/layers";
@@ -10,7 +10,7 @@ export class Scuti {
     public layer: Layer = new Layer();
 
     constructor(
-        private _configuration: RendererConfiguration
+        private _configuration: IRendererConfiguration
     ) {
         this._initializePixi();
         this._initializeCanvas();

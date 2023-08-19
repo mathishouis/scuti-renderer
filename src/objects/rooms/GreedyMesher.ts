@@ -1,7 +1,8 @@
 import {RoomHeightmap} from "./RoomHeightmap.ts";
-import {Direction, Position2D, Position3D} from "../../interfaces/Position.ts";
-import {Stair} from "../../interfaces/Stair.ts";
-import {StairType} from "../../interfaces/StairType.ts";
+import {Vector2D, Vector3D} from "../../types/Vector.ts";
+import {Stair} from "../../types/Stair.ts";
+import {StairType} from "../../enums/StairType.ts";
+import {Direction} from "../../enums/Direction.ts";
 
 // TODO: REFACTOR EVERYTHING HERE!!!!!!!
 export class GreedyMesher {
@@ -11,8 +12,8 @@ export class GreedyMesher {
     ) {}
 
     public getParts() {
-        const sizes: Record<number, Record<number, Position3D | undefined>> = {};
-        const blocks: Array<Record<'startPos' | 'size', Position2D | Position3D>> = [];
+        const sizes: Record<number, Record<number, Vector3D | undefined>> = {};
+        const blocks: Array<Record<'startPos' | 'size', Vector2D | Vector3D>> = [];
 
         for (let y = 0; y < this.heightMap.heightMap.length; y++) {
             sizes[y] = {}
@@ -49,7 +50,7 @@ export class GreedyMesher {
                 if (sizes[y][x])
                     blocks.push({
                         startPos: { x: Number(x) - sizes[y][x]!.x + 1, y: Number(y) - sizes[y][x]!.y + 1, z: sizes[y][x]!.z },
-                        size: sizes[y][x] as Position2D
+                        size: sizes[y][x] as Vector2D
                     })
             }
         }
@@ -59,15 +60,15 @@ export class GreedyMesher {
 
     public getStairs() {
         const stairs: Array<{
-            startPos: Position3D,
+            startPos: Vector3D,
             length: number,
             direction: Direction,
             leftCorner: StairType,
             rightCorner: StairType
         }> = [];
 
-        const rowStairSizes: Record<number, Record<number, Position3D | undefined>> = {};
-        const columnStairSizes: Record<number, Record<number, Position3D | undefined>> = {};
+        const rowStairSizes: Record<number, Record<number, Vector3D | undefined>> = {};
+        const columnStairSizes: Record<number, Record<number, Vector3D | undefined>> = {};
 
         for (let y = 0; y < this.heightMap.heightMap.length; y++) {
             rowStairSizes[y] = {}

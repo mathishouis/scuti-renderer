@@ -1,7 +1,8 @@
-import { HeightMap } from "../../interfaces/HeightMap.ts";
-import {Direction, Position2D} from "../../interfaces/Position.ts";
-import {Stair} from "../../interfaces/Stair.ts";
-import {StairType} from "../../interfaces/StairType.ts";
+import { HeightMap } from "../../types/HeightMap.ts";
+import {Vector2D} from "../../types/Vector.ts";
+import {Stair} from "../../types/Stair.ts";
+import {StairType} from "../../enums/StairType.ts";
+import {Direction} from "../../enums/Direction.ts";
 
 export class RoomHeightmap {
     public heightMap: HeightMap;
@@ -19,35 +20,35 @@ export class RoomHeightmap {
         });
     }
 
-    public isTile({ x, y }: Position2D): boolean {
+    public isTile({ x, y }: Vector2D): boolean {
         return this.getTile({ x, y }) !== "x";
     }
 
-    public getTile({ x, y }: Position2D): string {
+    public getTile({ x, y }: Vector2D): string {
         return x < 0 || y < 0 || this.heightMap[y] === undefined || this.heightMap[y][x] === undefined ? 'x' : this.heightMap[y][x];
     }
 
-    public getTileHeight({ x, y }: Position2D): number {
+    public getTileHeight({ x, y }: Vector2D): number {
         const tile: string = this.getTile({ x, y });
 
         return tile === 'x' ? 0 : isNaN(Number(tile)) ? tile.charCodeAt(0) - 96 + 9 : Number(tile);
     }
 
-    public getTileDifference(position1: Position2D, position2: Position2D): number {
+    public getTileDifference(position1: Vector2D, position2: Vector2D): number {
         return Number(this.getTileHeight(position1)) - Number(this.getTileHeight(position2));
     }
 
-    public getStair({ x, y }: Position2D): Stair | undefined {
-        const topLeftTile: Position2D = { x: x - 1, y: y - 1 };
-        const topTile: Position2D = { x: x, y: y - 1 };
-        const topRightTile: Position2D = { x: x + 1, y: y - 1 };
+    public getStair({ x, y }: Vector2D): Stair | undefined {
+        const topLeftTile: Vector2D = { x: x - 1, y: y - 1 };
+        const topTile: Vector2D = { x: x, y: y - 1 };
+        const topRightTile: Vector2D = { x: x + 1, y: y - 1 };
 
-        const midLeftTile: Position2D = { x: x - 1, y: y };
-        const midRightTile: Position2D = { x: x + 1, y: y };
+        const midLeftTile: Vector2D = { x: x - 1, y: y };
+        const midRightTile: Vector2D = { x: x + 1, y: y };
 
-        const botLeftTile: Position2D = { x: x - 1, y: y + 1 };
-        const botTile: Position2D = { x: x, y: y + 1 };
-        const botRightTile: Position2D = { x: x + 1, y: y + 1 };
+        const botLeftTile: Vector2D = { x: x - 1, y: y + 1 };
+        const botTile: Vector2D = { x: x, y: y + 1 };
+        const botRightTile: Vector2D = { x: x + 1, y: y + 1 };
 
         if (
             this.isTile({ x, y }) &&

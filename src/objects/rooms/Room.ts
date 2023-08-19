@@ -1,5 +1,5 @@
 import { Scuti } from "../../Scuti.ts";
-import { RoomConfiguration } from "../../interfaces/RoomConfiguration.ts";
+import { IRoomConfiguration } from "../../interfaces/IRoomConfiguration.ts";
 import { RoomVisualization } from "./RoomVisualization.ts";
 import { RoomCamera } from "./RoomCamera.ts";
 import { GameObject } from "../GameObject.ts";
@@ -12,7 +12,7 @@ export class Room extends GameObject {
     public camera!: RoomCamera;
 
     constructor(
-        public configuration: RoomConfiguration
+        public configuration: IRoomConfiguration
     ) {
         super();
     }

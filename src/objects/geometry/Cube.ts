@@ -1,11 +1,11 @@
 import { Color, Container, Graphics, Matrix } from "pixi.js";
 import { FloorMaterial } from "../rooms/materials/FloorMaterial.ts";
-import { CubeConfiguration } from "../../interfaces/CubeConfiguration.ts";
-import { CubeFace } from "../../interfaces/CubeFace.ts";
+import { ICubeConfiguration } from "../../interfaces/ICubeConfiguration.ts";
+import { CubeFace } from "../../enums/CubeFace.ts";
 
 export class Cube extends Container {
     constructor(
-        public configuration: CubeConfiguration
+        public configuration: ICubeConfiguration
     ) {
         super();
 
