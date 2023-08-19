@@ -32,10 +32,10 @@ export class RoomVisualization {
         greedyMesher.getParts().forEach((block: Record<'startPos' | 'size', Vector2D | Vector3D>) => {
             //const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
             const tilePart = new TilePart({
-                material: new FloorMaterial(111),
+                material: this.room.configuration.floorMaterial,
                 position: block.startPos as Vector3D,
                 size: block.size as Vector2D,
-                thickness: 8,
+                thickness: this.room.configuration.floorThickness,
             });
             this.add(tilePart);
         });
@@ -48,10 +48,10 @@ export class RoomVisualization {
         }) => {
             //const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
             const stair = new StairPart({
-                material: new FloorMaterial(111),
+                material: this.room.configuration.floorMaterial,
                 position: block.startPos,
                 length: block.length,
-                thickness: 8,
+                thickness: this.room.configuration.floorThickness,
                 direction: block.direction,
                 leftCorner: block.leftCorner,
                 rightCorner: block.rightCorner
