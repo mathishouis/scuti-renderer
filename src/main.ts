@@ -19,7 +19,7 @@ const heightMap: string =`xxxxxxxxxxxxxxxxxxxxxxxxxxx
 x2222xx1111111111xx11111111
 x2222xx1111111111xx11111111
 222222111111111111111111111
-x22222111111111111111111111
+x22222111122221111111111111
 x22222111111111111111111111
 x22222111111111111111111111
 x2222xx1111111111xx11111111
@@ -57,16 +57,16 @@ renderer.add(room);
 room.camera.zoom(1);
 room.camera.centerCamera(0);
 
-setInterval(() => {
+/*setInterval(() => {
     const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
     room.configuration.floorMaterial = new FloorMaterial(random)
     room.configuration.floorThickness = 8;
-}, 1000);
+}, 1000);*/
 
 new FloorMaterial(101);
 
 room.events.tiles.onPointerUp = (event: ITileEvent) => {
-    console.log(event);
+    console.log(event.position);
 };
 
 /*setTimeout(() => room.camera.zoom(2), 1000);

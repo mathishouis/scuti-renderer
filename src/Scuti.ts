@@ -40,10 +40,11 @@ export class Scuti {
 
     public async load(): Promise<void> {
         await Promise.all([
-            AssetLoader.load("rooms/materials/floor", "/rooms/materials/floor/floor.json")
+            AssetLoader.load("room/materials/floor", "/room/materials/floor/floor.json"),
+            AssetLoader.load("room/cursor", "/room/cursor/cursor.json")
         ])
-        for (const material of AssetLoader.get("rooms/materials/floor")) {
-            await AssetLoader.load(`rooms/materials/floor/${material.texture}`, `/rooms/materials/floor/textures/${material.texture}.png`);
+        for (const material of AssetLoader.get("room/materials/floor")) {
+            await AssetLoader.load(`room/materials/floor/${material.texture}`, `/room/materials/floor/textures/${material.texture}.png`);
         }
 
     }

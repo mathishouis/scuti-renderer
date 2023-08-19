@@ -16,14 +16,14 @@ export class FloorMaterial extends RoomMaterial {
     }
 
     private _initialize(): void {
-        const material: Material = AssetLoader.get("rooms/materials/floor").find((material: Material) => material.id === this.id);
+        const material: Material = AssetLoader.get("room/materials/floor").find((material: Material) => material.id === this.id);
 
         if (material) {
             this.color = material.color;
-            this.texture = AssetLoader.get(`rooms/materials/floor/${material.texture}`);
+            this.texture = AssetLoader.get(`room/materials/floor/${material.texture}`);
         } else {
             this.color = 16777215;
-            this.texture = AssetLoader.get("rooms/materials/floor/tiles");
+            this.texture = AssetLoader.get("room/materials/floor/tiles");
         }
     }
 }

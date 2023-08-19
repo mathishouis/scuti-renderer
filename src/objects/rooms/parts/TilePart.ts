@@ -66,8 +66,8 @@ export class TilePart extends RoomPart {
 
         this.container.eventMode = "static";
         this.container.addChild(cube);
-        this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.size.y);
-        this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.size.y) - 32 * this.configuration.position.z;
+        this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.size.y - 1);
+        this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.size.y - 1) - 32 * this.configuration.position.z;
 
         this.room.visualization.container.addChild(this.container);
     }
@@ -75,7 +75,7 @@ export class TilePart extends RoomPart {
     public getGlobalTilePosition(point: Point): Vector3D {
         const localPosition: Point = this.container.toLocal(point);
         const localX: number = Math.floor(localPosition.x / 64 + localPosition.y / 32),
-            localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64) + this.configuration.size.y;
+            localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64 - 0.01) + this.configuration.size.y;
         return {
             x: localX + this.configuration.position.x,
             y: localY + this.configuration.position.y,

@@ -1,8 +1,10 @@
 import { RoomLayer } from "./RoomLayer.ts";
 import { Room } from "../Room.ts";
 import { RoomPart } from "../parts/RoomPart.ts";
+import {CursorPart} from "../parts/CursorPart.ts";
 
 export class PartLayer extends RoomLayer {
+    public cursor!: CursorPart;
     public childrens: RoomPart[] = [];
 
     constructor(

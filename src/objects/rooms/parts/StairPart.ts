@@ -1,6 +1,6 @@
 import { RoomPart } from "./RoomPart.ts";
 import { Room } from "../Room.ts";
-import { Container, FederatedPointerEvent, Point, Polygon } from "pixi.js";
+import {Container, FederatedPointerEvent, Graphics, Point, Polygon} from "pixi.js";
 import { FloorMaterial } from "../materials/FloorMaterial.ts";
 import { Cube } from "../../geometry/Cube.ts";
 import { IStairConfiguration } from "../../../interfaces/IStairConfiguration.ts";
@@ -51,14 +51,12 @@ export class StairPart extends RoomPart {
             this.container.x = 32 * this.configuration.position.x - 32 * this.configuration.position.y;
             this.container.y = 16 * this.configuration.position.x + 16 * this.configuration.position.y - 32 * this.configuration.position.z;
         } else {
-            this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.length);
-            this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.length) - 32 * this.configuration.position.z;
+            this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.length - 1);
+            this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.length - 1) - 32 * this.configuration.position.z;
         }
 
         switch (this.configuration.direction) {
             case Direction.NORTH:
-                this.container.x -= 32;
-                this.container.y += 16;
                 this._renderStair({
                     x: 8,
                     y: -12
@@ -72,8 +70,8 @@ export class StairPart extends RoomPart {
                 });
                 break;
             case Direction.SOUTH:
-                this.container.x -= 8;
-                this.container.y += 4;
+                this.container.x += 24;
+                this.container.y -= 12;
                 this._renderStair({
                     x: -8,
                     y: -4
@@ -89,7 +87,7 @@ export class StairPart extends RoomPart {
                 break;
         }
 
-        if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
+        if (this.configuration.direction === Direction.NORTH) {
             this.container.hitArea = new Polygon(
                 new Point(0, 0),
                 new Point(32 * 1, -16 * 1),
@@ -97,7 +95,21 @@ export class StairPart extends RoomPart {
                 new Point(32 * this.configuration.length, 16 * this.configuration.length),
                 new Point(0, 0)
             );
-        } else {
+            this.container.addChild(new Graphics().beginFill(0x00FF00, 0.3).drawPolygon(
+                new Point(0, 0),
+                new Point(32 * 1, -16 * 1),
+                new Point(32 * (this.configuration.length + 1) + 32 * (1 - 1), -16 * (1 - 1) + 16 * (this.configuration.length - 1)),
+                new Point(32 * this.configuration.length, 16 * this.configuration.length),
+                new Point(0, 0)
+            ).endFill());
+        } else if (this.configuration.direction === Direction.WEST) {
+            this.container.addChild(new Graphics().beginFill(0xFF0000, 0.3).drawPolygon(
+                new Point(0, 24),
+                new Point(32 * this.configuration.length, -16 * this.configuration.length + 24),
+                new Point(64 + 32 * (this.configuration.length - 1), -16 * (this.configuration.length - 1) + 24),
+                new Point(32, 40),
+                new Point(0, 24)
+            ).endFill());
             this.container.hitArea = new Polygon(
                 new Point(0, 24),
                 new Point(32 * this.configuration.length, -16 * this.configuration.length + 24),
@@ -105,6 +117,24 @@ export class StairPart extends RoomPart {
                 new Point(32, 40),
                 new Point(0, 24)
             );
+        } else if (this.configuration.direction === Direction.SOUTH) {
+            this.container.hitArea = new Polygon();
+            /*this.container.addChild(new Graphics().beginFill(0x00FF00, 0.3).drawPolygon(
+                new Point(0 - 24, 0 + 12),
+                new Point(32 * 1 - 24, -16 * 1 + 12),
+                new Point(32 * (this.configuration.length + 1) + 32 * (1 - 1) - 24, -16 * (1 - 1) + 16 * (this.configuration.length - 1) + 12),
+                new Point(32 * this.configuration.length - 24, 16 * this.configuration.length + 12),
+                new Point(0 - 24, 0 + 12)
+            ).endFill());*/
+        } else if (this.configuration.direction === Direction.EAST) {
+            this.container.hitArea = new Polygon();
+            /*this.container.addChild(new Graphics().beginFill(0xFF0000, 0.3).drawPolygon(
+                new Point(0 - 24, 24 - 12),
+                new Point(32 * this.configuration.length - 24, -16 * this.configuration.length + 24 - 12),
+                new Point(64 + 32 * (this.configuration.length - 1) - 24, -16 * (this.configuration.length - 1) + 24 - 12),
+                new Point(32 - 24, 40 - 12),
+                new Point(0 - 24, 24 - 12)
+            ).endFill());*/
         }
 
         this.container.eventMode = "static";
@@ -222,12 +252,14 @@ export class StairPart extends RoomPart {
 
     public getGlobalTilePosition(point: Point): Vector3D {
         const localPosition: Point = this.container.toLocal(point);
-        let localX: number = Math.floor(localPosition.x / 64 + localPosition.y / 32),
-            localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64);
+        let localX: number;
+        let localY: number;
         if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
-            localY += 1;
+            localX = Math.floor(localPosition.x / 64 + localPosition.y / 32);
+            localY = Math.floor(localPosition.y / 32 - localPosition.x / 64) + 1;
         } else {
-            localY += this.configuration.length;
+            localX = Math.floor(localPosition.x / 64 + localPosition.y / 32 + 0.3) - 1;
+            localY = Math.floor(localPosition.y / 32 - localPosition.x / 64 + 0.24) + this.configuration.length - 1;
         }
         return {
             x: localX + this.configuration.position.x,
