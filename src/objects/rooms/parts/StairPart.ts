@@ -66,8 +66,8 @@ export class StairPart extends RoomPart {
                 });
                 break;
             case Direction.SOUTH:
-                this.container.x += 24;
-                this.container.y -= 12;
+                this.container.x -= 8;
+                this.container.y += 4;
                 this._renderStair({
                     x: -8,
                     y: -4
@@ -102,6 +102,7 @@ export class StairPart extends RoomPart {
         }
 
         this.container.eventMode = "static";
+        this.container.zIndex = (this.configuration.position.x + this.configuration.position.y) * 1000000 + 10000000 * 6;
     }
 
     private _renderStair(offsets: Position2D): void {

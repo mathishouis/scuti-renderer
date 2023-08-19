@@ -59,8 +59,11 @@ export class TilePart extends RoomPart {
 
         this.container.eventMode = "static";
         this.container.addChild(cube);
+
         this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.size.y);
         this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.size.y) - 32 * this.configuration.position.z;
+
+        this.container.zIndex = (this.configuration.position.x + this.configuration.position.y + this.configuration.position.z) * 1000000 + 10000000 * 6;
     }
 
     public getGlobalTilePosition(point: Point): Position3D {

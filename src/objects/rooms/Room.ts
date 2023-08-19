@@ -7,9 +7,9 @@ import {RoomHeightmap} from "./RoomHeightmap.ts";
 
 export class Room extends GameObject {
     public renderer!: Scuti;
+    public heightMap!: RoomHeightmap;
     public visualization!: RoomVisualization;
     public camera!: RoomCamera;
-    public heightMap!: RoomHeightmap;
 
     constructor(
         public configuration: RoomConfiguration
@@ -18,9 +18,9 @@ export class Room extends GameObject {
     }
 
     public render(): void {
+        this.heightMap = new RoomHeightmap(this.configuration.heightMap);
         this.visualization = new RoomVisualization(this);
         this.camera = new RoomCamera(this);
-        this.heightMap = new RoomHeightmap(this.configuration.heightMap);
 
         this.renderer.application.stage.addChild(this.camera);
     }
