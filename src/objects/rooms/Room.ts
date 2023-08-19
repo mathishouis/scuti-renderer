@@ -31,6 +31,11 @@ export class Room extends GameObject {
         this.renderer.application.stage.addChild(this.camera);
     }
 
+    public update(): void {
+        this.heightMap = new RoomHeightmap(this.configuration.heightMap);
+        this.visualization.update();
+    }
+
     public get tiles() {
 
     }

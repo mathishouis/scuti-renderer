@@ -4,12 +4,11 @@ import { TilePart } from "./parts/TilePart.ts";
 import { PartLayer } from "./layers/PartLayer.ts";
 import { RoomPart } from "./parts/RoomPart.ts";
 import { IRoomLayers } from "../../interfaces/IRoomLayers.ts";
-import { FloorMaterial } from "./materials/FloorMaterial.ts";
 import { StairPart } from "./parts/StairPart.ts";
 import { Vector2D, Vector3D } from "../../types/Vector.ts";
 import { GreedyMesher } from "./GreedyMesher.ts";
-import {StairType} from "../../enums/StairType.ts";
-import {Direction} from "../../enums/Direction.ts";
+import { StairType } from "../../enums/StairType.ts";
+import { Direction } from "../../enums/Direction.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -26,11 +25,8 @@ export class RoomVisualization {
     }
 
     public render(): void {
-        this.destroy();
-
         const greedyMesher = new GreedyMesher(this.room.heightMap);
         greedyMesher.getParts().forEach((block: Record<'startPos' | 'size', Vector2D | Vector3D>) => {
-            //const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
             const tilePart = new TilePart({
                 material: this.room.configuration.floorMaterial,
                 position: block.startPos as Vector3D,
@@ -46,7 +42,6 @@ export class RoomVisualization {
             leftCorner: StairType,
             rightCorner: StairType
         }) => {
-            //const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
             const stair = new StairPart({
                 material: this.room.configuration.floorMaterial,
                 position: block.startPos,
@@ -60,17 +55,22 @@ export class RoomVisualization {
         });
     }
 
+    public update(): void {
+        this.destroy();
+        this.render();
+    }
+
     public destroy(): void {
         [...this.layers.parts.childrens].forEach((part: RoomPart) => {
-            return part.container.destroy();
+            part.container.destroy();
+            this.layers.parts.remove(part)
         });
-        this.layers.parts.childrens = [];
     }
 
     public add(item: RoomPart): void {
+        this.layers.parts.add(item);
+
         item.room = this.room;
         item.render();
-
-        this.layers.parts.add(item);
     }
 }

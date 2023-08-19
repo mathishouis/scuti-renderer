@@ -42,18 +42,24 @@ x2222x0000000000xxxxxxxxxxx
 x2222x0000000000xxxxxxxxxxx
 x2222x0000000000xxxxxxxxxxx
 `;
-
+const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
 const room: Room = new Room({
     heightMap: heightMap,
     dragging: true,
     centerCamera: false,
-    floorMaterial: new FloorMaterial(101),
+    floorMaterial: new FloorMaterial(random),
     floorThickness: 8
 });
 
 renderer.add(room);
 
 room.camera.zoom(1);
+
+setInterval(() => {
+    const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
+    room.configuration.floorMaterial = new FloorMaterial(random)
+    room.configuration.floorThickness = Math.floor(Math.random() * (32 - 0 + 1)) + 0;
+}, 1000);
 
 new FloorMaterial(101);
 

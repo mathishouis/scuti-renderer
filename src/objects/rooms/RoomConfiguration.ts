@@ -44,7 +44,7 @@ export class RoomConfiguration {
 
     public set heightMap(heightMap: string) {
         this._heightMap = heightMap;
-        this.room.render();
+        this.room.update();
     }
 
     public get floorMaterial(): FloorMaterial {
@@ -53,7 +53,7 @@ export class RoomConfiguration {
 
     public set floorMaterial(material: FloorMaterial) {
         this._floorMaterial = material;
-        this.room.render();
+        this.room.update();
     }
 
     public get floorThickness(): number {
@@ -62,7 +62,7 @@ export class RoomConfiguration {
 
     public set floorThickness(thickness: number) {
         this._floorThickness = thickness;
-        this.room.render();
+        this.room.update();
     }
 
     public get floorHidden(): boolean {
@@ -71,7 +71,7 @@ export class RoomConfiguration {
 
     public set floorHidden(hidden: boolean) {
         this._floorHidden = hidden;
-        this.room.render();
+        this.room.update();
     }
 
     public get wallMaterial(): number {
@@ -80,7 +80,7 @@ export class RoomConfiguration {
 
     public set wallMaterial(material: number) {
         this._wallMaterial = material;
-        this.room.render();
+        this.room.update();
     }
 
     public get wallThickness(): number {
@@ -89,7 +89,7 @@ export class RoomConfiguration {
 
     public set wallThickness(thickness: number) {
         this._wallThickness = thickness;
-        this.room.render();
+        this.room.update();
     }
 
     public get wallHidden(): boolean {
@@ -98,7 +98,7 @@ export class RoomConfiguration {
 
     public set wallHidden(hidden: boolean) {
         this._wallHidden = hidden;
-        this.room.render();
+        this.room.update();
     }
 
     public get wallHeight(): number {
@@ -107,7 +107,7 @@ export class RoomConfiguration {
 
     public set wallHeight(height: number) {
         this._wallHeight = height;
-        this.room.render();
+        this.room.update();
     }
 
     public get dragging(): boolean {
