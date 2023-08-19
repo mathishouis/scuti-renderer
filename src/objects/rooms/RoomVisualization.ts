@@ -34,7 +34,7 @@ export class RoomVisualization {
         });
         this.layers.parts.cursor.room = this.room;
         this.layers.parts.cursor.render();
-        //this.layers.parts.cursor.hide();
+        this.layers.parts.cursor.hide();
     }
 
     private _registerFloorPart(part: TilePart | StairPart): void {

@@ -27,7 +27,9 @@ export class Scuti {
             width: this._configuration.width,
             height: this._configuration.height,
             resolution: 1,
-            antialias: false
+            antialias: false,
+            backgroundColor: this._configuration.backgroundColor ?? 0x0C567C,
+            backgroundAlpha: this._configuration.backgroundAlpha ?? 1
         });
         this.application.stage = new Stage();
         (globalThis as any).__PIXI_APP__ = this.application; // Support for PIXI.js dev-tool.

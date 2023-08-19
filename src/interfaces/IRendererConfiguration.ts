@@ -3,4 +3,6 @@ export interface IRendererConfiguration {
     width: number;
     height: number;
     resources: string;
+    backgroundColor?: number;
+    backgroundAlpha?: number;
 }

@@ -95,21 +95,7 @@ export class StairPart extends RoomPart {
                 new Point(32 * this.configuration.length, 16 * this.configuration.length),
                 new Point(0, 0)
             );
-            this.container.addChild(new Graphics().beginFill(0x00FF00, 0.3).drawPolygon(
-                new Point(0, 0),
-                new Point(32 * 1, -16 * 1),
-                new Point(32 * (this.configuration.length + 1) + 32 * (1 - 1), -16 * (1 - 1) + 16 * (this.configuration.length - 1)),
-                new Point(32 * this.configuration.length, 16 * this.configuration.length),
-                new Point(0, 0)
-            ).endFill());
         } else if (this.configuration.direction === Direction.WEST) {
-            this.container.addChild(new Graphics().beginFill(0xFF0000, 0.3).drawPolygon(
-                new Point(0, 24),
-                new Point(32 * this.configuration.length, -16 * this.configuration.length + 24),
-                new Point(64 + 32 * (this.configuration.length - 1), -16 * (this.configuration.length - 1) + 24),
-                new Point(32, 40),
-                new Point(0, 24)
-            ).endFill());
             this.container.hitArea = new Polygon(
                 new Point(0, 24),
                 new Point(32 * this.configuration.length, -16 * this.configuration.length + 24),

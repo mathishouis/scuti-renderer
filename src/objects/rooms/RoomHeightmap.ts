@@ -136,4 +136,24 @@ export class RoomHeightmap {
 
         return;
     }
+
+    public isDoor({ x, y }: Vector2D): boolean {
+        const topLeftTile: Vector2D = { x: x - 1, y: y - 1 };
+        const topTile: Vector2D = { x, y: y - 1 };
+
+        const midLeftTile: Vector2D = { x: x - 1, y };
+        const midTile: Vector2D = { x: x, y: y };
+
+        const botLeftTile: Vector2D = { x: x - 1, y: y + 1 };
+        const botTile: Vector2D = { x, y: y + 1 };
+
+        return (
+            !this.isTile(topTile) &&
+            !this.isTile(topLeftTile) &&
+            !this.isTile(midLeftTile) &&
+            !this.isTile(botLeftTile) &&
+            !this.isTile(botTile) &&
+            this.isTile(midTile)
+        );
+    }
 }
