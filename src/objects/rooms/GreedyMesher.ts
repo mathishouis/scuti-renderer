@@ -41,13 +41,26 @@ export class GreedyMesher {
             }
         }
 
+        let doorFound: boolean = false;
+
         for (const y in sizes) {
             for (const x in sizes[y]) {
-                if (sizes[y][x])
+                if (sizes[y][x]) {
+                    const door: boolean = this.heightMap.isDoor({
+                        x: Number(x),
+                        y: Number(y)
+                    }) && !doorFound;
+                    if (door) doorFound = true;
                     tiles.push({
-                        position: { x: Number(x) - sizes[y][x]!.x + 1, y: Number(y) - sizes[y][x]!.y + 1, z: sizes[y][x]!.z },
-                        size: sizes[y][x] as Vector2D
+                        position: {
+                            x: Number(x) - sizes[y][x]!.x + 1,
+                            y: Number(y) - sizes[y][x]!.y + 1,
+                            z: sizes[y][x]!.z
+                        },
+                        size: sizes[y][x] as Vector2D,
+                        door: door
                     });
+                }
             }
         }
 

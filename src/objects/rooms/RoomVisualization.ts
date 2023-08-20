@@ -65,7 +65,7 @@ export class RoomVisualization {
             material: this.room.configuration.floorMaterial,
             position: tile.position,
             size: tile.size,
-            thickness: this.room.configuration.floorThickness,
+            thickness: tile.door ? 0 : this.room.configuration.floorThickness,
         })));
 
         greedyMesher.stairs.forEach((stair: StairMesh): void => this._registerFloorPart(new StairPart({

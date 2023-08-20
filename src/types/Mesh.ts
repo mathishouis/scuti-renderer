@@ -4,7 +4,8 @@ import { StairType } from "../enums/StairType.ts";
 
 export type TileMesh = {
     position: Vector3D,
-    size: Vector2D
+    size: Vector2D,
+    door: boolean
 }
 
 export type StairMesh = {
