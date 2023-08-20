@@ -159,7 +159,8 @@ export class StairPart extends RoomPart {
             if (this.configuration.corners.right === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
                 size.x += (8 / 32) * (i - 3) + 0.25;
             } else if (this.configuration.corners.right === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
-                size.y -= (8 / 32) * i + 0.25;
+                size.y -= (8 / 32) * i;
+                if (this.configuration.direction === Direction.WEST) size.y -= 0.25;
             }
 
             const textureOffset: Vector2D = {
@@ -193,8 +194,8 @@ export class StairPart extends RoomPart {
                         textureOffset.y = -i * 4;
                         break;
                     case StairType.INNER_CORNER_STAIR:
-                        textureOffset.x = -i * 8;
-                        textureOffset.y = (i + 2) * 4;
+                        textureOffset.x = -(i + 3) * 8;
+                        textureOffset.y = (i + 5) * 4;
                         break;
                 }
             }
