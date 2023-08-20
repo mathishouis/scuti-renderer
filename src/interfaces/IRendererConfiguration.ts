@@ -5,4 +5,5 @@ export interface IRendererConfiguration {
     resources: string;
     backgroundColor?: number;
     backgroundAlpha?: number;
+    resizeTo?: HTMLElement | Window;
 }

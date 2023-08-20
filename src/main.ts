@@ -10,7 +10,9 @@ const renderer: Scuti = new Scuti({
     canvas: document.getElementById('app') as HTMLElement,
     width: window.innerWidth,
     height: window.innerHeight,
-    resources: './resources'
+    resources: './resources',
+    backgroundColor: 0x0C567C
+    //resizeTo: window
 });
 
 await renderer.load();
@@ -68,6 +70,11 @@ new FloorMaterial(101);
 room.events.tiles.onPointerUp = (event: ITileEvent) => {
     console.log(event.position);
 };
+
+//setTimeout(() => renderer.configuration.backgroundColor = 0xFF0000, 2000);
+//setTimeout(() => renderer.configuration.width = 200, 3000);
+//setTimeout(() => renderer.configuration.resizeTo = window, 4000);
+//setTimeout(() => renderer.configuration.canvas = document.getElementById("stats") ?? document.body, 4000);
 
 /*setTimeout(() => room.camera.zoom(2), 1000);
 setTimeout(() => room.camera.zoom(4), 2000);

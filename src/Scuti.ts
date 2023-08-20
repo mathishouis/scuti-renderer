@@ -1,17 +1,22 @@
-import { Application, BaseTexture, Container, SCALE_MODES, settings } from "pixi.js";
+import { Application, BaseTexture, Color, Container, SCALE_MODES, settings, Ticker, UPDATE_PRIORITY } from "pixi.js";
 import { IRendererConfiguration } from "./interfaces/IRendererConfiguration.ts";
 import { GameObject } from "./objects/GameObject.ts";
 import { AssetLoader } from "./objects/assets/AssetLoader.ts";
-import {Layer, Stage} from "@pixi/layers";
+import { Layer, Stage} from "@pixi/layers";
+import { addStats, StatsJSAdapter } from "pixi-stats";
+import { ScutiConfiguration } from "./ScutiConfiguration.ts";
 
 export class Scuti {
+    public configuration!: ScutiConfiguration;
     public canvas!: HTMLElement;
     public application!: Application;
     public layer: Layer = new Layer();
 
     constructor(
-        private _configuration: IRendererConfiguration
+        configuration: IRendererConfiguration
     ) {
+        this.configuration = new ScutiConfiguration(this, configuration);
+
         this._initializePixi();
         this._initializeCanvas();
     }
@@ -24,17 +29,24 @@ export class Scuti {
 
     private _initializeCanvas(): void {
         this.application = new Application({
-            width: this._configuration.width,
-            height: this._configuration.height,
+            width: this.configuration.width,
+            height: this.configuration.height,
             resolution: 1,
             antialias: false,
-            backgroundColor: this._configuration.backgroundColor ?? 0x0C567C,
-            backgroundAlpha: this._configuration.backgroundAlpha ?? 1
+            backgroundColor: new Color(this.configuration.backgroundColor ?? 0x0C567C).toHex(),
+            backgroundAlpha: this.configuration.backgroundAlpha ?? 1,
+            resizeTo: this.configuration.resizeTo
         });
         this.application.stage = new Stage();
         (globalThis as any).__PIXI_APP__ = this.application; // Support for PIXI.js dev-tool.
-        this.canvas = this._configuration.canvas;
+        this.canvas = this.configuration.canvas;
         this.canvas.append(this.application.view as HTMLCanvasElement);
+
+        // Pixi stats
+        const stats: StatsJSAdapter = addStats(document, this.application);
+        const ticker: Ticker = Ticker.shared;
+
+        ticker.add(stats.update, stats, UPDATE_PRIORITY.UTILITY);
 
         this.layer.group.enableSort = true;
         this.application.stage.addChild(this.layer);
