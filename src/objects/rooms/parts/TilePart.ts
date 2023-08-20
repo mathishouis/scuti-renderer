@@ -45,13 +45,14 @@ export class TilePart extends RoomPart {
     }
 
     public render(): void {
+        const zOrder: number = (this.configuration.position.z - 1) * 4;
         const material: FloorMaterial = this.configuration.material ?? new FloorMaterial(101);
         const cube: Cube = new Cube({
             layer: this.room.renderer.layer,
             zOrders: {
-                [CubeFace.TOP]: this.configuration.position.z * 10000,
-                [CubeFace.LEFT]: -(this.room.heightMap.heightMap[0].length - this.configuration.size.y) + this.configuration.position.y + this.configuration.position.z,
-                [CubeFace.RIGHT]: -(this.room.heightMap.heightMap.length - this.configuration.size.x) + this.configuration.position.x + this.configuration.position.z
+                [CubeFace.TOP]: zOrder + 1,
+                [CubeFace.LEFT]: zOrder - 0.5,
+                [CubeFace.RIGHT]: zOrder - 0.6
             },
             material: material,
             size: {

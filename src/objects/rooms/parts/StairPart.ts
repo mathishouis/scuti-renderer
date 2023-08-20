@@ -200,21 +200,23 @@ export class StairPart extends RoomPart {
             }
 
             const zOrders = {
-                [CubeFace.TOP]: this.configuration.position.z,
-                [CubeFace.LEFT]: this.configuration.position.z - 1,
-                [CubeFace.RIGHT]: this.configuration.position.z - 2
+                [CubeFace.TOP]: (this.configuration.position.z - 1) * 4,
+                [CubeFace.LEFT]: (this.configuration.position.z - 1) * 4,
+                [CubeFace.RIGHT]: (this.configuration.position.z - 1) * 4
             }
 
             if (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST) {
-                zOrders[CubeFace.TOP]= this.configuration.position.z + (3 - i) * 100;
-                zOrders[CubeFace.LEFT]= -(this.room.heightMap.heightMap[0].length - this.configuration.length) + this.configuration.position.y + (3 - i) * 100;
-                zOrders[CubeFace.RIGHT]= -(this.room.heightMap.heightMap.length - 1) + this.configuration.position.x + (3 - i) * 100;
-                // I ft descendre
+                zOrders[CubeFace.TOP] += (3 - i);
+                zOrders[CubeFace.LEFT] += (3 - i);
+                zOrders[CubeFace.RIGHT] += (3 - i);
+
+                if (this.configuration.direction === Direction.EAST) zOrders[CubeFace.RIGHT] -= 100;
             } else {
-                zOrders[CubeFace.TOP]= this.configuration.position.z + (i * 100);
-                zOrders[CubeFace.LEFT]= -(this.room.heightMap.heightMap[0].length - 1) + this.configuration.position.y + (i * 100);
-                zOrders[CubeFace.RIGHT]= -(this.room.heightMap.heightMap.length - this.configuration.length) + this.configuration.position.x + (i * 100);
-                // I ft monter
+                zOrders[CubeFace.TOP] += i;
+                zOrders[CubeFace.LEFT] += i;
+                zOrders[CubeFace.RIGHT] += i;
+
+                if (this.configuration.direction === Direction.SOUTH) zOrders[CubeFace.LEFT] -= 100;
             }
 
             const cube: Cube = new Cube({
