@@ -156,4 +156,17 @@ export class RoomHeightmap {
             this.isTile(midTile)
         );
     }
+
+    public get maxHeight(): number {
+        let z: number = 0;
+
+        for (let y: number = 0; y < this.heightMap.length; y++) {
+            for (let x: number = 0; x < this.heightMap[y].length; x++) {
+                const height: number = this.getTileHeight({ x, y });
+                if (height > z) z = height;
+            }
+        }
+
+        return z;
+    }
 }

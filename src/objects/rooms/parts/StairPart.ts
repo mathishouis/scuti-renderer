@@ -2,7 +2,7 @@ import {RoomPart} from "./RoomPart.ts";
 import {Room} from "../Room.ts";
 import {Container, FederatedPointerEvent, Point, Polygon} from "pixi.js";
 import {FloorMaterial} from "../materials/FloorMaterial.ts";
-import {Cube} from "../../geometry/Cube.ts";
+import {Cube} from "../geometry/Cube.ts";
 import {IStairConfiguration} from "../../../interfaces/IStairConfiguration.ts";
 import {Vector2D, Vector3D} from "../../../types/Vector.ts";
 import {CubeFace} from "../../../enums/CubeFace.ts";

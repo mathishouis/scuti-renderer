@@ -3,7 +3,7 @@ import { ITileConfiguration } from "../../../interfaces/ITileConfiguration.ts";
 import { Room } from "../Room.ts";
 import { Container, FederatedPointerEvent, Point, Polygon } from "pixi.js";
 import { FloorMaterial } from "../materials/FloorMaterial.ts";
-import { Cube } from "../../geometry/Cube.ts";
+import { Cube } from "../geometry/Cube.ts";
 import { EventManager } from "../../events/EventManager.ts";
 import { Vector3D } from "../../../types/Vector.ts";
 import {CubeFace} from "../../../enums/CubeFace.ts";

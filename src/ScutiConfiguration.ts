@@ -1,6 +1,6 @@
-import {Scuti} from "./Scuti.ts";
-import {IRendererConfiguration} from "./interfaces/IRendererConfiguration.ts";
-import {Color} from "pixi.js";
+import { Scuti } from "./Scuti.ts";
+import { IRendererConfiguration } from "./interfaces/IRendererConfiguration.ts";
+import { Color } from "pixi.js";
 
 export class ScutiConfiguration {
     private _canvas!: HTMLElement;

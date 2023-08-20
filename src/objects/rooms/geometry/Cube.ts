@@ -1,7 +1,8 @@
 import { Color, Container, Graphics, Matrix } from "pixi.js";
-import { FloorMaterial } from "../rooms/materials/FloorMaterial.ts";
-import { ICubeConfiguration } from "../../interfaces/ICubeConfiguration.ts";
-import { CubeFace } from "../../enums/CubeFace.ts";
+import { FloorMaterial } from "../materials/FloorMaterial.ts";
+import { ICubeConfiguration } from "../../../interfaces/ICubeConfiguration.ts";
+import { CubeFace } from "../../../enums/CubeFace.ts";
+import {WallMaterial} from "../materials/WallMaterial.ts";
 
 export class Cube extends Container {
     constructor(
@@ -13,7 +14,7 @@ export class Cube extends Container {
     }
 
     private _initialize(): void {
-        const material: FloorMaterial = this.configuration.material ?? new FloorMaterial(101);
+        const material: FloorMaterial | WallMaterial = this.configuration.material ?? new FloorMaterial(101);
         const topFace: Graphics = new Graphics()
             .beginTextureFill({
                 texture: material.texture,

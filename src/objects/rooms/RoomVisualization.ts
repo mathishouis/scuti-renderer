@@ -1,14 +1,16 @@
-import { Container } from "pixi.js";
-import { Room } from "./Room.ts";
-import { TilePart } from "./parts/TilePart.ts";
-import { PartLayer } from "./layers/PartLayer.ts";
-import { RoomPart } from "./parts/RoomPart.ts";
-import { IRoomLayers } from "../../interfaces/IRoomLayers.ts";
-import { StairPart } from "./parts/StairPart.ts";
-import { GreedyMesher } from "./GreedyMesher.ts";
-import { StairMesh, TileMesh } from "../../types/Mesh.ts";
-import { ITileEvent } from "../../interfaces/IEvents.ts";
+import {Container} from "pixi.js";
+import {Room} from "./Room.ts";
+import {TilePart} from "./parts/TilePart.ts";
+import {PartLayer} from "./layers/PartLayer.ts";
+import {RoomPart} from "./parts/RoomPart.ts";
+import {IRoomLayers} from "../../interfaces/IRoomLayers.ts";
+import {StairPart} from "./parts/StairPart.ts";
+import {GreedyMesher} from "./geometry/GreedyMesher.ts";
+import {StairMesh, TileMesh} from "../../types/Mesh.ts";
+import {ITileEvent} from "../../interfaces/IEvents.ts";
 import {CursorPart} from "./parts/CursorPart.ts";
+import {WallPart} from "./parts/WallPart.ts";
+import {Direction} from "../../enums/Direction.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -76,6 +78,26 @@ export class RoomVisualization {
             direction: stair.direction,
             corners: stair.corners
         })));
+
+        let wallPart = new WallPart({
+            material: undefined,
+            position: { x: 1, y: 6, z: 2 },
+            thickness: 8,
+            length: 3,
+            height: -1,
+            direction: Direction.WEST
+        });
+        this.add(wallPart);
+
+        let wallPart2 = new WallPart({
+            material: undefined,
+            position: { x: 1, y: 1, z: 2 },
+            thickness: 8,
+            length: 2,
+            height: -1,
+            direction: Direction.NORTH
+        });
+        this.add(wallPart2);
     }
 
     public update(): void {
