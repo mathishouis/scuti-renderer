@@ -7,6 +7,7 @@ export interface IWallConfiguration {
     position: Vector3D;
     length: number;
     thickness: number;
+    floorThickness: number;
     height: number;
     direction: Direction;
     corner: boolean;

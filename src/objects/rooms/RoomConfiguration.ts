@@ -1,6 +1,7 @@
 import { FloorMaterial } from "./materials/FloorMaterial.ts";
 import { IRoomConfiguration } from "../../interfaces/IRoomConfiguration.ts";
 import { Room } from "./Room.ts";
+import { WallMaterial } from "./materials/WallMaterial.ts";
 
 export class RoomConfiguration {
     private _heightMap!: string;
@@ -9,7 +10,7 @@ export class RoomConfiguration {
     private _floorThickness!: number;
     private _floorHidden!: boolean;
 
-    private _wallMaterial!: number;
+    private _wallMaterial!: WallMaterial;
     private _wallThickness!: number;
     private _wallHidden!: boolean;
     private _wallHeight!: number;
@@ -28,7 +29,7 @@ export class RoomConfiguration {
         this._floorThickness = configuration.floorThickness ?? 8;
         this._floorHidden = configuration.floorHidden ?? false;
 
-        this._wallMaterial = configuration.wallMaterial ?? 111;
+        this._wallMaterial = configuration.wallMaterial ?? new WallMaterial(101);
         this._wallThickness = configuration.wallThickness ?? 8;
         this._wallHidden = configuration.wallHidden ?? false;
         this._wallHeight = configuration.wallHeight ?? 0;
@@ -74,11 +75,11 @@ export class RoomConfiguration {
         this.room.update();
     }
 
-    public get wallMaterial(): number {
+    public get wallMaterial(): WallMaterial {
         return this._wallMaterial;
     }
 
-    public set wallMaterial(material: number) {
+    public set wallMaterial(material: WallMaterial) {
         this._wallMaterial = material;
         this.room.update();
     }

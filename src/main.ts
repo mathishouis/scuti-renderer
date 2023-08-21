@@ -3,6 +3,7 @@ import {Scuti} from "./Scuti.ts";
 import {Room} from "./objects/rooms/Room.ts";
 import {FloorMaterial} from "./objects/rooms/materials/FloorMaterial.ts";
 import {ITileEvent} from "./interfaces/IEvents.ts";
+import {WallMaterial} from "./objects/rooms/materials/WallMaterial.ts";
 
 console.log("Hello Word");
 
@@ -51,7 +52,10 @@ const room: Room = new Room({
     dragging: true,
     centerCamera: false,
     floorMaterial: new FloorMaterial(101),
-    floorThickness: 8
+    floorThickness: 8,
+    wallMaterial: new WallMaterial(108),
+    wallThickness: 8,
+    wallHeight: -1
 });
 
 renderer.add(room);

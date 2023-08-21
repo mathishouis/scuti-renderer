@@ -10,7 +10,6 @@ import {StairMesh, TileMesh, WallMesh} from "../../types/Mesh.ts";
 import {ITileEvent} from "../../interfaces/IEvents.ts";
 import {CursorPart} from "./parts/CursorPart.ts";
 import {WallPart} from "./parts/WallPart.ts";
-import {WallMaterial} from "../rooms/materials/WallMaterial.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -63,7 +62,7 @@ export class RoomVisualization {
         this._registerCursor();
         const greedyMesher: GreedyMesher = new GreedyMesher(this.room.heightMap);
 
-        greedyMesher.tiles.forEach((tile: TileMesh): void => this._registerFloorPart(new TilePart({
+        if (!this.room.configuration.floorHidden) greedyMesher.tiles.forEach((tile: TileMesh): void => this._registerFloorPart(new TilePart({
             material: this.room.configuration.floorMaterial,
             position: tile.position,
             size: tile.size,
@@ -71,7 +70,7 @@ export class RoomVisualization {
             door: tile.door
         })));
 
-        greedyMesher.stairs.forEach((stair: StairMesh): void => this._registerFloorPart(new StairPart({
+        if (!this.room.configuration.floorHidden) greedyMesher.stairs.forEach((stair: StairMesh): void => this._registerFloorPart(new StairPart({
             material: this.room.configuration.floorMaterial,
             position: stair.position,
             length: stair.length,
@@ -80,12 +79,13 @@ export class RoomVisualization {
             corners: stair.corners
         })));
 
-        greedyMesher.walls.forEach((wall: WallMesh): void => this.add(new WallPart({
-            material: new WallMaterial(117),
+        if (!this.room.configuration.wallHidden) greedyMesher.walls.forEach((wall: WallMesh): void => this.add(new WallPart({
+            material: this.room.configuration.wallMaterial,
             position: wall.position,
             length: wall.length,
-            thickness: this.room.configuration.floorThickness,
-            height: -1,
+            floorThickness: this.room.configuration.floorThickness,
+            thickness: this.room.configuration.wallThickness,
+            height: this.room.configuration.wallHeight,
             direction: wall.direction,
             corner: wall.corner,
             door: wall.door,
