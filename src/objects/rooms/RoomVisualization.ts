@@ -86,7 +86,8 @@ export class RoomVisualization {
             length: wall.length,
             thickness: this.room.configuration.floorThickness,
             height: -1,
-            direction: wall.direction
+            direction: wall.direction,
+            corner: wall.corner
         })));
 
         /*let wallPart = new WallPart({

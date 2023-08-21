@@ -255,6 +255,11 @@ export class GreedyMesher {
                 if (rowWallSizes[y][x] && wall !== undefined) {
                     let length: number = Number(rowWallSizes[y][x]!.x);
 
+                    const wall2: WallType | undefined = this.heightMap.getWall({ x: Number(x) - rowWallSizes[y][x]!.x + 1, y: Number(y) - rowWallSizes[y][x]!.y + 1 })
+                    let corner: boolean = wall2 === WallType.CORNER_WALL;
+
+                    console.log(wall2)
+
                     walls.push({
                         position: {
                             x: Number(x) - rowWallSizes[y][x]!.x + 1,
@@ -262,7 +267,8 @@ export class GreedyMesher {
                             z: rowWallSizes[y][x]!.z
                         },
                         length: length,
-                        direction: Direction.NORTH
+                        direction: Direction.NORTH,
+                        corner: corner
                     });
                 }
             }
@@ -281,7 +287,8 @@ export class GreedyMesher {
                             z: columnWallSizes[y][x]!.z
                         },
                         length: length,
-                        direction: Direction.WEST
+                        direction: Direction.WEST,
+                        corner: false
                     });
                 }
             }

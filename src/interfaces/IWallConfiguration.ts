@@ -9,4 +9,5 @@ export interface IWallConfiguration {
     thickness: number;
     height: number;
     direction: Direction;
+    corner: boolean;
 }

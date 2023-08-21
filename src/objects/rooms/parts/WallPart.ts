@@ -39,7 +39,7 @@ export class WallPart extends RoomPart {
             size.x = this.configuration.thickness / 32;
             size.y = this.configuration.length;
         } else if (this.configuration.direction === Direction.NORTH) {
-            size.x = this.configuration.length;
+            size.x = this.configuration.length + (this.configuration.corner ? 8 / 32 : 0);
             size.y = this.configuration.thickness / 32;
         }
 
@@ -47,8 +47,8 @@ export class WallPart extends RoomPart {
             layer: this.room.renderer.layer,
             zOrders: {
                 [CubeFace.TOP]: zOrder + 1,
-                [CubeFace.LEFT]: zOrder - 0.5,
-                [CubeFace.RIGHT]: zOrder - 0.6
+                [CubeFace.LEFT]: zOrder - 0.9,
+                [CubeFace.RIGHT]: zOrder - 0.8
             },
             material: material,
             size: size
@@ -59,8 +59,8 @@ export class WallPart extends RoomPart {
             this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.length - 1) - 8;
             this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.length - 1) - 32 * this.configuration.position.z - 4 - size.z * 32 + this.configuration.thickness;
         } else if (this.configuration.direction === Direction.NORTH) {
-            this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y - 1);
-            this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y - 1) - 32 * this.configuration.position.z - size.z * 32 + this.configuration.thickness;
+            this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y - 1) - (this.configuration.corner ? 8 : 0);
+            this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y - 1) - 32 * this.configuration.position.z - size.z * 32 + this.configuration.thickness - (this.configuration.corner ? 4 : 0);
         }
 
         this.room.visualization.container.addChild(this.container);
