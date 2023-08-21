@@ -17,7 +17,7 @@ const renderer: Scuti = new Scuti({
 
 await renderer.load();
 
-const heightMap: string =`xxxxxxxxxxxxxxxxxxxxxxxxxxx
+const heightMap: string =`xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 x2222xx1111111111xx11111111
 x2222xx1111111111xx11111111
 222222111111111111111111111

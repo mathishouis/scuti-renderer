@@ -42,16 +42,14 @@ export class GreedyMesher {
             }
         }
 
-        let doorFound: boolean = false;
-
         for (const y in sizes) {
             for (const x in sizes[y]) {
                 if (sizes[y][x]) {
                     const door: boolean = this.heightMap.isDoor({
                         x: Number(x),
                         y: Number(y)
-                    }) && !doorFound;
-                    if (door) doorFound = true;
+                    });
+
                     tiles.push({
                         position: {
                             x: Number(x) - sizes[y][x]!.x + 1,
@@ -255,10 +253,7 @@ export class GreedyMesher {
                 if (rowWallSizes[y][x] && wall !== undefined) {
                     let length: number = Number(rowWallSizes[y][x]!.x);
 
-                    const wall2: WallType | undefined = this.heightMap.getWall({ x: Number(x) - rowWallSizes[y][x]!.x + 1, y: Number(y) - rowWallSizes[y][x]!.y + 1 })
-                    let corner: boolean = wall2 === WallType.CORNER_WALL;
-
-                    console.log(wall2)
+                    const corner: boolean = this.heightMap.getWall({ x: Number(x) - rowWallSizes[y][x]!.x + 1, y: Number(y) - rowWallSizes[y][x]!.y + 1 }) === WallType.CORNER_WALL;
 
                     walls.push({
                         position: {
