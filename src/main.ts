@@ -50,7 +50,7 @@ const room: Room = new Room({
     heightMap: heightMap,
     dragging: true,
     centerCamera: false,
-    floorMaterial: new FloorMaterial(random),
+    floorMaterial: new FloorMaterial(101),
     floorThickness: 8
 });
 

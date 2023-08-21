@@ -18,3 +18,8 @@ export type StairMesh = {
     }
 }
 
+export type WallMesh = {
+    position: Vector3D,
+    length: number,
+    direction: Direction,
+}

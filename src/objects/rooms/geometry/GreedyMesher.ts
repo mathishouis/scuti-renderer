@@ -1,9 +1,10 @@
-import { RoomHeightmap } from "../RoomHeightmap.ts";
-import { Vector2D, Vector3D } from "../../../types/Vector.ts";
-import { Stair } from "../../../types/Stair.ts";
-import { StairType } from "../../../enums/StairType.ts";
-import { Direction } from "../../../enums/Direction.ts";
-import { TileMesh, StairMesh } from "../../../types/Mesh.ts";
+import {RoomHeightmap} from "../RoomHeightmap.ts";
+import {Vector2D, Vector3D} from "../../../types/Vector.ts";
+import {Stair} from "../../../types/Stair.ts";
+import {StairType} from "../../../enums/StairType.ts";
+import {Direction} from "../../../enums/Direction.ts";
+import {StairMesh, TileMesh, WallMesh} from "../../../types/Mesh.ts";
+import {WallType} from "../../../enums/WallType.ts";
 
 export class GreedyMesher {
     constructor(
@@ -195,4 +196,98 @@ export class GreedyMesher {
 
         return stairs;
     }
+
+    public get walls(): Array<WallMesh> {
+        const walls: Array<WallMesh> = [];
+
+        const rowWallSizes: Record<number, Record<number, Vector3D | undefined>> = {};
+        const columnWallSizes: Record<number, Record<number, Vector3D | undefined>> = {};
+
+        for (let y: number = 0; y < this.heightMap.heightMap.length; y++) {
+            rowWallSizes[y] = {}
+            columnWallSizes[y] = {}
+            for (let x: number = 1; x < this.heightMap.heightMap[y].length; x++) {
+                const wall: WallType | undefined = this.heightMap.getWall({ x, y });
+                if (wall !== undefined) {
+                    if (wall === WallType.RIGHT_WALL) {
+                        rowWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                    } else if(wall === WallType.LEFT_WALL) {
+                        columnWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                    } else if (wall === WallType.CORNER_WALL) {
+                        rowWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                        columnWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                    }
+                }
+            }
+        }
+
+        for (let y: number = 1; y < this.heightMap.heightMap.length; y++) {
+            for (let x: number = 0; x < this.heightMap.heightMap[y].length; x++) {
+                const wall: WallType | undefined = this.heightMap.getWall({ x: x - 1, y });
+                if (wall !== undefined) {
+                    if (wall === WallType.RIGHT_WALL || wall === WallType.CORNER_WALL) {
+                        if (rowWallSizes[y][x] && rowWallSizes[y][x - 1] && rowWallSizes[y][x]!.y === rowWallSizes[y][x - 1]!.y) {
+                            rowWallSizes[y][x]!.x += rowWallSizes[y][x - 1]!.x;
+                            rowWallSizes[y][x - 1] = undefined;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (let y: number = 1; y < this.heightMap.heightMap.length; y++) {
+            for (let x: number = 0; x < this.heightMap.heightMap[y].length; x++) {
+                const wall: WallType | undefined = this.heightMap.getWall({ x: Number(x), y: Number(y) - 1 });
+                if (wall !== undefined) {
+                    if (wall === WallType.LEFT_WALL || wall === WallType.CORNER_WALL) {
+                        if (columnWallSizes[y][x] && columnWallSizes[y - 1][x] && columnWallSizes[y][x]!.x === columnWallSizes[y - 1][x]!.x) {
+                            columnWallSizes[y][x]!.y += columnWallSizes[y - 1][x]!.y;
+                            columnWallSizes[y - 1][x] = undefined;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (const y in rowWallSizes) {
+            for (const x in rowWallSizes[y]) {
+                const wall: WallType | undefined = this.heightMap.getWall({ x: Number(x), y: Number(y) })
+                if (rowWallSizes[y][x] && wall !== undefined) {
+                    let length: number = Number(rowWallSizes[y][x]!.x);
+
+                    walls.push({
+                        position: {
+                            x: Number(x) - rowWallSizes[y][x]!.x + 1,
+                            y: Number(y) - rowWallSizes[y][x]!.y + 1,
+                            z: rowWallSizes[y][x]!.z
+                        },
+                        length: length,
+                        direction: Direction.NORTH
+                    });
+                }
+            }
+        }
+
+        for (const y in columnWallSizes) {
+            for (const x in columnWallSizes[y]) {
+                const wall: WallType | undefined = this.heightMap.getWall({ x: Number(x), y: Number(y) })
+                if (columnWallSizes[y][x] && wall !== undefined) {
+                    let length: number = Number(columnWallSizes[y][x]!.y);
+
+                    walls.push({
+                        position: {
+                            x: Number(x) - columnWallSizes[y][x]!.x + 1,
+                            y: Number(y) - columnWallSizes[y][x]!.y + 1,
+                            z: columnWallSizes[y][x]!.z
+                        },
+                        length: length,
+                        direction: Direction.WEST
+                    });
+                }
+            }
+        }
+
+        return walls;
+    }
+
 }

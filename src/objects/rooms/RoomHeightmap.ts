@@ -1,8 +1,9 @@
-import { HeightMap } from "../../types/HeightMap.ts";
+import {HeightMap} from "../../types/HeightMap.ts";
 import {Vector2D} from "../../types/Vector.ts";
 import {Stair} from "../../types/Stair.ts";
 import {StairType} from "../../enums/StairType.ts";
 import {Direction} from "../../enums/Direction.ts";
+import {WallType} from "../../enums/WallType.ts";
 
 export class RoomHeightmap {
     public heightMap: HeightMap;
@@ -135,6 +136,105 @@ export class RoomHeightmap {
             return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.NORTH_WEST };
 
         return;
+    }
+
+    public getWall({ x, y }: Vector2D): WallType | undefined {
+        if (/*this.isDoor({ x, y }) || */!this.isTile({ x, y })) return;
+
+        let rightWall = true;
+        let leftWall = true;
+
+        /*for (let i = y - 1; i >= 0; i--) {
+            if (this.isTile({ x, y: i })) rightWall = false;
+            if (this.isTile({ x: x - 1, y: i })) rightWall = false;
+            if (this.isTile({ x: x + 1, y: i })) rightWall = false;
+        }
+
+        for (let i = x - 1; i >= 0; i--) {
+            if (this.isTile({ x: i, y })) leftWall = false;
+            if (this.isTile({ x: i, y: y - 1 })) leftWall = false;
+            if (this.isTile({ x: i, y: y + 1 })) leftWall = false;
+        }*/
+
+        /*for (let i = y - 1; i >= 0; i--) {
+            for (let j = x - 1; j >= 0; j--) {
+                if (this.isTile({ x, y: i }) && !this.isDoor({ x, y: i })) rightWall = false;
+                if (this.isTile({ x: j, y: i }) && !this.isDoor({ x: j, y: i })) rightWall = false;
+            }
+        }
+
+        for (let i = x - 1; i >= 0; i--) {
+            for (let j = y - 1; j >= 0; j--) {
+                if (this.isTile({ x: i, y }) && !this.isDoor({ x: i, y })) leftWall = false;
+                if (this.isTile({ x: i, y: j }) && !this.isDoor({ x: i, y: j })) leftWall = false;
+            }
+        }*/
+
+        for (let i = y - 1; i >= 0; i--) {
+            for (let j = x - 1; j >= 0; j--) {
+                if (this.isTile({ x, y: i }) && !this.isDoor({ x, y: i })) rightWall = false;
+                if (this.isTile({ x: j, y: i }) && !this.isDoor({ x: j, y: i })) rightWall = false;
+            }
+        }
+
+        for (let i = x - 1; i >= 0; i--) {
+            for (let j = y - 1; j >= 0; j--) {
+                if (this.isTile({ x: i, y }) && !this.isDoor({ x: i, y })) leftWall = false;
+                if (this.isTile({ x: i, y: j }) && !this.isDoor({ x: i, y: j })) leftWall = false;
+            }
+        }
+
+        if (rightWall && leftWall) return WallType.CORNER_WALL;
+        if (leftWall) return WallType.LEFT_WALL;
+        if (rightWall) return WallType.RIGHT_WALL;
+
+        /*let wallX: boolean = false;
+        let wallY: boolean = false;
+
+        for (let i = y - 1; i >= 0; i--) {
+            let topLeftTile: Vector2D = { x: x - 1, y: i - 1 };
+            let topTile: Vector2D = { x, y: i - 1 };
+            let midLeftTile: Vector2D = { x: x - 1, y: i };
+
+            if (!this.isTile(topTile) || (!this.isTile(topLeftTile) && !this.isTile(topTile) && !this.isTile(midLeftTile))) {
+                wallY = true;
+            }
+
+            for (let j = x - 1; j >= 0; j--) {
+                topLeftTile = { x: j - 1, y: i - 1 };
+                topTile = { x: j, y: i - 1 };
+                midLeftTile = { x: j - 1, y: i };
+
+                if (!this.isTile(midLeftTile) || (!this.isTile(topLeftTile) && !this.isTile(topTile) && !this.isTile(midLeftTile))) {
+                    wallY = true;
+                }
+            }
+        }
+
+        for (let i = x - 1; i >= 0; i--) {
+            let topLeftTile: Vector2D = { x: i - 1, y: y - 1 };
+            let topTile: Vector2D = { x: i, y: y - 1 };
+            let midLeftTile: Vector2D = { x: i - 1, y: y };
+
+            if (!this.isTile(midLeftTile) || (!this.isTile(topLeftTile) && !this.isTile(topTile) && !this.isTile(midLeftTile))) {
+                wallX = true;
+            }
+
+            for (let j = y - 1; j >= 0; j--) {
+                topLeftTile = { x: i - 1, y: j - 1 };
+                topTile = { x: i, y: j - 1 };
+                midLeftTile = { x: i - 1, y: j };
+
+                if (!this.isTile(topTile) || (!this.isTile(topLeftTile) && !this.isTile(topTile) && !this.isTile(midLeftTile))) {
+                    wallX = true;
+                }
+            }
+        }
+
+        return wallX && wallY ?
+            WallType.CORNER_WALL : wallX ?
+                WallType.LEFT_WALL :
+                    wallY ? WallType.RIGHT_WALL : undefined;*/
     }
 
     public isDoor({ x, y }: Vector2D): boolean {
