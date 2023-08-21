@@ -10,4 +10,5 @@ export interface IWallConfiguration {
     height: number;
     direction: Direction;
     corner: boolean;
+    door?: number;
 }

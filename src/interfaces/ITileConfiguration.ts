@@ -6,4 +6,5 @@ export interface ITileConfiguration {
     position: Vector3D;
     size: Vector2D;
     thickness: number;
+    door?: boolean;
 }

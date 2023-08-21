@@ -22,5 +22,6 @@ export type WallMesh = {
     position: Vector3D,
     length: number,
     direction: Direction,
-    corner: boolean
+    corner: boolean,
+    door?: number
 }

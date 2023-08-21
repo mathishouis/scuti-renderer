@@ -1,9 +1,9 @@
-import {HeightMap} from "../../types/HeightMap.ts";
-import {Vector2D} from "../../types/Vector.ts";
-import {Stair} from "../../types/Stair.ts";
-import {StairType} from "../../enums/StairType.ts";
-import {Direction} from "../../enums/Direction.ts";
-import {WallType} from "../../enums/WallType.ts";
+import { HeightMap } from "../../types/HeightMap.ts";
+import { Vector2D } from "../../types/Vector.ts";
+import { Stair } from "../../types/Stair.ts";
+import { StairType } from "../../enums/StairType.ts";
+import { Direction } from "../../enums/Direction.ts";
+import { WallType } from "../../enums/WallType.ts";
 
 export class RoomHeightmap {
     public heightMap: HeightMap;

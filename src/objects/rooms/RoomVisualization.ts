@@ -10,7 +10,6 @@ import {StairMesh, TileMesh, WallMesh} from "../../types/Mesh.ts";
 import {ITileEvent} from "../../interfaces/IEvents.ts";
 import {CursorPart} from "./parts/CursorPart.ts";
 import {WallPart} from "./parts/WallPart.ts";
-import {Direction} from "../../enums/Direction.ts";
 import {WallMaterial} from "../rooms/materials/WallMaterial.ts";
 
 export class RoomVisualization {
@@ -68,7 +67,8 @@ export class RoomVisualization {
             material: this.room.configuration.floorMaterial,
             position: tile.position,
             size: tile.size,
-            thickness: tile.door ? 0 : this.room.configuration.floorThickness,
+            thickness: this.room.configuration.floorThickness,
+            door: tile.door
         })));
 
         greedyMesher.stairs.forEach((stair: StairMesh): void => this._registerFloorPart(new StairPart({
@@ -87,28 +87,9 @@ export class RoomVisualization {
             thickness: this.room.configuration.floorThickness,
             height: -1,
             direction: wall.direction,
-            corner: wall.corner
+            corner: wall.corner,
+            door: wall.door,
         })));
-
-        /*let wallPart = new WallPart({
-            material: undefined,
-            position: { x: 1, y: 6, z: 2 },
-            thickness: 8,
-            length: 3,
-            height: -1,
-            direction: Direction.WEST
-        });
-        this.add(wallPart);
-
-        let wallPart2 = new WallPart({
-            material: undefined,
-            position: { x: 1, y: 1, z: 2 },
-            thickness: 8,
-            length: 2,
-            height: -1,
-            direction: Direction.NORTH
-        });
-        this.add(wallPart2);*/
     }
 
     public update(): void {

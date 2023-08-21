@@ -1,13 +1,15 @@
-import {RoomPart} from "./RoomPart.ts";
-import {Room} from "../Room.ts";
-import {Container, Point} from "pixi.js";
-import {Cube} from "../geometry/Cube.ts";
-import {EventManager} from "../../events/EventManager.ts";
-import {Vector3D} from "../../../types/Vector.ts";
-import {CubeFace} from "../../../enums/CubeFace.ts";
-import {IWallConfiguration} from "../../../interfaces/IWallConfiguration.ts";
-import {WallMaterial} from "../materials/WallMaterial.ts";
-import {Direction} from "../../../enums/Direction.ts";
+import { RoomPart } from "./RoomPart.ts";
+import { Room } from "../Room.ts";
+import { Container, Point, Sprite } from "pixi.js";
+import { Cube } from "../geometry/Cube.ts";
+import { EventManager } from "../../events/EventManager.ts";
+import { Vector3D } from "../../../types/Vector.ts";
+import { CubeFace } from "../../../enums/CubeFace.ts";
+import { IWallConfiguration } from "../../../interfaces/IWallConfiguration.ts";
+import { WallMaterial } from "../materials/WallMaterial.ts";
+import { Direction } from "../../../enums/Direction.ts";
+import { AssetLoader } from "../../assets/AssetLoader.ts";
+import { DoorMaskFilter } from "../../filters/DoorMaskFilter.ts";
 
 export class WallPart extends RoomPart {
     public room!: Room;
@@ -37,30 +39,42 @@ export class WallPart extends RoomPart {
 
         if (this.configuration.direction === Direction.WEST) {
             size.x = this.configuration.thickness / 32;
-            size.y = this.configuration.length;
+            size.y = this.configuration.length + (this.configuration.corner ? 8 / 32 : 0);
         } else if (this.configuration.direction === Direction.NORTH) {
-            size.x = this.configuration.length + (this.configuration.corner ? 8 / 32 : 0);
+            size.x = this.configuration.length;
             size.y = this.configuration.thickness / 32;
         }
 
         const cube: Cube = new Cube({
             layer: this.room.renderer.layer,
             zOrders: {
-                [CubeFace.TOP]: zOrder + 1,
-                [CubeFace.LEFT]: zOrder - 0.9,
-                [CubeFace.RIGHT]: zOrder - 0.8
+                [CubeFace.TOP]: zOrder,
+                [CubeFace.LEFT]: zOrder - 0.5,
+                [CubeFace.RIGHT]: zOrder - 0.6
             },
             material: material,
             size: size
         });
-
         this.container.addChild(cube);
+
+        if (this.configuration.door !== undefined) {
+            const door: Sprite = new Sprite(AssetLoader.get("room/door"));
+            door.skew.set(0, -0.46);
+            door.x = this.configuration.thickness + (this.configuration.length - this.configuration.door - 1) * 32 + 1;
+            door.y = - this.configuration.thickness / 2 - door.height + size.z * 32 + 3 - (this.configuration.length - this.configuration.door - 1) * 16;
+
+            const filter: DoorMaskFilter = new DoorMaskFilter(door);
+            cube.faces[CubeFace.RIGHT].filters = [filter];
+
+            this.container.addChild(door);
+        }
+
         if (this.configuration.direction === Direction.WEST) {
             this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.length - 1) - 8;
             this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y + this.configuration.length - 1) - 32 * this.configuration.position.z - 4 - size.z * 32 + this.configuration.thickness;
         } else if (this.configuration.direction === Direction.NORTH) {
-            this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y - 1) - (this.configuration.corner ? 8 : 0);
-            this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y - 1) - 32 * this.configuration.position.z - size.z * 32 + this.configuration.thickness - (this.configuration.corner ? 4 : 0);
+            this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y - 1);
+            this.container.y = 16 * this.configuration.position.x + 16 * (this.configuration.position.y - 1) - 32 * this.configuration.position.z - size.z * 32 + this.configuration.thickness;
         }
 
         this.room.visualization.container.addChild(this.container);

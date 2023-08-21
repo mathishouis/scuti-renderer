@@ -6,7 +6,7 @@ import { FloorMaterial } from "../materials/FloorMaterial.ts";
 import { Cube } from "../geometry/Cube.ts";
 import { EventManager } from "../../events/EventManager.ts";
 import { Vector3D } from "../../../types/Vector.ts";
-import {CubeFace} from "../../../enums/CubeFace.ts";
+import { CubeFace } from "../../../enums/CubeFace.ts";
 
 export class TilePart extends RoomPart {
     public room!: Room;
@@ -50,7 +50,7 @@ export class TilePart extends RoomPart {
         const cube: Cube = new Cube({
             layer: this.room.renderer.layer,
             zOrders: {
-                [CubeFace.TOP]: zOrder + 1,
+                [CubeFace.TOP]: this.configuration.door ? zOrder - 0.6 : zOrder + 1,
                 [CubeFace.LEFT]: zOrder - 0.5,
                 [CubeFace.RIGHT]: zOrder - 0.6
             },
@@ -58,7 +58,7 @@ export class TilePart extends RoomPart {
             size: {
                 x: this.configuration.size.x,
                 y: this.configuration.size.y,
-                z: this.configuration.thickness / 32
+                z: this.configuration.door ? 0 : this.configuration.thickness / 32
             }
         });
 

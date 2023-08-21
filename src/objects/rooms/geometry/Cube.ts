@@ -2,9 +2,10 @@ import { Color, Container, Graphics, Matrix } from "pixi.js";
 import { FloorMaterial } from "../materials/FloorMaterial.ts";
 import { ICubeConfiguration } from "../../../interfaces/ICubeConfiguration.ts";
 import { CubeFace } from "../../../enums/CubeFace.ts";
-import {WallMaterial} from "../materials/WallMaterial.ts";
+import { WallMaterial } from "../materials/WallMaterial.ts";
 
 export class Cube extends Container {
+    public faces: Record<CubeFace, Graphics> = {}
     constructor(
         public configuration: ICubeConfiguration
     ) {
@@ -15,7 +16,7 @@ export class Cube extends Container {
 
     private _initialize(): void {
         const material: FloorMaterial | WallMaterial = this.configuration.material ?? new FloorMaterial(101);
-        const topFace: Graphics = new Graphics()
+        this.faces[CubeFace.TOP] = new Graphics()
             .beginTextureFill({
                 texture: material.texture,
                 color: new Color(material.color).premultiply(1).toNumber(),
@@ -35,7 +36,7 @@ export class Cube extends Container {
             .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)
             .lineTo(0, 0)
             .endFill();
-        const leftFace: Graphics = new Graphics()
+        this.faces[CubeFace.LEFT] = new Graphics()
             .beginTextureFill({
                 texture: material.texture,
                 color: new Color(material.color).premultiply(0.8).toNumber(),
@@ -53,7 +54,7 @@ export class Cube extends Container {
             .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x + this.configuration.size.z * 32)
             .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)
             .endFill();
-        const rightFace: Graphics = new Graphics()
+        this.faces[CubeFace.RIGHT] = new Graphics()
             .beginTextureFill({
                 texture: material.texture,
                 color: new Color(material.color).premultiply(0.71).toNumber(),
@@ -74,16 +75,16 @@ export class Cube extends Container {
             .endFill();
 
         if (this.configuration.layer) {
-            topFace.parentLayer = this.configuration.layer;
-            topFace.zOrder = this.configuration.zOrders?.[CubeFace.TOP] ?? 0;
-            leftFace.parentLayer = this.configuration.layer;
-            leftFace.zOrder = this.configuration.zOrders?.[CubeFace.LEFT] ?? 0;
-            rightFace.parentLayer = this.configuration.layer;
-            rightFace.zOrder = this.configuration.zOrders?.[CubeFace.RIGHT] ?? 0;
+            this.faces[CubeFace.TOP].parentLayer = this.configuration.layer;
+            this.faces[CubeFace.TOP].zOrder = this.configuration.zOrders?.[CubeFace.TOP] ?? 0;
+            this.faces[CubeFace.LEFT].parentLayer = this.configuration.layer;
+            this.faces[CubeFace.LEFT].zOrder = this.configuration.zOrders?.[CubeFace.LEFT] ?? 0;
+            this.faces[CubeFace.RIGHT].parentLayer = this.configuration.layer;
+            this.faces[CubeFace.RIGHT].zOrder = this.configuration.zOrders?.[CubeFace.RIGHT] ?? 0;
         }
 
-        this.addChild(topFace);
-        this.addChild(leftFace);
-        this.addChild(rightFace);
+        this.addChild(this.faces[CubeFace.TOP]);
+        this.addChild(this.faces[CubeFace.LEFT]);
+        this.addChild(this.faces[CubeFace.RIGHT]);
     }
 }

@@ -1,10 +1,10 @@
-import {RoomHeightmap} from "../RoomHeightmap.ts";
-import {Vector2D, Vector3D} from "../../../types/Vector.ts";
-import {Stair} from "../../../types/Stair.ts";
-import {StairType} from "../../../enums/StairType.ts";
-import {Direction} from "../../../enums/Direction.ts";
-import {StairMesh, TileMesh, WallMesh} from "../../../types/Mesh.ts";
-import {WallType} from "../../../enums/WallType.ts";
+import { RoomHeightmap } from "../RoomHeightmap.ts";
+import { Vector2D, Vector3D } from "../../../types/Vector.ts";
+import { Stair } from "../../../types/Stair.ts";
+import { StairType } from "../../../enums/StairType.ts";
+import { Direction } from "../../../enums/Direction.ts";
+import { StairMesh, TileMesh, WallMesh } from "../../../types/Mesh.ts";
+import { WallType } from "../../../enums/WallType.ts";
 
 export class GreedyMesher {
     constructor(
@@ -253,8 +253,6 @@ export class GreedyMesher {
                 if (rowWallSizes[y][x] && wall !== undefined) {
                     let length: number = Number(rowWallSizes[y][x]!.x);
 
-                    const corner: boolean = this.heightMap.getWall({ x: Number(x) - rowWallSizes[y][x]!.x + 1, y: Number(y) - rowWallSizes[y][x]!.y + 1 }) === WallType.CORNER_WALL;
-
                     walls.push({
                         position: {
                             x: Number(x) - rowWallSizes[y][x]!.x + 1,
@@ -263,7 +261,7 @@ export class GreedyMesher {
                         },
                         length: length,
                         direction: Direction.NORTH,
-                        corner: corner
+                        corner: false
                     });
                 }
             }
@@ -271,9 +269,17 @@ export class GreedyMesher {
 
         for (const y in columnWallSizes) {
             for (const x in columnWallSizes[y]) {
-                const wall: WallType | undefined = this.heightMap.getWall({ x: Number(x), y: Number(y) })
+                const wall: WallType | undefined = this.heightMap.getWall({ x: Number(x), y: Number(y) });
+
                 if (columnWallSizes[y][x] && wall !== undefined) {
                     let length: number = Number(columnWallSizes[y][x]!.y);
+                    let door: number | undefined = undefined;
+
+                    const corner: boolean = this.heightMap.getWall({ x: Number(x) - columnWallSizes[y][x]!.x + 1, y: Number(y) - columnWallSizes[y][x]!.y + 1 }) === WallType.CORNER_WALL;
+
+                    for (let i: number = Number(y) - length; i < Number(y) + 1; i++) {
+                        if (this.heightMap.isDoor({ x: Number(x) - columnWallSizes[y][x]!.x, y: i })) door = i - (Number(y) - length) - 1;
+                    }
 
                     walls.push({
                         position: {
@@ -283,7 +289,8 @@ export class GreedyMesher {
                         },
                         length: length,
                         direction: Direction.WEST,
-                        corner: false
+                        corner: corner,
+                        door: door
                     });
                 }
             }

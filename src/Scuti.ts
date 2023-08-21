@@ -56,7 +56,8 @@ export class Scuti {
         await Promise.all([
             AssetLoader.load("room/materials/floor", "/room/materials/floor/floor.json"),
             AssetLoader.load("room/materials/wall", "/room/materials/wall/wall.json"),
-            AssetLoader.load("room/cursor", "/room/cursor/cursor.json")
+            AssetLoader.load("room/cursor", "/room/cursor/cursor.json"),
+            AssetLoader.load("room/door", "/room/door/door.png")
         ]);
         for (const material of AssetLoader.get("room/materials/floor")) {
             await AssetLoader.load(`room/materials/floor/${material.texture}`, `/room/materials/floor/textures/${material.texture}.png`);
