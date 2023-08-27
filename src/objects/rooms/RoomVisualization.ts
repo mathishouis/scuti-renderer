@@ -26,13 +26,7 @@ export class RoomVisualization {
     }
 
     private _registerCursor(): void {
-        this.layers.parts.cursor = new CursorPart({
-            position: {
-                x: 0,
-                y: 0,
-                z: 2
-            }
-        });
+        this.layers.parts.cursor = new CursorPart({});
         this.layers.parts.cursor.room = this.room;
         this.layers.parts.cursor.render();
         this.layers.parts.cursor.hide();
@@ -90,6 +84,10 @@ export class RoomVisualization {
             corner: wall.corner,
             door: wall.door,
         })));
+
+        // Resets room position to the top-left corner by default
+        this.container.pivot.x = this.container.getBounds().left
+        this.container.pivot.y = this.container.getBounds().top
     }
 
     public update(): void {
