@@ -5,6 +5,8 @@ import { gsap } from "gsap";
 export class RoomCamera extends Container {
     public dragging: boolean = false;
     public hasDragged: boolean = false;
+    private lastClickTime: number = 0;
+    private clickThreshold: number = 75;
 
     constructor(
         public room: Room
@@ -28,12 +30,18 @@ export class RoomCamera extends Container {
     }
 
     private _dragStart = (): void => {
-        this.dragging = true;
+        const currentTime = Date.now();
+        if (currentTime - this.lastClickTime > this.clickThreshold) {
+            this.dragging = true;
+        }
     }
 
     private _dragEnd = (): void => {
         this.hasDragged = false;
         this.dragging = false;
+
+        this.lastClickTime = Date.now();
+
         if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
     }
 
