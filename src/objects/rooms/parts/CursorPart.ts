@@ -22,8 +22,6 @@ export class CursorPart extends RoomPart {
         const sprite: Sprite = new Sprite(texture);
         this.container.addChild(sprite);
 
-        this.container.x = 32 * this.configuration.position.x - 32 * this.configuration.position.y;
-        this.container.y = 16 * this.configuration.position.x + 16 * this.configuration.position.y - 32 * this.configuration.position.z - 20;
 
         this.room.visualization.container.addChild(this.container);
     }
