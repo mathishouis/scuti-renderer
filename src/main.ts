@@ -60,8 +60,19 @@ const room: Room = new Room({
 
 renderer.add(room);
 
-room.camera.zoom(1);
 room.camera.centerCamera(0);
+
+let zoom = 1  // by default
+
+renderer.application.view.addEventListener?.('wheel', (e) => {
+  const event = e as FederatedWheelEvent 
+  const delta = event.deltaY > 0 ? 0.5 : -0.5;
+  
+  zoom += delta;
+  zoom = Math.max(0.5, Math.min(5, zoom)); // limit minimum zoom level   
+    
+  room.camera.zoom(zoom, 0.3)
+})
 
 /*setInterval(() => {
     const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
