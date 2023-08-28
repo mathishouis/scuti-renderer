@@ -5,6 +5,8 @@ import { gsap } from "gsap";
 export class RoomCamera extends Container {
     public dragging: boolean = false;
     public hasDragged: boolean = false;
+    private _lastClickTime: number = 0;
+    private _clickThreshold: number = 75;
 
     constructor(
         public room: Room
@@ -12,6 +14,9 @@ export class RoomCamera extends Container {
         super();
 
         this._initializeListeners();
+
+        this.position.x = this.room.renderer.application.view.width / 2
+        this.position.y = this.room.renderer.application.view.height / 2
 
         this.addChild(room.visualization.container);
     }
@@ -25,12 +30,18 @@ export class RoomCamera extends Container {
     }
 
     private _dragStart = (): void => {
-        this.dragging = true;
+        const currentTime = Date.now();
+        if (currentTime - this._lastClickTime > this._clickThreshold) {
+            this.dragging = true;
+        }
     }
 
     private _dragEnd = (): void => {
         this.hasDragged = false;
         this.dragging = false;
+
+        this._lastClickTime = Date.now();
+
         if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
     }
 
@@ -40,11 +51,8 @@ export class RoomCamera extends Container {
     ): void => {
         if (this.dragging) {
             this.hasDragged = true;
-            gsap.to(this, {
-                x: Math.floor(this.x + x),
-                y: Math.floor(this.y + y),
-                duration: 0
-            });
+            this.pivot.x -= x / this.scale.x
+            this.pivot.y -= y / this.scale.y
         }
     }
 
@@ -58,8 +66,8 @@ export class RoomCamera extends Container {
 
     public centerCamera(duration: number = 0.8): void {
         gsap.to(this, {
-            x: Math.floor(this.room.renderer.application.view.width / 2),
-            y: Math.floor(this.room.renderer.application.view.height / 2 - this.height / 2),
+            x: Math.floor(this.room.renderer.application.view.width - this.width / 2),
+            y: Math.floor(this.room.renderer.application.view.height - this.height / 2),
             duration: duration,
             ease: "easeOut"
         });
@@ -68,23 +76,10 @@ export class RoomCamera extends Container {
     public zoom(zoom: number, duration: number = 0.8) {
         this.room.configuration.zoom = zoom;
 
-        let originalWidth: number = this.width;
-        let originalHeight: number = this.height;
-
         gsap.to(this.scale, {
             x: zoom,
             y: zoom,
-            duration: duration,
-            onUpdate: (): void => {
-                const widthDifference: number = this.width - originalWidth;
-                const heightDifference: number = this.height - originalHeight;
-
-                this.x = this.x - this.width / ((this.width / widthDifference) * 2);
-                this.y = this.y - this.height / ((this.height / heightDifference) * 2);
-
-                originalWidth = this.width;
-                originalHeight = this.height;
-            }
+            duration,
         });
     }
 }
