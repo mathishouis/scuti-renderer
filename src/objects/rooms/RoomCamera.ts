@@ -15,9 +15,6 @@ export class RoomCamera extends Container {
 
         this._initializeListeners();
 
-        this.position.x = this.room.renderer.application.view.width / 2
-        this.position.y = this.room.renderer.application.view.height / 2
-
         this.addChild(room.visualization.container);
     }
 
@@ -66,11 +63,14 @@ export class RoomCamera extends Container {
 
     public centerCamera(duration: number = 0.8): void {
         gsap.to(this, {
-            x: Math.floor(this.room.renderer.application.view.width - this.width / 2),
-            y: Math.floor(this.room.renderer.application.view.height - this.height / 2),
-            duration: duration,
+            x: Math.floor(this.room.renderer.application.view.width  / 2),
+            y: Math.floor(this.room.renderer.application.view.height  / 2),
+            duration,
             ease: "easeOut"
         });
+
+        this.pivot.x = this.width / 2
+        this.pivot.y = this.height / 2
     }
 
     public zoom(zoom: number, duration: number = 0.8) {
