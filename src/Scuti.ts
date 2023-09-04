@@ -15,7 +15,7 @@ import { AssetLoader } from "./objects/assets/AssetLoader.ts";
 import { Layer, Stage} from "@pixi/layers";
 import { addStats, StatsJSAdapter } from "pixi-stats";
 import { ScutiConfiguration } from "./ScutiConfiguration.ts";
-import {loadBundle} from "./parsers/BundleParser.ts";
+import {loadBundle} from "./objects/bundles/BundleParser.ts";
 
 export class Scuti {
     public configuration!: ScutiConfiguration;

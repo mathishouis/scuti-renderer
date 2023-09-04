@@ -1,4 +1,4 @@
-import {BaseTexture, checkExtension} from "pixi.js";
+import {BaseTexture, checkExtension, Texture} from "pixi.js";
 import { Buffer } from "buffer";
 import {Parser} from "./Parser.ts";
 
