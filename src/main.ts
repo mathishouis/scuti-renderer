@@ -11,7 +11,7 @@ const renderer: Scuti = new Scuti({
     canvas: document.getElementById('app') as HTMLElement,
     width: window.innerWidth,
     height: window.innerHeight,
-    resources: './resources',
+    resources: 'http://192.168.1.127:8081',
     backgroundColor: 0x0C567C
     //resizeTo: window
 });
@@ -72,7 +72,7 @@ renderer.application.view.addEventListener?.('wheel', (e) => {
   zoom = Math.max(0.5, Math.min(5, zoom)); // limit minimum zoom level   
     
   room.camera.zoom(zoom, 0.3)
-})
+}, { passive: true })
 
 /*setInterval(() => {
     const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
