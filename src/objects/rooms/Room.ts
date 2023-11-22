@@ -30,8 +30,8 @@ export class Room extends GameObject {
         this.events = new RoomEvents();
 
         this.visualization.render();
-
         this.renderer.application.stage.addChild(this.camera);
+        if (this.configuration.centerCamera) this.camera.centerCamera(0);
     }
 
     public update(): void {

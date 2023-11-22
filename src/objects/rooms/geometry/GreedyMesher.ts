@@ -18,12 +18,12 @@ export class GreedyMesher {
         for (let y: number = 0; y < this.heightMap.heightMap.length; y++) {
             sizes[y] = {};
             for (let x: number = 0; x < this.heightMap.heightMap[y].length; x++) {
-                if (!this.heightMap.isTile({ x, y }) || this.heightMap.getStair({x, y})) sizes[y][x] = undefined;
+                if (!this.heightMap.isTile({ x, y }) || this.heightMap.getStair({ x, y })) sizes[y][x] = undefined;
                 else sizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x, y }) };
             }
         }
 
-        for (let y: number = 0; y < this.heightMap.heightMap.length; y++) {
+        for (let y: number = 1; y < this.heightMap.heightMap.length; y++) {
             for (let x: number = 0; x < this.heightMap.heightMap[y].length; x++) {
                 if (this.heightMap.isTile({ x, y }) && this.heightMap.getTileHeight({ x, y }) === this.heightMap.getTileHeight({ x, y: y - 1 })) {
                     if (sizes[y][x] && sizes[y - 1][x]) sizes[y][x]!.y += sizes[y - 1][x]!.y;
@@ -33,7 +33,7 @@ export class GreedyMesher {
         }
 
         for (let y: number = 0; y < this.heightMap.heightMap.length; y++) {
-            for (let x: number = 0; x < this.heightMap.heightMap[y].length; x++) {
+            for (let x: number = 1; x < this.heightMap.heightMap[y].length; x++) {
                 if (!this.heightMap.isTile({ x: x - 1, y }) || this.heightMap.getTileHeight({ x: x - 1, y }) !== this.heightMap.getTileHeight({ x: x, y })) continue;
                 if (sizes[y][x] && sizes[y][x - 1] && sizes[y][x]!.y === sizes[y][x - 1]!.y) {
                     sizes[y][x]!.x += sizes[y][x - 1]!.x;
@@ -79,12 +79,12 @@ export class GreedyMesher {
                 const stair: Stair | undefined = this.heightMap.getStair({ x, y });
                 if (stair) {
                     if (stair.direction === Direction.NORTH || stair.direction === Direction.SOUTH) {
-                        rowStairSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                        rowStairSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x, y }) };
                     } else if(stair.direction === Direction.WEST || stair.direction === Direction.EAST) {
-                        columnStairSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                        columnStairSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x, y }) };
                     } else if (stair.type !== StairType.STAIR) {
-                        rowStairSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
-                        columnStairSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                        rowStairSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x, y }) };
+                        columnStairSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x, y }) };
                     }
                 }
             }
@@ -104,9 +104,9 @@ export class GreedyMesher {
             }
         }
 
-        for (let y: number = 1; y < this.heightMap.heightMap.length; y++) {
-            for (let x: number = 0; x < this.heightMap.heightMap[y].length; x++) {
-                const stair: Stair | undefined = this.heightMap.getStair({ x: Number(x), y: Number(y) - 1 });
+        for (let y: number = 0; y < this.heightMap.heightMap.length; y++) {
+            for (let x: number = 1; x < this.heightMap.heightMap[y].length; x++) {
+                const stair: Stair | undefined = this.heightMap.getStair({ x, y: y - 1 });
                 if (stair) {
                     if (stair.direction === Direction.WEST || stair.direction === Direction.EAST || stair.type !== StairType.STAIR) {
                         if (columnStairSizes[y][x] && columnStairSizes[y - 1][x] && columnStairSizes[y][x]!.x === columnStairSizes[y - 1][x]!.x) {
@@ -204,16 +204,16 @@ export class GreedyMesher {
         for (let y: number = 0; y < this.heightMap.heightMap.length; y++) {
             rowWallSizes[y] = {}
             columnWallSizes[y] = {}
-            for (let x: number = 1; x < this.heightMap.heightMap[y].length; x++) {
+            for (let x: number = 0; x < this.heightMap.heightMap[y].length; x++) {
                 const wall: WallType | undefined = this.heightMap.getWall({ x, y });
                 if (wall !== undefined) {
                     if (wall === WallType.RIGHT_WALL) {
-                        rowWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                        rowWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x, y }) };
                     } else if(wall === WallType.LEFT_WALL) {
-                        columnWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                        columnWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x, y }) };
                     } else if (wall === WallType.CORNER_WALL) {
-                        rowWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
-                        columnWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x: Number(x), y: Number(y) }) };
+                        rowWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x, y }) };
+                        columnWallSizes[y][x] = { x: 1, y: 1, z: this.heightMap.getTileHeight({ x, y }) };
                     }
                 }
             }
@@ -233,9 +233,9 @@ export class GreedyMesher {
             }
         }
 
-        for (let y: number = 1; y < this.heightMap.heightMap.length; y++) {
-            for (let x: number = 0; x < this.heightMap.heightMap[y].length; x++) {
-                const wall: WallType | undefined = this.heightMap.getWall({ x: Number(x), y: Number(y) - 1 });
+        for (let y: number = 0; y < this.heightMap.heightMap.length; y++) {
+            for (let x: number = 1; x < this.heightMap.heightMap[y].length; x++) {
+                const wall: WallType | undefined = this.heightMap.getWall({ x, y: y - 1 });
                 if (wall !== undefined) {
                     if (wall === WallType.LEFT_WALL || wall === WallType.CORNER_WALL) {
                         if (columnWallSizes[y][x] && columnWallSizes[y - 1][x] && columnWallSizes[y][x]!.x === columnWallSizes[y - 1][x]!.x) {

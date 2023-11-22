@@ -14,7 +14,6 @@ export class RoomCamera extends Container {
         super();
 
         this._initializeListeners();
-
         this.addChild(room.visualization.container);
     }
 
