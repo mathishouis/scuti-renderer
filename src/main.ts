@@ -5,20 +5,19 @@ import {FloorMaterial} from "./objects/rooms/materials/FloorMaterial.ts";
 import {ITileEvent} from "./interfaces/IEvents.ts";
 import {WallMaterial} from "./objects/rooms/materials/WallMaterial.ts";
 
-console.log("Hello Word");
-
 const renderer: Scuti = new Scuti({
     canvas: document.getElementById('app') as HTMLElement,
     width: window.innerWidth,
     height: window.innerHeight,
-    resources: './resources',
+    resources: 'http://127.0.0.1:8081',
     backgroundColor: 0x0C567C
     //resizeTo: window
 });
 
 await renderer.load();
 
-const heightMap: string =`xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+const heightMap: string =`
+xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 x2222xx1111111111xx11111111
 x2222xx1111111111xx11111111
 222222111111111111111111111
@@ -50,7 +49,7 @@ const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
 const room: Room = new Room({
     heightMap: heightMap,
     dragging: true,
-    centerCamera: false,
+    centerCamera: true,
     floorMaterial: new FloorMaterial(101),
     floorThickness: 8,
     wallMaterial: new WallMaterial(108),
@@ -60,19 +59,18 @@ const room: Room = new Room({
 
 renderer.add(room);
 
-room.camera.centerCamera(0);
+let [zoom, min_zoom, max_zoom] = [1, 0.5, 5]
 
-let zoom = 1  // by default
-
-renderer.application.view.addEventListener?.('wheel', (e) => {
-  const event = e as FederatedWheelEvent 
-  const delta = event.deltaY > 0 ? 0.5 : -0.5;
-  
-  zoom += delta;
-  zoom = Math.max(0.5, Math.min(5, zoom)); // limit minimum zoom level   
+// @ts-expect-error
+renderer.application.view.addEventListener('wheel', ({ deltaY }) => {
+    // todo(): add support accross browsers
+    const delta = deltaY > 0 ? -0.25 : 0.25;
     
-  room.camera.zoom(zoom, 0.3)
-})
+    zoom += delta;
+    zoom = Math.max(min_zoom, Math.min(max_zoom, zoom));
+        
+    room.camera.zoom(zoom, 0.25)
+}, { passive: true })
 
 /*setInterval(() => {
     const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;

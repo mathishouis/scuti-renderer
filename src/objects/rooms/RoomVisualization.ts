@@ -85,9 +85,9 @@ export class RoomVisualization {
             door: wall.door,
         })));
 
-        // Resets room position to the top-left corner by default
-        this.container.pivot.x = this.container.getBounds().left
-        this.container.pivot.y = this.container.getBounds().top
+        this.container.pivot.x = this.container.getBounds().left;
+        this.container.pivot.y = this.container.getBounds().top;
+        this.room.camera.centerCamera(0);
     }
 
     public update(): void {

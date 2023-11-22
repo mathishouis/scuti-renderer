@@ -3,6 +3,7 @@ import { Assets, Cache } from "pixi.js";
 
 export class AssetLoader {
     static loadedKeys: ILoadedKeys = {};
+    static assetsPath: string
 
     public static async load(key: string, path: string, onUncached?: () => void): Promise<void> {
         if ((AssetLoader.loadedKeys)[key] !== undefined) {
@@ -11,7 +12,7 @@ export class AssetLoader {
         }
         if (!Cache.has(key)) {
             if (onUncached != null) onUncached();
-            Assets.add(key, "http://192.168.1.127:8081" + path);
+            Assets.add(key, AssetLoader.assetsPath + path);
             (AssetLoader.loadedKeys)[key] = Assets.load(key);
             await (AssetLoader.loadedKeys)[key];
         }
