@@ -18,7 +18,13 @@ export class RoomVisualization {
     constructor(
         public room: Room
     ) {
+        this._initializeMaterials();
         this._initializeLayers();
+    }
+
+    private _initializeMaterials(): void {
+        this.room.configuration.floorMaterial.render();
+        this.room.configuration.wallMaterial.render();
     }
 
     private _initializeLayers(): void {
@@ -85,9 +91,13 @@ export class RoomVisualization {
             door: wall.door,
         })));
 
-        this.container.pivot.x = this.container.getBounds().left;
-        this.container.pivot.y = this.container.getBounds().top;
+
+        // Resets room position to the top-left corner by default
+        this.container.pivot.x = this.container.getBounds().left
+        this.container.pivot.y = this.container.getBounds().top
+
         this.room.camera.centerCamera(0);
+
     }
 
     public update(): void {

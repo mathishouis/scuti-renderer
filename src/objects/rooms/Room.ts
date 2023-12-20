@@ -21,6 +21,8 @@ export class Room extends GameObject {
         super();
 
         this.configuration = new RoomConfiguration(this, configuration);
+        this.configuration.floorMaterial.room = this;
+        this.configuration.wallMaterial.room = this;
     }
 
     public render(): void {

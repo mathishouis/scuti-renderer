@@ -1,29 +1,25 @@
 import { RoomMaterial } from "./RoomMaterial.ts";
-import { Texture } from "pixi.js";
+import { Sprite, Texture } from "pixi.js";
 import { AssetLoader } from "../../assets/AssetLoader.ts";
 import { Material } from "../../../types/Material.ts";
+import { Room } from "../Room.ts";
 
 export class FloorMaterial extends RoomMaterial {
     public color!: number;
     public texture!: Texture;
+    public room!: Room;
 
     constructor(
         public id: number
     ) {
         super();
-
-        this._initialize();
     }
 
-    private _initialize(): void {
-        const material: Material = AssetLoader.get("room/materials/floor").find((material: Material) => material.id === this.id);
+    public render(): void {
+        const material: Material = AssetLoader.get("room/materials").data.materials.floors.find((material: Material) => material.id === this.id);
+        const sprite: Sprite = new Sprite(AssetLoader.get("room/materials").textures[material.texture]);
 
-        if (material) {
-            this.color = material.color;
-            this.texture = AssetLoader.get(`room/materials/floor/${material.texture}`);
-        } else {
-            this.color = 16777215;
-            this.texture = AssetLoader.get("room/materials/floor/tiles");
-        }
+        this.texture = new Texture(this.room.renderer.application.renderer.generateTexture(sprite).baseTexture);
+        this.color = material.color;
     }
 }

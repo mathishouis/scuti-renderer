@@ -16,7 +16,7 @@ const renderer: Scuti = new Scuti({
 
 await renderer.load();
 
-const heightMap: string =`
+/*const heightMap: string =`
 xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 x2222xx1111111111xx11111111
 x2222xx1111111111xx11111111
@@ -44,6 +44,18 @@ x2222x0000000100xxxxxxxxxxx
 x2222x0000000100xxxxxxxxxxx
 x2222x0000000100xxxxxxxxxxx
 x2222x0000000000xxxxxxxxxxx
+`;*/
+
+const heightMap: string = `
+321000000
+100000000
+000000000
+000000000
+xx0000000
+xx0000000
+0000xx000
+00000xx00
+000xxxxx0
 `;
 const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
 const room: Room = new Room({
@@ -65,10 +77,10 @@ let [zoom, min_zoom, max_zoom] = [1, 0.5, 5]
 renderer.application.view.addEventListener('wheel', ({ deltaY }) => {
     // todo(): add support accross browsers
     const delta = deltaY > 0 ? -0.25 : 0.25;
-    
+
     zoom += delta;
     zoom = Math.max(min_zoom, Math.min(max_zoom, zoom));
-        
+
     room.camera.zoom(zoom, 0.25)
 }, { passive: true })
 
@@ -77,8 +89,6 @@ renderer.application.view.addEventListener('wheel', ({ deltaY }) => {
     room.configuration.floorMaterial = new FloorMaterial(random)
     room.configuration.floorThickness = 8;
 }, 1000);*/
-
-new FloorMaterial(101);
 
 room.events.tiles.onPointerUp = (event: ITileEvent) => {
     console.log(event.position);
