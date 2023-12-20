@@ -30,7 +30,6 @@ export class Room extends GameObject {
         this.events = new RoomEvents();
 
         this.visualization.render();
-
         this.renderer.application.stage.addChild(this.camera);
     }
 

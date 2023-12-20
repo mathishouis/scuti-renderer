@@ -1,4 +1,5 @@
 import { Scuti } from "./Scuti.ts";
+import { AssetLoader } from "./index.ts";
 import { IRendererConfiguration } from "./interfaces/IRendererConfiguration.ts";
 import { Color } from "pixi.js";
 
@@ -20,6 +21,7 @@ export class ScutiConfiguration {
         this._backgroundColor = configuration.backgroundColor ?? 0x000000;
         this._backgroundAlpha = configuration.backgroundAlpha ?? 1;
         this._resizeTo = configuration.resizeTo;
+        AssetLoader.assetsPath = configuration.resources;
     }
 
     public get canvas(): HTMLElement {

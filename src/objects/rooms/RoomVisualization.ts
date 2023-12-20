@@ -1,4 +1,4 @@
-import {Container, Sprite} from "pixi.js";
+import {Container} from "pixi.js";
 import {Room} from "./Room.ts";
 import {TilePart} from "./parts/TilePart.ts";
 import {PartLayer} from "./layers/PartLayer.ts";
@@ -10,7 +10,6 @@ import {StairMesh, TileMesh, WallMesh} from "../../types/Mesh.ts";
 import {ITileEvent} from "../../interfaces/IEvents.ts";
 import {CursorPart} from "./parts/CursorPart.ts";
 import {WallPart} from "./parts/WallPart.ts";
-import {AssetLoader} from "../assets/AssetLoader.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -86,13 +85,13 @@ export class RoomVisualization {
             door: wall.door,
         })));
 
+
         // Resets room position to the top-left corner by default
         this.container.pivot.x = this.container.getBounds().left
         this.container.pivot.y = this.container.getBounds().top
 
-        const sprite = new Sprite(AssetLoader.get("room/materials/wall2").get("walls.png"));
-        console.log(AssetLoader.get("room/materials/wall2").get("walls.png"));
-        this.container.addChild(sprite);
+        this.room.camera.centerCamera(0);
+
     }
 
     public update(): void {

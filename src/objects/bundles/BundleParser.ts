@@ -1,16 +1,14 @@
 import {
+    BaseTexture,
     checkDataUrl,
     checkExtension,
     ExtensionType,
     LoaderParser,
     LoaderParserPriority,
-    settings
+    settings, Spritesheet, Texture, utils
 } from "pixi.js";
 import { Bundle } from "scuti-bundle";
 import {Buffer} from "buffer";
-import {JsonParser} from "./parsers/JsonParser.ts";
-import {Parser} from "./parsers/Parser.ts";
-import {TextureParser} from "./parsers/TextureParser.ts";
 
 const validBundleExtension: string = ".bundle";
 const validBundleMIME: string = "application/octet-stream";
@@ -26,30 +24,22 @@ export const loadBundle = {
     },
     async load<T>(url: string): Promise<T> {
         const response: Response = await settings.ADAPTER.fetch(url);
-        //const json = await response.json();
         const buffer: ArrayBuffer = await response.arrayBuffer();
         const bundle: Bundle = new Bundle(Buffer.from(buffer));
 
-        const parsers: Parser[] = [JsonParser, TextureParser];
+        // TEXTURE PARSER
+        const src: ImageBitmap = await createImageBitmap(new Blob([bundle.get("texture")]));
+        const baseTexture: BaseTexture = new BaseTexture(src);
+        baseTexture.resource.internal = true;
+        const texture = new Texture(baseTexture);
 
-        const files: Map<string, any> = new Map();
+        const data = JSON.parse(bundle.get("data").toString());
+        const spritesheet = new Spritesheet(texture, data);
 
-        console.log(bundle.files);
+        utils.clearTextureCache();
 
-        bundle.files.forEach((file: Buffer, name: string) => {
-            parsers.forEach(async (parser: Parser) => {
-                if (parser.test(name)) {
-                    files.set(name, await parser.parse(file));
-                    return;
-                }
-            });
-        });
+        await spritesheet.parse();
 
-        console.log(files);
-        return files as T;
-        /*console.log(bundle);
-        console.log(bundle.get("walls.json").toString())
-        console.log(spritesheetAsset.loader?.testParse);*/
-        //return json as T;
+        return spritesheet as T;
     },
 } as LoaderParser;

@@ -15,10 +15,7 @@ export class RoomHeightmap {
     }
 
     public static parse(heightMap: string): HeightMap {
-        heightMap = heightMap.replace(/ /g, "");
-        heightMap = heightMap.replace(/\n\n/g, "\n");
-
-        return heightMap.split(/\r?\n/).map((line: string) => {
+        return heightMap.trim().split(/\r?\n/).map((line: string) => {
             return line.split('');
         });
     }
@@ -166,20 +163,20 @@ export class RoomHeightmap {
     }
 
     public getWall({ x, y }: Vector2D): WallType | undefined {
-        if (!this.isTile({ x, y })) return;
+        if (!this.isTile({ x, y }) || this.isDoor({ x, y })) return;
 
         let rightWall: boolean = true;
         let leftWall: boolean = true;
 
         for (let i = y - 1; i >= 0; i--) {
-            for (let j = x - 1; j >= 0; j--) {
+            for (let j = x; j >= 0; j--) {
                 if (this.isTile({ x, y: i }) && !this.isDoor({ x, y: i })) rightWall = false;
                 if (this.isTile({ x: j, y: i }) && !this.isDoor({ x: j, y: i })) rightWall = false;
             }
         }
 
         for (let i = x - 1; i >= 0; i--) {
-            for (let j = y - 1; j >= 0; j--) {
+            for (let j = y; j >= 0; j--) {
                 if (this.isTile({ x: i, y }) && !this.isDoor({ x: i, y })) leftWall = false;
                 if (this.isTile({ x: i, y: j }) && !this.isDoor({ x: i, y: j })) leftWall = false;
             }
@@ -191,7 +188,7 @@ export class RoomHeightmap {
     }
 
     public isDoor({ x, y }: Vector2D): boolean {
-        return !!(this.door && this.door.x === x && this.door.y === y);
+        return (this.door != null && this.door.x === x && this.door.y === y);
     }
 
     public get maxHeight(): number {
