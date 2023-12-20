@@ -18,7 +18,13 @@ export class RoomVisualization {
     constructor(
         public room: Room
     ) {
+        this._initializeMaterials();
         this._initializeLayers();
+    }
+
+    private _initializeMaterials(): void {
+        this.room.configuration.floorMaterial.render();
+        this.room.configuration.wallMaterial.render();
     }
 
     private _initializeLayers(): void {
