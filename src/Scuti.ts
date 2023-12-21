@@ -16,7 +16,7 @@ import { Layer, Stage} from "@pixi/layers";
 import { addStats, StatsJSAdapter } from "pixi-stats";
 import { ScutiConfiguration } from "./ScutiConfiguration.ts";
 import { loadBundle } from "./objects/bundles/BundleParser.ts";
-import { log } from "./utils/Logger.ts";
+import {log, perf} from "./utils/Logger.ts";
 import { benchmark } from "./utils/Benchmark.ts";
 
 export class Scuti {
@@ -42,7 +42,7 @@ export class Scuti {
         settings.RESOLUTION = 1;
         Container.defaultSortableChildren = true;
         BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
-        log(`🚀 SCUTI`, `Pixi initialized in ${ benchmark('pixi') }ms`);
+        perf('Pixi', 'pixi');
     }
 
     private _initializeCanvas(): void {
@@ -69,7 +69,7 @@ export class Scuti {
 
         this.layer.group.enableSort = true;
         this.application.stage.addChild(this.layer);
-        log(`🚀 SCUTI`, `Canvas initialized in ${ benchmark('canvas') }ms`);
+        perf('Canvas', 'canvas');
     }
 
     public async load(): Promise<void> {
@@ -81,7 +81,7 @@ export class Scuti {
             AssetLoader.load("room/door", "/room/door/door.png")
         ]);
 
-        log(`🚀 SCUTI`, `Resources loaded in ${ benchmark('resources') }ms`);
+        perf('Resources', 'resources');
     }
 
     public add(item: GameObject): void {

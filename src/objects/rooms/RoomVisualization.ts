@@ -1,4 +1,4 @@
-import {Container} from "pixi.js";
+import {Container, Sprite} from "pixi.js";
 import {Room} from "./Room.ts";
 import {TilePart} from "./parts/TilePart.ts";
 import {PartLayer} from "./layers/PartLayer.ts";
@@ -10,6 +10,8 @@ import {ITileEvent} from "../../interfaces/IEvents.ts";
 import {CursorPart} from "./parts/CursorPart.ts";
 import {StairMesh, TileMesh, WallMesh} from "../../types/Mesh.ts";
 import {WallPart} from "./parts/WallPart.ts";
+import {benchmark} from "../../utils/Benchmark.ts";
+import {perf} from "../../utils/Logger.ts";
 
 export class RoomVisualization {
     public container: Container = new Container();
@@ -59,6 +61,8 @@ export class RoomVisualization {
     }
 
     public render(): void {
+        benchmark('room-visualization');
+
         this._registerCursor();
         const greedyMesher: GreedyMesher = new GreedyMesher(this.room.heightMap);
 
@@ -90,6 +94,8 @@ export class RoomVisualization {
             corner: wall.corner,
             door: wall.door,
         })));
+
+        perf('Room Visualization', 'room-visualization');
 
         /*this._registerFloorPart(new StairPart({
             material: this.room.configuration.floorMaterial,

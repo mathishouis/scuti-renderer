@@ -1,3 +1,5 @@
+import {benchmark} from "./Benchmark.ts";
+
 function formatDate(date: Date): string {
     return String(date.getHours()) + ':' + String(date.getMinutes()) + ':' + String(date.getSeconds());
 }
@@ -23,8 +25,13 @@ function error(title: string, message: string): void {
     format(title, message, new Date(), '#E86C5D', '#FFFFFF');
 }
 
+function perf(title: string, tag: string): void {
+    format("⏱️ BENCHMARK", `${title} initialized in ${ benchmark(tag) }ms`, new Date(), '#093a52', '#FFFFFF');
+}
+
 export {
     log,
     warn,
     error,
+    perf,
 };
