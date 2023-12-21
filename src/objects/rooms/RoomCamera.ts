@@ -46,8 +46,8 @@ export class RoomCamera extends Container {
     ): void => {
         if (this.dragging) {
             this.hasDragged = true;
-            this.pivot.x -= x / this.scale.x
-            this.pivot.y -= y / this.scale.y
+            this.pivot.x = Math.floor(this.pivot.x - x / this.scale.x)
+            this.pivot.y = Math.floor(this.pivot.y - y / this.scale.y)
         }
     }
 
@@ -65,9 +65,12 @@ export class RoomCamera extends Container {
             duration,
             ease: "easeOut"
         });
-
-        this.pivot.x = this.width / 2
-        this.pivot.y = this.height / 2
+        gsap.to(this.pivot, {
+            x: Math.floor(this.width / 2),
+            y: Math.floor(this.height / 2),
+            duration,
+            ease: "easeOut"
+        });
     }
 
     public zoom(zoom: number, duration: number = 0.8) {

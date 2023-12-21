@@ -151,13 +151,13 @@ export class StairPart extends RoomPart {
             }
 
             if (this.configuration.corners.left === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
-                size.x += (8 / 32) * (i - 3);
+                size.x += (8 / 32) * (i - 4);
             } else if (this.configuration.corners.left === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 size.y -= (8 / 32) * i;
             }
 
             if (this.configuration.corners.right === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH)) {
-                size.x += (8 / 32) * (i - 3) + 0.25;
+                size.x += (8 / 32) * (i - 4) + 0.25;
             } else if (this.configuration.corners.right === StairType.INNER_CORNER_STAIR && (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST)) {
                 size.y -= (8 / 32) * i;
                 if (this.configuration.direction === Direction.WEST) size.y -= 0.25;
