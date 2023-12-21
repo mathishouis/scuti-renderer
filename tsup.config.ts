@@ -1,4 +1,4 @@
-import type { Options } from 'tsup'
+import type { Options } from 'tsup';
 
 export const tsup = {
   target: 'esnext',
@@ -7,5 +7,5 @@ export const tsup = {
   bundle: true,
   minify: true,
   entry: ['src/index.ts'],
-  dts: true
-} satisfies Options
+  dts: true,
+} satisfies Options;

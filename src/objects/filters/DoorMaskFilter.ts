@@ -1,4 +1,4 @@
-import { Sprite, SpriteMaskFilter } from "pixi.js";
+import { Sprite, SpriteMaskFilter } from 'pixi.js';
 
 const vertex = undefined;
 
@@ -31,9 +31,9 @@ const fragment = `
 `;
 
 export class DoorMaskFilter extends SpriteMaskFilter {
-    constructor(maskSprite: Sprite) {
-        super(vertex, fragment);
+  constructor(maskSprite: Sprite) {
+    super(vertex, fragment);
 
-        this.maskSprite = maskSprite;
-    }
+    this.maskSprite = maskSprite;
+  }
 }

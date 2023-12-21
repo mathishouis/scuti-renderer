@@ -1,5 +1,5 @@
 export enum CubeFace {
-    TOP,
-    LEFT,
-    RIGHT
+  TOP,
+  LEFT,
+  RIGHT,
 }
