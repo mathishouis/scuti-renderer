@@ -46,7 +46,7 @@ x2222x0010000100xxxxxxxxxxx
 x2222x0000000000xxxxxxxxxxx
 `;*/
 
-/*const heightMap: string = `
+const heightMap: string = `
 xxxxxxxxxx
 3321000100
 x100000000
@@ -55,16 +55,16 @@ x000001000
 xxx00111xx
 xxx0001000
 x00000x000
-000000xx00
+x00000xx00
 x000xxxxx0
 x400000000
 x300000000
 x200000000
 x100000000
 x000000000
-`;*/
+`;
 
-const heightMap: string = `
+/*const heightMap: string = `
 xxxxxxxxxx
 3310000100
 x200000000
@@ -75,7 +75,7 @@ xxx0001000
 x00000x000
 x00000xx00
 x000xxxxx0
-`;
+`;*/
 const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
 const room: Room = new Room({
     heightMap: heightMap,

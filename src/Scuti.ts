@@ -15,7 +15,9 @@ import { AssetLoader } from "./objects/assets/AssetLoader.ts";
 import { Layer, Stage} from "@pixi/layers";
 import { addStats, StatsJSAdapter } from "pixi-stats";
 import { ScutiConfiguration } from "./ScutiConfiguration.ts";
-import {loadBundle} from "./objects/bundles/BundleParser.ts";
+import { loadBundle } from "./objects/bundles/BundleParser.ts";
+import {log, perf} from "./utils/Logger.ts";
+import { benchmark } from "./utils/Benchmark.ts";
 
 export class Scuti {
     public configuration!: ScutiConfiguration;
@@ -28,18 +30,23 @@ export class Scuti {
     ) {
         this.configuration = new ScutiConfiguration(this, configuration);
 
+        log(`🚀 SCUTI`, `v0.0.0`);
+
         this._initializePixi();
         this._initializeCanvas();
     }
 
     private _initializePixi(): void {
+        benchmark('pixi');
         extensions.add(loadBundle);
         settings.RESOLUTION = 1;
         Container.defaultSortableChildren = true;
         BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
+        perf('Pixi', 'pixi');
     }
 
     private _initializeCanvas(): void {
+        benchmark('canvas');
         this.application = new Application({
             width: this.configuration.width,
             height: this.configuration.height,
@@ -62,15 +69,19 @@ export class Scuti {
 
         this.layer.group.enableSort = true;
         this.application.stage.addChild(this.layer);
+        perf('Canvas', 'canvas');
     }
 
     public async load(): Promise<void> {
+        benchmark('resources');
+
         await Promise.all([
             AssetLoader.load("room/materials", "/room/materials.bundle"),
             AssetLoader.load("room/cursor", "/room/cursor/cursor.json"),
             AssetLoader.load("room/door", "/room/door/door.png")
         ]);
 
+        perf('Resources', 'resources');
     }
 
     public add(item: GameObject): void {
