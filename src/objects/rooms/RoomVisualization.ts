@@ -8,8 +8,6 @@ import {StairPart} from "./parts/StairPart.ts";
 import {GreedyMesher} from "./geometry/GreedyMesher.ts";
 import {ITileEvent} from "../../interfaces/IEvents.ts";
 import {CursorPart} from "./parts/CursorPart.ts";
-import {Direction} from "../../enums/Direction.ts";
-import {StairType} from "../../enums/StairType.ts";
 import {StairMesh, TileMesh, WallMesh} from "../../types/Mesh.ts";
 import {WallPart} from "./parts/WallPart.ts";
 
