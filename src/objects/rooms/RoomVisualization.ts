@@ -1,17 +1,17 @@
 import { Container } from 'pixi.js';
-import { Room } from './Room.ts';
-import { TilePart } from './parts/TilePart.ts';
-import { PartLayer } from './layers/PartLayer.ts';
-import { RoomPart } from './parts/RoomPart.ts';
-import { IRoomLayers } from '../../interfaces/IRoomLayers.ts';
-import { StairPart } from './parts/StairPart.ts';
-import { GreedyMesher } from './geometry/GreedyMesher.ts';
-import { ITileEvent } from '../../interfaces/IEvents.ts';
-import { CursorPart } from './parts/CursorPart.ts';
-import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh.ts';
-import { WallPart } from './parts/WallPart.ts';
-import { benchmark } from '../../utils/Benchmark.ts';
-import { perf } from '../../utils/Logger.ts';
+import { Room } from './Room';
+import { TilePart } from './parts/TilePart';
+import { PartLayer } from './layers/PartLayer';
+import { RoomPart } from './parts/RoomPart';
+import { IRoomLayers } from '../../interfaces/IRoomLayers';
+import { StairPart } from './parts/StairPart';
+import { GreedyMesher } from './geometry/GreedyMesher';
+import { ITileEvent } from '../../interfaces/IEvents';
+import { CursorPart } from './parts/CursorPart';
+import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh';
+import { WallPart } from './parts/WallPart';
+import { benchmark } from '../../utils/Benchmark';
+import { perf } from '../../utils/Logger';
 
 export class RoomVisualization {
   public container: Container = new Container();
@@ -42,32 +42,25 @@ export class RoomVisualization {
     this.add(part);
 
     part.eventManager.onPointerDown = (event: ITileEvent): void => {
-      if (this.room.events.tiles.onPointerDown)
-        this.room.events.tiles.onPointerDown(event);
+      if (this.room.events.tiles.onPointerDown) this.room.events.tiles.onPointerDown(event);
     };
     part.eventManager.onPointerUp = (event: ITileEvent): void => {
-      if (this.room.events.tiles.onPointerUp)
-        this.room.events.tiles.onPointerUp(event);
+      if (this.room.events.tiles.onPointerUp) this.room.events.tiles.onPointerUp(event);
     };
     part.eventManager.onPointerMove = (event: ITileEvent): void => {
-      if (this.room.events.tiles.onPointerMove)
-        this.room.events.tiles.onPointerMove(event);
-      if (this.layers.parts.cursor)
-        this.layers.parts.cursor.move(event.position);
+      if (this.room.events.tiles.onPointerMove) this.room.events.tiles.onPointerMove(event);
+      if (this.layers.parts.cursor) this.layers.parts.cursor.move(event.position);
     };
     part.eventManager.onPointerOut = (event: ITileEvent): void => {
-      if (this.room.events.tiles.onPointerOut)
-        this.room.events.tiles.onPointerOut(event);
+      if (this.room.events.tiles.onPointerOut) this.room.events.tiles.onPointerOut(event);
       if (this.layers.parts.cursor) this.layers.parts.cursor.hide();
     };
     part.eventManager.onPointerOver = (event: ITileEvent): void => {
-      if (this.room.events.tiles.onPointerOver)
-        this.room.events.tiles.onPointerOver(event);
+      if (this.room.events.tiles.onPointerOver) this.room.events.tiles.onPointerOver(event);
       if (this.layers.parts.cursor) this.layers.parts.cursor.show();
     };
     part.eventManager.onDoublePointerDown = (event: ITileEvent): void => {
-      if (this.room.events.tiles.onDoublePointerDown)
-        this.room.events.tiles.onDoublePointerDown(event);
+      if (this.room.events.tiles.onDoublePointerDown) this.room.events.tiles.onDoublePointerDown(event);
     };
   }
 

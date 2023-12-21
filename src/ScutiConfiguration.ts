@@ -1,6 +1,6 @@
-import { Scuti } from './Scuti.ts';
-import { AssetLoader } from './index.ts';
-import { IRendererConfiguration } from './interfaces/IRendererConfiguration.ts';
+import { Scuti } from './Scuti';
+import { AssetLoader } from './index';
+import { IRendererConfiguration } from './interfaces/IRendererConfiguration';
 import { Color } from 'pixi.js';
 
 export class ScutiConfiguration {

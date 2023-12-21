@@ -1,7 +1,7 @@
-import { RoomLayer } from './RoomLayer.ts';
-import { Room } from '../Room.ts';
-import { RoomPart } from '../parts/RoomPart.ts';
-import { CursorPart } from '../parts/CursorPart.ts';
+import { RoomLayer } from './RoomLayer';
+import { Room } from '../Room';
+import { RoomPart } from '../parts/RoomPart';
+import { CursorPart } from '../parts/CursorPart';
 
 export class PartLayer extends RoomLayer {
   public cursor!: CursorPart;

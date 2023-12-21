@@ -1,4 +1,4 @@
-import { ILoadedKeys } from '../../interfaces/ILoadedKeys.ts';
+import { ILoadedKeys } from '../../interfaces/ILoadedKeys';
 import { Assets, Cache } from 'pixi.js';
 
 export class AssetLoader {

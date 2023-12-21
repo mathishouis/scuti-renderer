@@ -1,8 +1,8 @@
-import { RoomMaterial } from './RoomMaterial.ts';
+import { RoomMaterial } from './RoomMaterial';
 import { Sprite, Texture } from 'pixi.js';
-import { AssetLoader } from '../../assets/AssetLoader.ts';
-import { Material } from '../../../types/Material.ts';
-import { Room } from '../Room.ts';
+import { AssetLoader } from '../../assets/AssetLoader';
+import { Material } from '../../../types/Material';
+import { Room } from '../Room';
 
 export class FloorMaterial extends RoomMaterial {
   public color!: number;

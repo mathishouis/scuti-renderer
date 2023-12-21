@@ -1,5 +1,5 @@
-import { Room } from '../Room.ts';
-import { RoomPart } from '../parts/RoomPart.ts';
+import { Room } from '../Room';
+import { RoomPart } from '../parts/RoomPart';
 
 export abstract class RoomLayer {
   public abstract room: Room;

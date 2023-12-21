@@ -1,5 +1,5 @@
-import { Vector2D, Vector3D } from '../types/Vector.ts';
-import { FloorMaterial } from '../objects/rooms/materials/FloorMaterial.ts';
+import { Vector2D, Vector3D } from '../types/Vector';
+import { FloorMaterial } from '../objects/rooms/materials/FloorMaterial';
 
 export interface ITileConfiguration {
   material?: FloorMaterial;

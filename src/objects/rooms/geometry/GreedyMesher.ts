@@ -1,10 +1,10 @@
-import { RoomHeightmap } from '../RoomHeightmap.ts';
-import { Vector2D, Vector3D } from '../../../types/Vector.ts';
-import { Stair } from '../../../types/Stair.ts';
-import { StairType } from '../../../enums/StairType.ts';
-import { Direction } from '../../../enums/Direction.ts';
-import { StairMesh, TileMesh, WallMesh } from '../../../types/Mesh.ts';
-import { WallType } from '../../../enums/WallType.ts';
+import { RoomHeightmap } from '../RoomHeightmap';
+import { Vector2D, Vector3D } from '../../../types/Vector';
+import { Stair } from '../../../types/Stair';
+import { StairType } from '../../../enums/StairType';
+import { Direction } from '../../../enums/Direction';
+import { StairMesh, TileMesh, WallMesh } from '../../../types/Mesh';
+import { WallType } from '../../../enums/WallType';
 
 export class GreedyMesher {
   constructor(public heightMap: RoomHeightmap) {}

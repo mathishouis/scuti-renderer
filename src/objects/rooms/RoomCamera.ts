@@ -1,4 +1,4 @@
-import { Room } from './Room.ts';
+import { Room } from './Room';
 import { Container } from 'pixi.js';
 import { gsap } from 'gsap';
 

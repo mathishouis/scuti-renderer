@@ -1,6 +1,6 @@
-import { Vector2D, Vector3D } from './Vector.ts';
-import { Direction } from '../enums/Direction.ts';
-import { StairType } from '../enums/StairType.ts';
+import { Vector2D, Vector3D } from './Vector';
+import { Direction } from '../enums/Direction';
+import { StairType } from '../enums/StairType';
 
 export type TileMesh = {
   position: Vector3D;

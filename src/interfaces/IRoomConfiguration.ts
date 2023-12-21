@@ -1,5 +1,5 @@
-import { FloorMaterial } from '../objects/rooms/materials/FloorMaterial.ts';
-import { WallMaterial } from '../objects/rooms/materials/WallMaterial.ts';
+import { FloorMaterial } from '../objects/rooms/materials/FloorMaterial';
+import { WallMaterial } from '../objects/rooms/materials/WallMaterial';
 
 export interface IRoomConfiguration {
   heightMap: string;

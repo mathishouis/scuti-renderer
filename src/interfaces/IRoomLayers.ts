@@ -1,4 +1,4 @@
-import { PartLayer } from '../objects/rooms/layers/PartLayer.ts';
+import { PartLayer } from '../objects/rooms/layers/PartLayer';
 
 export interface IRoomLayers {
   parts: PartLayer;

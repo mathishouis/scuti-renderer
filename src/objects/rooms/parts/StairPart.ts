@@ -1,14 +1,14 @@
-import { RoomPart } from './RoomPart.ts';
-import { Room } from '../Room.ts';
+import { RoomPart } from './RoomPart';
+import { Room } from '../Room';
 import { Container, FederatedPointerEvent, Point, Polygon } from 'pixi.js';
-import { FloorMaterial } from '../materials/FloorMaterial.ts';
-import { Cube } from '../geometry/Cube.ts';
-import { IStairConfiguration } from '../../../interfaces/IStairConfiguration.ts';
-import { Vector2D, Vector3D } from '../../../types/Vector.ts';
-import { CubeFace } from '../../../enums/CubeFace.ts';
-import { EventManager } from '../../events/EventManager.ts';
-import { StairType } from '../../../enums/StairType.ts';
-import { Direction } from '../../../enums/Direction.ts';
+import { FloorMaterial } from '../materials/FloorMaterial';
+import { Cube } from '../geometry/Cube';
+import { IStairConfiguration } from '../../../interfaces/IStairConfiguration';
+import { Vector2D, Vector3D } from '../../../types/Vector';
+import { CubeFace } from '../../../enums/CubeFace';
+import { EventManager } from '../../events/EventManager';
+import { StairType } from '../../../enums/StairType';
+import { Direction } from '../../../enums/Direction';
 
 export class StairPart extends RoomPart {
   public room!: Room;

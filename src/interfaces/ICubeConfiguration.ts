@@ -1,7 +1,7 @@
-import { Vector2D, Vector3D } from '../types/Vector.ts';
-import { FloorMaterial } from '../objects/rooms/materials/FloorMaterial.ts';
+import { Vector2D, Vector3D } from '../types/Vector';
+import { FloorMaterial } from '../objects/rooms/materials/FloorMaterial';
 import { Layer } from '@pixi/layers';
-import { WallMaterial } from '../objects/rooms/materials/WallMaterial.ts';
+import { WallMaterial } from '../objects/rooms/materials/WallMaterial';
 
 export interface ICubeConfiguration {
   material?: FloorMaterial | WallMaterial;

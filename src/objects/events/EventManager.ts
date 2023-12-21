@@ -1,4 +1,4 @@
-import { ITileEvent } from '../../interfaces/IEvents.ts';
+import { ITileEvent } from '../../interfaces/IEvents';
 
 export class EventManager {
   private _isDoubleClicking: boolean = false;

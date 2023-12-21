@@ -1,7 +1,7 @@
-import { Vector3D } from '../types/Vector.ts';
-import { FloorMaterial } from '../objects/rooms/materials/FloorMaterial.ts';
-import { StairType } from '../enums/StairType.ts';
-import { Direction } from '../enums/Direction.ts';
+import { Vector3D } from '../types/Vector';
+import { FloorMaterial } from '../objects/rooms/materials/FloorMaterial';
+import { StairType } from '../enums/StairType';
+import { Direction } from '../enums/Direction';
 
 export interface IStairConfiguration {
   material?: FloorMaterial;

@@ -1,6 +1,6 @@
 import { Container } from 'pixi.js';
-import { Room } from '../Room.ts';
-import { EventManager } from '../../events/EventManager.ts';
+import { Room } from '../Room';
+import { EventManager } from '../../events/EventManager';
 
 export abstract class RoomPart {
   public abstract container: Container;

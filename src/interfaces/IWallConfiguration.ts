@@ -1,6 +1,6 @@
-import { Vector3D } from '../types/Vector.ts';
-import { WallMaterial } from '../objects/rooms/materials/WallMaterial.ts';
-import { Direction } from '../enums/Direction.ts';
+import { Vector3D } from '../types/Vector';
+import { WallMaterial } from '../objects/rooms/materials/WallMaterial';
+import { Direction } from '../enums/Direction';
 
 export interface IWallConfiguration {
   material?: WallMaterial;
