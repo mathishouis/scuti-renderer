@@ -58,10 +58,11 @@ export class WallPart extends RoomPart {
         this.container.addChild(cube);
 
         if (this.configuration.door !== undefined) {
+            const doorHeight: number = this.room.heightMap.getTileHeight({ x: this.configuration.position.x - 1, y: this.configuration.position.y + this.configuration.door });
             const door: Sprite = new Sprite(AssetLoader.get("room/door"));
             door.skew.set(0, -0.46);
             door.x = this.configuration.thickness + (this.configuration.length - this.configuration.door - 1) * 32 + 1;
-            door.y = 3 - this.configuration.floorThickness - door.height + size.z * 32 - (this.configuration.length - this.configuration.door - 1) * 16 + this.configuration.thickness / 2;
+            door.y = 3 - this.configuration.floorThickness - door.height + size.z * 32 - (this.configuration.length - this.configuration.door - 1) * 16 + this.configuration.thickness / 2 - doorHeight * 32;
 
             const filter: DoorMaskFilter = new DoorMaskFilter(door);
             cube.faces[CubeFace.RIGHT].filters = [filter];
