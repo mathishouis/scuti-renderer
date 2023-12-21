@@ -118,8 +118,8 @@ export class RoomHeightmap {
             this.isTile({ x, y }) &&
             this.isTile(topRightTile) &&
             this.getTileDifference(topRightTile, { x, y }) === 1 &&
-            this.getTileDifference(midRightTile, { x, y }) === 0 &&
-            this.getTileDifference(topTile, { x, y }) === 0
+            this.getTileDifference(midRightTile, { x, y }) !== 1 &&
+            this.getTileDifference(topTile, { x, y }) !== 1
         )
             return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.NORTH_EAST };
 
@@ -130,8 +130,8 @@ export class RoomHeightmap {
             this.isTile({ x, y }) &&
             this.isTile(botRightTile) &&
             this.getTileDifference(botRightTile, { x, y }) === 1 &&
-            this.getTileDifference(midRightTile, { x, y }) === 0 &&
-            this.getTileDifference(botTile, { x, y }) === 0
+            this.getTileDifference(midRightTile, { x, y }) !== 1 &&
+            this.getTileDifference(botTile, { x, y }) !== 1
         )
             return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.SOUTH_EAST };
 
@@ -142,8 +142,8 @@ export class RoomHeightmap {
             this.isTile({ x, y }) &&
             this.isTile(botLeftTile) &&
             this.getTileDifference(botLeftTile, { x, y }) === 1 &&
-            this.getTileDifference(midLeftTile, { x, y }) === 0 &&
-            this.getTileDifference(botTile, { x, y }) === 0
+            this.getTileDifference(midLeftTile, { x, y }) !== 1 &&
+            this.getTileDifference(botTile, { x, y }) !== 1
         )
             return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.SOUTH_WEST };
 
@@ -154,8 +154,8 @@ export class RoomHeightmap {
             this.isTile({ x, y }) &&
             this.isTile(topLeftTile) &&
             this.getTileDifference(topLeftTile, { x, y }) === 1 &&
-            this.getTileDifference(midLeftTile, { x, y }) === 0 &&
-            this.getTileDifference(topTile, { x, y }) === 0
+            this.getTileDifference(midLeftTile, { x, y }) !== 1 &&
+            this.getTileDifference(topTile, { x, y }) !== 1
         )
             return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.NORTH_WEST };
 
