@@ -132,74 +132,38 @@ export class GreedyMesher {
                     if (direction === Direction.NORTH_WEST || direction === Direction.NORTH_EAST) direction = Direction.NORTH;
                     if (direction === Direction.SOUTH_WEST || direction === Direction.SOUTH_EAST) direction = Direction.SOUTH;
 
-                    let leftX = Number(x) - rowStairSizes[y][x]!.x + 1;
-                    let leftY = Number(y) - rowStairSizes[y][x]!.y + 1;
-                    let startX = leftX;
-                    let startY = leftY;
-                    let rightX = Number(x);
-                    let rightY = Number(y);
+                    let leftStair: Stair | undefined = this.heightMap.getStair({
+                        x: Number(x) - rowStairSizes[y][x]!.x + 1,
+                        y: Number(y) - rowStairSizes[y][x]!.y + 1
+                    });
+
+                    let rightStair: Stair | undefined = this.heightMap.getStair({
+                        x: Number(x),
+                        y: Number(y)
+                    });
 
                     // Check if it's a tiny stair
                     if (rowStairSizes[y][x]!.x == 1 && rowStairSizes[y][x]!.y == 1) {
-                        if (stair.direction === Direction.NORTH_WEST) {
-                            leftX -= 1;
-                            leftY -= 1;
-                        } else if (stair.direction === Direction.NORTH_EAST) {
-                            rightX += 1;
-                            rightY += 1;
-                        }
-                    }
-
-                    let leftType: StairType | undefined = this.heightMap.getStair({
-                        x: leftX,
-                        y: leftY
-                    })?.type;
-
-                    const rightType: StairType | undefined = this.heightMap.getStair({
-                        x: rightX,
-                        y: rightY
-                    })?.type;
-
-                    // Check if there is other stairs around, so we can connect them
-                    let startType = this.heightMap.getStair({
-                        x: startX,
-                        y: startY
-                    })?.type;
-
-                    if (startType !== StairType.OUTER_CORNER_STAIR && startType !== StairType.INNER_CORNER_STAIR) {
-                        const topTile: Vector2D = {x: leftX, y: leftY - 1};
-                        const leftTile: Vector2D = {x: leftX - 1, y: leftY};
-                        const rightTile: Vector2D = {x: leftX + 1, y: leftY};
-                        const bottomTile: Vector2D = {x: leftX, y: leftY + 1};
-
-                        if (this.heightMap.getStair(bottomTile)?.type == StairType.STAIR && direction == Direction.NORTH && this.heightMap.getTileHeight(bottomTile) === this.heightMap.getTileHeight({
-                            x: Number(x),
-                            y: Number(y)
-                        })) {
-                            leftType = StairType.INNER_CORNER_STAIR;
-                        }
-
-                        if (this.heightMap.getStair(leftTile)?.type == StairType.STAIR && direction == Direction.NORTH && this.heightMap.getTileHeight(leftTile) === this.heightMap.getTileHeight({
-                            x: Number(x),
-                            y: Number(y)
-                        })) {
-                            leftType = StairType.INNER_CORNER_STAIR;
-                            startX -= 1;
-                            length += 1;
+                        if (leftStair) {
+                            if (leftStair.direction === Direction.NORTH_EAST) {
+                                rightStair!.type = StairType.STAIR;
+                            } else if (leftStair.direction === Direction.NORTH_WEST) {
+                                leftStair!.type = StairType.STAIR;
+                            }
                         }
                     }
 
                     stairs.push({
                         position: {
-                            x: startX,
-                            y: startY,
+                            x: Number(x) - rowStairSizes[y][x]!.x + 1,
+                            y: Number(y) - rowStairSizes[y][x]!.y + 1,
                             z: rowStairSizes[y][x]!.z
                         },
                         length: length,
                         direction: direction,
                         corners: {
-                            left: leftType ?? StairType.STAIR,
-                            right: rightType ?? StairType.STAIR
+                            left: leftStair ? leftStair.type : StairType.STAIR,
+                            right: rightStair ? rightStair.type : StairType.STAIR
                         }
                     });
                 }
@@ -216,74 +180,38 @@ export class GreedyMesher {
                     if (direction === Direction.NORTH_WEST || direction === Direction.SOUTH_WEST) direction = Direction.WEST;
                     if (direction === Direction.SOUTH_EAST || direction === Direction.NORTH_EAST) direction = Direction.EAST;
 
-                    let leftX = Number(x);
-                    let leftY = Number(y);
-                    let rightX = Number(x) - columnStairSizes[y][x]!.x + 1;
-                    let rightY = Number(y) - columnStairSizes[y][x]!.y + 1;
-                    let startX = rightX;
-                    let startY = rightY;
+                    const leftStair: Stair | undefined = this.heightMap.getStair({
+                        x: Number(x),
+                        y: Number(y)
+                    });
+
+                    let rightStair: Stair | undefined = this.heightMap.getStair({
+                        x: Number(x) - columnStairSizes[y][x]!.x + 1,
+                        y: Number(y) - columnStairSizes[y][x]!.y + 1
+                    });
 
                     // Check if it's a tiny stair
                     if (columnStairSizes[y][x]!.x == 1 && columnStairSizes[y][x]!.y == 1) {
-                        if (stair.direction === Direction.NORTH_WEST) {
-                            rightX -= 1;
-                            rightY -= 1;
-                        } else if (stair.direction === Direction.SOUTH_WEST) {
-                            leftX += 1;
-                            leftY += 1;
-                        }
-                    }
-
-                    const leftType: StairType | undefined = this.heightMap.getStair({
-                        x: leftX,
-                        y: leftY
-                    })?.type;
-
-                    let rightType: StairType | undefined = this.heightMap.getStair({
-                        x: rightX,
-                        y: rightY
-                    })?.type;
-
-                    // Check if there is other stairs around, so we can connect them
-                    let startType = this.heightMap.getStair({
-                        x: startX,
-                        y: startY
-                    })?.type;
-
-                    if (startType !== StairType.OUTER_CORNER_STAIR && startType !== StairType.INNER_CORNER_STAIR) {
-                        const topTile: Vector2D = {x: rightX, y: rightY - 1};
-                        const leftTile: Vector2D = {x: rightX - 1, y: rightY};
-                        const rightTile: Vector2D = {x: rightX + 1, y: rightY};
-                        const bottomTile: Vector2D = {x: rightX, y: rightY + 1};
-
-                        if (this.heightMap.getStair(rightTile)?.type == StairType.STAIR && this.heightMap.getStair(rightTile)?.direction == Direction.NORTH && direction == Direction.WEST && this.heightMap.getTileHeight(rightTile) === this.heightMap.getTileHeight({
-                            x: Number(x),
-                            y: Number(y)
-                        })) {
-                            rightType = StairType.INNER_CORNER_STAIR;
-                        }
-
-                        if (this.heightMap.getStair(topTile)?.type == StairType.STAIR && this.heightMap.getStair(topTile)?.direction == Direction.NORTH && direction == Direction.WEST && this.heightMap.getTileHeight(topTile) === this.heightMap.getTileHeight({
-                            x: Number(x),
-                            y: Number(y)
-                        })) {
-                            rightType = StairType.INNER_CORNER_STAIR;
-                            startY -= 1;
-                            length += 1;
+                        if (leftStair) {
+                            if (leftStair.direction === Direction.NORTH_WEST) {
+                                rightStair!.type = StairType.STAIR;
+                            } else if (leftStair.direction === Direction.SOUTH_WEST) {
+                                leftStair!.type = StairType.STAIR;
+                            }
                         }
                     }
 
                     stairs.push({
                         position: {
-                            x: startX,
-                            y: startY,
+                            x: Number(x) - columnStairSizes[y][x]!.x + 1,
+                            y: Number(y) - columnStairSizes[y][x]!.y + 1,
                             z: columnStairSizes[y][x]!.z
                         },
                         length: length,
                         direction: direction,
                         corners: {
-                            left: leftType ?? StairType.STAIR,
-                            right: rightType ?? StairType.STAIR
+                            left: leftStair ? leftStair.type : StairType.STAIR,
+                            right: rightStair ? rightStair.type : StairType.STAIR
                         }
                     });
                 }

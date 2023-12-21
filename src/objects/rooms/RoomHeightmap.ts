@@ -120,8 +120,12 @@ export class RoomHeightmap {
             this.getTileDifference(topRightTile, { x, y }) === 1 &&
             this.getTileDifference(midRightTile, { x, y }) !== 1 &&
             this.getTileDifference(topTile, { x, y }) !== 1
-        )
+        ) {
+            if (this.getTileDifference(midLeftTile, { x, y }) === 1)
+                return { type: StairType.INNER_CORNER_STAIR, direction: Direction.NORTH_EAST };
+
             return { type: StairType.OUTER_CORNER_STAIR, direction: Direction.NORTH_EAST };
+        }
 
         if (this.isTile({ x, y }) && this.isTile(midRightTile) && this.getTileDifference(midRightTile, { x, y }) === 1)
             return { type: StairType.STAIR, direction: Direction.EAST };

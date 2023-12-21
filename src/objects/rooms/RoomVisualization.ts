@@ -6,9 +6,11 @@ import {RoomPart} from "./parts/RoomPart.ts";
 import {IRoomLayers} from "../../interfaces/IRoomLayers.ts";
 import {StairPart} from "./parts/StairPart.ts";
 import {GreedyMesher} from "./geometry/GreedyMesher.ts";
-import {StairMesh, TileMesh, WallMesh} from "../../types/Mesh.ts";
 import {ITileEvent} from "../../interfaces/IEvents.ts";
 import {CursorPart} from "./parts/CursorPart.ts";
+import {Direction} from "../../enums/Direction.ts";
+import {StairType} from "../../enums/StairType.ts";
+import {StairMesh, TileMesh, WallMesh} from "../../types/Mesh.ts";
 import {WallPart} from "./parts/WallPart.ts";
 
 export class RoomVisualization {
@@ -90,6 +92,18 @@ export class RoomVisualization {
             corner: wall.corner,
             door: wall.door,
         })));
+
+        /*this._registerFloorPart(new StairPart({
+            material: this.room.configuration.floorMaterial,
+            position: { x: 0, y: 0, z: 0 },
+            length: 1,
+            thickness: this.room.configuration.floorThickness,
+            direction: Direction.NORTH,
+            corners: {
+                left: StairType.OUTER_CORNER_STAIR,
+                right: StairType.STAIR
+            }
+        }));*/
 
 
         // Resets room position to the top-left corner by default
