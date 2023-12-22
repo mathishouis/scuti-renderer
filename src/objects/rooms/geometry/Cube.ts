@@ -1,12 +1,21 @@
 import { Color, Container, Graphics, Matrix } from 'pixi.js';
 import { FloorMaterial } from '../materials/FloorMaterial';
-import { ICubeConfiguration } from '../../../interfaces/ICubeConfiguration';
 import { CubeFace } from '../../../enums/CubeFace';
 import { WallMaterial } from '../materials/WallMaterial';
+import { Vector2D, Vector3D } from '../../../types/Vector.ts';
+import { Layer } from '@pixi/layers';
+
+interface Configuration {
+  material?: FloorMaterial | WallMaterial;
+  size: Vector3D;
+  offsets?: Record<number, Vector2D>;
+  zOrders?: Record<number, number>;
+  layer?: Layer;
+}
 
 export class Cube extends Container {
   public faces: Record<number, Graphics> = {};
-  constructor(public configuration: ICubeConfiguration) {
+  constructor(public configuration: Configuration) {
     super();
 
     this._initialize();

@@ -1,19 +1,26 @@
 import { RoomPart } from './RoomPart';
-import { ITileConfiguration } from '../../../interfaces/ITileConfiguration';
 import { Room } from '../Room';
 import { Container, FederatedPointerEvent, Point, Polygon } from 'pixi.js';
 import { FloorMaterial } from '../materials/FloorMaterial';
 import { Cube } from '../geometry/Cube';
 import { EventManager } from '../../events/EventManager';
-import { Vector3D } from '../../../types/Vector';
+import { Vector2D, Vector3D } from '../../../types/Vector';
 import { CubeFace } from '../../../enums/CubeFace';
+
+interface Configuration {
+  material?: FloorMaterial;
+  position: Vector3D;
+  size: Vector2D;
+  thickness: number;
+  door?: boolean;
+}
 
 export class TilePart extends RoomPart {
   public room!: Room;
   public container: Container = new Container();
   public eventManager: EventManager = new EventManager();
 
-  constructor(public configuration: ITileConfiguration) {
+  constructor(public configuration: Configuration) {
     super();
 
     this._registerEvents();

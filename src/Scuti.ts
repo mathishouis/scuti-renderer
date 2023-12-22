@@ -9,7 +9,6 @@ import {
   Ticker,
   UPDATE_PRIORITY,
 } from 'pixi.js';
-import { IRendererConfiguration } from './interfaces/IRendererConfiguration';
 import { GameObject } from './objects/GameObject';
 import { AssetLoader } from './objects/assets/AssetLoader';
 import { Layer, Stage } from '@pixi/layers';
@@ -19,32 +18,38 @@ import { loadBundle } from './objects/bundles/BundleParser';
 import { log, perf } from './utils/Logger';
 import { benchmark } from './utils/Benchmark';
 
+interface Configuration {
+  canvas: HTMLElement;
+  width: number;
+  height: number;
+  resources: string;
+  backgroundColor?: number;
+  backgroundAlpha?: number;
+  resizeTo?: HTMLElement | Window;
+}
+
 export class Scuti {
-  public configuration!: ScutiConfiguration;
+  public configuration: ScutiConfiguration;
   public canvas!: HTMLElement;
   public application!: Application;
   public layer: Layer = new Layer();
 
-  constructor(configuration: IRendererConfiguration) {
-    this.configuration = new ScutiConfiguration(this, configuration);
-
+  constructor(configuration: Configuration) {
     log('🚀 SCUTI', 'v0.0.0');
 
-    this._initializePixi();
-    this._initializeCanvas();
+    this.configuration = new ScutiConfiguration({ ...configuration, ...{ renderer: this } });
+    this._initialize();
   }
 
-  private _initializePixi(): void {
-    benchmark('pixi');
+  private _initialize(): void {
+    benchmark('renderer');
+    // Pixi settings
     extensions.add(loadBundle);
     settings.RESOLUTION = 1;
     Container.defaultSortableChildren = true;
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
-    perf('Pixi', 'pixi');
-  }
 
-  private _initializeCanvas(): void {
-    benchmark('canvas');
+    // Application
     this.application = new Application({
       width: this.configuration.width,
       height: this.configuration.height,
@@ -67,7 +72,7 @@ export class Scuti {
 
     this.layer.group.enableSort = true;
     this.application.stage.addChild(this.layer);
-    perf('Canvas', 'canvas');
+    perf('Renderer', 'renderer');
   }
 
   public async load(): Promise<void> {

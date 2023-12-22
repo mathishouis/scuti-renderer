@@ -1,42 +1,69 @@
 import { FloorMaterial } from './materials/FloorMaterial';
-import { IRoomConfiguration } from '../../interfaces/IRoomConfiguration';
 import { Room } from './Room';
 import { WallMaterial } from './materials/WallMaterial';
 
+interface Configuration {
+  room: Room;
+  heightMap: string;
+  floorMaterial?: FloorMaterial;
+  floorThickness?: number;
+  floorHidden?: boolean;
+  wallMaterial?: WallMaterial;
+  wallThickness?: number;
+  wallHeight?: number;
+  wallHidden?: boolean;
+  dragging?: boolean;
+  centerCamera?: boolean;
+  zoom?: number;
+}
+
 export class RoomConfiguration {
-  private _heightMap!: string;
+  public room: Room;
 
-  private _floorMaterial!: FloorMaterial;
-  private _floorThickness!: number;
-  private _floorHidden!: boolean;
+  private _heightMap: string;
 
-  private _wallMaterial!: WallMaterial;
-  private _wallThickness!: number;
-  private _wallHidden!: boolean;
-  private _wallHeight!: number;
+  private _floorMaterial: FloorMaterial;
+  private _floorThickness: number;
+  private _floorHidden: boolean;
 
-  private _dragging!: boolean;
-  private _centerCamera!: boolean;
-  private _zoom!: number;
+  private _wallMaterial: WallMaterial;
+  private _wallThickness: number;
+  private _wallHidden: boolean;
+  private _wallHeight: number;
 
-  constructor(
-    public room: Room,
-    configuration: IRoomConfiguration,
-  ) {
-    this._heightMap = configuration.heightMap;
+  private _dragging: boolean;
+  private _centerCamera: boolean;
+  private _zoom: number;
 
-    this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(111);
-    this._floorThickness = configuration.floorThickness ?? 8;
-    this._floorHidden = configuration.floorHidden ?? false;
+  constructor({
+    room,
+    heightMap,
+    floorMaterial,
+    floorThickness,
+    floorHidden,
+    wallMaterial,
+    wallThickness,
+    wallHeight,
+    wallHidden,
+    dragging,
+    centerCamera,
+    zoom,
+  }: Configuration) {
+    this.room = room;
+    this._heightMap = heightMap;
 
-    this._wallMaterial = configuration.wallMaterial ?? new WallMaterial(101);
-    this._wallThickness = configuration.wallThickness ?? 8;
-    this._wallHidden = configuration.wallHidden ?? false;
-    this._wallHeight = configuration.wallHeight ?? 0;
+    this._floorMaterial = floorMaterial ?? new FloorMaterial(111);
+    this._floorThickness = floorThickness ?? 8;
+    this._floorHidden = floorHidden ?? false;
 
-    this._dragging = configuration.dragging ?? true;
-    this._centerCamera = configuration.centerCamera ?? true;
-    this._zoom = configuration.zoom ?? 1;
+    this._wallMaterial = wallMaterial ?? new WallMaterial(101);
+    this._wallThickness = wallThickness ?? 8;
+    this._wallHidden = wallHidden ?? false;
+    this._wallHeight = wallHeight ?? 0;
+
+    this._dragging = dragging ?? true;
+    this._centerCamera = centerCamera ?? true;
+    this._zoom = zoom ?? 1;
   }
 
   public get heightMap(): string {

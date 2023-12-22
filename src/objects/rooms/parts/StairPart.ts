@@ -3,19 +3,30 @@ import { Room } from '../Room';
 import { Container, FederatedPointerEvent, Point, Polygon } from 'pixi.js';
 import { FloorMaterial } from '../materials/FloorMaterial';
 import { Cube } from '../geometry/Cube';
-import { IStairConfiguration } from '../../../interfaces/IStairConfiguration';
 import { Vector2D, Vector3D } from '../../../types/Vector';
 import { CubeFace } from '../../../enums/CubeFace';
 import { EventManager } from '../../events/EventManager';
 import { StairType } from '../../../enums/StairType';
 import { Direction } from '../../../enums/Direction';
 
+interface Configuration {
+  material?: FloorMaterial;
+  position: Vector3D;
+  thickness: number;
+  length: number;
+  direction: Direction;
+  corners: {
+    left: StairType;
+    right: StairType;
+  };
+}
+
 export class StairPart extends RoomPart {
   public room!: Room;
   public container: Container = new Container();
   public eventManager: EventManager = new EventManager();
 
-  constructor(public configuration: IStairConfiguration) {
+  constructor(public configuration: Configuration) {
     super();
 
     this._registerEvents();

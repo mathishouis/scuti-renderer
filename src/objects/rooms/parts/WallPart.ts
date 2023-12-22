@@ -5,18 +5,29 @@ import { Cube } from '../geometry/Cube';
 import { EventManager } from '../../events/EventManager';
 import { Vector3D } from '../../../types/Vector';
 import { CubeFace } from '../../../enums/CubeFace';
-import { IWallConfiguration } from '../../../interfaces/IWallConfiguration';
 import { WallMaterial } from '../materials/WallMaterial';
 import { Direction } from '../../../enums/Direction';
 import { AssetLoader } from '../../assets/AssetLoader';
 import { DoorMaskFilter } from '../../filters/DoorMaskFilter';
+
+interface Configuration {
+  material?: WallMaterial;
+  position: Vector3D;
+  length: number;
+  thickness: number;
+  floorThickness: number;
+  height: number;
+  direction: Direction;
+  corner: boolean;
+  door?: number;
+}
 
 export class WallPart extends RoomPart {
   public room!: Room;
   public container: Container = new Container();
   public eventManager: EventManager = new EventManager();
 
-  constructor(public configuration: IWallConfiguration) {
+  constructor(public configuration: Configuration) {
     super();
   }
 

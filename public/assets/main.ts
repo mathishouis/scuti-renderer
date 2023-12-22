@@ -2,7 +2,7 @@ import './style.css';
 import { Scuti } from '../../src/Scuti';
 import { Room } from '../../src/objects/rooms/Room';
 import { FloorMaterial } from '../../src/objects/rooms/materials/FloorMaterial';
-import { ITileEvent } from '../../src/interfaces/IEvents';
+import { TileEvent } from '../../src/entities/IEvents';
 import { WallMaterial } from '../../src/objects/rooms/materials/WallMaterial';
 
 const renderer: Scuti = new Scuti({
@@ -11,9 +11,10 @@ const renderer: Scuti = new Scuti({
   height: window.innerHeight,
   resources: 'http://127.0.0.1:8081',
   backgroundColor: 0x0c567c,
-  //resizeTo: window
+  resizeTo: window,
 });
 
+// @ts-ignore
 await renderer.load();
 
 /*const heightMap: string =`
@@ -95,6 +96,7 @@ const [min_zoom, max_zoom] = [0.5, 5];
 
 renderer.application.view.addEventListener(
   'wheel',
+  // @ts-ignore
   ({ deltaY }) => {
     // todo(): add support accross browsers
     const delta = deltaY > 0 ? -0.25 : 0.25;
@@ -113,7 +115,7 @@ renderer.application.view.addEventListener(
     room.configuration.floorThickness = 8;
 }, 1000);*/
 
-room.events.tiles.onPointerUp = (event: ITileEvent) => {
+room.events.tiles.onPointerUp = (event: TileEvent) => {
   console.log(event.position);
 };
 

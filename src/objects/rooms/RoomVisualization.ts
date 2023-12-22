@@ -3,19 +3,22 @@ import { Room } from './Room';
 import { TilePart } from './parts/TilePart';
 import { PartLayer } from './layers/PartLayer';
 import { RoomPart } from './parts/RoomPart';
-import { IRoomLayers } from '../../interfaces/IRoomLayers';
 import { StairPart } from './parts/StairPart';
 import { GreedyMesher } from './geometry/GreedyMesher';
-import { ITileEvent } from '../../interfaces/IEvents';
+import { TileEvent } from '../../entities/Events';
 import { CursorPart } from './parts/CursorPart';
 import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh';
 import { WallPart } from './parts/WallPart';
 import { benchmark } from '../../utils/Benchmark';
 import { perf } from '../../utils/Logger';
 
+type RoomLayers = {
+  parts: PartLayer;
+};
+
 export class RoomVisualization {
   public container: Container = new Container();
-  public layers: IRoomLayers = {} as IRoomLayers;
+  public layers: RoomLayers = {} as RoomLayers;
 
   constructor(public room: Room) {
     this._initializeMaterials();
@@ -41,25 +44,25 @@ export class RoomVisualization {
   private _registerFloorPart(part: TilePart | StairPart): void {
     this.add(part);
 
-    part.eventManager.onPointerDown = (event: ITileEvent): void => {
+    part.eventManager.onPointerDown = (event: TileEvent): void => {
       if (this.room.events.tiles.onPointerDown) this.room.events.tiles.onPointerDown(event);
     };
-    part.eventManager.onPointerUp = (event: ITileEvent): void => {
+    part.eventManager.onPointerUp = (event: TileEvent): void => {
       if (this.room.events.tiles.onPointerUp) this.room.events.tiles.onPointerUp(event);
     };
-    part.eventManager.onPointerMove = (event: ITileEvent): void => {
+    part.eventManager.onPointerMove = (event: TileEvent): void => {
       if (this.room.events.tiles.onPointerMove) this.room.events.tiles.onPointerMove(event);
       if (this.layers.parts.cursor) this.layers.parts.cursor.move(event.position);
     };
-    part.eventManager.onPointerOut = (event: ITileEvent): void => {
+    part.eventManager.onPointerOut = (event: TileEvent): void => {
       if (this.room.events.tiles.onPointerOut) this.room.events.tiles.onPointerOut(event);
       if (this.layers.parts.cursor) this.layers.parts.cursor.hide();
     };
-    part.eventManager.onPointerOver = (event: ITileEvent): void => {
+    part.eventManager.onPointerOver = (event: TileEvent): void => {
       if (this.room.events.tiles.onPointerOver) this.room.events.tiles.onPointerOver(event);
       if (this.layers.parts.cursor) this.layers.parts.cursor.show();
     };
-    part.eventManager.onDoublePointerDown = (event: ITileEvent): void => {
+    part.eventManager.onDoublePointerDown = (event: TileEvent): void => {
       if (this.room.events.tiles.onDoublePointerDown) this.room.events.tiles.onDoublePointerDown(event);
     };
   }

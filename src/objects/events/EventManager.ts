@@ -1,17 +1,17 @@
-import { ITileEvent } from '../../interfaces/IEvents';
+import { TileEvent } from '../../entities/IEvents';
 
 export class EventManager {
   private _isDoubleClicking: boolean = false;
   private _doubleClickTimeout!: number;
 
-  public onPointerDown!: (event: ITileEvent) => void;
-  public onPointerUp!: (event: ITileEvent) => void;
-  public onPointerMove!: (event: ITileEvent) => void;
-  public onPointerOut!: (event: ITileEvent) => void;
-  public onPointerOver!: (event: ITileEvent) => void;
-  public onDoublePointerDown!: (event: ITileEvent) => void;
+  public onPointerDown!: (event: TileEvent) => void;
+  public onPointerUp!: (event: TileEvent) => void;
+  public onPointerMove!: (event: TileEvent) => void;
+  public onPointerOut!: (event: TileEvent) => void;
+  public onPointerOver!: (event: TileEvent) => void;
+  public onDoublePointerDown!: (event: TileEvent) => void;
 
-  public handlePointerDown(event: ITileEvent): void {
+  public handlePointerDown(event: TileEvent): void {
     if (!this._isDoubleClicking) {
       if (this.onPointerDown) this.onPointerDown(event);
       this._isDoubleClicking = true;
@@ -25,19 +25,19 @@ export class EventManager {
     }
   }
 
-  public handlePointerUp(event: ITileEvent): void {
+  public handlePointerUp(event: TileEvent): void {
     if (this.onPointerUp) this.onPointerUp(event);
   }
 
-  public handlePointerMove(event: ITileEvent): void {
+  public handlePointerMove(event: TileEvent): void {
     if (this.onPointerMove) this.onPointerMove(event);
   }
 
-  public handlePointerOut(event: ITileEvent): void {
+  public handlePointerOut(event: TileEvent): void {
     if (this.onPointerOut) this.onPointerOut(event);
   }
 
-  public handlePointerOver(event: ITileEvent): void {
+  public handlePointerOver(event: TileEvent): void {
     if (this.onPointerOver) this.onPointerOver(event);
   }
 }

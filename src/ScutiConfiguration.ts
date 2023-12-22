@@ -1,27 +1,46 @@
-import { Scuti } from './Scuti';
-import { AssetLoader } from './index';
-import { IRendererConfiguration } from './interfaces/IRendererConfiguration';
+import { AssetLoader, Scuti } from './index';
 import { Color } from 'pixi.js';
 
+interface Configuration {
+  renderer: Scuti;
+  canvas: HTMLElement;
+  width: number;
+  height: number;
+  resources: string;
+  backgroundColor?: number;
+  backgroundAlpha?: number;
+  resizeTo?: HTMLElement | Window;
+}
 export class ScutiConfiguration {
-  private _canvas!: HTMLElement;
-  private _width!: number;
-  private _height!: number;
-  private _backgroundColor!: number;
-  private _backgroundAlpha!: number;
-  private _resizeTo!: HTMLElement | Window | undefined;
+  public renderer: Scuti;
 
-  constructor(
-    public renderer: Scuti,
-    configuration: IRendererConfiguration,
-  ) {
-    this._canvas = configuration.canvas;
-    this._width = configuration.width;
-    this._height = configuration.height;
-    this._backgroundColor = configuration.backgroundColor ?? 0x000000;
-    this._backgroundAlpha = configuration.backgroundAlpha ?? 1;
-    this._resizeTo = configuration.resizeTo;
-    AssetLoader.assetsPath = configuration.resources;
+  private _canvas: HTMLElement;
+  private _width: number;
+  private _height: number;
+  private _backgroundColor: number;
+  private _backgroundAlpha: number;
+  private _resizeTo: HTMLElement | Window | undefined;
+
+  constructor({
+    canvas,
+    width,
+    height,
+    backgroundColor,
+    backgroundAlpha,
+    resizeTo,
+    resources,
+    renderer,
+  }: Configuration) {
+    this.renderer = renderer;
+
+    this._canvas = canvas;
+    this._width = width;
+    this._height = height;
+    this._backgroundColor = backgroundColor ?? 0x000000;
+    this._backgroundAlpha = backgroundAlpha ?? 1;
+    this._resizeTo = resizeTo;
+
+    AssetLoader.assetsPath = resources;
   }
 
   public get canvas(): HTMLElement {
@@ -75,7 +94,6 @@ export class ScutiConfiguration {
   }
 
   public set resizeTo(element: HTMLElement | Window) {
-    console.log('cc');
     this.renderer.application.resizeTo = element;
   }
 }

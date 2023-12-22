@@ -3,15 +3,18 @@ import { Room } from '../Room';
 import { Container, Sprite, Texture } from 'pixi.js';
 import { EventManager } from '../../events/EventManager';
 import { AssetLoader } from '../../assets/AssetLoader';
-import { ICursorConfiguration } from '../../../interfaces/ICursorConfiguration';
 import { Vector3D } from '../../../types/Vector';
+
+interface Configuration {
+  position?: Vector3D;
+}
 
 export class CursorPart extends RoomPart {
   public room!: Room;
   public container: Container = new Container();
   public eventManager!: EventManager;
 
-  constructor(public configuration: ICursorConfiguration) {
+  constructor(public configuration: Configuration) {
     super();
   }
 
