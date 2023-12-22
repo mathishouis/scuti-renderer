@@ -1,19 +1,20 @@
-import "./style.css";
-import {Scuti} from "./Scuti.ts";
-import {Room} from "./objects/rooms/Room.ts";
-import {FloorMaterial} from "./objects/rooms/materials/FloorMaterial.ts";
-import {ITileEvent} from "./interfaces/IEvents.ts";
-import {WallMaterial} from "./objects/rooms/materials/WallMaterial.ts";
+import './style.css';
+import { Scuti } from '../../src/Scuti';
+import { Room } from '../../src/objects/rooms/Room';
+import { FloorMaterial } from '../../src/objects/rooms/materials/FloorMaterial';
+import { TileEvent } from '../../src/entities/IEvents';
+import { WallMaterial } from '../../src/objects/rooms/materials/WallMaterial';
 
 const renderer: Scuti = new Scuti({
-    canvas: document.getElementById('app') as HTMLElement,
-    width: window.innerWidth,
-    height: window.innerHeight,
-    resources: 'http://127.0.0.1:8081',
-    backgroundColor: 0x0C567C
-    //resizeTo: window
+  canvas: document.getElementById('app') as HTMLElement,
+  width: window.innerWidth,
+  height: window.innerHeight,
+  resources: 'http://127.0.0.1:8081',
+  backgroundColor: 0x0c567c,
+  resizeTo: window,
 });
 
+// @ts-ignore
 await renderer.load();
 
 /*const heightMap: string =`
@@ -76,32 +77,37 @@ x00000x000
 x00000xx00
 x000xxxxx0
 `;*/
-const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
+
 const room: Room = new Room({
-    heightMap: heightMap,
-    dragging: true,
-    centerCamera: true,
-    floorMaterial: new FloorMaterial(101),
-    floorThickness: 8,
-    wallMaterial: new WallMaterial(108),
-    wallThickness: 8,
-    wallHeight: -1
+  heightMap: heightMap,
+  dragging: true,
+  centerCamera: true,
+  floorMaterial: new FloorMaterial(101),
+  floorThickness: 8,
+  wallMaterial: new WallMaterial(108),
+  wallThickness: 8,
+  wallHeight: -1,
 });
 
 renderer.add(room);
 
-let [zoom, min_zoom, max_zoom] = [1, 0.5, 5]
+let zoom = 1;
+const [min_zoom, max_zoom] = [0.5, 5];
 
-// @ts-expect-error
-renderer.application.view.addEventListener('wheel', ({ deltaY }) => {
+renderer.application.view.addEventListener(
+  'wheel',
+  // @ts-ignore
+  ({ deltaY }) => {
     // todo(): add support accross browsers
     const delta = deltaY > 0 ? -0.25 : 0.25;
 
     zoom += delta;
     zoom = Math.max(min_zoom, Math.min(max_zoom, zoom));
 
-    room.camera.zoom(zoom, 0.25)
-}, { passive: true })
+    room.camera.zoom(zoom, 0.25);
+  },
+  { passive: true },
+);
 
 /*setInterval(() => {
     const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
@@ -109,8 +115,8 @@ renderer.application.view.addEventListener('wheel', ({ deltaY }) => {
     room.configuration.floorThickness = 8;
 }, 1000);*/
 
-room.events.tiles.onPointerUp = (event: ITileEvent) => {
-    console.log(event.position);
+room.events.tiles.onPointerUp = (event: TileEvent) => {
+  console.log(event.position);
 };
 
 //setTimeout(() => renderer.configuration.backgroundColor = 0xFF0000, 2000);
@@ -128,7 +134,6 @@ setTimeout(() => room.camera.zoom(4), 6000);
 setTimeout(() => room.camera.zoom(0.5), 7000);
 
 setTimeout(() => room.camera.zoom(5), 8000);*/
-
 
 /*setTimeout(() => room.camera.zoom = 3, 3000);
 setTimeout(() => room.camera.zoom = 0.5, 4000);

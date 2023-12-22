@@ -1,6 +1,6 @@
-import { Scuti } from "../Scuti.ts";
+import { Scuti } from '../Scuti';
 
 export abstract class GameObject {
-    public abstract renderer: Scuti;
-    public abstract render(): void;
+  public abstract renderer: Scuti;
+  public abstract render(): void;
 }

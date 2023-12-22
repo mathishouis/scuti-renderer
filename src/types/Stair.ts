@@ -1,7 +1,7 @@
-import { StairType } from "../enums/StairType.ts";
-import { Direction } from "../enums/Direction.ts";
+import { StairType } from '../enums/StairType';
+import { Direction } from '../enums/Direction';
 
 export type Stair = {
-    type: StairType;
-    direction: Direction;
-}
+  type: StairType;
+  direction: Direction;
+};

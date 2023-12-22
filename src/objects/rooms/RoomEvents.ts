@@ -1,5 +1,5 @@
-import {EventManager} from "../events/EventManager.ts";
+import { EventManager } from '../events/EventManager';
 
 export class RoomEvents {
-    public tiles: EventManager = new EventManager();
+  public tiles: EventManager = new EventManager();
 }

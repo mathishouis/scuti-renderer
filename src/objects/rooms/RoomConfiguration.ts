@@ -1,137 +1,164 @@
-import { FloorMaterial } from "./materials/FloorMaterial.ts";
-import { IRoomConfiguration } from "../../interfaces/IRoomConfiguration.ts";
-import { Room } from "./Room.ts";
-import { WallMaterial } from "./materials/WallMaterial.ts";
+import { FloorMaterial } from './materials/FloorMaterial';
+import { Room } from './Room';
+import { WallMaterial } from './materials/WallMaterial';
+
+interface Configuration {
+  room: Room;
+  heightMap: string;
+  floorMaterial?: FloorMaterial;
+  floorThickness?: number;
+  floorHidden?: boolean;
+  wallMaterial?: WallMaterial;
+  wallThickness?: number;
+  wallHeight?: number;
+  wallHidden?: boolean;
+  dragging?: boolean;
+  centerCamera?: boolean;
+  zoom?: number;
+}
 
 export class RoomConfiguration {
-    private _heightMap!: string;
+  public room: Room;
 
-    private _floorMaterial!: FloorMaterial;
-    private _floorThickness!: number;
-    private _floorHidden!: boolean;
+  private _heightMap: string;
 
-    private _wallMaterial!: WallMaterial;
-    private _wallThickness!: number;
-    private _wallHidden!: boolean;
-    private _wallHeight!: number;
+  private _floorMaterial: FloorMaterial;
+  private _floorThickness: number;
+  private _floorHidden: boolean;
 
-    private _dragging!: boolean;
-    private _centerCamera!: boolean;
-    private _zoom!: number;
+  private _wallMaterial: WallMaterial;
+  private _wallThickness: number;
+  private _wallHidden: boolean;
+  private _wallHeight: number;
 
-    constructor(
-        public room: Room,
-        configuration: IRoomConfiguration
-    ) {
-        this._heightMap = configuration.heightMap;
+  private _dragging: boolean;
+  private _centerCamera: boolean;
+  private _zoom: number;
 
-        this._floorMaterial = configuration.floorMaterial ?? new FloorMaterial(111);
-        this._floorThickness = configuration.floorThickness ?? 8;
-        this._floorHidden = configuration.floorHidden ?? false;
+  constructor({
+    room,
+    heightMap,
+    floorMaterial,
+    floorThickness,
+    floorHidden,
+    wallMaterial,
+    wallThickness,
+    wallHeight,
+    wallHidden,
+    dragging,
+    centerCamera,
+    zoom,
+  }: Configuration) {
+    this.room = room;
+    this._heightMap = heightMap;
 
-        this._wallMaterial = configuration.wallMaterial ?? new WallMaterial(101);
-        this._wallThickness = configuration.wallThickness ?? 8;
-        this._wallHidden = configuration.wallHidden ?? false;
-        this._wallHeight = configuration.wallHeight ?? 0;
+    this._floorMaterial = floorMaterial ?? new FloorMaterial(111);
+    this._floorThickness = floorThickness ?? 8;
+    this._floorHidden = floorHidden ?? false;
 
-        this._dragging = configuration.dragging ?? true;
-        this._centerCamera = configuration.centerCamera ?? true;
-        this._zoom = configuration.zoom ?? 1;
-    }
+    this._wallMaterial = wallMaterial ?? new WallMaterial(101);
+    this._wallThickness = wallThickness ?? 8;
+    this._wallHidden = wallHidden ?? false;
+    this._wallHeight = wallHeight ?? 0;
 
-    public get heightMap(): string {
-        return this._heightMap;
-    }
+    this._dragging = dragging ?? true;
+    this._centerCamera = centerCamera ?? true;
+    this._zoom = zoom ?? 1;
+  }
 
-    public set heightMap(heightMap: string) {
-        this._heightMap = heightMap;
-        this.room.update();
-    }
+  public get heightMap(): string {
+    return this._heightMap;
+  }
 
-    public get floorMaterial(): FloorMaterial {
-        return this._floorMaterial;
-    }
+  public set heightMap(heightMap: string) {
+    this._heightMap = heightMap;
+    this.room.update();
+  }
 
-    public set floorMaterial(material: FloorMaterial) {
-        this._floorMaterial = material;
-        this.room.update();
-    }
+  public get floorMaterial(): FloorMaterial {
+    return this._floorMaterial;
+  }
 
-    public get floorThickness(): number {
-        return this._floorThickness;
-    }
+  public set floorMaterial(material: FloorMaterial) {
+    this._floorMaterial = material;
+    this.room.update();
+  }
 
-    public set floorThickness(thickness: number) {
-        this._floorThickness = thickness;
-        this.room.update();
-    }
+  public get floorThickness(): number {
+    return this._floorThickness;
+  }
 
-    public get floorHidden(): boolean {
-        return this._floorHidden;
-    }
+  public set floorThickness(thickness: number) {
+    this._floorThickness = thickness;
+    this.room.update();
+  }
 
-    public set floorHidden(hidden: boolean) {
-        this._floorHidden = hidden;
-        this.room.update();
-    }
+  public get floorHidden(): boolean {
+    return this._floorHidden;
+  }
 
-    public get wallMaterial(): WallMaterial {
-        return this._wallMaterial;
-    }
+  public set floorHidden(hidden: boolean) {
+    this._floorHidden = hidden;
+    this.room.update();
+  }
 
-    public set wallMaterial(material: WallMaterial) {
-        this._wallMaterial = material;
-        this.room.update();
-    }
+  public get wallMaterial(): WallMaterial {
+    return this._wallMaterial;
+  }
 
-    public get wallThickness(): number {
-        return this._wallThickness;
-    }
+  public set wallMaterial(material: WallMaterial) {
+    this._wallMaterial = material;
+    this.room.update();
+  }
 
-    public set wallThickness(thickness: number) {
-        this._wallThickness = thickness;
-        this.room.update();
-    }
+  public get wallThickness(): number {
+    return this._wallThickness;
+  }
 
-    public get wallHidden(): boolean {
-        return this._wallHidden;
-    }
+  public set wallThickness(thickness: number) {
+    this._wallThickness = thickness;
+    this.room.update();
+  }
 
-    public set wallHidden(hidden: boolean) {
-        this._wallHidden = hidden;
-        this.room.update();
-    }
+  public get wallHidden(): boolean {
+    return this._wallHidden;
+  }
 
-    public get wallHeight(): number {
-        return this._wallHeight;
-    }
+  public set wallHidden(hidden: boolean) {
+    this._wallHidden = hidden;
+    this.room.update();
+  }
 
-    public set wallHeight(height: number) {
-        this._wallHeight = height;
-        this.room.update();
-    }
+  public get wallHeight(): number {
+    return this._wallHeight;
+  }
 
-    public get dragging(): boolean {
-        return this._dragging;
-    }
+  public set wallHeight(height: number) {
+    this._wallHeight = height;
+    this.room.update();
+  }
 
-    public set dragging(dragging: boolean) {
-        this._dragging = dragging;
-    }
+  public get dragging(): boolean {
+    return this._dragging;
+  }
 
-    public get centerCamera(): boolean {
-        return this._centerCamera;
-    }
+  public set dragging(dragging: boolean) {
+    this._dragging = dragging;
+  }
 
-    public set centerCamera(centerCamera: boolean) {
-        this._centerCamera = centerCamera;
-    }
+  public get centerCamera(): boolean {
+    return this._centerCamera;
+  }
 
-    public get zoom(): number {
-        return this._zoom;
-    }
+  public set centerCamera(centerCamera: boolean) {
+    this._centerCamera = centerCamera;
+  }
 
-    public set zoom(zoom: number) {
-        this._zoom = zoom;
-    }
+  public get zoom(): number {
+    return this._zoom;
+  }
+
+  public set zoom(zoom: number) {
+    this._zoom = zoom;
+  }
 }

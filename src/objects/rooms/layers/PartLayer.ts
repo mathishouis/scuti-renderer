@@ -1,23 +1,21 @@
-import { RoomLayer } from "./RoomLayer.ts";
-import { Room } from "../Room.ts";
-import { RoomPart } from "../parts/RoomPart.ts";
-import {CursorPart} from "../parts/CursorPart.ts";
+import { RoomLayer } from './RoomLayer';
+import { Room } from '../Room';
+import { RoomPart } from '../parts/RoomPart';
+import { CursorPart } from '../parts/CursorPart';
 
 export class PartLayer extends RoomLayer {
-    public cursor!: CursorPart;
-    public childrens: RoomPart[] = [];
+  public cursor!: CursorPart;
+  public childrens: RoomPart[] = [];
 
-    constructor(
-        public room: Room
-    ) {
-        super();
-    }
+  constructor(public room: Room) {
+    super();
+  }
 
-    public add(item: RoomPart): void {
-        this.childrens.push(item);
-    }
+  public add(item: RoomPart): void {
+    this.childrens.push(item);
+  }
 
-    public remove(item: RoomPart): void {
-        this.childrens = this.childrens.filter((filteredItem: RoomPart) => filteredItem !== item);
-    }
+  public remove(item: RoomPart): void {
+    this.childrens = this.childrens.filter((filteredItem: RoomPart) => filteredItem !== item);
+  }
 }

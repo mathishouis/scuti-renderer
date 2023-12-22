@@ -1,42 +1,55 @@
-import { Scuti } from "../../Scuti.ts";
-import { IRoomConfiguration } from "../../interfaces/IRoomConfiguration.ts";
-import { RoomVisualization } from "./RoomVisualization.ts";
-import { RoomCamera } from "./RoomCamera.ts";
-import { GameObject } from "../GameObject.ts";
-import { RoomHeightmap } from "./RoomHeightmap.ts";
-import { RoomConfiguration } from "./RoomConfiguration.ts";
-import {RoomEvents} from "./RoomEvents.ts";
+import { Scuti } from '../../Scuti';
+import { RoomVisualization } from './RoomVisualization';
+import { RoomCamera } from './RoomCamera';
+import { GameObject } from '../GameObject';
+import { RoomHeightmap } from './RoomHeightmap';
+import { RoomConfiguration } from './RoomConfiguration';
+import { RoomEvents } from './RoomEvents';
+import { FloorMaterial } from './materials/FloorMaterial.ts';
+import { WallMaterial } from './materials/WallMaterial.ts';
+
+interface Configuration {
+  heightMap: string;
+  floorMaterial?: FloorMaterial;
+  floorThickness?: number;
+  floorHidden?: boolean;
+  wallMaterial?: WallMaterial;
+  wallThickness?: number;
+  wallHeight?: number;
+  wallHidden?: boolean;
+  dragging?: boolean;
+  centerCamera?: boolean;
+  zoom?: number;
+}
 
 export class Room extends GameObject {
-    public renderer!: Scuti;
-    public heightMap!: RoomHeightmap;
-    public visualization!: RoomVisualization;
-    public camera!: RoomCamera;
-    public configuration: RoomConfiguration;
-    public events!: RoomEvents;
+  public renderer!: Scuti;
+  public heightMap!: RoomHeightmap;
+  public visualization!: RoomVisualization;
+  public camera!: RoomCamera;
+  public configuration: RoomConfiguration;
+  public events!: RoomEvents;
 
-    constructor(
-        configuration: IRoomConfiguration
-    ) {
-        super();
+  constructor(configuration: Configuration) {
+    super();
 
-        this.configuration = new RoomConfiguration(this, configuration);
-        this.configuration.floorMaterial.room = this;
-        this.configuration.wallMaterial.room = this;
-    }
+    this.configuration = new RoomConfiguration({ ...configuration, ...{ room: this } });
+    this.configuration.floorMaterial.room = this;
+    this.configuration.wallMaterial.room = this;
+  }
 
-    public render(): void {
-        this.heightMap = new RoomHeightmap(this.configuration.heightMap);
-        this.visualization = new RoomVisualization(this);
-        this.camera = new RoomCamera(this);
-        this.events = new RoomEvents();
+  public render(): void {
+    this.heightMap = new RoomHeightmap(this.configuration.heightMap);
+    this.visualization = new RoomVisualization(this);
+    this.camera = new RoomCamera(this);
+    this.events = new RoomEvents();
 
-        this.visualization.render();
-        this.renderer.application.stage.addChild(this.camera);
-    }
+    this.visualization.render();
+    this.renderer.application.stage.addChild(this.camera);
+  }
 
-    public update(): void {
-        this.heightMap = new RoomHeightmap(this.configuration.heightMap);
-        this.visualization.update();
-    }
+  public update(): void {
+    this.heightMap = new RoomHeightmap(this.configuration.heightMap);
+    this.visualization.update();
+  }
 }
