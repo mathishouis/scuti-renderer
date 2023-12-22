@@ -275,7 +275,8 @@ export class StairPart extends RoomPart {
       const cube: Cube = new Cube({
         layer: this.room.renderer.layer,
         zOrders: zOrders,
-        material: material,
+        texture: material.texture,
+        color: material.color,
         size: size,
         offsets: {
           [CubeFace.TOP]: textureOffset,

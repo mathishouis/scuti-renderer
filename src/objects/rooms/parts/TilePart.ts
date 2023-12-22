@@ -64,7 +64,8 @@ export class TilePart extends RoomPart {
         [CubeFace.LEFT]: zOrder - 0.5,
         [CubeFace.RIGHT]: zOrder - 0.6,
       },
-      material: material,
+      texture: material.texture,
+      color: material.color,
       size: {
         x: this.configuration.size.x,
         y: this.configuration.size.y,

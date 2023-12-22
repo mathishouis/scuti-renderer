@@ -11,6 +11,7 @@ import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh';
 import { WallPart } from './parts/WallPart';
 import { benchmark } from '../../utils/Benchmark';
 import { perf } from '../../utils/Logger';
+import { LandscapePart } from './parts/LandscapePart.ts';
 
 type RoomLayers = {
   parts: PartLayer;
@@ -101,7 +102,7 @@ export class RoomVisualization {
       );
 
     if (!this.room.configuration.wallHidden)
-      greedyMesher.walls.forEach((wall: WallMesh): void =>
+      greedyMesher.walls.forEach((wall: WallMesh): void => {
         this.add(
           new WallPart({
             material: this.room.configuration.wallMaterial,
@@ -114,8 +115,33 @@ export class RoomVisualization {
             corner: wall.corner,
             door: wall.door,
           }),
-        ),
+        );
+        /*this.add(
+          new LandscapePart({
+            position: wall.position,
+            length: wall.length,
+            floorThickness: this.room.configuration.floorThickness,
+            height: this.room.configuration.wallHeight,
+            direction: wall.direction,
+            door: wall.door,
+          }),
+        );*/
+      });
+
+    benchmark('ls');
+    greedyMesher.walls.forEach((wall: WallMesh): void => {
+      this.add(
+        new LandscapePart({
+          position: wall.position,
+          length: wall.length,
+          floorThickness: this.room.configuration.floorThickness,
+          height: this.room.configuration.wallHeight,
+          direction: wall.direction,
+          door: wall.door,
+        }),
       );
+    });
+    perf('Landscape', 'ls');
 
     perf('Room Visualization', 'room-visualization');
 

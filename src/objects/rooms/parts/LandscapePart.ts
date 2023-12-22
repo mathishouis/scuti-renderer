@@ -1,6 +1,6 @@
 import { RoomPart } from './RoomPart';
 import { Room } from '../Room';
-import { Container, Point, Sprite } from 'pixi.js';
+import { Container, Point, Sprite, Spritesheet, Texture } from 'pixi.js';
 import { Cube } from '../geometry/Cube';
 import { EventManager } from '../../events/EventManager';
 import { Vector3D } from '../../../types/Vector';
@@ -8,21 +8,39 @@ import { CubeFace } from '../../../enums/CubeFace';
 import { WallMaterial } from '../materials/WallMaterial';
 import { Direction } from '../../../enums/Direction';
 import { AssetLoader } from '../../assets/AssetLoader';
-import { DoorMaskFilter } from '../../filters/DoorMaskFilter';
+import { random } from '../../../utils/Random';
 
 interface Configuration {
-  material?: WallMaterial;
   position: Vector3D;
   length: number;
-  thickness: number;
   floorThickness: number;
   height: number;
   direction: Direction;
-  corner: boolean;
   door?: number;
 }
 
-export class WallPart extends RoomPart {
+enum RepeatMode {
+  NONE = 'none',
+  RANDOM = 'random',
+}
+
+enum Align {
+  BOTTOM,
+  TOP,
+}
+
+interface Material {
+  id: string;
+  repeat: RepeatMode;
+  align: Align;
+  columns: Column[];
+}
+
+interface Column {
+  texture: string;
+}
+
+export class LandscapePart extends RoomPart {
   public room!: Room;
   public container: Container = new Container();
   public eventManager: EventManager = new EventManager();
@@ -31,9 +49,94 @@ export class WallPart extends RoomPart {
     super();
   }
 
+  public parseLandscapeColumn({ texture }: Column): Texture {
+    const spritesheet = AssetLoader.get('room/materials') as Spritesheet;
+    // todo(): Render extras
+
+    return spritesheet.textures[texture];
+  }
+
+  public parseLandscapeMaterial({ repeat, align, columns }: Material): Texture {
+    //console.log(repeat, align, columns);
+    const columnTextures = columns.map((column: Column) => this.parseLandscapeColumn(column));
+    const container = new Container();
+    const maxWidth = this.configuration.length * 32;
+    let offset = 0;
+
+    if (repeat === RepeatMode.RANDOM) {
+      while (offset < maxWidth) {
+        const seed = this.configuration.position.x + this.configuration.position.y + this.configuration.length + offset;
+        const randomIndex = random(seed, 0, 1);
+        const column = columnTextures[randomIndex];
+        const sprite = new Sprite(column);
+
+        sprite.x = offset;
+        if (this.configuration.direction === Direction.NORTH) sprite.scale.x = -1;
+        container.addChild(sprite);
+        offset += sprite.width;
+      }
+    } else if (repeat === RepeatMode.NONE) {
+    }
+
+    return this.room.renderer.application.renderer.generateTexture(container);
+  }
+
+  public renderLayer(texture: Texture): Cube {
+    const size: Vector3D = {
+      x: 0,
+      y: 0,
+      z: texture.height / 32,
+    };
+    console.log(texture.height / 32);
+
+    if (this.configuration.direction === Direction.WEST) {
+      size.y = this.configuration.length;
+    } else if (this.configuration.direction === Direction.NORTH) {
+      size.x = this.configuration.length;
+    }
+
+    const cube: Cube = new Cube({
+      layer: this.room.renderer.layer,
+      size: size,
+      zOrders: {
+        [CubeFace.TOP]: 10000,
+        [CubeFace.LEFT]: 10000 - 0.5,
+        [CubeFace.RIGHT]: 10000 - 0.6,
+      },
+      texture: texture,
+      shadows: false,
+    });
+
+    return cube;
+  }
+
   public render(): void {
     const zOrder: number = (this.configuration.position.z - 1) * 4;
-    const material: WallMaterial = this.configuration.material ?? new WallMaterial(101);
+    const material = new WallMaterial(101);
+    material.room = this.room;
+    material.render();
+
+    /*console.log(
+      random(this.configuration.position.x + this.configuration.position.y + this.configuration.length, 0, 1),
+    );*/
+
+    let spritesheet = AssetLoader.get('room/materials');
+    let landscapeId = 'default';
+    let landscapeData = spritesheet.data.materials.landscapes.data.find(
+      (landscape: any) => landscape.id === landscapeId,
+    );
+    landscapeData.layers.static.forEach((staticLayer: any) => {
+      if (staticLayer.asset) {
+        let material = spritesheet.data.materials.landscapes.materials.find(
+          (fMaterial: any) => staticLayer.asset === fMaterial.id,
+        ) as Material;
+        //console.log(material);
+        this.container.addChild(this.renderLayer(this.parseLandscapeMaterial(material)));
+      } else {
+        // color
+      }
+    });
+
     const size: Vector3D = {
       x: 0,
       y: 0,
@@ -47,22 +150,18 @@ export class WallPart extends RoomPart {
     }
 
     if (this.configuration.direction === Direction.WEST) {
-      size.x = this.configuration.thickness / 32;
-      size.y = this.configuration.length + (this.configuration.corner ? this.configuration.thickness / 32 : 0);
+      size.y = this.configuration.length;
     } else if (this.configuration.direction === Direction.NORTH) {
       size.x = this.configuration.length;
-      size.y = this.configuration.thickness / 32;
     }
 
-    const cube: Cube = new Cube({
+    /*const cube: Cube = new Cube({
       layer: this.room.renderer.layer,
       zOrders: {
         [CubeFace.TOP]: zOrder,
         [CubeFace.LEFT]: zOrder - 0.5,
         [CubeFace.RIGHT]: zOrder - 0.6,
       },
-      texture: material.texture,
-      color: material.color,
       size: size,
     });
     this.container.addChild(cube);
@@ -74,32 +173,28 @@ export class WallPart extends RoomPart {
       });
       const door: Sprite = new Sprite(AssetLoader.get('room/door'));
       door.skew.set(0, -0.46);
-      door.x = this.configuration.thickness + (this.configuration.length - this.configuration.door - 1) * 32 + 1;
+      door.x = (this.configuration.length - this.configuration.door - 1) * 32 + 1;
       door.y =
         3 -
         this.configuration.floorThickness -
         door.height +
         size.z * 32 -
-        (this.configuration.length - this.configuration.door - 1) * 16 +
-        this.configuration.thickness / 2 -
+        (this.configuration.length - this.configuration.door - 1) * 16 -
         doorHeight * 32;
 
       const filter: DoorMaskFilter = new DoorMaskFilter(door);
       cube.faces[CubeFace.RIGHT].filters = [filter];
 
       this.container.addChild(door);
-    }
+    }*/
 
     if (this.configuration.direction === Direction.WEST) {
       this.container.x =
-        32 * this.configuration.position.x -
-        32 * (this.configuration.position.y + this.configuration.length - 1) -
-        this.configuration.thickness;
+        32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.length - 1);
       this.container.y =
         16 * this.configuration.position.x +
         16 * (this.configuration.position.y + this.configuration.length - 1) -
         32 * this.configuration.position.z -
-        this.configuration.thickness / 2 -
         size.z * 32 +
         this.configuration.floorThickness;
     } else if (this.configuration.direction === Direction.NORTH) {

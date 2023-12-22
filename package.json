@@ -21,9 +21,11 @@
     "gsap": "^3.12.2",
     "pixi-stats": "^1.2.2",
     "pixi.js": "^7.2.4",
-    "scuti-bundle": "^1.0.7"
+    "scuti-bundle": "^1.0.7",
+    "seedrandom": "^3.0.5"
   },
   "devDependencies": {
+    "@types/seedrandom": "^3.0.8",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "eslint": "^8.56.0",
