@@ -1,4 +1,4 @@
-import { TileEvent } from '../../entities/IEvents';
+import { TileEvent } from '../../entities/Events';
 
 export class EventManager {
   private _isDoubleClicking: boolean = false;
