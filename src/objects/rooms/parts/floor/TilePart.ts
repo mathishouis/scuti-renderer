@@ -1,11 +1,11 @@
-import { RoomPart } from './RoomPart';
-import { Room } from '../Room';
+import { RoomPart } from '../RoomPart.ts';
+import { Room } from '../../Room.ts';
 import { Container, FederatedPointerEvent, Point, Polygon } from 'pixi.js';
-import { FloorMaterial } from '../materials/FloorMaterial';
-import { Cube } from '../geometry/Cube';
-import { EventManager } from '../../events/EventManager';
-import { Vector2D, Vector3D } from '../../../types/Vector';
-import { CubeFace } from '../../../enums/CubeFace';
+import { FloorMaterial } from '../../materials/FloorMaterial.ts';
+import { Cube } from '../../geometry/Cube.ts';
+import { EventManager } from '../../../events/EventManager.ts';
+import { Vector2D, Vector3D } from '../../../../types/Vector.ts';
+import { CubeFace } from '../../../../enums/CubeFace.ts';
 
 interface Configuration {
   material?: FloorMaterial;

@@ -1,9 +1,9 @@
-import { RoomPart } from './RoomPart';
-import { Room } from '../Room';
+import { RoomPart } from '../RoomPart.ts';
+import { Room } from '../../Room.ts';
 import { Container, Sprite, Texture } from 'pixi.js';
-import { EventManager } from '../../events/EventManager';
-import { AssetLoader } from '../../assets/AssetLoader';
-import { Vector3D } from '../../../types/Vector';
+import { EventManager } from '../../../events/EventManager.ts';
+import { AssetLoader } from '../../../assets/AssetLoader.ts';
+import { Vector3D } from '../../../../types/Vector.ts';
 
 interface Configuration {
   position?: Vector3D;

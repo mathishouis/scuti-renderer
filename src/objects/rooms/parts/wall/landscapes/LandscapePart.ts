@@ -1,13 +1,14 @@
-import { RoomPart } from './RoomPart';
-import { Room } from '../Room';
+import { RoomPart } from '../../RoomPart.ts';
+import { Room } from '../../../Room.ts';
 import { Container, Point, Sprite, Spritesheet, Texture } from 'pixi.js';
-import { Cube } from '../geometry/Cube';
-import { EventManager } from '../../events/EventManager';
-import { Vector2D, Vector3D } from '../../../types/Vector';
-import { CubeFace } from '../../../enums/CubeFace';
-import { Direction } from '../../../enums/Direction';
-import { AssetLoader } from '../../assets/AssetLoader';
-import { random } from '../../../utils/Random';
+import { Cube } from '../../../geometry/Cube.ts';
+import { EventManager } from '../../../../events/EventManager.ts';
+import { Vector2D, Vector3D } from '../../../../../types/Vector.ts';
+import { CubeFace } from '../../../../../enums/CubeFace.ts';
+import { Direction } from '../../../../../enums/Direction.ts';
+import { AssetLoader } from '../../../../assets/AssetLoader.ts';
+import { random } from '../../../../../utils/Random.ts';
+import { DoorMaskFilter } from '../../../../filters/DoorMaskFilter.ts';
 
 interface Configuration {
   position: Vector3D;
