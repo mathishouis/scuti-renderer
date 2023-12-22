@@ -5,8 +5,8 @@ import { GameObject } from '../GameObject';
 import { RoomHeightmap } from './RoomHeightmap';
 import { RoomConfiguration } from './RoomConfiguration';
 import { RoomEvents } from './RoomEvents';
-import { FloorMaterial } from './materials/FloorMaterial.ts';
-import { WallMaterial } from './materials/WallMaterial.ts';
+import { FloorMaterial } from './materials/FloorMaterial';
+import { WallMaterial } from './materials/WallMaterial';
 
 interface Configuration {
   heightMap: string;

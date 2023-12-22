@@ -2,8 +2,8 @@ import './style.css';
 import { Scuti } from '../../src/Scuti';
 import { Room } from '../../src/objects/rooms/Room';
 import { FloorMaterial } from '../../src/objects/rooms/materials/FloorMaterial';
-import { TileEvent } from '../../src/entities/IEvents';
 import { WallMaterial } from '../../src/objects/rooms/materials/WallMaterial';
+import { TileEvent } from '../../src/entities/Events';
 
 const renderer: Scuti = new Scuti({
   canvas: document.getElementById('app') as HTMLElement,
