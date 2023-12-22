@@ -1,7 +1,5 @@
 import { Color, Container, Graphics, Matrix, Texture } from 'pixi.js';
-import { FloorMaterial } from '../materials/FloorMaterial';
 import { CubeFace } from '../../../enums/CubeFace';
-import { WallMaterial } from '../materials/WallMaterial';
 import { Vector2D, Vector3D } from '../../../types/Vector';
 import { Layer } from '@pixi/layers';
 

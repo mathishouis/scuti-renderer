@@ -3,7 +3,7 @@ import { Room } from '../Room';
 import { Container, Point, Sprite, Spritesheet, Texture } from 'pixi.js';
 import { Cube } from '../geometry/Cube';
 import { EventManager } from '../../events/EventManager';
-import { Vector3D } from '../../../types/Vector';
+import { Vector2D, Vector3D } from '../../../types/Vector';
 import { CubeFace } from '../../../enums/CubeFace';
 import { WallMaterial } from '../materials/WallMaterial';
 import { Direction } from '../../../enums/Direction';
@@ -25,8 +25,9 @@ enum RepeatMode {
 }
 
 enum Align {
-  BOTTOM,
-  TOP,
+  BOTTOM = 'bottom',
+  TOP = 'top',
+  ALL = 'all',
 }
 
 interface Material {
@@ -40,6 +41,12 @@ interface Column {
   texture: string;
 }
 
+interface Layer {
+  texture: Texture;
+  align: Align;
+}
+
+// todo(): SEPARATE EVERYTHING IN DIFFERENT CLASS AND MAKE EVERYTHING LOOKS CLEANER
 export class LandscapePart extends RoomPart {
   public room!: Room;
   public container: Container = new Container();
@@ -81,13 +88,29 @@ export class LandscapePart extends RoomPart {
     return this.room.renderer.application.renderer.generateTexture(container);
   }
 
-  public renderLayer(texture: Texture): Cube {
+  public renderLayer({ texture, align }: Layer): Cube {
     const size: Vector3D = {
       x: 0,
       y: 0,
       z: texture.height / 32,
     };
-    console.log(texture.height / 32);
+    const position: Vector2D = {
+      x: 0,
+      y: 0,
+    };
+    if (align === Align.BOTTOM) {
+      if (this.configuration.height !== -1) {
+        position.y = 115 + 64 * this.configuration.height - texture.height;
+      } else {
+        position.y = this.room.heightMap.maxHeight * 32 + 115 - texture.height;
+      }
+    } else if (align === Align.ALL) {
+      if (this.configuration.height !== -1) {
+        size.z = 115 / 32 + (64 / 32) * this.configuration.height;
+      } else {
+        size.z = this.room.heightMap.maxHeight + 115 / 32;
+      }
+    }
 
     if (this.configuration.direction === Direction.WEST) {
       size.y = this.configuration.length;
@@ -106,6 +129,8 @@ export class LandscapePart extends RoomPart {
       texture: texture,
       shadows: false,
     });
+    cube.x = position.x;
+    cube.y = position.y;
 
     return cube;
   }
@@ -126,14 +151,21 @@ export class LandscapePart extends RoomPart {
       (landscape: any) => landscape.id === landscapeId,
     );
     landscapeData.layers.static.forEach((staticLayer: any) => {
-      if (staticLayer.asset) {
+      if (staticLayer.material) {
         let material = spritesheet.data.materials.landscapes.materials.find(
-          (fMaterial: any) => staticLayer.asset === fMaterial.id,
+          (fMaterial: any) => staticLayer.material === fMaterial.id,
         ) as Material;
         //console.log(material);
-        this.container.addChild(this.renderLayer(this.parseLandscapeMaterial(material)));
-      } else {
+        this.container.addChild(
+          this.renderLayer({ texture: this.parseLandscapeMaterial(material), align: material.align }),
+        );
+      } else if (staticLayer.texture) {
         // color
+        console.log(staticLayer);
+        const texture = this.room.renderer.application.renderer.generateTexture(
+          new Sprite(spritesheet.textures[staticLayer.texture]),
+        );
+        this.container.addChild(this.renderLayer({ texture: texture, align: Align.ALL }));
       }
     });
 
