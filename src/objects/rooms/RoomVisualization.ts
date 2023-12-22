@@ -11,7 +11,7 @@ import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh';
 import { WallPart } from './parts/WallPart';
 import { benchmark } from '../../utils/Benchmark';
 import { perf } from '../../utils/Logger';
-import { LandscapePart } from './parts/LandscapePart.ts';
+import { LandscapePart } from './parts/LandscapePart';
 
 type RoomLayers = {
   parts: PartLayer;

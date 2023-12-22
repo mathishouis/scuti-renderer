@@ -5,7 +5,6 @@ import { Cube } from '../geometry/Cube';
 import { EventManager } from '../../events/EventManager';
 import { Vector2D, Vector3D } from '../../../types/Vector';
 import { CubeFace } from '../../../enums/CubeFace';
-import { WallMaterial } from '../materials/WallMaterial';
 import { Direction } from '../../../enums/Direction';
 import { AssetLoader } from '../../assets/AssetLoader';
 import { random } from '../../../utils/Random';
@@ -39,6 +38,13 @@ interface Material {
 
 interface Column {
   texture: string;
+  extras: Extra[];
+}
+
+interface Extra {
+  max: number;
+  texture: string;
+  offsets: Vector2D[];
 }
 
 interface Layer {
@@ -56,11 +62,33 @@ export class LandscapePart extends RoomPart {
     super();
   }
 
-  public parseLandscapeColumn({ texture }: Column): Texture {
+  public parseLandscapeColumn({ texture, extras }: Column): Texture {
     const spritesheet = AssetLoader.get('room/materials') as Spritesheet;
-    // todo(): Render extras
+    const container = new Container();
+    const background = new Sprite(spritesheet.textures[texture]);
 
-    return spritesheet.textures[texture];
+    container.addChild(background);
+
+    extras.forEach((extra: Extra) => {
+      const seed = this.configuration.position.x + this.configuration.position.y + this.configuration.length;
+      const finalOffsets: Vector2D[] = [];
+      const randomIndex = random(seed, 0, extra.offsets.length - 1);
+
+      for (let i = 0; i < extra.max; i++) {
+        const offset = extra.offsets[randomIndex];
+        if (!finalOffsets.includes(offset)) finalOffsets.push(offset);
+      }
+
+      finalOffsets.forEach((offset: Vector2D) => {
+        const sprite = new Sprite(spritesheet.textures[extra.texture]);
+        //if (this.configuration.direction === Direction.NORTH) sprite.scale.x = -1;
+        sprite.x = offset.x;
+        sprite.y = offset.y;
+        container.addChild(sprite);
+      });
+    });
+
+    return this.room.renderer.application.renderer.generateTexture(container);
   }
 
   public parseLandscapeMaterial({ repeat, align, columns }: Material): Texture {
@@ -89,6 +117,7 @@ export class LandscapePart extends RoomPart {
   }
 
   public renderLayer({ texture, align }: Layer): Cube {
+    const zOrder: number = (this.configuration.position.z - 1) * 4;
     const size: Vector3D = {
       x: 0,
       y: 0,
@@ -122,9 +151,9 @@ export class LandscapePart extends RoomPart {
       layer: this.room.renderer.layer,
       size: size,
       zOrders: {
-        [CubeFace.TOP]: 10000,
-        [CubeFace.LEFT]: 10000 - 0.5,
-        [CubeFace.RIGHT]: 10000 - 0.6,
+        [CubeFace.TOP]: zOrder,
+        [CubeFace.LEFT]: zOrder - 0.5,
+        [CubeFace.RIGHT]: zOrder - 0.6,
       },
       texture: texture,
       shadows: false,
@@ -136,15 +165,6 @@ export class LandscapePart extends RoomPart {
   }
 
   public render(): void {
-    const zOrder: number = (this.configuration.position.z - 1) * 4;
-    const material = new WallMaterial(101);
-    material.room = this.room;
-    material.render();
-
-    /*console.log(
-      random(this.configuration.position.x + this.configuration.position.y + this.configuration.length, 0, 1),
-    );*/
-
     let spritesheet = AssetLoader.get('room/materials');
     let landscapeId = 'default';
     let landscapeData = spritesheet.data.materials.landscapes.data.find(
@@ -161,7 +181,6 @@ export class LandscapePart extends RoomPart {
         );
       } else if (staticLayer.texture) {
         // color
-        console.log(staticLayer);
         const texture = this.room.renderer.application.renderer.generateTexture(
           new Sprite(spritesheet.textures[staticLayer.texture]),
         );
@@ -186,39 +205,6 @@ export class LandscapePart extends RoomPart {
     } else if (this.configuration.direction === Direction.NORTH) {
       size.x = this.configuration.length;
     }
-
-    /*const cube: Cube = new Cube({
-      layer: this.room.renderer.layer,
-      zOrders: {
-        [CubeFace.TOP]: zOrder,
-        [CubeFace.LEFT]: zOrder - 0.5,
-        [CubeFace.RIGHT]: zOrder - 0.6,
-      },
-      size: size,
-    });
-    this.container.addChild(cube);
-
-    if (this.configuration.door !== undefined) {
-      const doorHeight: number = this.room.heightMap.getTileHeight({
-        x: this.configuration.position.x - 1,
-        y: this.configuration.position.y + this.configuration.door,
-      });
-      const door: Sprite = new Sprite(AssetLoader.get('room/door'));
-      door.skew.set(0, -0.46);
-      door.x = (this.configuration.length - this.configuration.door - 1) * 32 + 1;
-      door.y =
-        3 -
-        this.configuration.floorThickness -
-        door.height +
-        size.z * 32 -
-        (this.configuration.length - this.configuration.door - 1) * 16 -
-        doorHeight * 32;
-
-      const filter: DoorMaskFilter = new DoorMaskFilter(door);
-      cube.faces[CubeFace.RIGHT].filters = [filter];
-
-      this.container.addChild(door);
-    }*/
 
     if (this.configuration.direction === Direction.WEST) {
       this.container.x =
