@@ -8,3 +8,6 @@ export * from './objects/rooms/RoomEvents';
 export * from './objects/GameObject';
 export * from './objects/assets/AssetLoader';
 export * from './objects/events/EventManager';
+export * from './objects/rooms/materials/FloorMaterial';
+export * from './objects/rooms/materials/WallMaterial';
+export * from './objects/rooms/materials/RoomMaterial';
