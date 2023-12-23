@@ -5,8 +5,8 @@ import { EventManager } from '../../../../events/EventManager';
 import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
 import { LandscapeMaterial } from '../../../materials/LandscapeMaterial';
-import { Cube } from '../../../geometry/Cube.ts';
-import { CubeFace } from '../../../../../enums/CubeFace.ts';
+import { Cube } from '../../../geometry/Cube';
+import { CubeFace } from '../../../../../enums/CubeFace';
 
 interface Configuration {
   material?: LandscapeMaterial;
@@ -37,10 +37,7 @@ export class LandscapePart extends RoomPart {
       size: {
         x: this.configuration.direction === Direction.NORTH ? this.configuration.length : 0,
         y: this.configuration.direction === Direction.WEST ? this.configuration.length : 0,
-        z:
-          this.configuration.height === -1
-            ? this.room.heightMap.maxHeight + 115 / 32
-            : 115 / 32 + (64 / 32) * this.configuration.height,
+        z: this.configuration.height === -1 ? this.room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * this.configuration.height,
       },
       zOrders: {
         [CubeFace.TOP]: -4,
@@ -61,10 +58,7 @@ export class LandscapePart extends RoomPart {
     const size: Vector3D = {
       x: direction === Direction.NORTH ? length : 0,
       y: direction === Direction.WEST ? length : 0,
-      z:
-        floorThickness / 32 -
-        position.z +
-        (height === -1 ? this.room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height),
+      z: floorThickness / 32 - position.z + (height === -1 ? this.room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height),
     };
 
     this.container.addChild(this.mask);

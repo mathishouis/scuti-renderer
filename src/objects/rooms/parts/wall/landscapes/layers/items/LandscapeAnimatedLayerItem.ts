@@ -1,9 +1,9 @@
-import { LandscapeAnimatedLayer } from '../LandscapeAnimatedLayer.ts';
+import { LandscapeAnimatedLayer } from '../LandscapeAnimatedLayer';
 import { Sprite } from 'pixi.js';
-import { LandscapeSpritesheet } from '../../entities/Landscape.ts';
-import { asset } from '../../../../../../../utils/Assets.ts';
-import { random } from '../../../../../../../utils/Random.ts';
-import { Direction } from '../../../../../../../enums/Direction.ts';
+import { LandscapeSpritesheet } from '../../entities/Landscape';
+import { asset } from '../../../../../../../utils/Assets';
+import { random } from '../../../../../../../utils/Random';
+import { Direction } from '../../../../../../../enums/Direction';
 
 interface Configuration {
   layer: LandscapeAnimatedLayer;

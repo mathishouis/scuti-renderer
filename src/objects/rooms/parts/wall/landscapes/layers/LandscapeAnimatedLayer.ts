@@ -1,11 +1,9 @@
 import { LandscapeLayer } from './LandscapeLayer';
-import { Sprite, Texture } from 'pixi.js';
+import { Texture } from 'pixi.js';
 import { LandscapePart } from '../LandscapePart';
 import { asset } from '../../../../../../utils/Assets';
-import { LandscapeSpritesheet } from '../entities/Landscape.ts';
-import { Direction } from '../../../../../../enums/Direction.ts';
-import { random } from '../../../../../../utils/Random.ts';
-import { LandscapeAnimatedLayerItem } from './items/LandscapeAnimatedLayerItem.ts';
+import { LandscapeSpritesheet } from '../entities/Landscape';
+import { LandscapeAnimatedLayerItem } from './items/LandscapeAnimatedLayerItem';
 
 interface Configuration {
   part: LandscapePart;

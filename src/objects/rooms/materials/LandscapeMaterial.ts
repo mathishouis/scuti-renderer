@@ -1,7 +1,7 @@
 import { asset } from '../../../utils/Assets';
 import { Landscape, LandscapeSpritesheet } from '../parts/wall/landscapes/entities/Landscape';
 import { LandscapeLayer } from '../parts/wall/landscapes/layers/LandscapeLayer';
-import { LandscapeAnimatedLayer } from '../parts/wall/landscapes/layers/LandscapeAnimatedLayer.ts';
+import { LandscapeAnimatedLayer } from '../parts/wall/landscapes/layers/LandscapeAnimatedLayer';
 
 export class LandscapeMaterial {
   public layers: { layer: new (configuration: any) => LandscapeLayer; params: any }[] = [];
@@ -42,9 +42,7 @@ export class LandscapeMaterial {
 
   public initialize(): void {
     const spritesheet: LandscapeSpritesheet = asset('room/materials');
-    const { layers }: Landscape = spritesheet.data.materials.landscapes.data.find(
-      (landscape: Landscape) => landscape.id === this.id,
-    )!;
+    const { layers }: Landscape = spritesheet.data.materials.landscapes.data.find((landscape: Landscape) => landscape.id === this.id)!;
 
     this._parse(layers);
     //this._animated(layers.animated);
