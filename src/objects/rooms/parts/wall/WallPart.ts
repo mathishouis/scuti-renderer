@@ -1,6 +1,6 @@
 import { RoomPart } from '../RoomPart';
 import { Room } from '../../Room';
-import { Container, Point, Sprite } from 'pixi.js';
+import { Container, Sprite } from 'pixi.js';
 import { Cube } from '../../geometry/Cube';
 import { EventManager } from '../../../events/EventManager';
 import { Vector3D } from '../../../../types/Vector';
@@ -113,16 +113,5 @@ export class WallPart extends RoomPart {
     }
 
     this.room.visualization.container.addChild(this.container);
-  }
-
-  public getGlobalTilePosition(point: Point): Vector3D {
-    const localPosition: Point = this.container.toLocal(point);
-    const localX: number = Math.floor(localPosition.x / 64 + localPosition.y / 32),
-      localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64 - 0.01) + this.configuration.length;
-    return {
-      x: localX + this.configuration.position.x,
-      y: localY + this.configuration.position.y,
-      z: this.configuration.position.z,
-    };
   }
 }
