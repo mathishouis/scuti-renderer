@@ -8,7 +8,7 @@ import { CubeFace } from '../../../../enums/CubeFace';
 import { WallMaterial } from '../../materials/WallMaterial';
 import { Direction } from '../../../../enums/Direction';
 import { DoorMaskFilter } from '../../../filters/DoorMaskFilter';
-import { asset } from '../../../../utils/Assets.ts';
+import { asset } from '../../../../utils/Assets';
 
 interface Configuration {
   material?: WallMaterial;

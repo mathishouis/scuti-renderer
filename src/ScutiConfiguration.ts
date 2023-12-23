@@ -1,6 +1,6 @@
-import { Scuti } from './Scuti.ts';
+import { Scuti } from './Scuti';
 import { Color } from 'pixi.js';
-import { registerPath } from './utils/Assets.ts';
+import { registerPath } from './utils/Assets';
 
 interface Configuration {
   renderer: Scuti;

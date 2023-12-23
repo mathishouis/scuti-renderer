@@ -4,7 +4,7 @@ import { LandscapePart } from '../LandscapePart';
 import { Vector2D, Vector3D } from '../../../../../../types/Vector';
 import { random } from '../../../../../../utils/Random';
 import { Direction } from '../../../../../../enums/Direction';
-import { asset } from '../../../../../../utils/Assets.ts';
+import { asset } from '../../../../../../utils/Assets';
 
 interface Configuration {
   part: LandscapePart;

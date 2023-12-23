@@ -10,7 +10,7 @@ import {
   UPDATE_PRIORITY,
 } from 'pixi.js';
 import { GameObject } from './objects/GameObject';
-import { register } from './utils/Assets.ts';
+import { register } from './utils/Assets';
 import { Layer, Stage } from '@pixi/layers';
 import { addStats, StatsJSAdapter } from 'pixi-stats';
 import { ScutiConfiguration } from './ScutiConfiguration';

@@ -6,7 +6,7 @@ export * from './objects/rooms/RoomConfiguration';
 export * from './objects/rooms/RoomVisualization';
 export * from './objects/rooms/RoomEvents';
 export * from './objects/GameObject';
-export * from './utils/Assets.ts';
+export * from './utils/Assets';
 export * from './objects/events/EventManager';
 export * from './objects/rooms/materials/FloorMaterial';
 export * from './objects/rooms/materials/WallMaterial';

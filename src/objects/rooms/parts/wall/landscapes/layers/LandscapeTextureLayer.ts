@@ -1,7 +1,7 @@
 import { LandscapeLayer } from './LandscapeLayer';
 import { Sprite, Spritesheet, Texture } from 'pixi.js';
 import { LandscapePart } from '../LandscapePart';
-import { asset } from '../../../../../../utils/Assets.ts';
+import { asset } from '../../../../../../utils/Assets';
 
 interface Configuration {
   part: LandscapePart;

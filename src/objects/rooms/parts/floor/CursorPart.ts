@@ -3,7 +3,7 @@ import { Room } from '../../Room';
 import { Container, Sprite, Texture } from 'pixi.js';
 import { EventManager } from '../../../events/EventManager';
 import { Vector3D } from '../../../../types/Vector';
-import { asset } from '../../../../utils/Assets.ts';
+import { asset } from '../../../../utils/Assets';
 
 interface Configuration {
   position?: Vector3D;

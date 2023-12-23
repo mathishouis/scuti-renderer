@@ -2,7 +2,7 @@ import { RoomMaterial } from './RoomMaterial';
 import { Sprite, Texture } from 'pixi.js';
 import { Material } from '../../../types/Material';
 import { Room } from '../Room';
-import { asset } from '../../../utils/Assets.ts';
+import { asset } from '../../../utils/Assets';
 
 export class WallMaterial extends RoomMaterial {
   public color!: number;

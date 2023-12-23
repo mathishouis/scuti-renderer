@@ -5,7 +5,7 @@ import { EventManager } from '../../../../events/EventManager';
 import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
 import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer';
-import { asset } from '../../../../../utils/Assets.ts';
+import { asset } from '../../../../../utils/Assets';
 
 interface Configuration {
   position: Vector3D;
