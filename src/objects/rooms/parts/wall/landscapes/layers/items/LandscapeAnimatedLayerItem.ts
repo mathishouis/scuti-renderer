@@ -21,6 +21,7 @@ export class LandscapeAnimatedLayerItem {
   public speedX: number;
   public randomX: number;
   public randomY: number;
+  public sprite!: Sprite;
 
   constructor({ layer, index, texture, speedX, randomX, randomY }: Configuration) {
     this.layer = layer;
@@ -32,30 +33,31 @@ export class LandscapeAnimatedLayerItem {
   }
 
   public render(): void {
-    const { room, configuration } = this.layer.part;
-    const { direction, position, length } = configuration;
     const spritesheet: LandscapeSpritesheet = asset('room/materials');
-    const seed = room.heightMap.sizeY * room.heightMap.sizeX * this.index;
-    const sprite = new Sprite(spritesheet.textures[this.texture]);
-    const maxY = (155 - sprite.height) * 0.55;
-    const minY = 0;
-    const width = room.heightMap.sizeY * 32 + room.heightMap.sizeX * 32;
-    const percentage = random(seed, 0, 12300, 0) % width;
 
-    sprite.y = random(seed, 0, 1, 2) * (maxY - minY) + minY + (direction === Direction.WEST ? -1 : 1) * (sprite.x / 2);
-    sprite.skew.x = 0;
-    sprite.skew.y = (direction === Direction.WEST ? -1 : 1) * 0.466;
+    this.sprite = new Sprite(spritesheet.textures[this.texture]);
+    this.sprite.skew.x = 0;
+    this.sprite.skew.y = (this.layer.part.configuration.direction === Direction.WEST ? -1 : 1) * 0.466;
 
-    sprite.x =
-      (direction === Direction.WEST ? length * 32 : 0) -
-      sprite.width -
-      (room.heightMap.sizeY - configuration.position.y) * 32 -
-      position.x * 32 +
-      percentage;
-    sprite.y += (direction === Direction.WEST ? -1 : 1) * (sprite.x / 2);
-
-    this.layer.part.container.addChild(sprite);
+    this.layer.part.container.addChild(this.sprite);
   }
 
-  public next(): void {}
+  public next(): void {
+    const { room, configuration } = this.layer.part;
+    const { direction, position, length } = configuration;
+    const seed = room.heightMap.sizeY * room.heightMap.sizeX * this.index;
+    const maxY = (155 - this.sprite.height) * 0.55;
+    const minY = 0;
+    const width = room.heightMap.sizeY * 32 + room.heightMap.sizeX * 32 + this.sprite.width;
+    const percentage = (random(seed, 0, 12300, 0) + new Date().getTime() / 50) % width;
+
+    this.sprite.x = Math.floor(
+      (direction === Direction.WEST ? length * 32 : 0) -
+        this.sprite.width -
+        (room.heightMap.sizeY - configuration.position.y) * 32 -
+        position.x * 32 +
+        percentage,
+    );
+    this.sprite.y = random(seed, 0, 1, 2) * (maxY - minY) + minY + (direction === Direction.WEST ? -1 : 1) * (this.sprite.x / 2);
+  }
 }

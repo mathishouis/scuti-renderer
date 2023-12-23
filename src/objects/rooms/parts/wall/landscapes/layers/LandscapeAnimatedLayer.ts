@@ -26,6 +26,7 @@ export class LandscapeAnimatedLayer extends LandscapeLayer {
   public part: LandscapePart;
   public name: string;
   public color: number = 0xffffff;
+  public items: LandscapeAnimatedLayerItem[] = [];
 
   constructor({ part, name }: Configuration) {
     super();
@@ -45,14 +46,23 @@ export class LandscapeAnimatedLayer extends LandscapeLayer {
     )!;
 
     items.forEach((item: LandscapeAnimationItem, index: number) =>
-      new LandscapeAnimatedLayerItem({
-        layer: this,
-        index,
-        texture: item.texture,
-        speedX: item.speedX,
-        randomX: item.randomX,
-        randomY: item.randomY,
-      }).render(),
+      this.items.push(
+        new LandscapeAnimatedLayerItem({
+          layer: this,
+          index,
+          texture: item.texture,
+          speedX: item.speedX,
+          randomX: item.randomX,
+          randomY: item.randomY,
+        }),
+      ),
     );
+
+    this.items.forEach((item: LandscapeAnimatedLayerItem) => item.render());
+    this.part.room.renderer.application.ticker.add(() => this.next());
+  }
+
+  public next(): void {
+    this.items.forEach((item: LandscapeAnimatedLayerItem) => item.next());
   }
 }
