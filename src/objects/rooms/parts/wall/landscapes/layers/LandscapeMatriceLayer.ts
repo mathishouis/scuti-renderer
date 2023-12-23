@@ -2,9 +2,24 @@ import { LandscapeLayer } from './LandscapeLayer';
 import { Container, Sprite, Spritesheet, Texture } from 'pixi.js';
 import { LandscapePart } from '../LandscapePart';
 import { Vector2D, Vector3D } from '../../../../../../types/Vector';
-import { random } from '../../../../../../utils/Random';
+import { random, shuffle } from '../../../../../../utils/Random';
 import { Direction } from '../../../../../../enums/Direction';
 import { asset } from '../../../../../../utils/Assets';
+
+interface LandscapeSpritesheet {
+  frames: [];
+  textures: [];
+  data: {
+    materials: {
+      floors: [];
+      walls: [];
+      landscapes: {
+        data: [];
+        matrices: Matrice[];
+      };
+    };
+  };
+}
 
 interface Configuration {
   part: LandscapePart;
@@ -51,14 +66,13 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
 
     offsets.forEach((offset: Vector2D) => {
       const sprite: Sprite = new Sprite(spritesheet.textures[texture]);
-
       sprite.x = offset.x;
       sprite.y = offset.y;
       sprites.push(sprite);
     });
 
-    // todo(): Seed shuffle cus it never change :(
-    return sprites.sort(() => seed).slice(0, max);
+    const slice: number = random(seed, 0, sprites.length - 1);
+    return sprites.slice(slice - max, slice);
   }
 
   private _column({ texture, extras }: Column): Texture {
@@ -85,10 +99,10 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
 
   public get position(): Vector2D {
     const { configuration, room } = this.part;
-    const spritesheet: Spritesheet = asset('room/materials');
+    const spritesheet: LandscapeSpritesheet = asset('room/materials');
     const { align }: Matrice = spritesheet.data.materials.landscapes.matrices.find(
       (matrice: Matrice): boolean => matrice.id === this.name,
-    );
+    )!;
     const position: Vector2D = {
       x: 0,
       y: 0,
@@ -109,10 +123,10 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
     if (this._texture) return this._texture;
 
     const { position, length, direction } = this.part.configuration;
-    const spritesheet: Spritesheet = asset('room/materials');
+    const spritesheet: LandscapeSpritesheet = asset('room/materials');
     const { repeat, columns }: Matrice = spritesheet.data.materials.landscapes.matrices.find(
       (matrice: Matrice): boolean => matrice.id === this.name,
-    );
+    )!;
     const textures: Texture[] = columns.map((column: Column) => this._column(column));
     const container: Container = new Container();
     const width: number = length * 32;

@@ -6,6 +6,8 @@ import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
 import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer';
 import { asset } from '../../../../../utils/Assets';
+import { LandscapeTextureLayer } from './layers/LandscapeTextureLayer';
+import { LandscapeColorLayer } from './layers/LandscapeColorLayer';
 
 interface Configuration {
   position: Vector3D;
@@ -35,9 +37,11 @@ export class LandscapePart extends RoomPart {
     );
     landscapeData.layers.static.forEach((staticLayer: any) => {
       if (staticLayer.matrice) {
+        new LandscapeMatriceLayer({ part: this, name: staticLayer.matrice }).render();
       } else if (staticLayer.texture) {
-        //new LandscapeTextureLayer({ part: this, name: staticLayer.texture }).render();
-        new LandscapeMatriceLayer({ part: this, name: 'landscape_64_foreground_1' }).render();
+        new LandscapeTextureLayer({ part: this, name: staticLayer.texture }).render();
+      } else if (staticLayer.color) {
+        new LandscapeColorLayer({ part: this, color: staticLayer.color }).render();
       }
     });
 
