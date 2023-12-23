@@ -1,15 +1,14 @@
-import { RoomPart } from '../../RoomPart.ts';
-import { Room } from '../../../Room.ts';
+import { RoomPart } from '../../RoomPart';
+import { Room } from '../../../Room';
 import { Container, Point, Sprite, Spritesheet, Texture } from 'pixi.js';
-import { Cube } from '../../../geometry/Cube.ts';
-import { EventManager } from '../../../../events/EventManager.ts';
-import { Vector2D, Vector3D } from '../../../../../types/Vector.ts';
-import { CubeFace } from '../../../../../enums/CubeFace.ts';
-import { Direction } from '../../../../../enums/Direction.ts';
-import { AssetLoader } from '../../../../assets/AssetLoader.ts';
-import { random } from '../../../../../utils/Random.ts';
-import { DoorMaskFilter } from '../../../../filters/DoorMaskFilter.ts';
-import { LandscapeTextureLayer } from './layers/LandscapeTextureLayer.ts';
+import { Cube } from '../../../geometry/Cube';
+import { EventManager } from '../../../../events/EventManager';
+import { Vector2D, Vector3D } from '../../../../../types/Vector';
+import { CubeFace } from '../../../../../enums/CubeFace';
+import { Direction } from '../../../../../enums/Direction';
+import { AssetLoader } from '../../../../assets/AssetLoader';
+import { random } from '../../../../../utils/Random';
+import { LandscapeColorLayer } from './layers/LandscapeColorLayer';
 
 interface Configuration {
   position: Vector3D;
@@ -183,11 +182,8 @@ export class LandscapePart extends RoomPart {
         );
       } else if (staticLayer.texture) {
         // color
-        const texture = this.room.renderer.application.renderer.generateTexture(
-          new Sprite(spritesheet.textures[staticLayer.texture]),
-        );
-        //this.container.addChild(this.renderLayer({ texture: texture, align: Align.ALL }));
-        new LandscapeTextureLayer({ part: this, name: staticLayer.texture }).render();
+        //new LandscapeTextureLayer({ part: this, name: staticLayer.texture }).render();
+        new LandscapeColorLayer({ part: this, color: 0xff0000 }).render();
       }
     });
 

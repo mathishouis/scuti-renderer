@@ -1,17 +1,17 @@
 import { Container } from 'pixi.js';
 import { Room } from './Room';
-import { TilePart } from './parts/floor/TilePart.ts';
+import { TilePart } from './parts/floor/TilePart';
 import { PartLayer } from './layers/PartLayer';
 import { RoomPart } from './parts/RoomPart';
-import { StairPart } from './parts/floor/StairPart.ts';
+import { StairPart } from './parts/floor/StairPart';
 import { GreedyMesher } from './geometry/GreedyMesher';
 import { TileEvent } from '../../entities/Events';
-import { CursorPart } from './parts/floor/CursorPart.ts';
+import { CursorPart } from './parts/floor/CursorPart';
 import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh';
-import { WallPart } from './parts/wall/WallPart.ts';
+import { WallPart } from './parts/wall/WallPart';
 import { benchmark } from '../../utils/Benchmark';
 import { perf } from '../../utils/Logger';
-import { LandscapePart } from './parts/wall/landscapes/LandscapePart.ts';
+import { LandscapePart } from './parts/wall/landscapes/LandscapePart';
 
 type RoomLayers = {
   parts: PartLayer;

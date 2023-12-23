@@ -3,14 +3,32 @@ import { Container, Texture } from 'pixi.js';
 import { LandscapePart } from '../LandscapePart.ts';
 import { Cube } from '../../../../geometry/Cube.ts';
 import { CubeFace } from '../../../../../../enums/CubeFace.ts';
+import { Direction } from '../../../../../../enums/Direction.ts';
 
 export abstract class LandscapeLayer {
   public abstract container: Container;
   public abstract part: LandscapePart;
+  public abstract color: number;
   public abstract align: 'top' | 'bottom' | 'stretch';
-  public abstract get size(): Vector3D;
-  public abstract get position(): Vector2D;
   public abstract get texture(): Texture;
+
+  public get size(): Vector3D {
+    const { configuration, room } = this.part;
+    const { direction, length, height } = configuration;
+
+    return {
+      x: direction === Direction.NORTH ? length : 0,
+      y: direction === Direction.WEST ? length : 0,
+      z: height === -1 ? room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height,
+    };
+  }
+
+  public get position(): Vector2D {
+    return {
+      x: 0,
+      y: 0,
+    };
+  }
 
   public render(): void {
     const cube: Cube = new Cube({
@@ -21,6 +39,7 @@ export abstract class LandscapeLayer {
         [CubeFace.LEFT]: -4 - 0.5,
         [CubeFace.RIGHT]: -4 - 0.6,
       },
+      color: this.color,
       texture: this.texture,
       shadows: false,
     });
