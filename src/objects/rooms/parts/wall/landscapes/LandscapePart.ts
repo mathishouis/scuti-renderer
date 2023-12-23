@@ -9,6 +9,7 @@ import { Direction } from '../../../../../enums/Direction.ts';
 import { AssetLoader } from '../../../../assets/AssetLoader.ts';
 import { random } from '../../../../../utils/Random.ts';
 import { DoorMaskFilter } from '../../../../filters/DoorMaskFilter.ts';
+import { LandscapeTextureLayer } from './layers/LandscapeTextureLayer.ts';
 
 interface Configuration {
   position: Vector3D;
@@ -167,11 +168,11 @@ export class LandscapePart extends RoomPart {
 
   public render(): void {
     let spritesheet = AssetLoader.get('room/materials');
-    let landscapeId = 'default';
+    let landscapeId = 101;
     let landscapeData = spritesheet.data.materials.landscapes.data.find(
       (landscape: any) => landscape.id === landscapeId,
     );
-    landscapeData.layers.static.forEach((staticLayer: any) => {
+    landscapeData.layers.static.forEach((staticLayer: { texture: string; material: Material }) => {
       if (staticLayer.material) {
         let material = spritesheet.data.materials.landscapes.materials.find(
           (fMaterial: any) => staticLayer.material === fMaterial.id,
@@ -185,7 +186,8 @@ export class LandscapePart extends RoomPart {
         const texture = this.room.renderer.application.renderer.generateTexture(
           new Sprite(spritesheet.textures[staticLayer.texture]),
         );
-        this.container.addChild(this.renderLayer({ texture: texture, align: Align.ALL }));
+        //this.container.addChild(this.renderLayer({ texture: texture, align: Align.ALL }));
+        new LandscapeTextureLayer({ part: this, name: staticLayer.texture }).render();
       }
     });
 
