@@ -87,6 +87,46 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
     return this.part.room.renderer.application.renderer.generateTexture(container);
   }
 
+  private _random(textures: Texture[]): Texture {
+    const { position, length, direction } = this.part.configuration;
+    const width = length * 32;
+    const container: Container = new Container();
+
+    let offset = 0;
+
+    while (offset < width) {
+      const seed = position.x + position.y + length + offset;
+      const randomIndex = random(seed, 0, 1);
+      const sprite = new Sprite(textures[randomIndex]);
+      sprite.x = offset;
+      if (direction === Direction.NORTH) sprite.scale.x = -1;
+      container.addChild(sprite);
+      offset += sprite.width;
+    }
+
+    return this.part.room.renderer.application.renderer.generateTexture(container);
+  }
+
+  private _order(textures: Texture[]): Texture {
+    const { length, direction } = this.part.configuration;
+    const width: number = length * 32;
+    const container: Container = new Container();
+
+    let offset: number = 0;
+    let index: number = 0;
+
+    while (offset < width) {
+      const sprite = new Sprite(textures[index]);
+      sprite.x = offset;
+      if (direction === Direction.NORTH) sprite.scale.x = -1;
+      container.addChild(sprite);
+      offset += sprite.width;
+      index = (index + 1) % textures.length;
+    }
+
+    return this.part.room.renderer.application.renderer.generateTexture(container);
+  }
+
   public get size(): Vector3D {
     const { direction, length } = this.part.configuration;
 
@@ -122,33 +162,14 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
   public get texture(): Texture {
     if (this._texture) return this._texture;
 
-    const { position, length, direction } = this.part.configuration;
     const spritesheet: LandscapeSpritesheet = asset('room/materials');
     const { repeat, columns }: Matrice = spritesheet.data.materials.landscapes.matrices.find(
       (matrice: Matrice): boolean => matrice.id === this.name,
     )!;
     const textures: Texture[] = columns.map((column: Column) => this._column(column));
-    const container: Container = new Container();
-    const width: number = length * 32;
 
-    let offset: number = 0;
-
-    if (repeat === 'random') {
-      while (offset < width) {
-        const seed = position.x + position.y + length + offset;
-        const randomIndex = random(seed, 0, 1);
-        const column = textures[randomIndex];
-        const sprite = new Sprite(column);
-
-        sprite.x = offset;
-        if (direction === Direction.NORTH) sprite.scale.x = -1;
-        container.addChild(sprite);
-        offset += sprite.width;
-      }
-    } else if (repeat === 'none') {
-    }
-
-    this._texture = this.part.room.renderer.application.renderer.generateTexture(container);
+    if (repeat === 'random') this._texture = this._random(textures);
+    if (repeat === 'none') this._texture = this._order(textures);
 
     return this._texture;
   }
