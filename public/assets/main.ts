@@ -48,7 +48,7 @@ x2222x0010000100xxxxxxxxxxx
 x2222x0000000000xxxxxxxxxxx
 `;*/
 
-const heightMap: string = `
+/*const heightMap: string = `
 xxxxxxxxxx
 3321000100
 x100000000
@@ -63,6 +63,37 @@ x400000000
 x300000000
 x000000000
 x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+`;*/
+
+const heightMap: string = `
+xxxxxxxxxx
+xxxx000100
+xxxx000000
+xx00000000
+xx00001000
+xxx00111xx
+xxx0001000
+x00000x000
+x00000xx00
+x000xxxxx0
+x000000000
+x000000000
+xx00000000
+xx00000000
 x000000000
 x000000000
 x000000000
@@ -92,8 +123,6 @@ x00000xx00
 x000xxxxx0
 `;*/
 
-new LandscapeMaterial(101);
-
 const room: Room = new Room({
   heightMap: heightMap,
   dragging: true,
@@ -103,6 +132,7 @@ const room: Room = new Room({
   wallMaterial: new WallMaterial(108),
   wallThickness: 8,
   wallHeight: -1,
+  landscapeMaterial: new LandscapeMaterial(101),
 });
 
 renderer.add(room);

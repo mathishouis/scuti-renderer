@@ -4,6 +4,7 @@ import { LandscapeLayer } from '../parts/wall/landscapes/layers/LandscapeLayer';
 import { LandscapeColorLayer } from '../parts/wall/landscapes/layers/LandscapeColorLayer';
 import { LandscapeTextureLayer } from '../parts/wall/landscapes/layers/LandscapeTextureLayer';
 import { LandscapeMatriceLayer } from '../parts/wall/landscapes/layers/LandscapeMatriceLayer';
+import { LandscapeAnimatedLayer } from '../parts/wall/landscapes/layers/LandscapeAnimatedLayer.ts';
 
 export class LandscapeMaterial {
   public layers: { layer: new (configuration: any) => LandscapeLayer; params: any }[] = [];
@@ -12,22 +13,27 @@ export class LandscapeMaterial {
     this.initialize();
   }
 
-  private _static(layers: any): void {
+  private _parse(layers: any): void {
     layers.forEach((layer: any) => {
       if (layer['color']) {
-        this.layers.push({
+        /*this.layers.push({
           layer: LandscapeColorLayer,
           params: { color: layer['color'] },
-        });
+        });*/
       } else if (layer['texture']) {
-        this.layers.push({
+        /*this.layers.push({
           layer: LandscapeTextureLayer,
           params: { name: layer['texture'] },
-        });
+        });*/
       } else if (layer['matrice']) {
-        this.layers.push({
+        /*this.layers.push({
           layer: LandscapeMatriceLayer,
           params: { name: layer['matrice'] },
+        });*/
+      } else {
+        this.layers.push({
+          layer: LandscapeAnimatedLayer,
+          params: { name: layer['animation'] },
         });
       }
     });
@@ -43,7 +49,7 @@ export class LandscapeMaterial {
       (landscape: Landscape) => landscape.id === this.id,
     )!;
 
-    this._static(layers.static);
+    this._parse(layers);
     //this._animated(layers.animated);
   }
 }

@@ -5,6 +5,8 @@ import { EventManager } from '../../../../events/EventManager';
 import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
 import { LandscapeMaterial } from '../../../materials/LandscapeMaterial';
+import { Cube } from '../../../geometry/Cube.ts';
+import { CubeFace } from '../../../../../enums/CubeFace.ts';
 
 interface Configuration {
   material?: LandscapeMaterial;
@@ -21,8 +23,34 @@ export class LandscapePart extends RoomPart {
   public container: Container = new Container();
   public eventManager: EventManager = new EventManager();
 
+  private _mask!: Cube;
+
   constructor(public configuration: Configuration) {
     super();
+  }
+
+  public get mask(): Cube {
+    if (this._mask) return this._mask;
+
+    this._mask = new Cube({
+      layer: this.room.renderer.layer,
+      size: {
+        x: this.configuration.direction === Direction.NORTH ? this.configuration.length : 0,
+        y: this.configuration.direction === Direction.WEST ? this.configuration.length : 0,
+        z:
+          this.configuration.height === -1
+            ? this.room.heightMap.maxHeight + 115 / 32
+            : 115 / 32 + (64 / 32) * this.configuration.height,
+      },
+      zOrders: {
+        [CubeFace.TOP]: -4,
+        [CubeFace.LEFT]: -4 - 0.5,
+        [CubeFace.RIGHT]: -4 - 0.6,
+      },
+      shadows: false,
+    });
+
+    return this._mask;
   }
 
   public render(): void {
@@ -39,9 +67,13 @@ export class LandscapePart extends RoomPart {
         (height === -1 ? this.room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height),
     };
 
+    this.container.addChild(this.mask);
+
     material.layers.forEach((layer: any) => {
       new layer.layer({ ...layer.params, ...{ part: this } }).render();
     });
+
+    this.container.mask = this.mask;
 
     this.container.x = baseX;
     this.container.y = baseY - 32 * position.z - size.z * 32 + floorThickness;

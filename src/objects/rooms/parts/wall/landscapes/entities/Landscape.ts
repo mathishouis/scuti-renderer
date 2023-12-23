@@ -1,4 +1,5 @@
 import { Vector2D } from '../../../../../../types/Vector';
+import { Texture } from 'pixi.js';
 
 export interface Extra {
   max: number;
@@ -20,7 +21,7 @@ export interface Matrice {
 
 export interface LandscapeSpritesheet {
   frames: [];
-  textures: [];
+  textures: Record<string, Texture>;
   data: {
     materials: {
       floors: [];
@@ -28,6 +29,7 @@ export interface LandscapeSpritesheet {
       landscapes: {
         data: [];
         matrices: Matrice[];
+        animations: [];
       };
     };
   };
