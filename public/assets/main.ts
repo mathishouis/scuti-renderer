@@ -4,6 +4,7 @@ import { Room } from '../../src/objects/rooms/Room';
 import { FloorMaterial } from '../../src/objects/rooms/materials/FloorMaterial';
 import { WallMaterial } from '../../src/objects/rooms/materials/WallMaterial';
 import { TileEvent } from '../../src/entities/Events';
+import { LandscapeMaterial } from '../../src';
 
 const renderer: Scuti = new Scuti({
   canvas: document.getElementById('app') as HTMLElement,
@@ -90,6 +91,8 @@ x00000x000
 x00000xx00
 x000xxxxx0
 `;*/
+
+new LandscapeMaterial(101);
 
 const room: Room = new Room({
   heightMap: heightMap,

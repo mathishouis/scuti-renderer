@@ -132,6 +132,7 @@ export class RoomVisualization {
     greedyMesher.walls.forEach((wall: WallMesh): void => {
       this.add(
         new LandscapePart({
+          material: this.room.configuration.landscapeMaterial,
           position: wall.position,
           length: wall.length,
           floorThickness: this.room.configuration.floorThickness,

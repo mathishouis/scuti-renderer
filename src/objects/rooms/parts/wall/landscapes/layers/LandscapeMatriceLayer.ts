@@ -2,46 +2,14 @@ import { LandscapeLayer } from './LandscapeLayer';
 import { Container, Sprite, Spritesheet, Texture } from 'pixi.js';
 import { LandscapePart } from '../LandscapePart';
 import { Vector2D, Vector3D } from '../../../../../../types/Vector';
-import { random, shuffle } from '../../../../../../utils/Random';
+import { random } from '../../../../../../utils/Random';
 import { Direction } from '../../../../../../enums/Direction';
 import { asset } from '../../../../../../utils/Assets';
-
-interface LandscapeSpritesheet {
-  frames: [];
-  textures: [];
-  data: {
-    materials: {
-      floors: [];
-      walls: [];
-      landscapes: {
-        data: [];
-        matrices: Matrice[];
-      };
-    };
-  };
-}
+import { Column, Extra, LandscapeSpritesheet, Matrice } from '../entities/Landscape.ts';
 
 interface Configuration {
   part: LandscapePart;
   name: string;
-}
-
-interface Extra {
-  max: number;
-  texture: string;
-  offsets: Vector2D[];
-}
-
-interface Column {
-  texture: string;
-  extras: Extra[];
-}
-
-interface Matrice {
-  id: string;
-  repeat: 'random' | 'none';
-  align: 'top' | 'bottom' | 'stretch';
-  columns: Column[];
 }
 
 export class LandscapeMatriceLayer extends LandscapeLayer {
@@ -143,20 +111,16 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
     const { align }: Matrice = spritesheet.data.materials.landscapes.matrices.find(
       (matrice: Matrice): boolean => matrice.id === this.name,
     )!;
-    const position: Vector2D = {
+
+    return {
       x: 0,
-      y: 0,
+      y:
+        align === 'bottom'
+          ? configuration.height !== -1
+            ? 115 + 64 * configuration.height - this.texture.height
+            : room.heightMap.maxHeight * 32 + 115 - this.texture.height
+          : 0,
     };
-
-    if (align === 'bottom') {
-      if (configuration.height !== -1) {
-        position.y = 115 + 64 * configuration.height - this.texture.height;
-      } else {
-        position.y = room.heightMap.maxHeight * 32 + 115 - this.texture.height;
-      }
-    }
-
-    return position;
   }
 
   public get texture(): Texture {

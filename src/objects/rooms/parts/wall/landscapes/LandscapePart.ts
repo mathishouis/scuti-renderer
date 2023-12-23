@@ -4,12 +4,13 @@ import { Container, Point } from 'pixi.js';
 import { EventManager } from '../../../../events/EventManager';
 import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
-import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer';
-import { asset } from '../../../../../utils/Assets';
-import { LandscapeTextureLayer } from './layers/LandscapeTextureLayer';
-import { LandscapeColorLayer } from './layers/LandscapeColorLayer';
+import { LandscapeMaterial } from '../../../materials/LandscapeMaterial.ts';
+import { LandscapeColorLayer } from './layers/LandscapeColorLayer.ts';
+import { LandscapeTextureLayer } from './layers/LandscapeTextureLayer.ts';
+import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer.ts';
 
 interface Configuration {
+  material?: LandscapeMaterial;
   position: Vector3D;
   length: number;
   floorThickness: number;
@@ -19,7 +20,6 @@ interface Configuration {
 }
 
 // todo(): Add animated layer :(
-// todo(): SEPARATE EVERYTHING IN DIFFERENT CLASS AND MAKE EVERYTHING LOOKS CLEANER
 export class LandscapePart extends RoomPart {
   public room!: Room;
   public container: Container = new Container();
@@ -30,18 +30,15 @@ export class LandscapePart extends RoomPart {
   }
 
   public render(): void {
-    let spritesheet = asset('room/materials');
-    let landscapeId = 101;
-    let landscapeData = spritesheet.data.materials.landscapes.data.find(
-      (landscape: any) => landscape.id === landscapeId,
-    );
-    landscapeData.layers.static.forEach((staticLayer: any) => {
-      if (staticLayer.matrice) {
-        new LandscapeMatriceLayer({ part: this, name: staticLayer.matrice }).render();
-      } else if (staticLayer.texture) {
-        new LandscapeTextureLayer({ part: this, name: staticLayer.texture }).render();
-      } else if (staticLayer.color) {
-        new LandscapeColorLayer({ part: this, color: staticLayer.color }).render();
+    const material: LandscapeMaterial = this.configuration.material ?? new LandscapeMaterial(101);
+
+    material.staticLayers.forEach((layer: any) => {
+      if (layer['color']) {
+        new LandscapeColorLayer({ part: this, color: layer['color'] }).render();
+      } else if (layer['texture']) {
+        new LandscapeTextureLayer({ part: this, name: layer['texture'] }).render();
+      } else if (layer['matrice']) {
+        new LandscapeMatriceLayer({ part: this, name: layer['matrice'] }).render();
       }
     });
 

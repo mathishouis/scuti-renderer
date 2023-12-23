@@ -11,3 +11,4 @@ export * from './objects/events/EventManager';
 export * from './objects/rooms/materials/FloorMaterial';
 export * from './objects/rooms/materials/WallMaterial';
 export * from './objects/rooms/materials/RoomMaterial';
+export * from './objects/rooms/materials/LandscapeMaterial';
