@@ -81,12 +81,12 @@ x000000000
 
 const heightMap: string = `
 xxxxxxxxxx
-xxxx000100
 xxxx000000
+xxxx000000
+x000000000
 xx00000000
-xx00001000
-xxx00111xx
-xxx0001000
+xxx00000xx
+xxx0000000
 x00000x000
 x00000xx00
 x000xxxxx0

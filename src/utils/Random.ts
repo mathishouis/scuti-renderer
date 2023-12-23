@@ -1,9 +1,9 @@
 import seedrandom from 'seedrandom';
 
-function random(seed: number, min: number, max: number): number {
+function random(seed: number, min: number, max: number, fixed: number = 0): number {
   // @ts-ignore
   const generator = new seedrandom(String(seed));
-  return Math.floor(generator() * (max + 1)) + min;
+  return parseFloat((generator() * max + min).toFixed(fixed));
 }
 
 function shuffle(seed: number, array: any[]): any[] {

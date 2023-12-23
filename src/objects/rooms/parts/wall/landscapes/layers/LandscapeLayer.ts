@@ -40,7 +40,6 @@ export abstract class LandscapeLayer {
       },
       color: this.color,
       texture: this.texture,
-      shadows: false,
     });
 
     const { x, y } = this.position;

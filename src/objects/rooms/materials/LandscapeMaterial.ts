@@ -1,9 +1,6 @@
 import { asset } from '../../../utils/Assets';
 import { Landscape, LandscapeSpritesheet } from '../parts/wall/landscapes/entities/Landscape';
 import { LandscapeLayer } from '../parts/wall/landscapes/layers/LandscapeLayer';
-import { LandscapeColorLayer } from '../parts/wall/landscapes/layers/LandscapeColorLayer';
-import { LandscapeTextureLayer } from '../parts/wall/landscapes/layers/LandscapeTextureLayer';
-import { LandscapeMatriceLayer } from '../parts/wall/landscapes/layers/LandscapeMatriceLayer';
 import { LandscapeAnimatedLayer } from '../parts/wall/landscapes/layers/LandscapeAnimatedLayer.ts';
 
 export class LandscapeMaterial {

@@ -45,6 +45,7 @@ export class Room extends GameObject {
     this.visualization = new RoomVisualization(this);
     this.camera = new RoomCamera(this);
     this.events = new RoomEvents();
+    //this.renderer.application.ticker.maxFPS = 144; todo(): Add configurable FPS
 
     this.visualization.render();
     this.renderer.application.stage.addChild(this.camera);
