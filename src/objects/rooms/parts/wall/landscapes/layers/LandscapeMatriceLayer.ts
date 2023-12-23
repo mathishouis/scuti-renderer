@@ -2,9 +2,9 @@ import { LandscapeLayer } from './LandscapeLayer';
 import { Container, Sprite, Spritesheet, Texture } from 'pixi.js';
 import { AssetLoader } from '../../../../../assets/AssetLoader';
 import { LandscapePart } from '../LandscapePart';
-import { Vector2D, Vector3D } from '../../../../../../types/Vector.ts';
-import { random } from '../../../../../../utils/Random.ts';
-import { Direction } from '../../../../../../enums/Direction.ts';
+import { Vector2D, Vector3D } from '../../../../../../types/Vector';
+import { random } from '../../../../../../utils/Random';
+import { Direction } from '../../../../../../enums/Direction';
 
 interface Configuration {
   part: LandscapePart;

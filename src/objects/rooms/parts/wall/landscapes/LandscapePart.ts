@@ -2,10 +2,10 @@ import { RoomPart } from '../../RoomPart';
 import { Room } from '../../../Room';
 import { Container, Point } from 'pixi.js';
 import { EventManager } from '../../../../events/EventManager';
-import { Vector2D, Vector3D } from '../../../../../types/Vector';
+import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
 import { AssetLoader } from '../../../../assets/AssetLoader';
-import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer.ts';
+import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer';
 
 interface Configuration {
   position: Vector3D;
@@ -16,6 +16,7 @@ interface Configuration {
   door?: number;
 }
 
+// todo(): Add animated layer :(
 // todo(): SEPARATE EVERYTHING IN DIFFERENT CLASS AND MAKE EVERYTHING LOOKS CLEANER
 export class LandscapePart extends RoomPart {
   public room!: Room;

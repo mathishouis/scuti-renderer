@@ -1,9 +1,9 @@
 import { Vector2D, Vector3D } from '../../../../../../types/Vector';
 import { Container, Texture } from 'pixi.js';
-import { LandscapePart } from '../LandscapePart.ts';
-import { Cube } from '../../../../geometry/Cube.ts';
-import { CubeFace } from '../../../../../../enums/CubeFace.ts';
-import { Direction } from '../../../../../../enums/Direction.ts';
+import { LandscapePart } from '../LandscapePart';
+import { Cube } from '../../../../geometry/Cube';
+import { CubeFace } from '../../../../../../enums/CubeFace';
+import { Direction } from '../../../../../../enums/Direction';
 
 export abstract class LandscapeLayer {
   public container: Container = new Container();
