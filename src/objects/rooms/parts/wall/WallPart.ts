@@ -7,8 +7,8 @@ import { Vector3D } from '../../../../types/Vector';
 import { CubeFace } from '../../../../enums/CubeFace';
 import { WallMaterial } from '../../materials/WallMaterial';
 import { Direction } from '../../../../enums/Direction';
-import { AssetLoader } from '../../../assets/AssetLoader';
 import { DoorMaskFilter } from '../../../filters/DoorMaskFilter';
+import { asset } from '../../../../utils/Assets.ts';
 
 interface Configuration {
   material?: WallMaterial;
@@ -72,7 +72,7 @@ export class WallPart extends RoomPart {
         x: this.configuration.position.x - 1,
         y: this.configuration.position.y + this.configuration.door,
       });
-      const door: Sprite = new Sprite(AssetLoader.get('room/door'));
+      const door: Sprite = new Sprite(asset('room/door'));
       door.skew.set(0, -0.46);
       door.x = this.configuration.thickness + (this.configuration.length - this.configuration.door - 1) * 32 + 1;
       door.y =

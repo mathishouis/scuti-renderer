@@ -4,8 +4,8 @@ import { Container, Point } from 'pixi.js';
 import { EventManager } from '../../../../events/EventManager';
 import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
-import { AssetLoader } from '../../../../assets/AssetLoader';
 import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer';
+import { asset } from '../../../../../utils/Assets.ts';
 
 interface Configuration {
   position: Vector3D;
@@ -28,7 +28,7 @@ export class LandscapePart extends RoomPart {
   }
 
   public render(): void {
-    let spritesheet = AssetLoader.get('room/materials');
+    let spritesheet = asset('room/materials');
     let landscapeId = 101;
     let landscapeData = spritesheet.data.materials.landscapes.data.find(
       (landscape: any) => landscape.id === landscapeId,

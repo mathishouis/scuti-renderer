@@ -1,10 +1,10 @@
 import { LandscapeLayer } from './LandscapeLayer';
 import { Container, Sprite, Spritesheet, Texture } from 'pixi.js';
-import { AssetLoader } from '../../../../../assets/AssetLoader';
 import { LandscapePart } from '../LandscapePart';
 import { Vector2D, Vector3D } from '../../../../../../types/Vector';
 import { random } from '../../../../../../utils/Random';
 import { Direction } from '../../../../../../enums/Direction';
+import { asset } from '../../../../../../utils/Assets.ts';
 
 interface Configuration {
   part: LandscapePart;
@@ -45,7 +45,7 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
 
   private _extra({ max, texture, offsets }: Extra): Sprite[] {
     const { position, length } = this.part.configuration;
-    const spritesheet: Spritesheet = AssetLoader.get('room/materials');
+    const spritesheet: Spritesheet = asset('room/materials');
     const sprites: Sprite[] = [];
     const seed: number = position.x + position.y + length;
 
@@ -62,7 +62,7 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
   }
 
   private _column({ texture, extras }: Column): Texture {
-    const spritesheet: Spritesheet = AssetLoader.get('room/materials');
+    const spritesheet: Spritesheet = asset('room/materials');
     const container: Container = new Container();
     const background: Sprite = new Sprite(spritesheet.textures[texture]);
     const sprites: Sprite[] = extras.flatMap((extra: Extra) => this._extra(extra));
@@ -85,7 +85,7 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
 
   public get position(): Vector2D {
     const { configuration, room } = this.part;
-    const spritesheet: Spritesheet = AssetLoader.get('room/materials');
+    const spritesheet: Spritesheet = asset('room/materials');
     const { align }: Matrice = spritesheet.data.materials.landscapes.matrices.find(
       (matrice: Matrice): boolean => matrice.id === this.name,
     );
@@ -109,7 +109,7 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
     if (this._texture) return this._texture;
 
     const { position, length, direction } = this.part.configuration;
-    const spritesheet: Spritesheet = AssetLoader.get('room/materials');
+    const spritesheet: Spritesheet = asset('room/materials');
     const { repeat, columns }: Matrice = spritesheet.data.materials.landscapes.matrices.find(
       (matrice: Matrice): boolean => matrice.id === this.name,
     );

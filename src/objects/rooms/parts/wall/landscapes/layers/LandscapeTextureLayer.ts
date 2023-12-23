@@ -1,7 +1,7 @@
 import { LandscapeLayer } from './LandscapeLayer';
 import { Sprite, Spritesheet, Texture } from 'pixi.js';
-import { AssetLoader } from '../../../../../assets/AssetLoader';
 import { LandscapePart } from '../LandscapePart';
+import { asset } from '../../../../../../utils/Assets.ts';
 
 interface Configuration {
   part: LandscapePart;
@@ -21,7 +21,7 @@ export class LandscapeTextureLayer extends LandscapeLayer {
   }
 
   public get texture(): Texture {
-    const spritesheet: Spritesheet = AssetLoader.get('room/materials');
+    const spritesheet: Spritesheet = asset('room/materials');
     const sprite: Sprite = new Sprite(spritesheet.textures[this.name]);
 
     return this.part.room.renderer.application.renderer.generateTexture(sprite);
