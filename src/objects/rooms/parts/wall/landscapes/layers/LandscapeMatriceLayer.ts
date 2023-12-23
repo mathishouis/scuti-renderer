@@ -5,7 +5,7 @@ import { Vector2D, Vector3D } from '../../../../../../types/Vector';
 import { random } from '../../../../../../utils/Random';
 import { Direction } from '../../../../../../enums/Direction';
 import { asset } from '../../../../../../utils/Assets';
-import { Column, Extra, LandscapeSpritesheet, Matrice } from '../entities/Landscape.ts';
+import { Column, Extra, LandscapeSpritesheet, Matrice } from '../entities/Landscape';
 
 interface Configuration {
   part: LandscapePart;

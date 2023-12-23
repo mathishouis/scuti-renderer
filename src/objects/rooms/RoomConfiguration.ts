@@ -1,7 +1,7 @@
 import { FloorMaterial } from './materials/FloorMaterial';
 import { Room } from './Room';
 import { WallMaterial } from './materials/WallMaterial';
-import { LandscapeMaterial } from './materials/LandscapeMaterial.ts';
+import { LandscapeMaterial } from './materials/LandscapeMaterial';
 
 interface Configuration {
   room: Room;

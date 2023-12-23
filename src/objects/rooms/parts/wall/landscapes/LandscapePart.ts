@@ -4,10 +4,10 @@ import { Container, Point } from 'pixi.js';
 import { EventManager } from '../../../../events/EventManager';
 import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
-import { LandscapeMaterial } from '../../../materials/LandscapeMaterial.ts';
-import { LandscapeColorLayer } from './layers/LandscapeColorLayer.ts';
-import { LandscapeTextureLayer } from './layers/LandscapeTextureLayer.ts';
-import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer.ts';
+import { LandscapeMaterial } from '../../../materials/LandscapeMaterial';
+import { LandscapeColorLayer } from './layers/LandscapeColorLayer';
+import { LandscapeTextureLayer } from './layers/LandscapeTextureLayer';
+import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer';
 
 interface Configuration {
   material?: LandscapeMaterial;

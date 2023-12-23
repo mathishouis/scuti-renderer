@@ -1,5 +1,5 @@
-import { asset } from '../../../utils/Assets.ts';
-import { Landscape, LandscapeSpritesheet } from '../parts/wall/landscapes/entities/Landscape.ts';
+import { asset } from '../../../utils/Assets';
+import { Landscape, LandscapeSpritesheet } from '../parts/wall/landscapes/entities/Landscape';
 
 export class LandscapeMaterial {
   public staticLayers: [] = [];
