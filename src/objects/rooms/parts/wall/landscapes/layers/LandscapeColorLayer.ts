@@ -1,5 +1,5 @@
 import { LandscapeLayer } from './LandscapeLayer';
-import { Container, Texture } from 'pixi.js';
+import { Texture } from 'pixi.js';
 import { LandscapePart } from '../LandscapePart';
 
 interface Configuration {
@@ -8,10 +8,8 @@ interface Configuration {
 }
 
 export class LandscapeColorLayer extends LandscapeLayer {
-  public container: Container = new Container();
   public part: LandscapePart;
   public color: number;
-  public align: 'top' | 'bottom' | 'stretch' = 'stretch';
 
   constructor({ part, color }: Configuration) {
     super();

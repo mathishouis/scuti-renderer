@@ -6,10 +6,9 @@ import { CubeFace } from '../../../../../../enums/CubeFace.ts';
 import { Direction } from '../../../../../../enums/Direction.ts';
 
 export abstract class LandscapeLayer {
-  public abstract container: Container;
+  public container: Container = new Container();
   public abstract part: LandscapePart;
   public abstract color: number;
-  public abstract align: 'top' | 'bottom' | 'stretch';
   public abstract get texture(): Texture;
 
   public get size(): Vector3D {

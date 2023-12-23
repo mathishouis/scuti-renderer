@@ -1,14 +1,11 @@
 import { RoomPart } from '../../RoomPart';
 import { Room } from '../../../Room';
-import { Container, Point, Sprite, Spritesheet, Texture } from 'pixi.js';
-import { Cube } from '../../../geometry/Cube';
+import { Container, Point } from 'pixi.js';
 import { EventManager } from '../../../../events/EventManager';
 import { Vector2D, Vector3D } from '../../../../../types/Vector';
-import { CubeFace } from '../../../../../enums/CubeFace';
 import { Direction } from '../../../../../enums/Direction';
 import { AssetLoader } from '../../../../assets/AssetLoader';
-import { random } from '../../../../../utils/Random';
-import { LandscapeColorLayer } from './layers/LandscapeColorLayer';
+import { LandscapeMatriceLayer } from './layers/LandscapeMatriceLayer.ts';
 
 interface Configuration {
   position: Vector3D;
@@ -17,40 +14,6 @@ interface Configuration {
   height: number;
   direction: Direction;
   door?: number;
-}
-
-enum RepeatMode {
-  NONE = 'none',
-  RANDOM = 'random',
-}
-
-enum Align {
-  BOTTOM = 'bottom',
-  TOP = 'top',
-  ALL = 'all',
-}
-
-interface Material {
-  id: string;
-  repeat: RepeatMode;
-  align: Align;
-  columns: Column[];
-}
-
-interface Column {
-  texture: string;
-  extras: Extra[];
-}
-
-interface Extra {
-  max: number;
-  texture: string;
-  offsets: Vector2D[];
-}
-
-interface Layer {
-  texture: Texture;
-  align: Align;
 }
 
 // todo(): SEPARATE EVERYTHING IN DIFFERENT CLASS AND MAKE EVERYTHING LOOKS CLEANER
@@ -63,127 +26,17 @@ export class LandscapePart extends RoomPart {
     super();
   }
 
-  public parseLandscapeColumn({ texture, extras }: Column): Texture {
-    const spritesheet = AssetLoader.get('room/materials') as Spritesheet;
-    const container = new Container();
-    const background = new Sprite(spritesheet.textures[texture]);
-
-    container.addChild(background);
-
-    extras.forEach((extra: Extra) => {
-      const seed = this.configuration.position.x + this.configuration.position.y + this.configuration.length;
-      const finalOffsets: Vector2D[] = [];
-      const randomIndex = random(seed, 0, extra.offsets.length - 1);
-
-      for (let i = 0; i < extra.max; i++) {
-        const offset = extra.offsets[randomIndex];
-        if (!finalOffsets.includes(offset)) finalOffsets.push(offset);
-      }
-
-      finalOffsets.forEach((offset: Vector2D) => {
-        const sprite = new Sprite(spritesheet.textures[extra.texture]);
-        //if (this.configuration.direction === Direction.NORTH) sprite.scale.x = -1;
-        sprite.x = offset.x;
-        sprite.y = offset.y;
-        container.addChild(sprite);
-      });
-    });
-
-    return this.room.renderer.application.renderer.generateTexture(container);
-  }
-
-  public parseLandscapeMaterial({ repeat, align, columns }: Material): Texture {
-    //console.log(repeat, align, columns);
-    const columnTextures = columns.map((column: Column) => this.parseLandscapeColumn(column));
-    const container = new Container();
-    const maxWidth = this.configuration.length * 32;
-    let offset = 0;
-
-    if (repeat === RepeatMode.RANDOM) {
-      while (offset < maxWidth) {
-        const seed = this.configuration.position.x + this.configuration.position.y + this.configuration.length + offset;
-        const randomIndex = random(seed, 0, 1);
-        const column = columnTextures[randomIndex];
-        const sprite = new Sprite(column);
-
-        sprite.x = offset;
-        if (this.configuration.direction === Direction.NORTH) sprite.scale.x = -1;
-        container.addChild(sprite);
-        offset += sprite.width;
-      }
-    } else if (repeat === RepeatMode.NONE) {
-    }
-
-    return this.room.renderer.application.renderer.generateTexture(container);
-  }
-
-  public renderLayer({ texture, align }: Layer): Cube {
-    const zOrder: number = (this.configuration.position.z - 1) * 4;
-    const size: Vector3D = {
-      x: 0,
-      y: 0,
-      z: texture.height / 32,
-    };
-    const position: Vector2D = {
-      x: 0,
-      y: 0,
-    };
-    if (align === Align.BOTTOM) {
-      if (this.configuration.height !== -1) {
-        position.y = 115 + 64 * this.configuration.height - texture.height;
-      } else {
-        position.y = this.room.heightMap.maxHeight * 32 + 115 - texture.height;
-      }
-    } else if (align === Align.ALL) {
-      if (this.configuration.height !== -1) {
-        size.z = 115 / 32 + (64 / 32) * this.configuration.height;
-      } else {
-        size.z = this.room.heightMap.maxHeight + 115 / 32;
-      }
-    }
-
-    if (this.configuration.direction === Direction.WEST) {
-      size.y = this.configuration.length;
-    } else if (this.configuration.direction === Direction.NORTH) {
-      size.x = this.configuration.length;
-    }
-
-    const cube: Cube = new Cube({
-      layer: this.room.renderer.layer,
-      size: size,
-      zOrders: {
-        [CubeFace.TOP]: zOrder,
-        [CubeFace.LEFT]: zOrder - 0.5,
-        [CubeFace.RIGHT]: zOrder - 0.6,
-      },
-      texture: texture,
-      shadows: false,
-    });
-    cube.x = position.x;
-    cube.y = position.y;
-
-    return cube;
-  }
-
   public render(): void {
     let spritesheet = AssetLoader.get('room/materials');
     let landscapeId = 101;
     let landscapeData = spritesheet.data.materials.landscapes.data.find(
       (landscape: any) => landscape.id === landscapeId,
     );
-    landscapeData.layers.static.forEach((staticLayer: { texture: string; material: Material }) => {
-      if (staticLayer.material) {
-        let material = spritesheet.data.materials.landscapes.materials.find(
-          (fMaterial: any) => staticLayer.material === fMaterial.id,
-        ) as Material;
-        //console.log(material);
-        this.container.addChild(
-          this.renderLayer({ texture: this.parseLandscapeMaterial(material), align: material.align }),
-        );
+    landscapeData.layers.static.forEach((staticLayer: any) => {
+      if (staticLayer.matrice) {
       } else if (staticLayer.texture) {
-        // color
         //new LandscapeTextureLayer({ part: this, name: staticLayer.texture }).render();
-        new LandscapeColorLayer({ part: this, color: 0xff0000 }).render();
+        new LandscapeMatriceLayer({ part: this, name: 'landscape_64_foreground_1' }).render();
       }
     });
 

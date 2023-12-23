@@ -1,5 +1,5 @@
 import { LandscapeLayer } from './LandscapeLayer';
-import { Container, Sprite, Spritesheet, Texture } from 'pixi.js';
+import { Sprite, Spritesheet, Texture } from 'pixi.js';
 import { AssetLoader } from '../../../../../assets/AssetLoader';
 import { LandscapePart } from '../LandscapePart';
 
@@ -9,11 +9,9 @@ interface Configuration {
 }
 
 export class LandscapeTextureLayer extends LandscapeLayer {
-  public container: Container = new Container();
   public part: LandscapePart;
   public name: string;
   public color: number = 0xffffff;
-  public align: 'top' | 'bottom' | 'stretch' = 'stretch';
 
   constructor({ part, name }: Configuration) {
     super();
