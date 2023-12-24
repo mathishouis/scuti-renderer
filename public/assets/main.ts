@@ -133,27 +133,10 @@ const room: Room = new Room({
   wallThickness: 8,
   wallHeight: -1,
   landscapeMaterial: new LandscapeMaterial(101),
+  zoom: true,
 });
 
 renderer.add(room);
-
-let zoom = 1;
-const [min_zoom, max_zoom] = [0.5, 5];
-
-renderer.application.view.addEventListener(
-  'wheel',
-  // @ts-ignore
-  ({ deltaY }) => {
-    // todo(): add support accross browsers
-    const delta = deltaY > 0 ? -0.25 : 0.25;
-
-    zoom += delta;
-    zoom = Math.max(min_zoom, Math.min(max_zoom, zoom));
-
-    room.camera.zoom(zoom, 0.25);
-  },
-  { passive: true },
-);
 
 /*setInterval(() => {
     const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
