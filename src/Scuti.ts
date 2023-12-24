@@ -1,14 +1,4 @@
-import {
-  Application,
-  BaseTexture,
-  Color,
-  Container,
-  extensions,
-  SCALE_MODES,
-  settings,
-  Ticker,
-  UPDATE_PRIORITY,
-} from 'pixi.js';
+import { Application, BaseTexture, Color, Container, extensions, SCALE_MODES, settings, Ticker, UPDATE_PRIORITY } from 'pixi.js';
 import { GameObject } from './objects/GameObject';
 import { register } from './utils/Assets';
 import { Layer, Stage } from '@pixi/layers';
@@ -45,7 +35,7 @@ export class Scuti {
     benchmark('renderer');
     // Pixi settings
     extensions.add(loadBundle);
-    settings.RESOLUTION = 1;
+    settings.ROUND_PIXELS = true;
     Container.defaultSortableChildren = true;
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
 
