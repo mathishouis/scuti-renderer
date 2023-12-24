@@ -18,8 +18,12 @@ export class RoomCamera extends Container {
   }
 
   private _initializeListeners(): void {
-    if (this.room.configuration.scrollZoom) {
+    if (this.room.configuration.zoom?.type === 'wheel' || this.room.configuration.zoom?.type === 'both') {
       this.room.renderer.canvas.addEventListener('wheel', this._onZoom, { passive: true });
+    }
+
+    if (this.room.configuration.zoom?.type === 'keydown' || this.room.configuration.zoom?.type === 'both') {
+      window.addEventListener('keypress', this._onZoom, { passive: true });
     }
 
     if (this.room.configuration.dragging) {
@@ -31,12 +35,19 @@ export class RoomCamera extends Container {
     }
   }
 
-  private _onZoom = ({ deltaY }: WheelEvent): void => {
-    this.room.configuration.zoomLevel += deltaY > 0 ? -0.5 : 0.5;
-    this.room.configuration.zoomLevel = Math.max(
-      this.room.configuration.minZoom,
-      Math.min(this.room.configuration.maxZoom, this.room.configuration.zoomLevel),
-    );
+  private _onZoom = (event: WheelEvent | KeyboardEvent): void => {
+    const zoom = this.room.configuration.zoom!;
+    const { step, level, min, max, duration } = zoom;
+
+    if (event instanceof KeyboardEvent) {
+      if (event.key === '+' || event.key === '-') {
+        zoom.level = Math.max(min!, Math.min(max!, level! + (event.key === '+' ? step! : -step!)));
+      }
+    } else if (event instanceof WheelEvent) {
+      zoom.level = Math.max(min!, Math.min(max!, level! + (event.deltaY > 0 ? -step! : step!)));
+    }
+
+    this.zoom(zoom.level!, duration!);
   };
 
   private _dragStart = (): void => {

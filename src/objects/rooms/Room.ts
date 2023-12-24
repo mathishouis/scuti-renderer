@@ -3,30 +3,8 @@ import { RoomVisualization } from './RoomVisualization';
 import { RoomCamera } from './RoomCamera';
 import { GameObject } from '../GameObject';
 import { RoomHeightmap } from './RoomHeightmap';
-import { RoomConfiguration } from './RoomConfiguration';
+import { Configuration, RoomConfiguration } from './RoomConfiguration';
 import { RoomEvents } from './RoomEvents';
-import { FloorMaterial } from './materials/FloorMaterial';
-import { WallMaterial } from './materials/WallMaterial';
-import { LandscapeMaterial } from './materials/LandscapeMaterial';
-
-interface Configuration {
-  heightMap: string;
-  floorMaterial?: FloorMaterial;
-  floorThickness?: number;
-  floorHidden?: boolean;
-  wallMaterial?: WallMaterial;
-  wallThickness?: number;
-  wallHeight?: number;
-  wallHidden?: boolean;
-  landscapeMaterial?: LandscapeMaterial;
-  dragging?: boolean;
-  centerCamera?: boolean;
-  zoomLevel?: number;
-  scrollZoom?: boolean;
-  zoomDuration?: number;
-  minZoom?: number;
-  maxZoom?: number;
-}
 
 export class Room extends GameObject {
   public renderer!: Scuti;
@@ -36,7 +14,7 @@ export class Room extends GameObject {
   public configuration: RoomConfiguration;
   public events!: RoomEvents;
 
-  constructor(configuration: Configuration) {
+  constructor(configuration: Omit<Configuration, 'room'>) {
     super();
 
     this.configuration = new RoomConfiguration({ ...configuration, ...{ room: this } });
