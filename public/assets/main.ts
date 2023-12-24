@@ -149,6 +149,7 @@ const room: Room = new Room({
   wallThickness: 8,
   wallHeight: -1,
   landscapeMaterial: new LandscapeMaterial(101),
+  zoom: true,
 });
 
 renderer.add(room);

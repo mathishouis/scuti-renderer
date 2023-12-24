@@ -22,16 +22,7 @@ export class RoomCamera extends Container {
 
   private _initializeListeners(): void {
     if (this.room.configuration.zoom) {
-      this.room.renderer.canvas.addEventListener(
-        'wheel',
-        ({ deltaY }) => {
-          this.zoom += deltaY > 0 ? -0.5 : 0.5;
-          this.zoom = Math.max(this._minZoom, Math.min(this._maxZoom, this.zoom));
-
-          this.update(this.zoom, 0.5);
-        },
-        { passive: true },
-      );
+      this.room.renderer.canvas.addEventListener('wheel', this._onZoom, { passive: true });
     }
 
     if (this.room.configuration.dragging) {
@@ -42,6 +33,13 @@ export class RoomCamera extends Container {
       );
     }
   }
+
+  private _onZoom = ({ deltaY }: WheelEvent): void => {
+    this.zoom += deltaY > 0 ? -0.5 : 0.5;
+    this.zoom = Math.max(this._minZoom, Math.min(this._maxZoom, this.zoom));
+
+    this.update(this.zoom, 0.5);
+  };
 
   private _dragStart = (): void => {
     const currentTime = Date.now();
