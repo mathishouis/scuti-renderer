@@ -46,10 +46,10 @@ export class LandscapeAnimatedLayerItem {
     const { room, configuration } = this.layer.part;
     const { direction, position, length } = configuration;
     const seed = room.heightMap.sizeY * room.heightMap.sizeX * this.index;
-    const maxY = (155 - this.sprite.height) * 0.55;
+    const maxY = (155 - this.sprite.height) * this.randomY; // todo(): i'm not very sure if it's the real use of randomY... :(
     const minY = 0;
     const width = room.heightMap.sizeY * 32 + room.heightMap.sizeX * 32 + this.sprite.width;
-    const percentage = (random(seed, 0, 12300, 0) + new Date().getTime() / 50) % width;
+    const percentage = (random(seed, 0, 12300, 0) + new Date().getTime() / (50 + this.speedX * 1.5)) % width;
 
     this.sprite.x = Math.floor(
       (direction === Direction.WEST ? length * 32 : 0) -
