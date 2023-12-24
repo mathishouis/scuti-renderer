@@ -16,7 +16,7 @@ interface Configuration {
   landscapeMaterial?: LandscapeMaterial;
   dragging?: boolean;
   centerCamera?: boolean;
-  zoom?: number;
+  zoom?: boolean;
 }
 
 export class RoomConfiguration {
@@ -37,7 +37,7 @@ export class RoomConfiguration {
 
   private _dragging: boolean;
   private _centerCamera: boolean;
-  private _zoom: number;
+  private _zoom: boolean;
 
   constructor({
     room,
@@ -70,7 +70,7 @@ export class RoomConfiguration {
 
     this._dragging = dragging ?? true;
     this._centerCamera = centerCamera ?? true;
-    this._zoom = zoom ?? 1;
+    this._zoom = zoom ?? false;
   }
 
   public get heightMap(): string {
@@ -170,11 +170,11 @@ export class RoomConfiguration {
     this._centerCamera = centerCamera;
   }
 
-  public get zoom(): number {
+  public get zoom(): boolean {
     return this._zoom;
   }
 
-  public set zoom(zoom: number) {
+  public set zoom(zoom: boolean) {
     this._zoom = zoom;
   }
 }

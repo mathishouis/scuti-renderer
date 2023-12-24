@@ -5,17 +5,35 @@ import { gsap } from 'gsap';
 export class RoomCamera extends Container {
   public dragging: boolean = false;
   public hasDragged: boolean = false;
+  public zoom: number = 1;
+
   private _lastClickTime: number = 0;
   private _clickThreshold: number = 75;
+  private _minZoom: number = 0.5;
+  private _maxZoom: number = 3;
 
   constructor(public room: Room) {
     super();
 
     this._initializeListeners();
+
     this.addChild(room.visualization.container);
   }
 
   private _initializeListeners(): void {
+    if (this.room.configuration.zoom) {
+      this.room.renderer.canvas.addEventListener(
+        'wheel',
+        ({ deltaY }) => {
+          this.zoom += deltaY > 0 ? -0.5 : 0.5;
+          this.zoom = Math.max(this._minZoom, Math.min(this._maxZoom, this.zoom));
+
+          this.update(this.zoom, 0.5);
+        },
+        { passive: true },
+      );
+    }
+
     if (this.room.configuration.dragging) {
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
@@ -51,8 +69,7 @@ export class RoomCamera extends Container {
   public isOutOfBounds(): boolean {
     const { x, y } = this.pivot;
     const { width, height } = this.room.renderer.application.view;
-    if (x - width / 2 > this.width || x + width / 2 < 0 || y - height / 2 > this.height || y + height / 2 < 0)
-      return true;
+    if (x - width / 2 > this.width || x + width / 2 < 0 || y - height / 2 > this.height || y + height / 2 < 0) return true;
     else return false;
   }
 
@@ -71,9 +88,7 @@ export class RoomCamera extends Container {
     });
   }
 
-  public zoom(zoom: number, duration: number = 0.8) {
-    this.room.configuration.zoom = zoom;
-
+  public update(zoom: number, duration: number = 0.8) {
     gsap.to(this.scale, {
       x: zoom,
       y: zoom,
