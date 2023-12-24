@@ -37,8 +37,5 @@ export interface LandscapeSpritesheet {
 
 export interface Landscape {
   id: number;
-  layers: {
-    static: [];
-    animated: [];
-  };
+  layers: Record<string, {}>[];
 }

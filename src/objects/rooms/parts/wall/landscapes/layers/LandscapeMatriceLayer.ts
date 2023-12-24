@@ -26,6 +26,7 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
     this.name = name;
   }
 
+  // todo(): create a LandscapeMatriceLayerItem class?
   private _extra({ max, texture, offsets }: Extra): Sprite[] {
     const { position, length } = this.part.configuration;
     const spritesheet: Spritesheet = asset('room/materials');
@@ -127,6 +128,7 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
     if (this._texture) return this._texture;
 
     const spritesheet: LandscapeSpritesheet = asset('room/materials');
+    console.log(this.name);
     const { repeat, columns }: Matrice = spritesheet.data.materials.landscapes.matrices.find(
       (matrice: Matrice): boolean => matrice.id === this.name,
     )!;
