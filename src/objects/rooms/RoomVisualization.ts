@@ -12,7 +12,7 @@ import { WallPart } from './parts/wall/WallPart';
 import { benchmark } from '../../utils/Benchmark';
 import { perf } from '../../utils/Logger';
 import { LandscapePart } from './parts/wall/landscapes/LandscapePart';
-import { DoorPart } from './parts/wall/DoorPart.ts';
+import { DoorPart } from './parts/wall/DoorPart';
 
 type RoomLayers = {
   parts: PartLayer;

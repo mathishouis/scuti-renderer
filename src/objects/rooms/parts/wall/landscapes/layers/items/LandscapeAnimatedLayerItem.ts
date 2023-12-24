@@ -4,7 +4,7 @@ import { LandscapeSpritesheet } from '../../entities/Landscape';
 import { asset } from '../../../../../../../utils/Assets';
 import { random } from '../../../../../../../utils/Random';
 import { Direction } from '../../../../../../../enums/Direction';
-import { DoorMaskFilter } from '../../../../../../filters/DoorMaskFilter.ts';
+import { DoorMaskFilter } from '../../../../../../filters/DoorMaskFilter';
 
 interface Configuration {
   layer: LandscapeAnimatedLayer;

@@ -4,7 +4,7 @@ import { LandscapePart } from '../LandscapePart';
 import { Cube } from '../../../../geometry/Cube';
 import { CubeFace } from '../../../../../../enums/CubeFace';
 import { Direction } from '../../../../../../enums/Direction';
-import { DoorMaskFilter } from '../../../../../filters/DoorMaskFilter.ts';
+import { DoorMaskFilter } from '../../../../../filters/DoorMaskFilter';
 
 export abstract class LandscapeLayer {
   public container: Container = new Container();
