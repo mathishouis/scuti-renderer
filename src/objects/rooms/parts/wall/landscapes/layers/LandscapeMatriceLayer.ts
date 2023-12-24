@@ -128,7 +128,6 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
     if (this._texture) return this._texture;
 
     const spritesheet: LandscapeSpritesheet = asset('room/materials');
-    console.log(this.name);
     const { repeat, columns }: Matrice = spritesheet.data.materials.landscapes.matrices.find(
       (matrice: Matrice): boolean => matrice.id === this.name,
     )!;
