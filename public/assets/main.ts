@@ -79,7 +79,7 @@ x000000000
 x000000000
 `;*/
 
-/*const heightMap: string = `
+const heightMap: string = `
 xxxxxxxxxx
 xxxx000400
 xxxx000000
@@ -108,8 +108,8 @@ x000000000
 x000000000
 x000000000
 x000000000
-`;*/
-const heightMap: string = `
+`;
+/*const heightMap: string = `
 xxxxxxxxxx
 x000000000
 0000000000
@@ -124,7 +124,7 @@ x000000000
 x000000000
 x000000000
 x000000000
-`;
+`;*/
 
 /*const heightMap: string = `
 xxxxxxxxxx

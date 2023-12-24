@@ -65,9 +65,17 @@ export class WallPart extends RoomPart {
     });
     this.container.addChild(cube);
 
-    if (this.room.visualization.layers.parts.door) {
+    if (
+      this.room.heightMap.door &&
+      this.room.visualization.layers.parts.door &&
+      this.configuration.position.x - 1 === this.room.heightMap.door.x &&
+      this.configuration.position.y <= this.room.heightMap.door.y &&
+      this.room.heightMap.door.y <= this.configuration.position.y + this.configuration.length - 1 &&
+      this.configuration.direction === Direction.WEST
+    ) {
       const filter: DoorMaskFilter = new DoorMaskFilter(this.room.visualization.layers.parts.door.sprite);
       cube.faces[CubeFace.RIGHT].filters = [filter];
+      cube.faces[CubeFace.RIGHT].filterArea = this.room.visualization.layers.parts.door.sprite.filterArea;
     }
 
     if (this.configuration.direction === Direction.WEST) {

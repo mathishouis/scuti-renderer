@@ -30,6 +30,20 @@ export abstract class LandscapeLayer {
     };
   }
 
+  public get door(): boolean {
+    const { room, configuration } = this.part;
+
+    return (
+      (room.heightMap.door &&
+        room.visualization.layers.parts.door &&
+        configuration.position.x - 1 === room.heightMap.door.x &&
+        configuration.position.y <= room.heightMap.door.y &&
+        room.heightMap.door.y <= configuration.position.y + configuration.length - 1 &&
+        configuration.direction === Direction.WEST) ??
+      false
+    );
+  }
+
   public render(): void {
     const { visualization, renderer } = this.part.room;
     const { door } = visualization.layers.parts;
@@ -37,9 +51,9 @@ export abstract class LandscapeLayer {
       layer: renderer.layer,
       size: this.size,
       zOrders: {
-        [CubeFace.TOP]: -4,
-        [CubeFace.LEFT]: -4 - 0.5,
-        [CubeFace.RIGHT]: -4 - 0.6,
+        [CubeFace.TOP]: -3,
+        [CubeFace.LEFT]: -3 - 0.5,
+        [CubeFace.RIGHT]: -3 - 0.6,
       },
       shadows: {
         [CubeFace.TOP]: 1,
@@ -50,9 +64,10 @@ export abstract class LandscapeLayer {
       texture: this.texture,
     });
 
-    if (door && cube.faces[CubeFace.RIGHT]) {
+    if (this.door) {
       const filter: DoorMaskFilter = new DoorMaskFilter(door.sprite);
       cube.faces[CubeFace.RIGHT].filters = [filter];
+      cube.faces[CubeFace.RIGHT].filterArea = door.sprite.filterArea;
     }
 
     const { x, y } = this.position;

@@ -54,6 +54,7 @@ export class LandscapeAnimatedLayer extends LandscapeLayer {
           speedX: item.speedX,
           randomX: item.randomX,
           randomY: item.randomY,
+          door: this.door,
         }),
       ),
     );

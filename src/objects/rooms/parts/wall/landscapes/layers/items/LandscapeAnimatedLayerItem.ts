@@ -13,6 +13,7 @@ interface Configuration {
   speedX: number;
   randomX: number;
   randomY: number;
+  door: boolean;
 }
 
 export class LandscapeAnimatedLayerItem {
@@ -23,14 +24,16 @@ export class LandscapeAnimatedLayerItem {
   public randomX: number;
   public randomY: number;
   public sprite!: Sprite;
+  public door: boolean;
 
-  constructor({ layer, index, texture, speedX, randomX, randomY }: Configuration) {
+  constructor({ layer, index, texture, speedX, randomX, randomY, door }: Configuration) {
     this.layer = layer;
     this.index = index;
     this.texture = texture;
     this.speedX = speedX;
     this.randomX = randomX;
     this.randomY = randomY;
+    this.door = door;
   }
 
   public render(): void {
@@ -41,7 +44,7 @@ export class LandscapeAnimatedLayerItem {
     this.sprite.skew.x = 0;
     this.sprite.skew.y = (this.layer.part.configuration.direction === Direction.WEST ? -1 : 1) * 0.466;
 
-    if (door) {
+    if (this.door && door) {
       const filter: DoorMaskFilter = new DoorMaskFilter(door.sprite);
       this.sprite.filters = [filter];
     }
