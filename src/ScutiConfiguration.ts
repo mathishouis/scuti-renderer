@@ -1,5 +1,6 @@
-import { AssetLoader, Scuti } from './index';
+import { Scuti } from './Scuti';
 import { Color } from 'pixi.js';
+import { registerPath } from './utils/Assets';
 
 interface Configuration {
   renderer: Scuti;
@@ -40,7 +41,7 @@ export class ScutiConfiguration {
     this._backgroundAlpha = backgroundAlpha ?? 1;
     this._resizeTo = resizeTo;
 
-    AssetLoader.assetsPath = resources;
+    registerPath(resources);
   }
 
   public get canvas(): HTMLElement {

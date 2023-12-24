@@ -1,11 +1,11 @@
-import { RoomPart } from './RoomPart';
-import { Room } from '../Room';
+import { RoomPart } from '../RoomPart';
+import { Room } from '../../Room';
 import { Container, FederatedPointerEvent, Point, Polygon } from 'pixi.js';
-import { FloorMaterial } from '../materials/FloorMaterial';
-import { Cube } from '../geometry/Cube';
-import { EventManager } from '../../events/EventManager';
-import { Vector2D, Vector3D } from '../../../types/Vector';
-import { CubeFace } from '../../../enums/CubeFace';
+import { FloorMaterial } from '../../materials/FloorMaterial';
+import { Cube } from '../../geometry/Cube';
+import { EventManager } from '../../../events/EventManager';
+import { Vector2D, Vector3D } from '../../../../types/Vector';
+import { CubeFace } from '../../../../enums/CubeFace';
 
 interface Configuration {
   material?: FloorMaterial;
@@ -64,7 +64,8 @@ export class TilePart extends RoomPart {
         [CubeFace.LEFT]: zOrder - 0.5,
         [CubeFace.RIGHT]: zOrder - 0.6,
       },
-      material: material,
+      texture: material.texture,
+      color: material.color,
       size: {
         x: this.configuration.size.x,
         y: this.configuration.size.y,

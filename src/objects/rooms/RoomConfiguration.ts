@@ -1,6 +1,7 @@
 import { FloorMaterial } from './materials/FloorMaterial';
 import { Room } from './Room';
 import { WallMaterial } from './materials/WallMaterial';
+import { LandscapeMaterial } from './materials/LandscapeMaterial';
 
 interface Configuration {
   room: Room;
@@ -12,6 +13,7 @@ interface Configuration {
   wallThickness?: number;
   wallHeight?: number;
   wallHidden?: boolean;
+  landscapeMaterial?: LandscapeMaterial;
   dragging?: boolean;
   centerCamera?: boolean;
   zoom?: number;
@@ -31,6 +33,8 @@ export class RoomConfiguration {
   private _wallHidden: boolean;
   private _wallHeight: number;
 
+  private _landscapeMaterial: LandscapeMaterial;
+
   private _dragging: boolean;
   private _centerCamera: boolean;
   private _zoom: number;
@@ -45,6 +49,7 @@ export class RoomConfiguration {
     wallThickness,
     wallHeight,
     wallHidden,
+    landscapeMaterial,
     dragging,
     centerCamera,
     zoom,
@@ -60,6 +65,8 @@ export class RoomConfiguration {
     this._wallThickness = wallThickness ?? 8;
     this._wallHidden = wallHidden ?? false;
     this._wallHeight = wallHeight ?? 0;
+
+    this._landscapeMaterial = landscapeMaterial ?? new LandscapeMaterial(101);
 
     this._dragging = dragging ?? true;
     this._centerCamera = centerCamera ?? true;
@@ -135,6 +142,15 @@ export class RoomConfiguration {
 
   public set wallHeight(height: number) {
     this._wallHeight = height;
+    this.room.update();
+  }
+
+  public get landscapeMaterial(): LandscapeMaterial {
+    return this._landscapeMaterial;
+  }
+
+  public set landscapeMaterial(material: LandscapeMaterial) {
+    this._landscapeMaterial = material;
     this.room.update();
   }
 

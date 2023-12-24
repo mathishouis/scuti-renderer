@@ -10,7 +10,7 @@ import {
   UPDATE_PRIORITY,
 } from 'pixi.js';
 import { GameObject } from './objects/GameObject';
-import { AssetLoader } from './objects/assets/AssetLoader';
+import { register } from './utils/Assets';
 import { Layer, Stage } from '@pixi/layers';
 import { addStats, StatsJSAdapter } from 'pixi-stats';
 import { ScutiConfiguration } from './ScutiConfiguration';
@@ -79,9 +79,9 @@ export class Scuti {
     benchmark('resources');
 
     await Promise.all([
-      AssetLoader.load('room/materials', '/room/materials.bundle'),
-      AssetLoader.load('room/cursor', '/room/cursor/cursor.json'),
-      AssetLoader.load('room/door', '/room/door/door.png'),
+      register('room/materials', '/room/materials.bundle'),
+      register('room/cursor', '/room/cursor/cursor.json'),
+      register('room/door', '/room/door/door.png'),
     ]);
 
     perf('Resources', 'resources');

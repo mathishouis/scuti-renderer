@@ -1,13 +1,13 @@
-import { RoomPart } from './RoomPart';
-import { Room } from '../Room';
+import { RoomPart } from '../RoomPart';
+import { Room } from '../../Room';
 import { Container, FederatedPointerEvent, Point, Polygon } from 'pixi.js';
-import { FloorMaterial } from '../materials/FloorMaterial';
-import { Cube } from '../geometry/Cube';
-import { Vector2D, Vector3D } from '../../../types/Vector';
-import { CubeFace } from '../../../enums/CubeFace';
-import { EventManager } from '../../events/EventManager';
-import { StairType } from '../../../enums/StairType';
-import { Direction } from '../../../enums/Direction';
+import { FloorMaterial } from '../../materials/FloorMaterial';
+import { Cube } from '../../geometry/Cube';
+import { Vector2D, Vector3D } from '../../../../types/Vector';
+import { CubeFace } from '../../../../enums/CubeFace';
+import { EventManager } from '../../../events/EventManager';
+import { StairType } from '../../../../enums/StairType';
+import { Direction } from '../../../../enums/Direction';
 
 interface Configuration {
   material?: FloorMaterial;
@@ -275,7 +275,8 @@ export class StairPart extends RoomPart {
       const cube: Cube = new Cube({
         layer: this.room.renderer.layer,
         zOrders: zOrders,
-        material: material,
+        texture: material.texture,
+        color: material.color,
         size: size,
         offsets: {
           [CubeFace.TOP]: textureOffset,

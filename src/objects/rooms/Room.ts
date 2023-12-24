@@ -7,6 +7,7 @@ import { RoomConfiguration } from './RoomConfiguration';
 import { RoomEvents } from './RoomEvents';
 import { FloorMaterial } from './materials/FloorMaterial';
 import { WallMaterial } from './materials/WallMaterial';
+import { LandscapeMaterial } from './materials/LandscapeMaterial';
 
 interface Configuration {
   heightMap: string;
@@ -17,6 +18,7 @@ interface Configuration {
   wallThickness?: number;
   wallHeight?: number;
   wallHidden?: boolean;
+  landscapeMaterial?: LandscapeMaterial;
   dragging?: boolean;
   centerCamera?: boolean;
   zoom?: number;
@@ -43,6 +45,7 @@ export class Room extends GameObject {
     this.visualization = new RoomVisualization(this);
     this.camera = new RoomCamera(this);
     this.events = new RoomEvents();
+    //this.renderer.application.ticker.maxFPS = 144; todo(): Add configurable FPS
 
     this.visualization.render();
     this.renderer.application.stage.addChild(this.camera);

@@ -4,6 +4,7 @@ import { Room } from '../../src/objects/rooms/Room';
 import { FloorMaterial } from '../../src/objects/rooms/materials/FloorMaterial';
 import { WallMaterial } from '../../src/objects/rooms/materials/WallMaterial';
 import { TileEvent } from '../../src/entities/Events';
+import { LandscapeMaterial } from '../../src';
 
 const renderer: Scuti = new Scuti({
   canvas: document.getElementById('app') as HTMLElement,
@@ -47,7 +48,7 @@ x2222x0010000100xxxxxxxxxxx
 x2222x0000000000xxxxxxxxxxx
 `;*/
 
-const heightMap: string = `
+/*const heightMap: string = `
 xxxxxxxxxx
 3321000100
 x100000000
@@ -60,10 +61,70 @@ x00000xx00
 x000xxxxx0
 x400000000
 x300000000
-x200000000
-x100000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+`;*/
+
+const heightMap: string = `
+xxxxxxxxxx
+xxxx000400
+xxxx000000
+x000000000
+xx00000000
+xxx00000xx
+xxx0000000
+x00000x000
+x00000xx00
+x000xxxxx0
+x000000000
+x000000000
+xx00000000
+xx00000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
 x000000000
 `;
+/*const heightMap: string = `
+xxxxxxxxxx
+x000000000
+0000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+x000000000
+`;*/
 
 /*const heightMap: string = `
 xxxxxxxxxx
@@ -87,6 +148,7 @@ const room: Room = new Room({
   wallMaterial: new WallMaterial(108),
   wallThickness: 8,
   wallHeight: -1,
+  landscapeMaterial: new LandscapeMaterial(101),
 });
 
 renderer.add(room);

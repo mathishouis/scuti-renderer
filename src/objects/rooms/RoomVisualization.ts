@@ -1,16 +1,18 @@
 import { Container } from 'pixi.js';
 import { Room } from './Room';
-import { TilePart } from './parts/TilePart';
+import { TilePart } from './parts/floor/TilePart';
 import { PartLayer } from './layers/PartLayer';
 import { RoomPart } from './parts/RoomPart';
-import { StairPart } from './parts/StairPart';
+import { StairPart } from './parts/floor/StairPart';
 import { GreedyMesher } from './geometry/GreedyMesher';
 import { TileEvent } from '../../entities/Events';
-import { CursorPart } from './parts/CursorPart';
+import { CursorPart } from './parts/floor/CursorPart';
 import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh';
-import { WallPart } from './parts/WallPart';
+import { WallPart } from './parts/wall/WallPart';
 import { benchmark } from '../../utils/Benchmark';
 import { perf } from '../../utils/Logger';
+import { LandscapePart } from './parts/wall/landscapes/LandscapePart';
+import { DoorPart } from './parts/wall/DoorPart';
 
 type RoomLayers = {
   parts: PartLayer;
@@ -39,6 +41,22 @@ export class RoomVisualization {
     this.layers.parts.cursor.room = this.room;
     this.layers.parts.cursor.render();
     this.layers.parts.cursor.hide();
+  }
+
+  private _registerDoor(): void {
+    if (this.room.heightMap.door) {
+      this.layers.parts.door = new DoorPart({
+        position: {
+          x: this.room.heightMap.door.x,
+          y: this.room.heightMap.door.y,
+          z: this.room.heightMap.getTileHeight(this.room.heightMap.door),
+        },
+        floorThickness: this.room.configuration.floorThickness,
+        thickness: this.room.configuration.wallThickness,
+      });
+      this.layers.parts.door.room = this.room;
+      this.layers.parts.door.render();
+    }
   }
 
   private _registerFloorPart(part: TilePart | StairPart): void {
@@ -71,6 +89,8 @@ export class RoomVisualization {
     benchmark('room-visualization');
 
     this._registerCursor();
+    this._registerDoor();
+
     const greedyMesher: GreedyMesher = new GreedyMesher(this.room.heightMap);
 
     if (!this.room.configuration.floorHidden)
@@ -101,7 +121,7 @@ export class RoomVisualization {
       );
 
     if (!this.room.configuration.wallHidden)
-      greedyMesher.walls.forEach((wall: WallMesh): void =>
+      greedyMesher.walls.forEach((wall: WallMesh): void => {
         this.add(
           new WallPart({
             material: this.room.configuration.wallMaterial,
@@ -112,10 +132,19 @@ export class RoomVisualization {
             height: this.room.configuration.wallHeight,
             direction: wall.direction,
             corner: wall.corner,
-            door: wall.door,
           }),
-        ),
-      );
+        );
+        this.add(
+          new LandscapePart({
+            material: this.room.configuration.landscapeMaterial,
+            position: wall.position,
+            length: wall.length,
+            floorThickness: this.room.configuration.floorThickness,
+            height: this.room.configuration.wallHeight,
+            direction: wall.direction,
+          }),
+        );
+      });
 
     perf('Room Visualization', 'room-visualization');
 

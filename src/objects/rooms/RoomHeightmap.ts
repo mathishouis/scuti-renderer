@@ -239,4 +239,12 @@ export class RoomHeightmap {
 
     return z;
   }
+
+  public get sizeX(): number {
+    return this.heightMap.sort((a, b) => b.length - a.length)[0].length;
+  }
+
+  public get sizeY(): number {
+    return this.heightMap.length;
+  }
 }
