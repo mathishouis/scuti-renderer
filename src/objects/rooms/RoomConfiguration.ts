@@ -77,7 +77,7 @@ export class RoomConfiguration {
 
     this._dragging = dragging ?? true;
     this._centerCamera = centerCamera ?? true;
-    this._zoom = zoom != null ? { level: 1, min: 0.5, max: 2, step: 0.5, ...zoom } : zoom;
+    this._zoom = { level: 1, min: 0.5, max: 2, step: 0.5, ...zoom };
   }
 
   public get heightMap(): string {
