@@ -2,6 +2,9 @@ import { asset } from '../../../utils/Assets';
 import { Landscape, LandscapeSpritesheet } from '../parts/wall/landscapes/entities/Landscape';
 import { LandscapeLayer } from '../parts/wall/landscapes/layers/LandscapeLayer';
 import { LandscapeAnimatedLayer } from '../parts/wall/landscapes/layers/LandscapeAnimatedLayer';
+import { LandscapeColorLayer } from '../parts/wall/landscapes/layers/LandscapeColorLayer.ts';
+import { LandscapeTextureLayer } from '../parts/wall/landscapes/layers/LandscapeTextureLayer.ts';
+import { LandscapeMatriceLayer } from '../parts/wall/landscapes/layers/LandscapeMatriceLayer.ts';
 
 export class LandscapeMaterial {
   public layers: { layer: new (configuration: any) => LandscapeLayer; params: any }[] = [];
@@ -13,20 +16,20 @@ export class LandscapeMaterial {
   private _parse(layers: any): void {
     layers.forEach((layer: any) => {
       if (layer['color']) {
-        /*this.layers.push({
+        this.layers.push({
           layer: LandscapeColorLayer,
           params: { color: layer['color'] },
-        });*/
+        });
       } else if (layer['texture']) {
-        /*this.layers.push({
+        this.layers.push({
           layer: LandscapeTextureLayer,
           params: { name: layer['texture'] },
-        });*/
+        });
       } else if (layer['matrice']) {
-        /*this.layers.push({
+        this.layers.push({
           layer: LandscapeMatriceLayer,
           params: { name: layer['matrice'] },
-        });*/
+        });
       } else {
         this.layers.push({
           layer: LandscapeAnimatedLayer,

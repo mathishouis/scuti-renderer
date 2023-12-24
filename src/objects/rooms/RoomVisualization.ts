@@ -12,6 +12,7 @@ import { WallPart } from './parts/wall/WallPart';
 import { benchmark } from '../../utils/Benchmark';
 import { perf } from '../../utils/Logger';
 import { LandscapePart } from './parts/wall/landscapes/LandscapePart';
+import { DoorPart } from './parts/wall/DoorPart.ts';
 
 type RoomLayers = {
   parts: PartLayer;
@@ -40,6 +41,22 @@ export class RoomVisualization {
     this.layers.parts.cursor.room = this.room;
     this.layers.parts.cursor.render();
     this.layers.parts.cursor.hide();
+  }
+
+  private _registerDoor(): void {
+    if (this.room.heightMap.door) {
+      this.layers.parts.door = new DoorPart({
+        position: {
+          x: this.room.heightMap.door.x,
+          y: this.room.heightMap.door.y,
+          z: this.room.heightMap.getTileHeight(this.room.heightMap.door),
+        },
+        floorThickness: this.room.configuration.floorThickness,
+        thickness: this.room.configuration.wallThickness,
+      });
+      this.layers.parts.door.room = this.room;
+      this.layers.parts.door.render();
+    }
   }
 
   private _registerFloorPart(part: TilePart | StairPart): void {
@@ -72,6 +89,8 @@ export class RoomVisualization {
     benchmark('room-visualization');
 
     this._registerCursor();
+    this._registerDoor();
+
     const greedyMesher: GreedyMesher = new GreedyMesher(this.room.heightMap);
 
     if (!this.room.configuration.floorHidden)
@@ -113,36 +132,19 @@ export class RoomVisualization {
             height: this.room.configuration.wallHeight,
             direction: wall.direction,
             corner: wall.corner,
-            door: wall.door,
           }),
         );
-        /*this.add(
+        this.add(
           new LandscapePart({
+            material: this.room.configuration.landscapeMaterial,
             position: wall.position,
             length: wall.length,
             floorThickness: this.room.configuration.floorThickness,
             height: this.room.configuration.wallHeight,
             direction: wall.direction,
-            door: wall.door,
           }),
-        );*/
+        );
       });
-
-    benchmark('ls');
-    greedyMesher.walls.forEach((wall: WallMesh): void => {
-      this.add(
-        new LandscapePart({
-          material: this.room.configuration.landscapeMaterial,
-          position: wall.position,
-          length: wall.length,
-          floorThickness: this.room.configuration.floorThickness,
-          height: this.room.configuration.wallHeight,
-          direction: wall.direction,
-          door: wall.door,
-        }),
-      );
-    });
-    perf('Landscape', 'ls');
 
     perf('Room Visualization', 'room-visualization');
 

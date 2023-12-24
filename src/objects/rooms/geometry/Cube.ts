@@ -9,8 +9,8 @@ interface Configuration {
   size: Vector3D;
   offsets?: Record<number, Vector2D>;
   zOrders?: Record<number, number>;
+  shadows?: Record<number, number>;
   layer?: Layer;
-  shadows?: boolean;
 }
 
 export class Cube extends Container {
@@ -24,15 +24,12 @@ export class Cube extends Container {
   private _initialize(): void {
     const texture: Texture = this.configuration.texture ?? Texture.WHITE;
     const color: number = this.configuration.color ?? 0xffffff;
-    let shadows: boolean = true;
-
-    if (this.configuration.shadows === false) shadows = false;
 
     if (this.configuration.size.x > 0 && this.configuration.size.y > 0)
       this.faces[CubeFace.TOP] = new Graphics()
         .beginTextureFill({
           texture: texture,
-          color: new Color(color).premultiply(1).toNumber(),
+          color: new Color(color).premultiply(this.configuration.shadows?.[CubeFace.TOP] ?? 1).toNumber(),
           matrix: new Matrix(
             1,
             0.5,
@@ -57,7 +54,7 @@ export class Cube extends Container {
       this.faces[CubeFace.LEFT] = new Graphics()
         .beginTextureFill({
           texture: texture,
-          color: new Color(color).premultiply(shadows ? 0.8 : 1).toNumber(),
+          color: new Color(color).premultiply(this.configuration.shadows?.[CubeFace.LEFT] ?? 0.8).toNumber(),
           matrix: new Matrix(
             1,
             0.5,
@@ -76,7 +73,7 @@ export class Cube extends Container {
       this.faces[CubeFace.RIGHT] = new Graphics()
         .beginTextureFill({
           texture: texture,
-          color: new Color(color).premultiply(shadows ? 0.71 : 1).toNumber(),
+          color: new Color(color).premultiply(this.configuration.shadows?.[CubeFace.RIGHT] ?? 0.71).toNumber(),
           matrix: new Matrix(
             1,
             -0.5,

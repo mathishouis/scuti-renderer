@@ -15,7 +15,6 @@ interface Configuration {
   floorThickness: number;
   height: number;
   direction: Direction;
-  door?: number;
 }
 
 export class LandscapePart extends RoomPart {
@@ -44,7 +43,6 @@ export class LandscapePart extends RoomPart {
         [CubeFace.LEFT]: -4 - 0.5,
         [CubeFace.RIGHT]: -4 - 0.6,
       },
-      shadows: false,
     });
 
     return this._mask;
@@ -61,14 +59,10 @@ export class LandscapePart extends RoomPart {
       z: floorThickness / 32 - position.z + (height === -1 ? this.room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height),
     };
 
+    material.layers.forEach((layer: any) => new layer.layer({ ...layer.params, ...{ part: this } }).render());
+
     this.container.addChild(this.mask);
-
-    material.layers.forEach((layer: any) => {
-      new layer.layer({ ...layer.params, ...{ part: this } }).render();
-    });
-
     this.container.mask = this.mask;
-
     this.container.x = baseX;
     this.container.y = baseY - 32 * position.z - size.z * 32 + floorThickness;
 

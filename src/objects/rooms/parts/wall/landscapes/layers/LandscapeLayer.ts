@@ -4,6 +4,7 @@ import { LandscapePart } from '../LandscapePart';
 import { Cube } from '../../../../geometry/Cube';
 import { CubeFace } from '../../../../../../enums/CubeFace';
 import { Direction } from '../../../../../../enums/Direction';
+import { DoorMaskFilter } from '../../../../../filters/DoorMaskFilter.ts';
 
 export abstract class LandscapeLayer {
   public container: Container = new Container();
@@ -30,17 +31,29 @@ export abstract class LandscapeLayer {
   }
 
   public render(): void {
+    const { visualization, renderer } = this.part.room;
+    const { door } = visualization.layers.parts;
     const cube: Cube = new Cube({
-      layer: this.part.room.renderer.layer,
+      layer: renderer.layer,
       size: this.size,
       zOrders: {
         [CubeFace.TOP]: -4,
         [CubeFace.LEFT]: -4 - 0.5,
         [CubeFace.RIGHT]: -4 - 0.6,
       },
+      shadows: {
+        [CubeFace.TOP]: 1,
+        [CubeFace.LEFT]: 1,
+        [CubeFace.RIGHT]: 0.8,
+      },
       color: this.color,
       texture: this.texture,
     });
+
+    if (door && cube.faces[CubeFace.RIGHT]) {
+      const filter: DoorMaskFilter = new DoorMaskFilter(door.sprite);
+      cube.faces[CubeFace.RIGHT].filters = [filter];
+    }
 
     const { x, y } = this.position;
     cube.x = x;

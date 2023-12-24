@@ -31,7 +31,7 @@ export class GreedyMesher {
         if (
           this.heightMap.isTile({ x, y }) &&
           this.heightMap.getTileHeight({ x, y }) === this.heightMap.getTileHeight({ x, y: y - 1 }) &&
-          !this.heightMap.isDoor({ x, y: y - 1 })
+          !(this.heightMap.door?.x === x && this.heightMap.door?.y === y - 1)
         ) {
           if (sizes[y][x] && sizes[y - 1][x]) sizes[y][x]!.y += sizes[y - 1][x]!.y;
           if (this.heightMap.getStair({ x, y }) === undefined) sizes[y - 1][x] = undefined;
@@ -44,7 +44,7 @@ export class GreedyMesher {
         if (
           !this.heightMap.isTile({ x: x - 1, y }) ||
           this.heightMap.getTileHeight({ x: x - 1, y }) !== this.heightMap.getTileHeight({ x: x, y }) ||
-          this.heightMap.isDoor({ x: x - 1, y })
+          (this.heightMap.door?.x === x - 1 && this.heightMap.door?.y === y)
         )
           continue;
         if (sizes[y][x] && sizes[y][x - 1] && sizes[y][x]!.y === sizes[y][x - 1]!.y) {
@@ -57,10 +57,7 @@ export class GreedyMesher {
     for (const y in sizes) {
       for (const x in sizes[y]) {
         if (sizes[y][x]) {
-          const door: boolean = this.heightMap.isDoor({
-            x: Number(x),
-            y: Number(y),
-          });
+          const door: boolean = this.heightMap.door?.x === Number(x) && this.heightMap.door?.y === Number(y);
 
           tiles.push({
             position: {
@@ -125,16 +122,8 @@ export class GreedyMesher {
           y,
         });
         if (stair && this.heightMap.getTileHeight({ x, y }) === this.heightMap.getTileHeight({ x: x - 1, y: y })) {
-          if (
-            stair.direction === Direction.NORTH ||
-            stair.direction === Direction.SOUTH ||
-            stair.type !== StairType.STAIR
-          ) {
-            if (
-              rowStairSizes[y][x] &&
-              rowStairSizes[y][x - 1] &&
-              rowStairSizes[y][x]!.y === rowStairSizes[y][x - 1]!.y
-            ) {
+          if (stair.direction === Direction.NORTH || stair.direction === Direction.SOUTH || stair.type !== StairType.STAIR) {
+            if (rowStairSizes[y][x] && rowStairSizes[y][x - 1] && rowStairSizes[y][x]!.y === rowStairSizes[y][x - 1]!.y) {
               rowStairSizes[y][x]!.x += rowStairSizes[y][x - 1]!.x;
               rowStairSizes[y][x - 1] = undefined;
             } else if (!rowStairSizes[y][x - 1]) {
@@ -152,16 +141,8 @@ export class GreedyMesher {
           y: y - 1,
         });
         if (stair && this.heightMap.getTileHeight({ x, y }) === this.heightMap.getTileHeight({ x: x, y: y - 1 })) {
-          if (
-            stair.direction === Direction.WEST ||
-            stair.direction === Direction.EAST ||
-            stair.type !== StairType.STAIR
-          ) {
-            if (
-              columnStairSizes[y][x] &&
-              columnStairSizes[y - 1][x] &&
-              columnStairSizes[y][x]!.x === columnStairSizes[y - 1][x]!.x
-            ) {
+          if (stair.direction === Direction.WEST || stair.direction === Direction.EAST || stair.type !== StairType.STAIR) {
+            if (columnStairSizes[y][x] && columnStairSizes[y - 1][x] && columnStairSizes[y][x]!.x === columnStairSizes[y - 1][x]!.x) {
               columnStairSizes[y][x]!.y += columnStairSizes[y - 1][x]!.y;
               columnStairSizes[y - 1][x] = undefined;
             } else if (!columnStairSizes[y - 1][x]) {
@@ -342,11 +323,7 @@ export class GreedyMesher {
         });
         if (wall !== undefined) {
           if (wall === WallType.LEFT_WALL || wall === WallType.CORNER_WALL) {
-            if (
-              columnWallSizes[y][x] &&
-              columnWallSizes[y - 1][x] &&
-              columnWallSizes[y][x]!.x === columnWallSizes[y - 1][x]!.x
-            ) {
+            if (columnWallSizes[y][x] && columnWallSizes[y - 1][x] && columnWallSizes[y][x]!.x === columnWallSizes[y - 1][x]!.x) {
               columnWallSizes[y][x]!.y += columnWallSizes[y - 1][x]!.y;
               columnWallSizes[y - 1][x] = undefined;
             }
@@ -387,23 +364,12 @@ export class GreedyMesher {
 
         if (columnWallSizes[y][x] && wall !== undefined) {
           const length: number = Number(columnWallSizes[y][x]!.y);
-          let door: number | undefined = undefined;
 
           const corner: boolean =
             this.heightMap.getWall({
               x: Number(x) - columnWallSizes[y][x]!.x + 1,
               y: Number(y) - columnWallSizes[y][x]!.y + 1,
             }) === WallType.CORNER_WALL;
-
-          for (let i: number = Number(y) - length; i < Number(y) + 1; i++) {
-            if (
-              this.heightMap.isDoor({
-                x: Number(x) - columnWallSizes[y][x]!.x,
-                y: i,
-              })
-            )
-              door = i - (Number(y) - length) - 1;
-          }
 
           walls.push({
             position: {
@@ -414,7 +380,6 @@ export class GreedyMesher {
             length: length,
             direction: Direction.WEST,
             corner: corner,
-            door: door,
           });
         }
       }

@@ -1,6 +1,6 @@
 import { RoomPart } from '../RoomPart';
 import { Room } from '../../Room';
-import { Container, Sprite } from 'pixi.js';
+import { Container } from 'pixi.js';
 import { Cube } from '../../geometry/Cube';
 import { EventManager } from '../../../events/EventManager';
 import { Vector3D } from '../../../../types/Vector';
@@ -8,7 +8,6 @@ import { CubeFace } from '../../../../enums/CubeFace';
 import { WallMaterial } from '../../materials/WallMaterial';
 import { Direction } from '../../../../enums/Direction';
 import { DoorMaskFilter } from '../../../filters/DoorMaskFilter';
-import { asset } from '../../../../utils/Assets';
 
 interface Configuration {
   material?: WallMaterial;
@@ -19,7 +18,6 @@ interface Configuration {
   height: number;
   direction: Direction;
   corner: boolean;
-  door?: number;
 }
 
 export class WallPart extends RoomPart {
@@ -67,27 +65,9 @@ export class WallPart extends RoomPart {
     });
     this.container.addChild(cube);
 
-    if (this.configuration.door !== undefined) {
-      const doorHeight: number = this.room.heightMap.getTileHeight({
-        x: this.configuration.position.x - 1,
-        y: this.configuration.position.y + this.configuration.door,
-      });
-      const door: Sprite = new Sprite(asset('room/door'));
-      door.skew.set(0, -0.46);
-      door.x = this.configuration.thickness + (this.configuration.length - this.configuration.door - 1) * 32 + 1;
-      door.y =
-        3 -
-        this.configuration.floorThickness -
-        door.height +
-        size.z * 32 -
-        (this.configuration.length - this.configuration.door - 1) * 16 +
-        this.configuration.thickness / 2 -
-        doorHeight * 32;
-
-      const filter: DoorMaskFilter = new DoorMaskFilter(door);
+    if (this.room.visualization.layers.parts.door) {
+      const filter: DoorMaskFilter = new DoorMaskFilter(this.room.visualization.layers.parts.door.sprite);
       cube.faces[CubeFace.RIGHT].filters = [filter];
-
-      this.container.addChild(door);
     }
 
     if (this.configuration.direction === Direction.WEST) {

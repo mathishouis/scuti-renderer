@@ -4,6 +4,7 @@ import { LandscapeSpritesheet } from '../../entities/Landscape';
 import { asset } from '../../../../../../../utils/Assets';
 import { random } from '../../../../../../../utils/Random';
 import { Direction } from '../../../../../../../enums/Direction';
+import { DoorMaskFilter } from '../../../../../../filters/DoorMaskFilter.ts';
 
 interface Configuration {
   layer: LandscapeAnimatedLayer;
@@ -33,11 +34,17 @@ export class LandscapeAnimatedLayerItem {
   }
 
   public render(): void {
+    const { door } = this.layer.part.room.visualization.layers.parts;
     const spritesheet: LandscapeSpritesheet = asset('room/materials');
 
     this.sprite = new Sprite(spritesheet.textures[this.texture]);
     this.sprite.skew.x = 0;
     this.sprite.skew.y = (this.layer.part.configuration.direction === Direction.WEST ? -1 : 1) * 0.466;
+
+    if (door) {
+      const filter: DoorMaskFilter = new DoorMaskFilter(door.sprite);
+      this.sprite.filters = [filter];
+    }
 
     this.layer.part.container.addChild(this.sprite);
   }
