@@ -21,7 +21,11 @@ interface Configuration {
   landscapeMaterial?: LandscapeMaterial;
   dragging?: boolean;
   centerCamera?: boolean;
-  zoom?: boolean;
+  zoomLevel?: number;
+  scrollZoom?: boolean;
+  zoomDuration?: number;
+  minZoom?: number;
+  maxZoom?: number;
 }
 
 export class Room extends GameObject {

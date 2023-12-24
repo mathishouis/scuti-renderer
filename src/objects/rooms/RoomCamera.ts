@@ -5,12 +5,9 @@ import { gsap } from 'gsap';
 export class RoomCamera extends Container {
   public dragging: boolean = false;
   public hasDragged: boolean = false;
-  public zoom: number = 1;
 
   private _lastClickTime: number = 0;
   private _clickThreshold: number = 75;
-  private _minZoom: number = 0.5;
-  private _maxZoom: number = 3;
 
   constructor(public room: Room) {
     super();
@@ -21,7 +18,7 @@ export class RoomCamera extends Container {
   }
 
   private _initializeListeners(): void {
-    if (this.room.configuration.zoom) {
+    if (this.room.configuration.scrollZoom) {
       this.room.renderer.canvas.addEventListener('wheel', this._onZoom, { passive: true });
     }
 
@@ -35,10 +32,11 @@ export class RoomCamera extends Container {
   }
 
   private _onZoom = ({ deltaY }: WheelEvent): void => {
-    this.zoom += deltaY > 0 ? -0.5 : 0.5;
-    this.zoom = Math.max(this._minZoom, Math.min(this._maxZoom, this.zoom));
-
-    this.update(this.zoom, 0.5);
+    this.room.configuration.zoomLevel += deltaY > 0 ? -0.5 : 0.5;
+    this.room.configuration.zoomLevel = Math.max(
+      this.room.configuration.minZoom,
+      Math.min(this.room.configuration.maxZoom, this.room.configuration.zoomLevel),
+    );
   };
 
   private _dragStart = (): void => {
@@ -86,7 +84,7 @@ export class RoomCamera extends Container {
     });
   }
 
-  public update(zoom: number, duration: number = 0.8) {
+  public zoom(zoom: number, duration: number = 0.8) {
     gsap.to(this.scale, {
       x: zoom,
       y: zoom,
