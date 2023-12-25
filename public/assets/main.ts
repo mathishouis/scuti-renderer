@@ -5,6 +5,7 @@ import { FloorMaterial } from '../../src/objects/rooms/materials/FloorMaterial';
 import { WallMaterial } from '../../src/objects/rooms/materials/WallMaterial';
 import { TileEvent } from '../../src/entities/Events';
 import { LandscapeMaterial } from '../../src';
+import { FloorFurniture } from '../../src/objects/rooms/objects/furnitures/FloorFurniture';
 
 const renderer: Scuti = new Scuti({
   canvas: document.getElementById('app') as HTMLElement,
@@ -152,6 +153,19 @@ const room: Room = new Room({
 });
 
 renderer.add(room);
+
+room.add(
+  new FloorFurniture({
+    id: 3886,
+    position: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    direction: 0,
+    state: 0,
+  }),
+);
 
 let zoom = 1;
 const [min_zoom, max_zoom] = [0.5, 5];

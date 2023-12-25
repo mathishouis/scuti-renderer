@@ -8,6 +8,7 @@ import { RoomEvents } from './RoomEvents';
 import { FloorMaterial } from './materials/FloorMaterial';
 import { WallMaterial } from './materials/WallMaterial';
 import { LandscapeMaterial } from './materials/LandscapeMaterial';
+import { RoomObject } from './objects/RoomObject';
 
 interface Configuration {
   heightMap: string;
@@ -54,5 +55,10 @@ export class Room extends GameObject {
   public update(): void {
     this.heightMap = new RoomHeightmap(this.configuration.heightMap);
     this.visualization.update();
+  }
+
+  public add(object: RoomObject): void {
+    object.room = this;
+    object.render();
   }
 }
