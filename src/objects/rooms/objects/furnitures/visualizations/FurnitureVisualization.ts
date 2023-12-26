@@ -64,8 +64,6 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     const alpha = layerLetter === 'sd' ? 0.2 : layer?.alpha / 255 ?? 0;
     const tag = layer?.tag;
 
-    if (layerLetter === 'sd') console.log(name);
-
     const furnitureLayer = new FurnitureLayer({
       furniture: this.furniture,
       id: id,
