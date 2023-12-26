@@ -23,7 +23,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     const key = `furnitures/${this.furniture.data.name}`;
     const spritesheet = asset(key);
 
-    for (let i = 0; i < spritesheet.data.properties.layerCount; i++) this.layer(i);
+    for (let i = 0; i < spritesheet.data.properties.layerCount + 1; i++) this.layer(i);
   }
 
   public layer(id: number): void {
@@ -54,17 +54,17 @@ export class FurnitureVisualization extends RoomObjectVisualization {
       if (colorLayer && colorLayer.color) tint = Number(`0x${colorLayer.color}`);
     }
 
-    const layerLetter = String.fromCharCode(97 + Number(id));
+    const layerLetter = properties.layerCount === id ? 'sd' : String.fromCharCode(97 + Number(id));
     const name = `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${frame}`;
     const flipped = frames[name] ? frames[name].flipped ?? false : false;
     const layer = layers.find((layer: any) => layer.id === id);
     const z = layer?.z ?? 0;
     const blend = layer?.ink ? BLEND_MODES[layer.ink] : undefined;
     const interactive = layer?.interactive ?? true;
-    const alpha = layer?.alpha / 255 ?? 0;
+    const alpha = layerLetter === 'sd' ? 0.2 : layer?.alpha / 255 ?? 0;
     const tag = layer?.tag;
 
-    //console.log(name, flipped, frame);
+    if (layerLetter === 'sd') console.log(name);
 
     const furnitureLayer = new FurnitureLayer({
       furniture: this.furniture,

@@ -144,7 +144,7 @@ const room: Room = new Room({
   heightMap: heightMap,
   dragging: true,
   centerCamera: true,
-  floorMaterial: new FloorMaterial(101),
+  floorMaterial: new FloorMaterial(102),
   floorThickness: 8,
   wallMaterial: new WallMaterial(108),
   wallThickness: 8,

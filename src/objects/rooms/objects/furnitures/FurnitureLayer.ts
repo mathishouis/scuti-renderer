@@ -44,7 +44,7 @@ export class FurnitureLayer {
   public render(): void {
     const key = `furnitures/${this.furniture.data.name}`;
     const spritesheet = asset(key);
-    const layerLetter = String.fromCharCode(97 + Number(this.id));
+    const layerLetter = spritesheet.data.properties.layerCount === this.id ? 'sd' : String.fromCharCode(97 + Number(this.id));
     const name = `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${this.frame}`;
 
     this.sprite = new Sprite(spritesheet.textures[name]);

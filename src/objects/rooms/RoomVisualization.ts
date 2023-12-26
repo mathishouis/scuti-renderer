@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js';
+import { Container, Ticker } from 'pixi.js';
 import { Room } from './Room';
 import { TilePart } from './parts/floor/TilePart';
 import { PartLayer } from './layers/PartLayer';
@@ -21,10 +21,12 @@ type RoomLayers = {
 export class RoomVisualization {
   public container: Container = new Container();
   public layers: RoomLayers = {} as RoomLayers;
+  public furnituresTicker!: Ticker;
 
   constructor(public room: Room) {
     this._initializeMaterials();
     this._initializeLayers();
+    this._initializeTickers();
   }
 
   private _initializeMaterials(): void {
@@ -34,6 +36,12 @@ export class RoomVisualization {
 
   private _initializeLayers(): void {
     this.layers.parts = new PartLayer(this.room);
+  }
+
+  private _initializeTickers(): void {
+    this.furnituresTicker = new Ticker();
+    this.furnituresTicker.maxFPS = 12;
+    this.furnituresTicker.start();
   }
 
   private _registerCursor(): void {
