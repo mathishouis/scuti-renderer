@@ -46,7 +46,6 @@ export class FurnitureLayer {
     const spritesheet = asset(key);
     const layerLetter = String.fromCharCode(97 + Number(this.id));
     const name = `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${this.frame}`;
-    console.log(name);
 
     this.sprite = new Sprite(spritesheet.textures[name]);
     this.sprite.parentLayer = this.furniture.room.renderer.layer;

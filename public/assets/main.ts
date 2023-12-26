@@ -162,7 +162,33 @@ room.add(
       y: 10,
       z: 0,
     },
-    direction: 0,
+    direction: 2,
+    state: 1,
+  }),
+);
+
+room.add(
+  new FloorFurniture({
+    id: 62,
+    position: {
+      x: 8,
+      y: 10,
+      z: 0,
+    },
+    direction: 4,
+    state: 1,
+  }),
+);
+
+room.add(
+  new FloorFurniture({
+    id: 1619,
+    position: {
+      x: 11,
+      y: 10,
+      z: 0,
+    },
+    direction: 4,
     state: 1,
   }),
 );

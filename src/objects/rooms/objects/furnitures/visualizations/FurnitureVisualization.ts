@@ -13,25 +13,27 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     const key = `furnitures/${this.furniture.data.name}`;
     const spritesheet = asset(key);
     const { frames, properties } = spritesheet.data;
-    const { directions, layers, animations } = properties;
+    const { directions, layers, animations, layerCount } = properties;
 
-    for (let i = 0; i < layers.length; i++) {
-      const layerLetter = String.fromCharCode(97 + Number(i));
-      const name = `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${this.furniture.state}`;
-      const flipped = frames[name] ? frames[name].flipped ?? false : false;
+    for (let i = 0; i < layerCount; i++) {
+      if (!directions.includes(this.furniture.direction)) this.furniture.direction = this.furniture.data.direction ?? directions[0];
+
       const animation = animations.find((animation: any) => animation.state === this.furniture.state);
+
       if (animation) {
         const animationLayer = animation.layers.find((layer: any) => layer.id === i);
         if (animationLayer && animationLayer.frames) this.frames.set(i, animationLayer.frames[0]);
       }
-      const layer = layers.find((layer: any) => layer.id === i);
-      const z = layer.z ?? 0;
-      const blend = layer.ink ? BLEND_MODES[layer.ink] : undefined;
-      const interactive = layer.interactive ?? true;
-      const alpha = layer.alpha / 255 ?? 0;
-      const tag = layer.tag;
 
-      if (!directions.includes(this.furniture.direction)) this.furniture.direction = this.furniture.data.direction ?? directions[0];
+      const layerLetter = String.fromCharCode(97 + Number(i));
+      const name = `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${this.frames.get(i) ?? 0}`;
+      const flipped = frames[name] ? frames[name].flipped ?? false : false;
+      const layer = layers.find((layer: any) => layer.id === i);
+      const z = layer?.z ?? 0;
+      const blend = layer?.ink ? BLEND_MODES[layer.ink] : undefined;
+      const interactive = layer?.interactive ?? true;
+      const alpha = layer?.alpha / 255 ?? 0;
+      const tag = layer?.tag;
 
       const furnitureLayer = new FurnitureLayer({
         furniture: this.furniture,
