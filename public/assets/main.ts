@@ -153,20 +153,17 @@ const room: Room = new Room({
 });
 
 renderer.add(room);
-
-room.add(
-  new FloorFurniture({
-    id: 3886,
-    position: {
-      x: 4,
-      y: 10,
-      z: 0,
-    },
-    direction: 2,
-    state: 1,
-  }),
-);
-
+const tv = new FloorFurniture({
+  id: 3886,
+  position: {
+    x: 4,
+    y: 10,
+    z: 0,
+  },
+  direction: 2,
+  state: 1,
+});
+room.add(tv);
 room.add(
   new FloorFurniture({
     id: 62,
@@ -184,12 +181,83 @@ room.add(
   new FloorFurniture({
     id: 1619,
     position: {
-      x: 11,
-      y: 10,
+      x: 5,
+      y: 16,
       z: 0,
     },
     direction: 4,
     state: 1,
+  }),
+);
+room.add(
+  new FloorFurniture({
+    id: 1620,
+    position: {
+      x: 6,
+      y: 16,
+      z: 0,
+    },
+    direction: 4,
+    state: 1,
+  }),
+);
+const dragon = new FloorFurniture({
+  id: 1621,
+  position: {
+    x: 7,
+    y: 16,
+    z: 0,
+  },
+  direction: 4,
+  state: 1,
+});
+room.add(dragon);
+room.add(
+  new FloorFurniture({
+    id: 1622,
+    position: {
+      x: 8,
+      y: 16,
+      z: 0,
+    },
+    direction: 4,
+    state: 1,
+  }),
+);
+room.add(
+  new FloorFurniture({
+    id: 14863,
+    position: {
+      x: 9,
+      y: 16,
+      z: 0,
+    },
+    direction: 2,
+    state: 0,
+  }),
+);
+room.add(
+  new FloorFurniture({
+    id: 14281,
+    position: {
+      x: 6,
+      y: 23,
+      z: 0,
+    },
+    direction: 2,
+    state: 0,
+  }),
+);
+room.add(
+  new FloorFurniture({
+    id: 3029,
+    position: {
+      x: 11,
+      y: 14,
+      z: 0,
+    },
+    direction: 4,
+    state: 2,
   }),
 );
 

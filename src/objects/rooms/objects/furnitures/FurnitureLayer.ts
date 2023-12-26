@@ -58,4 +58,8 @@ export class FurnitureLayer {
 
     this.furniture.visualization.container.addChild(this.sprite);
   }
+
+  public destroy(): void {
+    this.sprite.destroy();
+  }
 }
