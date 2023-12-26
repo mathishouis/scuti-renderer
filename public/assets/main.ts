@@ -158,8 +158,8 @@ room.add(
   new FloorFurniture({
     id: 3886,
     position: {
-      x: 0,
-      y: 0,
+      x: 4,
+      y: 10,
       z: 0,
     },
     direction: 0,

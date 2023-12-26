@@ -73,9 +73,8 @@ export class Scuti {
     benchmark('resources');
 
     await Promise.all([
-      register('room/materials', '/room/materials.bundle'),
-      register('room/cursor', '/room/cursor/cursor.json'),
-      register('room/door', '/room/door/door.png'),
+      register('room/materials', '/bundles/room/materials.bundle'),
+      register('room/content', '/bundles/room/content.bundle'),
       register('data/furnitures', '/data/furnitures.data'),
     ]);
 

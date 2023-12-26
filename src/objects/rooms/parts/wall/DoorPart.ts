@@ -22,7 +22,7 @@ export class DoorPart extends RoomPart {
   }
 
   public render(): void {
-    this.sprite = new Sprite(asset('room/door'));
+    this.sprite = new Sprite(asset('room/content').textures['door']);
     this.sprite.skew.set(0, -0.46);
     this.sprite.parentLayer = this.room.renderer.layer;
     this.sprite.zOrder = 1000000;
