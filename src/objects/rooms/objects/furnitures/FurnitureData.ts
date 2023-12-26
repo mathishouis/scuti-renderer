@@ -5,7 +5,7 @@ interface Configuration {
   furniture: RoomFurniture;
 }
 
-export class RoomFurnitureData {
+export class FurnitureData {
   public furniture: RoomFurniture;
   public name!: string;
   public offerId?: number;

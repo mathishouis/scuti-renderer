@@ -8,7 +8,7 @@ interface Configuration {
   position: Vector3D;
 }
 
-export class RoomFurniturePlaceholder {
+export class FurniturePlaceholder {
   public furniture: RoomFurniture;
   public sprite!: Sprite;
   public position: Vector3D;
