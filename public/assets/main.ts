@@ -163,7 +163,7 @@ room.add(
       z: 0,
     },
     direction: 0,
-    state: 0,
+    state: 1,
   }),
 );
 

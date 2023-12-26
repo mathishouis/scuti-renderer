@@ -5,6 +5,7 @@ import { asset } from '../../../../utils/Assets.ts';
 interface Configuration {
   furniture: RoomFurniture;
   id: number;
+  frame: number;
   alpha: number;
   tint: number;
   z: number;
@@ -17,6 +18,7 @@ interface Configuration {
 export class FurnitureLayer {
   public furniture: RoomFurniture;
   public id: number;
+  public frame: number;
   public alpha: number;
   public tint: number;
   public z: number;
@@ -26,9 +28,10 @@ export class FurnitureLayer {
   public tag: string;
   public sprite!: Sprite;
 
-  constructor({ furniture, id, alpha, tint, z, blend, flip, interactive, tag }: Configuration) {
+  constructor({ furniture, id, frame, alpha, tint, z, blend, flip, interactive, tag }: Configuration) {
     this.furniture = furniture;
     this.id = id;
+    this.frame = frame;
     this.alpha = alpha;
     this.tint = tint;
     this.z = z;
@@ -41,10 +44,19 @@ export class FurnitureLayer {
   public render(): void {
     const key = `furnitures/${this.furniture.data.name}`;
     const spritesheet = asset(key);
-    const layer = String.fromCharCode(97 + Number(this.id));
-    const name = `${this.furniture.data.name}_64_${layer}_${this.furniture.direction}_${this.furniture.state}`;
+    const layerLetter = String.fromCharCode(97 + Number(this.id));
+    const name = `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${this.frame}`;
+    console.log(name);
 
     this.sprite = new Sprite(spritesheet.textures[name]);
+    this.sprite.parentLayer = this.furniture.room.renderer.layer;
+
+    if (this.flip) this.sprite.scale.x = -1;
+    if (this.z) this.sprite.zOrder = this.z;
+    if (this.alpha) this.sprite.alpha = this.alpha;
+    if (this.tint) this.sprite.tint = this.tint;
+    if (this.blend) this.sprite.blendMode = this.blend;
+
     this.furniture.visualization.container.addChild(this.sprite);
   }
 }

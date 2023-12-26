@@ -7,29 +7,47 @@ import { RoomFurniture } from '../RoomFurniture.ts';
 export class FurnitureVisualization extends RoomObjectVisualization {
   public furniture!: RoomFurniture;
   public layers: Map<number, FurnitureLayer> = new Map();
+  public frames: Map<number, number> = new Map();
 
   public render(): void {
     const key = `furnitures/${this.furniture.data.name}`;
     const spritesheet = asset(key);
+    const { frames, properties } = spritesheet.data;
+    const { directions, layers, animations } = properties;
 
-    for (let i = 0; i < spritesheet.data.properties.layers.length; i++) {
-      if (!spritesheet.data.properties.directions.includes(this.furniture.direction))
-        this.furniture.direction = this.furniture.data.direction ?? spritesheet.data.properties.directions[0];
+    for (let i = 0; i < layers.length; i++) {
+      const layerLetter = String.fromCharCode(97 + Number(i));
+      const name = `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${this.furniture.state}`;
+      const flipped = frames[name] ? frames[name].flipped ?? false : false;
+      const animation = animations.find((animation: any) => animation.state === this.furniture.state);
+      if (animation) {
+        const animationLayer = animation.layers.find((layer: any) => layer.id === i);
+        if (animationLayer && animationLayer.frames) this.frames.set(i, animationLayer.frames[0]);
+      }
+      const layer = layers.find((layer: any) => layer.id === i);
+      const z = layer.z ?? 0;
+      const blend = layer.ink ? BLEND_MODES[layer.ink] : undefined;
+      const interactive = layer.interactive ?? true;
+      const alpha = layer.alpha / 255 ?? 0;
+      const tag = layer.tag;
 
-      const layer = new FurnitureLayer({
+      if (!directions.includes(this.furniture.direction)) this.furniture.direction = this.furniture.data.direction ?? directions[0];
+
+      const furnitureLayer = new FurnitureLayer({
         furniture: this.furniture,
         id: i,
-        alpha: 0,
+        frame: this.frames.get(i) ?? 0,
+        alpha: alpha,
         tint: 0xffffff,
-        z: 1,
-        blend: BLEND_MODES.NONE,
-        flip: false,
-        interactive: false,
-        tag: 'tag',
+        z: z,
+        blend: blend as any,
+        flip: flipped,
+        interactive: interactive,
+        tag: tag,
       });
-      layer.render();
+      furnitureLayer.render();
 
-      this.layers.set(i, layer);
+      this.layers.set(i, furnitureLayer);
     }
   }
 
