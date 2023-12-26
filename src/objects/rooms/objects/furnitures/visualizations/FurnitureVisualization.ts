@@ -1,8 +1,8 @@
 import { RoomObjectVisualization } from '../../RoomObjectVisualization';
-import { asset } from '../../../../../utils/Assets.ts';
-import { FurnitureLayer } from '../FurnitureLayer.ts';
+import { asset } from '../../../../../utils/Assets';
+import { FurnitureLayer } from '../FurnitureLayer';
 import { BLEND_MODES } from '@pixi/constants';
-import { RoomFurniture } from '../RoomFurniture.ts';
+import { RoomFurniture } from '../RoomFurniture';
 
 export class FurnitureVisualization extends RoomObjectVisualization {
   public furniture!: RoomFurniture;

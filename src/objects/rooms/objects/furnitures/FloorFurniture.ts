@@ -2,11 +2,11 @@ import { RoomFurniture } from './RoomFurniture';
 import { Vector3D } from '../../../../types/Vector';
 import { FurnitureVisualization } from './visualizations/FurnitureVisualization';
 import { Direction } from '../../../../enums/Direction';
-import { FurnitureData } from './FurnitureData.ts';
+import { FurnitureData } from './FurnitureData';
 import { Room } from '../../Room';
-import { asset, register } from '../../../../utils/Assets.ts';
-import { FurniturePlaceholder } from './FurniturePlaceholder.ts';
-import { FurnitureStaticVisualization } from './visualizations/FurnitureStaticVisualization.ts';
+import { asset, register } from '../../../../utils/Assets';
+import { FurniturePlaceholder } from './FurniturePlaceholder';
+import { FurnitureStaticVisualization } from './visualizations/FurnitureStaticVisualization';
 
 interface Configuration {
   id: number;

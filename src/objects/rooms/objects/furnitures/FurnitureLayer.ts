@@ -1,6 +1,6 @@
 import { BLEND_MODES, Sprite } from 'pixi.js';
-import { RoomFurniture } from './RoomFurniture.ts';
-import { asset } from '../../../../utils/Assets.ts';
+import { RoomFurniture } from './RoomFurniture';
+import { asset } from '../../../../utils/Assets';
 
 interface Configuration {
   furniture: RoomFurniture;
