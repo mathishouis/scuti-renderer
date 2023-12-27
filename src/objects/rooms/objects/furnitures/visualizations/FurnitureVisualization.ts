@@ -27,7 +27,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     for (let i = 0; i < spritesheet.data.properties.layerCount + 1; i++) this.layer(i);
   }
 
-  protected layer(id: number): void {
+  public layer(id: number): void {
     const spritesheet = asset(this.getAssetName());
     const { frames, properties } = spritesheet.data;
     const { directions, layers } = properties;
@@ -59,7 +59,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     this.layers.set(id, furnitureLayer);
   }
 
-  protected next(): void {
+  public next(): void {
     const spritesheet = asset(this.getAssetName());
     const { animations, layerCount } = spritesheet.data.properties;
 
@@ -87,8 +87,8 @@ export class FurnitureVisualization extends RoomObjectVisualization {
       }
     }
   }
-  protected update(): void {}
-  protected destroy(): void {}
+  public update(): void {}
+  public destroy(): void {}
 
   public reset(): void {
     this.layers.forEach((layer: FurnitureLayer) => layer.destroy());
@@ -97,7 +97,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     this.render();
   }
 
-  protected getLayerColor(id: number): number {
+  public getLayerColor(id: number): number {
     const spritesheet = asset(this.getAssetName());
     const { colors } = spritesheet.data.properties;
     const color = colors.find((color: any) => color.id === this.furniture.data.colorId);
@@ -110,7 +110,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     return 0xffffff;
   }
 
-  protected getLayerTag(id: number): string {
+  public getLayerTag(id: number): string {
     const spritesheet = asset(this.getAssetName());
     const { layers } = spritesheet.data.properties;
     const layer = layers.find((layer: any) => layer.id === id);
@@ -120,7 +120,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     return '';
   }
 
-  protected getLayerFrame(id: number): number {
+  public getLayerFrame(id: number): number {
     const spritesheet = asset(this.getAssetName());
     const { animations } = spritesheet.data.properties;
     const animation = animations.find((animation: any) => animation.state === this.furniture.state);
@@ -136,7 +136,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     return 0;
   }
 
-  protected getLayerName(id: number): string {
+  public getLayerName(id: number): string {
     const spritesheet = asset(this.getAssetName());
     const { layerCount } = spritesheet.data.properties;
 
@@ -144,13 +144,13 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     return `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${this.getLayerFrame(id)}`;
   }
 
-  protected getLayerTexture(id: number): Texture {
+  public getLayerTexture(id: number): Texture {
     const spritesheet = asset(this.getAssetName());
 
     return spritesheet.textures[this.getLayerName(id)];
   }
 
-  protected getAssetName(): string {
+  public getAssetName(): string {
     return `furnitures/${this.furniture.data.name}`;
   }
 }

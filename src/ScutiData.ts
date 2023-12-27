@@ -1,8 +1,9 @@
 import { asset } from './utils/Assets';
-import { FurnitureStaticVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureStaticVisualization.ts';
-import { FurnitureGuildCustomizedVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureGuildCustomizedVisualization.ts';
-import { FurnitureAnimatedVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureAnimatedVisualization.ts';
-import { FurnitureVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureVisualization.ts';
+import { FurnitureStaticVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureStaticVisualization';
+import { FurnitureGuildCustomizedVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureGuildCustomizedVisualization';
+import { FurnitureAnimatedVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureAnimatedVisualization';
+import { FurnitureVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureVisualization';
+import { FurnitureBadgeDisplayVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureBadgeDisplayVisualization.ts';
 
 interface FurnitureData {
   id: number;
@@ -18,6 +19,7 @@ export class ScutiData {
     furniture_static: FurnitureStaticVisualization,
     furniture_guild_customized: FurnitureGuildCustomizedVisualization,
     furniture_animated: FurnitureAnimatedVisualization,
+    furniture_badge_display: FurnitureBadgeDisplayVisualization,
   };
   public furnitures: Map<number, FurnitureData> = new Map();
 

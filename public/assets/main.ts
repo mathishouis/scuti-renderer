@@ -144,7 +144,7 @@ const room: Room = new Room({
   heightMap: heightMap,
   dragging: true,
   centerCamera: true,
-  floorMaterial: new FloorMaterial(102),
+  floorMaterial: new FloorMaterial(101),
   floorThickness: 8,
   wallMaterial: new WallMaterial(108),
   wallThickness: 8,
@@ -290,6 +290,20 @@ const badge = new FloorFurniture({
   badge: 'http://127.0.0.1:8081/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
 });
 room.add(badge);
+
+const badgeDisplay = new FloorFurniture({
+  id: 5013,
+  position: {
+    x: 10,
+    y: 16,
+    z: 0,
+  },
+  direction: 2,
+  state: 0,
+  // @ts-ignore
+  badge: 'http://127.0.0.1:8081/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
+});
+room.add(badgeDisplay);
 
 /*const pennant = new FloorFurniture({
   id: 4253,

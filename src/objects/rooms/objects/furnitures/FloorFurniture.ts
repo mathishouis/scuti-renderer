@@ -6,7 +6,7 @@ import { FurnitureData } from './FurnitureData';
 import { Room } from '../../Room';
 import { asset, register } from '../../../../utils/Assets';
 import { FurniturePlaceholder } from './FurniturePlaceholder';
-import { ScutiData } from '../../../../ScutiData.ts';
+import { ScutiData } from '../../../../ScutiData';
 
 interface Configuration {
   id: number;

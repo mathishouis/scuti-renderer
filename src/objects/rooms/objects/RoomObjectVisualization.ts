@@ -5,14 +5,14 @@ export abstract class RoomObjectVisualization {
   public container = new Container();
   public abstract furniture: RoomFurniture;
   public abstract render(): void;
-  protected abstract next(): void;
-  protected abstract update(): void;
-  protected abstract destroy(): void;
-  protected abstract reset(): void;
-  protected abstract getLayerColor(id: number): number;
-  protected abstract getLayerTag(id: number): string;
-  protected abstract getLayerFrame(id: number): number;
-  protected abstract getLayerName(id: number): string;
-  protected abstract getAssetName(): string;
-  protected abstract getLayerTexture(id: number): Texture;
+  public abstract next(): void;
+  public abstract update(): void;
+  public abstract destroy(): void;
+  public abstract reset(): void;
+  public abstract getLayerColor(id: number): number;
+  public abstract getLayerTag(id: number): string;
+  public abstract getLayerFrame(id: number): number;
+  public abstract getLayerName(id: number): string;
+  public abstract getAssetName(): string;
+  public abstract getLayerTexture(id: number): Texture;
 }

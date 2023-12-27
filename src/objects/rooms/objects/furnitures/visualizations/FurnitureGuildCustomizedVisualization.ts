@@ -28,7 +28,7 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisu
     this._badge = badge;
   }
 
-  protected getLayerColor(id: number): number {
+  public getLayerColor(id: number): number {
     const tag = this.getLayerTag(id);
 
     if (tag === FurnitureGuildCustomizedVisualization.PRIMARY_COLOR_TAG)
@@ -39,7 +39,7 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisu
     return super.getLayerColor(id);
   }
 
-  protected getLayerTexture(id: number): Texture {
+  public getLayerTexture(id: number): Texture {
     const tag = this.getLayerTag(id);
     const trim = super.getLayerTexture(id)?.trim;
 
