@@ -287,7 +287,7 @@ const badge = new FloorFurniture({
   // @ts-ignore
   primaryColor: 0x00ffff,
   secondaryColor: 0xff00ff,
-  badge: 'http://127.0.0.1:8081/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
+  badge: 'http://127.0.0.1:8081/images/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
 });
 room.add(badge);
 
@@ -301,7 +301,7 @@ const badgeDisplay = new FloorFurniture({
   direction: 2,
   state: 0,
   // @ts-ignore
-  badge: 'http://127.0.0.1:8081/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
+  badge: 'http://127.0.0.1:8081/images/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
 });
 room.add(badgeDisplay);
 
@@ -319,6 +319,37 @@ room.add(bottle);
 setTimeout(() => {
   bottle.visualization.setState(6);
 }, 3000);
+
+const mpu = new FloorFurniture({
+  id: 4276,
+  position: {
+    x: 5,
+    y: 30,
+    z: 0,
+  },
+  direction: 0,
+  state: 0,
+  image: 'http://127.0.0.1:8081/images/ads/mpu/mpu_habbosafety.png',
+});
+room.add(mpu);
+
+const mpu2 = new FloorFurniture({
+  id: 4069,
+  position: {
+    x: -5,
+    y: 20,
+    z: 0,
+  },
+  direction: 0,
+  state: 0,
+  offsets: {
+    x: 0,
+    y: 0,
+    z: 0,
+  },
+  image: 'http://127.0.0.1:8081/images/ads/mpu/MPU_FR.png',
+});
+room.add(mpu2);
 
 /*const pennant = new FloorFurniture({
   id: 4253,

@@ -40,7 +40,6 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     const name = this.getLayerName(id);
     const flipped = frames[name] ? frames[name].flipped ?? false : false;
     const layer = layers.find((layer: any) => layer.id === id);
-    const z = layer?.z ?? 0;
     const blend = layer?.ink ? BLEND_MODES[layer.ink] : undefined;
     const interactive = layer?.interactive ?? true;
     const alpha = name.includes('_sd_') ? 0.2 : layer?.alpha / 255 ?? 0;
@@ -51,7 +50,11 @@ export class FurnitureVisualization extends RoomObjectVisualization {
       frame: this.getLayerFrame(id),
       alpha: alpha,
       tint: this.getLayerColor(id),
-      z: z,
+      offsets: {
+        x: this.getLayerXOffset(id),
+        y: this.getLayerYOffset(id),
+        z: this.getLayerZOffset(id),
+      },
       blend: blend as any,
       flip: flipped,
       interactive: interactive,
@@ -191,6 +194,36 @@ export class FurnitureVisualization extends RoomObjectVisualization {
   }
 
   public updateState(): number {
+    return 0;
+  }
+
+  public getLayerXOffset(id: number): number {
+    const spritesheet = asset(this.getAssetName());
+    const { layers } = spritesheet.data.properties;
+    const layer = layers.find((layer: any) => layer.id === id);
+
+    if (layer && layer.x) return layer.x;
+
+    return 0;
+  }
+
+  public getLayerYOffset(id: number): number {
+    const spritesheet = asset(this.getAssetName());
+    const { layers } = spritesheet.data.properties;
+    const layer = layers.find((layer: any) => layer.id === id);
+
+    if (layer && layer.y) return layer.y;
+
+    return 0;
+  }
+
+  public getLayerZOffset(id: number): number {
+    const spritesheet = asset(this.getAssetName());
+    const { layers } = spritesheet.data.properties;
+    const layer = layers.find((layer: any) => layer.id === id);
+
+    if (layer && layer.z) return layer.z;
+
     return 0;
   }
 }
