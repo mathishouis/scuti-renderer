@@ -369,6 +369,38 @@ const bg = new FloorFurniture({
 });
 room.add(bg);
 
+const counter = new FloorFurniture({
+  id: 3525,
+  position: {
+    x: -8,
+    y: 0,
+    z: 0,
+  },
+  direction: 0,
+  state: 3653,
+});
+room.add(counter);
+
+setInterval(() => {
+  counter.setState(counter.state - 1);
+}, 1000);
+
+const counter2 = new FloorFurniture({
+  id: 3645,
+  position: {
+    x: -10,
+    y: 0,
+    z: 0,
+  },
+  direction: 0,
+  state: 100,
+});
+room.add(counter2);
+
+setInterval(() => {
+  counter2.setState(counter2.state - 1);
+}, 1000);
+
 /*const pennant = new FloorFurniture({
   id: 4253,
   position: {

@@ -64,4 +64,11 @@ export class FloorFurniture extends RoomFurniture {
 
     this.room.visualization.container.addChild(this.visualization.container);
   }
+
+  // todo(): make a getter / setter
+  public setState(state: number): void {
+    this.state = state;
+    this.visualization.setState(state);
+    this.visualization.reset();
+  }
 }
