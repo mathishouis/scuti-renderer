@@ -1,5 +1,5 @@
 import { FurnitureVisualization } from './FurnitureVisualization';
-import { asset } from '../../../../../utils/Assets.ts';
+import { asset } from '../../../../../utils/Assets';
 
 export class FurnitureAnimatedVisualization extends FurnitureVisualization {
   public render(): void {
