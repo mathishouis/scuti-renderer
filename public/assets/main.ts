@@ -153,7 +153,7 @@ const room: Room = new Room({
 });
 
 renderer.add(room);
-const tv = new FloorFurniture({
+/*const tv = new FloorFurniture({
   id: 3886,
   position: {
     x: 4,
@@ -259,7 +259,42 @@ room.add(
     direction: 4,
     state: 2,
   }),
-);
+);*/
+const gate = new FloorFurniture({
+  id: 4389,
+  position: {
+    x: 4,
+    y: 16,
+    z: 0,
+  },
+  direction: 2,
+  state: 0,
+  // @ts-ignore
+  primaryColor: 0x00ffff,
+  secondaryColor: 0xff00ff,
+});
+room.add(gate);
+
+const badge = new FloorFurniture({
+  id: 4249,
+  position: {
+    x: 8,
+    y: 16,
+    z: 0,
+  },
+  direction: 2,
+  state: 0,
+  // @ts-ignore
+  primaryColor: 0x00ffff,
+  secondaryColor: 0xff00ff,
+  badge: 'http://127.0.0.1:8081/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
+});
+room.add(badge);
+
+setTimeout(() => {
+  // @ts-ignore
+  gate.visualization.primaryColor = 0xffff00;
+}, 3000);
 
 let zoom = 1;
 const [min_zoom, max_zoom] = [0.5, 5];

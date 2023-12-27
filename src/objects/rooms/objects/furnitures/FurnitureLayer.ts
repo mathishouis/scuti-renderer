@@ -42,16 +42,12 @@ export class FurnitureLayer {
   }
 
   public render(): void {
-    const key = `furnitures/${this.furniture.data.name}`;
-    const spritesheet = asset(key);
-    const layerLetter = spritesheet.data.properties.layerCount === this.id ? 'sd' : String.fromCharCode(97 + Number(this.id));
-    const name = `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${this.frame}`;
-
-    this.sprite = new Sprite(spritesheet.textures[name]);
+    this.sprite = new Sprite(this.furniture.visualization.getLayerTexture(this.id));
     this.sprite.parentLayer = this.furniture.room.renderer.layer;
+    this.sprite.zOrder = 1000;
 
     if (this.flip) this.sprite.scale.x = -1;
-    if (this.z) this.sprite.zOrder = this.z;
+    if (this.z) this.sprite.zOrder += this.z;
     if (this.alpha) this.sprite.alpha = this.alpha;
     if (this.tint) this.sprite.tint = this.tint;
     if (this.blend) this.sprite.blendMode = this.blend;

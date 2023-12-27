@@ -6,7 +6,7 @@ import { FurnitureData } from './FurnitureData';
 import { Room } from '../../Room';
 import { asset, register } from '../../../../utils/Assets';
 import { FurniturePlaceholder } from './FurniturePlaceholder';
-import { FurnitureAnimatedVisualization } from './visualizations/FurnitureAnimatedVisualization';
+import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization.ts';
 
 interface Configuration {
   id: number;
@@ -32,7 +32,7 @@ export class FloorFurniture extends RoomFurniture {
     this.position = position;
     this.direction = direction;
     this.state = state;
-    this.visualization = new FurnitureAnimatedVisualization({ ...visualization, ...{ furniture: this } }); // todo(): create visualization based on asset data
+    this.visualization = new FurnitureGuildCustomizedVisualization({ ...visualization, ...{ furniture: this } }); // todo(): create visualization based on asset data
   }
 
   public render(): void {

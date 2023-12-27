@@ -3,11 +3,13 @@ import { asset } from '../../../../../utils/Assets';
 import { FurnitureLayer } from '../FurnitureLayer';
 import { BLEND_MODES } from '@pixi/constants';
 import { RoomFurniture } from '../RoomFurniture';
+import { Texture } from 'pixi.js';
 
 interface Configuration {
   furniture: RoomFurniture;
 }
 
+// todo(): set in cache all the properties
 export class FurnitureVisualization extends RoomObjectVisualization {
   public furniture: RoomFurniture;
   public layers: Map<number, FurnitureLayer> = new Map();
@@ -19,71 +21,57 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     this.furniture = furniture;
   }
 
-  public render(): void {
-    const key = `furnitures/${this.furniture.data.name}`;
-    const spritesheet = asset(key);
+  protected render(): void {
+    const spritesheet = asset(this.getAssetName());
 
     for (let i = 0; i < spritesheet.data.properties.layerCount + 1; i++) this.layer(i);
   }
 
-  public layer(id: number): void {
-    const key = `furnitures/${this.furniture.data.name}`;
-    const spritesheet = asset(key);
+  protected layer(id: number): void {
+    const spritesheet = asset(this.getAssetName());
     const { frames, properties } = spritesheet.data;
-    const { colors, directions, layers, animations } = properties;
+    const { directions, layers, animations } = properties;
 
     if (!directions.includes(this.furniture.direction)) this.furniture.direction = this.furniture.data.direction ?? directions[0];
 
     const animation = animations.find((animation: any) => animation.state === this.furniture.state);
-    const color = colors.find((color: any) => color.id === this.furniture.data.colorId);
-
-    let tint = 0xffffff;
     let frame = 0;
 
     if (animation) {
       const animationLayer = animation.layers.find((layer: any) => layer.id === id);
       if (animationLayer && animationLayer.frames) {
         if (!this.frames.get(id)) this.frames.set(id, 0);
-        frame = animationLayer.frames[this.frames.get(id) ?? 0];
+        frame = animationLayer.frames[this.getLayerFrame(id)];
       }
     }
 
-    if (color) {
-      const colorLayer = color.layers.find((layer: any) => layer.id === id);
-
-      if (colorLayer && colorLayer.color) tint = Number(`0x${colorLayer.color}`);
-    }
-
-    const layerLetter = properties.layerCount === id ? 'sd' : String.fromCharCode(97 + Number(id));
-    const name = `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${frame}`;
+    const name = this.getLayerName(id);
     const flipped = frames[name] ? frames[name].flipped ?? false : false;
     const layer = layers.find((layer: any) => layer.id === id);
     const z = layer?.z ?? 0;
     const blend = layer?.ink ? BLEND_MODES[layer.ink] : undefined;
     const interactive = layer?.interactive ?? true;
-    const alpha = layerLetter === 'sd' ? 0.2 : layer?.alpha / 255 ?? 0;
-    const tag = layer?.tag;
+    const alpha = name.includes('_sd_') ? 0.2 : layer?.alpha / 255 ?? 0;
 
     const furnitureLayer = new FurnitureLayer({
       furniture: this.furniture,
       id: id,
       frame: frame,
       alpha: alpha,
-      tint: tint,
+      tint: this.getLayerColor(id),
       z: z,
       blend: blend as any,
       flip: flipped,
       interactive: interactive,
-      tag: tag,
+      tag: this.getLayerTag(id),
     });
     furnitureLayer.render();
 
     this.layers.set(id, furnitureLayer);
   }
 
-  public next(): void {
-    const key = `furnitures/${this.furniture.data.name}`;
-    const spritesheet = asset(key);
+  protected next(): void {
+    const spritesheet = asset(this.getAssetName());
     const { animations, layerCount } = spritesheet.data.properties;
 
     for (let i = 0; i < layerCount; i++) {
@@ -94,7 +82,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
         if (animationLayer && animationLayer.frames) {
           const frames = animationLayer.frames;
-          const frame = this.frames.get(i) ?? 0;
+          const frame = this.getLayerFrame(i);
 
           if (frames.length > 1) {
             if (frames.length - 1 > frame) {
@@ -110,6 +98,58 @@ export class FurnitureVisualization extends RoomObjectVisualization {
       }
     }
   }
-  public update(): void {}
-  public destroy(): void {}
+  protected update(): void {}
+  protected destroy(): void {}
+
+  public reset(): void {
+    this.layers.forEach((layer: FurnitureLayer) => layer.destroy());
+    this.layers = new Map();
+    this.frames = new Map();
+    this.render();
+  }
+
+  protected getLayerColor(id: number): number {
+    const spritesheet = asset(this.getAssetName());
+    const { colors } = spritesheet.data.properties;
+    const color = colors.find((color: any) => color.id === this.furniture.data.colorId);
+
+    if (color) {
+      const colorLayer = color.layers.find((layer: any) => layer.id === id);
+      if (colorLayer && colorLayer.color) return Number(`0x${colorLayer.color}`);
+    }
+
+    return 0xffffff;
+  }
+
+  protected getLayerTag(id: number): string {
+    const spritesheet = asset(this.getAssetName());
+    const { layers } = spritesheet.data.properties;
+    const layer = layers.find((layer: any) => layer.id === id);
+
+    if (layer && layer.tag) return layer.tag;
+
+    return '';
+  }
+
+  protected getLayerFrame(id: number): number {
+    return this.frames.get(id) ?? 0;
+  }
+
+  protected getLayerName(id: number): string {
+    const spritesheet = asset(this.getAssetName());
+    const { layerCount } = spritesheet.data.properties;
+
+    const layerLetter = layerCount === id ? 'sd' : String.fromCharCode(97 + Number(id));
+    return `${this.furniture.data.name}_${layerLetter}_${this.furniture.direction}_${this.getLayerFrame(id)}`;
+  }
+
+  protected getLayerTexture(id: number): Texture {
+    const spritesheet = asset(this.getAssetName());
+
+    return spritesheet.textures[this.getLayerName(id)];
+  }
+
+  protected getAssetName(): string {
+    return `furnitures/${this.furniture.data.name}`;
+  }
 }

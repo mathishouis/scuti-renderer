@@ -22,7 +22,7 @@ export class FurnitureData {
   private _initialize(): void {
     const data = this.furniture.room.renderer.data.furnitures.get(this.furniture.id);
 
-    if (!data) return error('RoomFurnitureData', `Canno't find the furniture (id:${this.furniture.id}) in furnitures.data`);
+    if (!data) return error('RoomFurnitureData', `Cannot find the furniture (id:${this.furniture.id}) in furnitures.data`);
 
     this.name = data.name;
     this.offerId = data.offer_id;
