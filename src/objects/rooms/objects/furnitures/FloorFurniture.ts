@@ -6,7 +6,7 @@ import { FurnitureData } from './FurnitureData';
 import { Room } from '../../Room';
 import { asset, register } from '../../../../utils/Assets';
 import { FurniturePlaceholder } from './FurniturePlaceholder';
-import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization.ts';
+import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization';
 
 interface Configuration {
   id: number;

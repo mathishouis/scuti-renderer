@@ -1,5 +1,5 @@
-import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization.ts';
-import { RoomFurniture } from '../RoomFurniture.ts';
+import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
+import { RoomFurniture } from '../RoomFurniture';
 import { Texture } from 'pixi.js';
 
 interface Configuration {
