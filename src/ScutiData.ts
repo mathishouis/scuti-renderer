@@ -8,7 +8,7 @@ import { FurnitureBottleVisualization } from './objects/rooms/objects/furnitures
 import { FurnitureBrandedImageVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureBrandedImageVisualization';
 import { FurnitureBBVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureBBVisualization';
 import { FurnitureRoomBackgroundVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureRoomBackgroundVisualization';
-import { FurnitureCounterClockVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureCounterClockVisualization.ts';
+import { FurnitureCounterClockVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureCounterClockVisualization';
 
 interface FurnitureData {
   id: number;
