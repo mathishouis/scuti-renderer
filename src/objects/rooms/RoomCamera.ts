@@ -18,6 +18,10 @@ export class RoomCamera extends Container {
   }
 
   private _initializeListeners(): void {
+    window.onresize = () => {
+      this.room.renderer.application.renderer.resolution = window.devicePixelRatio;
+    };
+
     if (this.room.configuration.zoom?.type === 'wheel' || this.room.configuration.zoom?.type === 'both') {
       this.room.renderer.canvas.addEventListener('wheel', this._onZoom, { passive: true });
     }

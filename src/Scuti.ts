@@ -43,8 +43,9 @@ export class Scuti {
     this.application = new Application({
       width: this.configuration.width,
       height: this.configuration.height,
-      resolution: 1,
       antialias: false,
+      autoDensity: true,
+      resolution: window.devicePixelRatio,
       backgroundColor: new Color(this.configuration.backgroundColor ?? 0x0c567c).toHex(),
       backgroundAlpha: this.configuration.backgroundAlpha ?? 1,
       resizeTo: this.configuration.resizeTo,
