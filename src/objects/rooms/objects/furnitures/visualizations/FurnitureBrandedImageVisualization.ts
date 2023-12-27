@@ -1,6 +1,6 @@
 import { FurnitureVisualization } from './FurnitureVisualization';
-import { RoomFurniture } from '../RoomFurniture.ts';
-import { Vector3D } from '../../../../../types/Vector.ts';
+import { RoomFurniture } from '../RoomFurniture';
+import { Vector3D } from '../../../../../types/Vector';
 import { Texture } from 'pixi.js';
 
 interface Configuration {

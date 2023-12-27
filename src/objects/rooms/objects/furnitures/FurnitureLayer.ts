@@ -1,6 +1,6 @@
 import { BLEND_MODES, Sprite } from 'pixi.js';
 import { RoomFurniture } from './RoomFurniture';
-import { Vector3D } from '../../../../types/Vector.ts';
+import { Vector3D } from '../../../../types/Vector';
 
 interface Configuration {
   furniture: RoomFurniture;

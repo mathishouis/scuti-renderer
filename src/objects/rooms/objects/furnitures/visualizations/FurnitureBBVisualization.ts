@@ -1,4 +1,4 @@
-import { FurnitureBrandedImageVisualization } from './FurnitureBrandedImageVisualization.ts';
+import { FurnitureBrandedImageVisualization } from './FurnitureBrandedImageVisualization';
 
 export class FurnitureBBVisualization extends FurnitureBrandedImageVisualization {
   public getLayerXOffset(id: number, direction: number): number {

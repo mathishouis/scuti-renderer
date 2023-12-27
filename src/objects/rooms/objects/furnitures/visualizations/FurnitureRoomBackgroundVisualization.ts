@@ -1,7 +1,7 @@
-import { FurnitureBrandedImageVisualization } from './FurnitureBrandedImageVisualization.ts';
-import { Direction } from '../../../../../enums/Direction.ts';
-import { Vector2D, Vector3D } from '../../../../../types/Vector.ts';
-import { RoomFurniture } from '../RoomFurniture.ts';
+import { FurnitureBrandedImageVisualization } from './FurnitureBrandedImageVisualization';
+import { Direction } from '../../../../../enums/Direction';
+import { Vector2D, Vector3D } from '../../../../../types/Vector';
+import { RoomFurniture } from '../RoomFurniture';
 import { Texture } from 'pixi.js';
 
 interface Configuration {
