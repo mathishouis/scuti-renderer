@@ -21,7 +21,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     this.furniture = furniture;
   }
 
-  protected render(): void {
+  public render(): void {
     const spritesheet = asset(this.getAssetName());
 
     for (let i = 0; i < spritesheet.data.properties.layerCount + 1; i++) this.layer(i);
@@ -30,20 +30,9 @@ export class FurnitureVisualization extends RoomObjectVisualization {
   protected layer(id: number): void {
     const spritesheet = asset(this.getAssetName());
     const { frames, properties } = spritesheet.data;
-    const { directions, layers, animations } = properties;
+    const { directions, layers } = properties;
 
     if (!directions.includes(this.furniture.direction)) this.furniture.direction = this.furniture.data.direction ?? directions[0];
-
-    const animation = animations.find((animation: any) => animation.state === this.furniture.state);
-    let frame = 0;
-
-    if (animation) {
-      const animationLayer = animation.layers.find((layer: any) => layer.id === id);
-      if (animationLayer && animationLayer.frames) {
-        if (!this.frames.get(id)) this.frames.set(id, 0);
-        frame = animationLayer.frames[this.getLayerFrame(id)];
-      }
-    }
 
     const name = this.getLayerName(id);
     const flipped = frames[name] ? frames[name].flipped ?? false : false;
@@ -56,7 +45,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     const furnitureLayer = new FurnitureLayer({
       furniture: this.furniture,
       id: id,
-      frame: frame,
+      frame: this.getLayerFrame(id),
       alpha: alpha,
       tint: this.getLayerColor(id),
       z: z,
@@ -82,7 +71,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
         if (animationLayer && animationLayer.frames) {
           const frames = animationLayer.frames;
-          const frame = this.getLayerFrame(i);
+          const frame = this.frames.get(i) ?? 0;
 
           if (frames.length > 1) {
             if (frames.length - 1 > frame) {
@@ -132,7 +121,19 @@ export class FurnitureVisualization extends RoomObjectVisualization {
   }
 
   protected getLayerFrame(id: number): number {
-    return this.frames.get(id) ?? 0;
+    const spritesheet = asset(this.getAssetName());
+    const { animations } = spritesheet.data.properties;
+    const animation = animations.find((animation: any) => animation.state === this.furniture.state);
+
+    if (animation) {
+      const animationLayer = animation.layers.find((layer: any) => layer.id === id);
+      if (animationLayer && animationLayer.frames) {
+        if (!this.frames.get(id)) this.frames.set(id, 0);
+        return animationLayer.frames[this.frames.get(id) ?? 0];
+      }
+    }
+
+    return 0;
   }
 
   protected getLayerName(id: number): string {

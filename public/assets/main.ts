@@ -153,7 +153,7 @@ const room: Room = new Room({
 });
 
 renderer.add(room);
-/*const tv = new FloorFurniture({
+const tv = new FloorFurniture({
   id: 3886,
   position: {
     x: 4,
@@ -259,7 +259,7 @@ room.add(
     direction: 4,
     state: 2,
   }),
-);*/
+);
 const gate = new FloorFurniture({
   id: 4389,
   position: {
@@ -290,6 +290,22 @@ const badge = new FloorFurniture({
   badge: 'http://127.0.0.1:8081/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
 });
 room.add(badge);
+
+/*const pennant = new FloorFurniture({
+  id: 4253,
+  position: {
+    x: 10,
+    y: 16,
+    z: 0,
+  },
+  direction: 2,
+  state: 0,
+  // @ts-ignore
+  primaryColor: 0x00ffff,
+  secondaryColor: 0xff00ff,
+  badge: 'http://127.0.0.1:8081/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
+});
+room.add(pennant);*/
 
 setTimeout(() => {
   // @ts-ignore

@@ -4,7 +4,7 @@ import { Container, Texture } from 'pixi.js';
 export abstract class RoomObjectVisualization {
   public container = new Container();
   public abstract furniture: RoomFurniture;
-  protected abstract render(): void;
+  public abstract render(): void;
   protected abstract next(): void;
   protected abstract update(): void;
   protected abstract destroy(): void;

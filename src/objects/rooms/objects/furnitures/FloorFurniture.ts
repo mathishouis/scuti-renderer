@@ -6,7 +6,7 @@ import { FurnitureData } from './FurnitureData';
 import { Room } from '../../Room';
 import { asset, register } from '../../../../utils/Assets';
 import { FurniturePlaceholder } from './FurniturePlaceholder';
-import { FurnitureGuildCustomizedVisualization } from './visualizations/FurnitureGuildCustomizedVisualization';
+import { ScutiData } from '../../../../ScutiData.ts';
 
 interface Configuration {
   id: number;
@@ -24,27 +24,26 @@ export class FloorFurniture extends RoomFurniture {
   public direction: Direction;
   public state: number;
   public data!: FurnitureData;
+  public parameters: any;
 
-  constructor({ id, position, direction, state, ...visualization }: Configuration) {
+  constructor({ id, position, direction, state, ...parameters }: Configuration) {
     super();
 
     this.id = id;
     this.position = position;
     this.direction = direction;
     this.state = state;
-    this.visualization = new FurnitureGuildCustomizedVisualization({ ...visualization, ...{ furniture: this } }); // todo(): create visualization based on asset data
+    this.parameters = parameters;
   }
 
   public render(): void {
     this.data = new FurnitureData({ furniture: this });
-    this.room.visualization.container.addChild(this.visualization.container);
-    this.visualization.container.x = 32 * this.position.x - 32 * this.position.y;
-    this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 * this.position.z - 50;
 
     const key = `furnitures/${this.data.name}`;
     const path = `/bundles/furnitures/${this.data.name}.bundle`;
+    const spritesheet = asset(key);
 
-    if (!asset(key)) {
+    if (!spritesheet) {
       this.placeholder = new FurniturePlaceholder({ furniture: this, position: this.position });
       this.placeholder.render();
       register(key, path).then(() => this.render());
@@ -53,6 +52,15 @@ export class FloorFurniture extends RoomFurniture {
 
     if (this.placeholder) this.placeholder.destroy();
 
+    this.visualization = new ScutiData.VISUALIZATIONS[spritesheet.data.properties.visualization]({
+      ...this.parameters,
+      ...{ furniture: this },
+    });
+
     this.visualization.render();
+    this.visualization.container.x = 32 * this.position.x - 32 * this.position.y;
+    this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 * this.position.z - 50;
+
+    this.room.visualization.container.addChild(this.visualization.container);
   }
 }

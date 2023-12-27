@@ -1,4 +1,8 @@
 import { asset } from './utils/Assets';
+import { FurnitureStaticVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureStaticVisualization.ts';
+import { FurnitureGuildCustomizedVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureGuildCustomizedVisualization.ts';
+import { FurnitureAnimatedVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureAnimatedVisualization.ts';
+import { FurnitureVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureVisualization.ts';
 
 interface FurnitureData {
   id: number;
@@ -10,6 +14,11 @@ interface FurnitureData {
 }
 
 export class ScutiData {
+  public static VISUALIZATIONS: Record<string, new (configuration: any) => FurnitureVisualization> = {
+    furniture_static: FurnitureStaticVisualization,
+    furniture_guild_customized: FurnitureGuildCustomizedVisualization,
+    furniture_animated: FurnitureAnimatedVisualization,
+  };
   public furnitures: Map<number, FurnitureData> = new Map();
 
   constructor() {

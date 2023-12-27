@@ -20,7 +20,10 @@ export class FurniturePlaceholder {
 
   public render(): void {
     this.sprite = new Sprite(asset('room/content').textures['floor_placeholder']);
-    this.furniture.visualization.container.addChild(this.sprite);
+    this.sprite.x = 32 * this.position.x - 32 * this.position.y;
+    this.sprite.y = 16 * this.position.x + 16 * this.position.y - 32 * this.position.z - 50;
+
+    this.furniture.room.visualization.container.addChild(this.sprite);
   }
 
   public destroy(): void {
