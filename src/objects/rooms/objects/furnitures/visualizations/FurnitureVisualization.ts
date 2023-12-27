@@ -73,6 +73,18 @@ export class FurnitureVisualization extends RoomObjectVisualization {
         const animationLayer = animation.layers.find((layer: any) => layer.id === i);
 
         if (animationLayer && animationLayer.frames) {
+          if (animationLayer.loopCount) {
+            if (this.loopsCount.get(i) === undefined) {
+              this.loopsCount.set(i, 0);
+            } else {
+              if ((this.loopsCount.get(i) ?? 0) >= animationLayer.loopCount) {
+                this.loopsCount.set(i, (this.loopsCount.get(i) ?? 0) + 1);
+              } else {
+                continue;
+              }
+            }
+          }
+
           if (animationLayer.frameRepeat) {
             if (this.framesRepeat.get(i) === undefined) {
               this.framesRepeat.set(i, 0);
