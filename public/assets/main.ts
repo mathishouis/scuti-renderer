@@ -351,6 +351,24 @@ const mpu2 = new FloorFurniture({
 });
 room.add(mpu2);
 
+const bg = new FloorFurniture({
+  id: 3996,
+  position: {
+    x: -20,
+    y: 20,
+    z: 0,
+  },
+  direction: 0,
+  state: 0,
+  offsets: {
+    x: 0,
+    y: 0,
+    z: 10000,
+  },
+  image: 'http://127.0.0.1:8081/images/ads/wl15/wl15_a.png',
+});
+room.add(bg);
+
 /*const pennant = new FloorFurniture({
   id: 4253,
   position: {

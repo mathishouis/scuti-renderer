@@ -7,6 +7,7 @@ import { FurnitureBadgeDisplayVisualization } from './objects/rooms/objects/furn
 import { FurnitureBottleVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureBottleVisualization';
 import { FurnitureBrandedImageVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureBrandedImageVisualization.ts';
 import { FurnitureBBVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureBBVisualization.ts';
+import { FurnitureRoomBackgroundVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureRoomBackgroundVisualization.ts';
 
 interface FurnitureData {
   id: number;
@@ -26,6 +27,7 @@ export class ScutiData {
     furniture_bottle: FurnitureBottleVisualization,
     furniture_branded_image: FurnitureBrandedImageVisualization,
     furniture_bb: FurnitureBBVisualization,
+    furniture_bg: FurnitureRoomBackgroundVisualization,
   };
   public furnitures: Map<number, FurnitureData> = new Map();
 

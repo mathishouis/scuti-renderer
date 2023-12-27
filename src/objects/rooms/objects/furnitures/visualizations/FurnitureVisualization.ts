@@ -51,9 +51,9 @@ export class FurnitureVisualization extends RoomObjectVisualization {
       alpha: alpha,
       tint: this.getLayerColor(id),
       offsets: {
-        x: this.getLayerXOffset(id),
-        y: this.getLayerYOffset(id),
-        z: this.getLayerZOffset(id),
+        x: this.getLayerXOffset(id, this.furniture.direction),
+        y: this.getLayerYOffset(id, this.furniture.direction),
+        z: this.getLayerZOffset(id, this.furniture.direction),
       },
       blend: blend as any,
       flip: flipped,
@@ -197,7 +197,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     return 0;
   }
 
-  public getLayerXOffset(id: number): number {
+  public getLayerXOffset(id: number, direction: number): number {
     const spritesheet = asset(this.getAssetName());
     const { layers } = spritesheet.data.properties;
     const layer = layers.find((layer: any) => layer.id === id);
@@ -207,7 +207,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     return 0;
   }
 
-  public getLayerYOffset(id: number): number {
+  public getLayerYOffset(id: number, direction: number): number {
     const spritesheet = asset(this.getAssetName());
     const { layers } = spritesheet.data.properties;
     const layer = layers.find((layer: any) => layer.id === id);
@@ -217,7 +217,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     return 0;
   }
 
-  public getLayerZOffset(id: number): number {
+  public getLayerZOffset(id: number, direction: number): number {
     const spritesheet = asset(this.getAssetName());
     const { layers } = spritesheet.data.properties;
     const layer = layers.find((layer: any) => layer.id === id);

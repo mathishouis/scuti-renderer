@@ -12,11 +12,6 @@ interface Configuration {
 export class FurnitureBrandedImageVisualization extends FurnitureVisualization {
   protected static BRANDED_IMAGE: string = 'branded_image';
 
-  private static STATE_0: number = 0;
-  private static STATE_1: number = 1;
-  private static STATE_2: number = 2;
-  private static STATE_3: number = 3;
-
   protected _image: string;
   protected _offsets: Vector3D;
 
