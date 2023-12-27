@@ -57,6 +57,7 @@ export class FloorFurniture extends RoomFurniture {
       ...{ furniture: this },
     });
 
+    this.visualization.setState(this.state);
     this.visualization.render();
     this.visualization.container.x = 32 * this.position.x - 32 * this.position.y;
     this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 * this.position.z - 50;

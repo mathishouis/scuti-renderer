@@ -268,7 +268,7 @@ const gate = new FloorFurniture({
     z: 0,
   },
   direction: 2,
-  state: 0,
+  state: 101,
   // @ts-ignore
   primaryColor: 0x00ffff,
   secondaryColor: 0xff00ff,
@@ -304,6 +304,21 @@ const badgeDisplay = new FloorFurniture({
   badge: 'http://127.0.0.1:8081/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
 });
 room.add(badgeDisplay);
+
+const bottle = new FloorFurniture({
+  id: 129,
+  position: {
+    x: 10,
+    y: 20,
+    z: 0,
+  },
+  direction: 2,
+  state: -1,
+});
+room.add(bottle);
+setTimeout(() => {
+  bottle.visualization.setState(6);
+}, 3000);
 
 /*const pennant = new FloorFurniture({
   id: 4253,

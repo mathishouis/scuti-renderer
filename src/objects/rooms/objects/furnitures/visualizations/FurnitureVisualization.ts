@@ -32,7 +32,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     const { frames, properties } = spritesheet.data;
     const { directions, layers } = properties;
 
-    if (!directions.includes(this.furniture.direction)) this.furniture.direction = this.furniture.data.direction ?? directions[0];
+    if (!directions.includes(this.furniture.direction)) this.furniture.direction = this.furniture.data.direction ?? directions[0] ?? 0;
 
     const name = this.getLayerName(id);
     const flipped = frames[name] ? frames[name].flipped ?? false : false;
@@ -86,6 +86,8 @@ export class FurnitureVisualization extends RoomObjectVisualization {
         }
       }
     }
+
+    this.updateState();
   }
   public update(): void {}
   public destroy(): void {}
@@ -152,5 +154,13 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
   public getAssetName(): string {
     return `furnitures/${this.furniture.data.name}`;
+  }
+
+  public setState(id: number): void {
+    this.furniture.state = id;
+  }
+
+  public updateState(): number {
+    return 0;
   }
 }

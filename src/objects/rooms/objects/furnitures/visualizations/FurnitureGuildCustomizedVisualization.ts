@@ -10,11 +10,11 @@ interface Configuration {
 }
 
 export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisualization {
-  public static PRIMARY_COLOR_TAG: string = 'COLOR1';
-  public static SECONDARY_COLOR_TAG: string = 'COLOR2';
-  public static BADGE_TAG: string = 'BADGE';
-  public static PRIMARY_COLOR_DEFAULT: number = 0xeeeeee;
-  public static SECONDARY_COLOR_DEFAULT: number = 0x4b4b4b;
+  private static PRIMARY_COLOR_TAG: string = 'COLOR1';
+  private static SECONDARY_COLOR_TAG: string = 'COLOR2';
+  private static BADGE_TAG: string = 'BADGE';
+  private static PRIMARY_COLOR_DEFAULT: number = 0xeeeeee;
+  private static SECONDARY_COLOR_DEFAULT: number = 0x4b4b4b;
 
   private _primaryColor: number | undefined;
   private _secondaryColor: number | undefined;
