@@ -30,11 +30,7 @@ export class FurnitureBrandedImageVisualization extends FurnitureVisualization {
   public getLayerTexture(id: number): Texture {
     const tag = this.getLayerTag(id);
 
-    if (tag === FurnitureBrandedImageVisualization.BRANDED_IMAGE && this._image) {
-      const texture = Texture.from(this._image);
-
-      return texture;
-    }
+    if (tag === FurnitureBrandedImageVisualization.BRANDED_IMAGE && this._image) return Texture.from(this._image);
 
     return super.getLayerTexture(id);
   }

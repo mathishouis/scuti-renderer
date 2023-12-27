@@ -8,6 +8,10 @@
 
 An open-source Habbo renderer written in TypeScript for [scuti-client](https://github.com/kozennnn/scuti-client). This project aim to reproduce the Habbo room engine, furnitures and avatars using modern technologies like [TypeScript](https://github.com/microsoft/TypeScript) or [PixiJS](https://github.com/pixijs/pixijs).
 
+> [!IMPORTANT]
+>
+> Scuti is currently in active development, we therefore advise you to wait for a more stable version to use it in your projects because many things may change.
+
 ### Follow us
 
 Join our [Discord](https://discord.gg/s6fQAPt) server and get in touch with members of our community. You can ask help or simply talk with us, don't be shy!
