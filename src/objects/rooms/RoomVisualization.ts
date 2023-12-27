@@ -40,7 +40,7 @@ export class RoomVisualization {
 
   private _initializeTickers(): void {
     this.furnituresTicker = new Ticker();
-    this.furnituresTicker.maxFPS = 12;
+    this.furnituresTicker.maxFPS = 24;
     this.furnituresTicker.start();
   }
 

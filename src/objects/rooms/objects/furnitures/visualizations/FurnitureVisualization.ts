@@ -13,7 +13,10 @@ interface Configuration {
 export class FurnitureVisualization extends RoomObjectVisualization {
   public furniture: RoomFurniture;
   public layers: Map<number, FurnitureLayer> = new Map();
+  // todo(): move everything in another class
   public frames: Map<number, number> = new Map();
+  public framesRepeat: Map<number, number> = new Map();
+  public loopsCount: Map<number, number> = new Map();
 
   constructor({ furniture }: Configuration) {
     super();
@@ -70,6 +73,19 @@ export class FurnitureVisualization extends RoomObjectVisualization {
         const animationLayer = animation.layers.find((layer: any) => layer.id === i);
 
         if (animationLayer && animationLayer.frames) {
+          if (animationLayer.frameRepeat) {
+            if (this.framesRepeat.get(i) === undefined) {
+              this.framesRepeat.set(i, 0);
+            } else {
+              if (this.framesRepeat.get(i) === animationLayer.frameRepeat) {
+                this.framesRepeat.set(i, 0);
+              } else {
+                this.framesRepeat.set(i, (this.framesRepeat.get(i) ?? 0) + 1);
+                continue;
+              }
+            }
+          }
+
           const frames = animationLayer.frames;
           const frame = this.frames.get(i) ?? 0;
 
@@ -96,6 +112,8 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     this.layers.forEach((layer: FurnitureLayer) => layer.destroy());
     this.layers = new Map();
     this.frames = new Map();
+    this.framesRepeat = new Map();
+    this.loopsCount = new Map();
     this.render();
   }
 
