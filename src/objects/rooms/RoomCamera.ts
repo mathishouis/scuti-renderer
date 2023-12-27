@@ -7,7 +7,7 @@ export class RoomCamera extends Container {
   public hasDragged: boolean = false;
 
   private _lastClickTime: number = 0;
-  private _clickThreshold: number = 75;
+  private _clickThreshold: number = 100;
 
   constructor(public room: Room) {
     super();
@@ -72,8 +72,8 @@ export class RoomCamera extends Container {
   private _dragMove = (x: number, y: number): void => {
     if (this.dragging) {
       this.hasDragged = true;
-      this.pivot.x = Math.floor(this.pivot.x - x / this.scale.x);
-      this.pivot.y = Math.floor(this.pivot.y - y / this.scale.y);
+      this.pivot.x = Math.floor(this.pivot.x - x / (this.scale.x * window.devicePixelRatio));
+      this.pivot.y = Math.floor(this.pivot.y - y / (this.scale.y * window.devicePixelRatio));
     }
   };
 
