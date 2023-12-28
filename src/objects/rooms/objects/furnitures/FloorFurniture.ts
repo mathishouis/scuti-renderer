@@ -69,5 +69,6 @@ export class FloorFurniture extends RoomFurniture {
   public setState(state: number): void {
     this.state = state;
     this.visualization.setState(state);
+    this.visualization.update();
   }
 }

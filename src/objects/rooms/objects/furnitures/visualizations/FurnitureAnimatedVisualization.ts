@@ -1,8 +1,15 @@
 import { FurnitureVisualization } from './FurnitureVisualization';
+import { RoomFurniture } from '../RoomFurniture.ts';
+
+interface Configuration {
+  furniture: RoomFurniture;
+}
 
 export class FurnitureAnimatedVisualization extends FurnitureVisualization {
-  public render(): void {
-    super.render();
+  constructor({ furniture }: Configuration) {
+    super({ furniture });
+
+    this.furniture = furniture;
 
     this.furniture.room.visualization.furnituresTicker.add(() => this.next());
   }
