@@ -41,6 +41,12 @@ export class FurnitureVisualizationData {
     for (let i = 0; i < this.layerCount + 1; i++) this.register(i);
   }
 
+  public update(): void {
+    this.layers = new Map();
+
+    for (let i = 0; i < this.layerCount + 1; i++) this.register(i);
+  }
+
   public reset(): void {
     this.layers = new Map();
     this._initialize();

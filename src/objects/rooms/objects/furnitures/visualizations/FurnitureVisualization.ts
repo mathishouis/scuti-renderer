@@ -121,7 +121,6 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
   public getLayerTexture(id: number): Texture {
     const spritesheet = asset(this.getAssetName());
-
     return spritesheet.textures[this.getLayerName(id)];
   }
 
@@ -131,7 +130,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
   public setState(id: number): void {
     this.furniture.state = id;
-    if (this.data) this.data.reset();
+    if (this.data) this.data.update();
   }
 
   public updateState(): number {

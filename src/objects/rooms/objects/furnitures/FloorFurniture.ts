@@ -7,6 +7,7 @@ import { Room } from '../../Room';
 import { asset, register } from '../../../../utils/Assets';
 import { FurniturePlaceholder } from './FurniturePlaceholder';
 import { ScutiData } from '../../../../ScutiData';
+import { RoomObjectVisualizationFactory } from '../RoomObjectVisualizationFactory.ts';
 
 interface Configuration {
   id: number;
@@ -52,10 +53,10 @@ export class FloorFurniture extends RoomFurniture {
 
     if (this.placeholder) this.placeholder.destroy();
 
-    this.visualization = new ScutiData.VISUALIZATIONS[spritesheet.data.properties.visualization]({
+    this.visualization = RoomObjectVisualizationFactory.create(spritesheet.data.properties.visualization, {
       ...this.parameters,
       ...{ furniture: this },
-    });
+    }) as FurnitureVisualization;
 
     this.visualization.setState(this.state);
     this.visualization.render();

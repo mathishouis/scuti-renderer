@@ -21,18 +21,6 @@ interface FurnitureData {
 }
 
 export class ScutiData {
-  public static VISUALIZATIONS: Record<string, new (configuration: any) => FurnitureVisualization> = {
-    furniture_static: FurnitureStaticVisualization,
-    furniture_guild_customized: FurnitureGuildCustomizedVisualization,
-    furniture_animated: FurnitureAnimatedVisualization,
-    furniture_badge_display: FurnitureBadgeDisplayVisualization,
-    furniture_bottle: FurnitureBottleVisualization,
-    furniture_branded_image: FurnitureBrandedImageVisualization,
-    furniture_bb: FurnitureBBVisualization,
-    furniture_bg: FurnitureRoomBackgroundVisualization,
-    furniture_counter_clock: FurnitureCounterClockVisualization,
-    furniture_fireworks: FurnitureFireworksVisualization,
-  };
   public furnitures: Map<number, FurnitureData> = new Map();
 
   constructor() {
