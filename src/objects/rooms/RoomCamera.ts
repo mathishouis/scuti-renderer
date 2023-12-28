@@ -33,9 +33,7 @@ export class RoomCamera extends Container {
     if (this.room.configuration.dragging) {
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
-      this.room.renderer.application.renderer.events.domElement.addEventListener('pointermove', (event: PointerEvent) =>
-        this._dragMove(event.movementX, event.movementY),
-      );
+      this.room.renderer.application.renderer.events.domElement.addEventListener('pointermove', this._dragMove);
     }
   }
 
@@ -69,11 +67,11 @@ export class RoomCamera extends Container {
     if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
   };
 
-  private _dragMove = (x: number, y: number): void => {
+  private _dragMove = (event: PointerEvent): void => {
     if (this.dragging) {
       this.hasDragged = true;
-      this.pivot.x = Math.floor(this.pivot.x - x / (this.scale.x * window.devicePixelRatio));
-      this.pivot.y = Math.floor(this.pivot.y - y / (this.scale.y * window.devicePixelRatio));
+      this.pivot.x -= event.movementX / (this.scale.x * window.devicePixelRatio);
+      this.pivot.y -= event.movementY / (this.scale.y * window.devicePixelRatio);
     }
   };
 
