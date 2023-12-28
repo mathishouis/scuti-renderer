@@ -320,7 +320,7 @@ const bottle = new FloorFurniture({
 });
 room.add(bottle);
 setTimeout(() => {
-  bottle.visualization.setState(6);
+  bottle.visualization.setState(0);
 }, 3000);
 
 const mpu = new FloorFurniture({

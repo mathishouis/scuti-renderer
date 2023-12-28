@@ -57,27 +57,32 @@ export class FurnitureVisualization extends RoomObjectVisualization {
       const layer = this.data.layers.get(i);
 
       if (layer) {
+        if (layer.currentLoopCount >= layer.loopCount) {
+          layer.currentLoopCount = 0;
+        } else {
+          layer.currentLoopCount += 1;
+          continue;
+        }
+
+        if (layer.currentFrameRepeat >= layer.frameRepeat) {
+          layer.currentFrameRepeat = 0;
+        } else {
+          layer.currentFrameRepeat += 1;
+          continue;
+        }
+
         if (layer.frames.length > 1) {
-          if (layer.currentLoopCount >= layer.loopCount) {
-            layer.currentLoopCount = 0;
-          } else {
-            layer.currentLoopCount += 1;
-            continue;
-          }
-
-          if (layer.currentFrameRepeat >= layer.frameRepeat) {
-            layer.currentFrameRepeat = 0;
-          } else {
-            layer.currentFrameRepeat += 1;
-            continue;
-          }
-
-          if (layer.frames.length - 1 > layer.frameIndex) {
+          if (layer.frames.length - 1 > layer.frameIndex && !layer.needUpdate) {
             layer.frameIndex += 1;
           } else {
             layer.frameIndex = 0;
           }
 
+          layer.needUpdate = true;
+        }
+
+        if (layer.needUpdate) {
+          layer.needUpdate = false;
           this.layers.get(i)?.destroy();
           this.layer(i);
         }
@@ -108,7 +113,6 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
   public getLayerFrame(id: number): number {
     const layer = this.data.layers.get(id);
-
     if (layer && layer.frames.length) return layer.frames[layer.frameIndex];
 
     return 0;
@@ -130,7 +134,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
   public setState(id: number): void {
     this.furniture.state = id;
-    if (this.data) this.data.update();
+    if (this.data) this.data.setState(id);
   }
 
   public updateState(): number {
@@ -154,7 +158,6 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
   public getLayerAlpha(id: number): number {
     const layer = this.data.layers.get(id);
-    if (id === this.data.layers.size) console.log(layer, id);
     return layer ? layer.alpha : 0;
   }
 

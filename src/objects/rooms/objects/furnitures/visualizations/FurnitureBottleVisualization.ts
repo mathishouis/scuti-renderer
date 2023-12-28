@@ -31,6 +31,7 @@ export class FurnitureBottleVisualization extends FurnitureAnimatedVisualization
   }
 
   public updateState(): number {
+    //console.log(this._stateQueue);
     if (this.getLastFramePlayed(0) && this._stateQueue.length) super.setState(this._stateQueue.shift() as number);
 
     return super.updateState();

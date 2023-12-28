@@ -18,6 +18,7 @@ interface CachedLayer {
   blend: BLEND_MODES | undefined;
   offsets: Vector3D;
   directions: number[];
+  needUpdate: boolean;
 }
 
 interface Configuration {
@@ -78,6 +79,7 @@ export class FurnitureVisualizationData {
         z: 0,
       },
       directions: [],
+      needUpdate: true,
     };
 
     const colorProperty = colors.find(({ id }: any) => id === colorId);
@@ -118,5 +120,28 @@ export class FurnitureVisualizationData {
 
   public get directions(): number[] {
     return (this.spritesheet.data as any).properties.directions;
+  }
+
+  public setState(id: number): void {
+    const { animations } = (this.spritesheet.data as any).properties;
+    const animationProperty = animations.find(({ state }: any) => state === id);
+
+    for (let i = 0; i < this.layerCount; i++)
+      if (animationProperty) {
+        const layer = this.layers.get(i);
+
+        if (layer) {
+          const animationLayer = animationProperty.layers.find(({ id }: any) => id === i);
+
+          if (animationLayer && animationLayer.frames) {
+            if (animationLayer.loopCount) layer.loopCount = animationLayer.loopCount;
+            if (animationLayer.frameRepeat) layer.frameRepeat = animationLayer.frameRepeat;
+
+            layer.frames = animationLayer.frames;
+            layer.frameIndex = 0;
+            layer.needUpdate = true;
+          }
+        }
+      }
   }
 }
