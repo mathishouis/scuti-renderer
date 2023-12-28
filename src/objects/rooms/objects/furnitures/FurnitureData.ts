@@ -1,5 +1,6 @@
 import { RoomFurniture } from './RoomFurniture';
 import { error } from '../../../../utils/Logger';
+import { FloorFurniture } from './FloorFurniture.ts';
 
 interface Configuration {
   furniture: RoomFurniture;
@@ -20,7 +21,13 @@ export class FurnitureData {
   }
 
   private _initialize(): void {
-    const data = this.furniture.room.renderer.data.furnitures.get(this.furniture.id);
+    let data;
+
+    if (this.furniture instanceof FloorFurniture && this.furniture.id !== 4010) {
+      data = this.furniture.room.renderer.data.furnitures.floors.get(this.furniture.id);
+    } else {
+      data = this.furniture.room.renderer.data.furnitures.walls.get(this.furniture.id);
+    }
 
     if (!data) return error('RoomFurnitureData', `Cannot find the furniture (id:${this.furniture.id}) in furnitures.data`);
 

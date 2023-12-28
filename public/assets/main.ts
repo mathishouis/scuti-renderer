@@ -352,6 +352,22 @@ const beamer = new FloorFurniture({
 });
 room.add(beamer);
 
+const wheel = new FloorFurniture({
+  id: 4010,
+  position: {
+    x: 10,
+    y: 0,
+    z: 25,
+  },
+  direction: 2,
+  state: -1,
+});
+room.add(wheel);
+
+setTimeout(() => {
+  wheel.setState(5);
+}, 3000);
+
 const bottle = new FloorFurniture({
   id: 129,
   position: {
