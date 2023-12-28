@@ -14,6 +14,7 @@ import { FurnitureVoteMajorityVisualization } from './furnitures/visualizations/
 import { FurnitureWaterAreaVisualization } from './furnitures/visualizations/FurnitureWaterAreaVisualization.ts';
 import { FurnitureQueueTileVisualization } from './furnitures/visualizations/FurnitureQueueTileVisualization.ts';
 import { FurnitureScoreBoardVisualization } from './furnitures/visualizations/FurnitureScoreBoardVisualization.ts';
+import { FurnitureGuildIsometricBadgeVisualization } from './furnitures/visualizations/FurnitureGuildIsometricBadgeVisualization.ts';
 
 export class RoomObjectVisualizationFactory {
   public static VISUALIZATIONS: Record<string, new (configuration: any) => RoomObjectVisualization> = {
@@ -32,6 +33,7 @@ export class RoomObjectVisualizationFactory {
     furniture_water_area: FurnitureWaterAreaVisualization,
     furniture_queue_tile: FurnitureQueueTileVisualization,
     furniture_score_board: FurnitureScoreBoardVisualization,
+    furniture_guild_isometric_badge: FurnitureGuildIsometricBadgeVisualization,
   };
 
   public static get(visualization: string): { new (configuration: any): RoomObjectVisualization } {

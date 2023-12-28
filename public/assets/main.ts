@@ -282,7 +282,7 @@ const badge = new FloorFurniture({
   id: 4249,
   position: {
     x: 8,
-    y: 16,
+    y: 17,
     z: 0,
   },
   direction: 2,
@@ -293,6 +293,22 @@ const badge = new FloorFurniture({
   badge: 'http://127.0.0.1:8081/images/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
 });
 room.add(badge);
+
+const badgePennant = new FloorFurniture({
+  id: 4253,
+  position: {
+    x: 9,
+    y: 22,
+    z: 0,
+  },
+  direction: 2,
+  state: 0,
+  // @ts-ignore
+  primaryColor: 0x00ffff,
+  secondaryColor: 0xff00ff,
+  badge: 'http://127.0.0.1:8081/images/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
+});
+room.add(badgePennant);
 
 const badgeDisplay = new FloorFurniture({
   id: 5013,
@@ -307,6 +323,22 @@ const badgeDisplay = new FloorFurniture({
   badge: 'http://127.0.0.1:8081/images/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
 });
 room.add(badgeDisplay);
+
+const forum = new FloorFurniture({
+  id: 5863,
+  position: {
+    x: 0,
+    y: 0,
+    z: 20,
+  },
+  direction: 2,
+  state: 1,
+  // @ts-ignore
+  thumbnail: 'http://127.0.0.1:8081/images/badges/b24114s13104t24134045306c93d0e4305fe1925250449c1c3.gif',
+  primaryColor: 0xffff00,
+  secondaryColor: 0x00ff00,
+});
+room.add(forum);
 
 const bottle = new FloorFurniture({
   id: 129,
