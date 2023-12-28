@@ -19,11 +19,11 @@ export class FurnitureBadgeDisplayVisualization extends FurnitureAnimatedVisuali
   }
 
   public getLayerTexture(id: number): Texture {
-    const tag = this.getLayerTag(id);
+    const tag = super.getLayerTag(id);
     const trim = super.getLayerTexture(id)?.trim;
 
     if (tag === FurnitureBadgeDisplayVisualization.BADGE_TAG && this._badge && trim) {
-      const texture = Texture.from(this._badge);
+      const texture = new Texture(Texture.from(this._badge).baseTexture);
       texture.trim = trim;
 
       return texture;

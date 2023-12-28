@@ -1,6 +1,6 @@
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 import { RoomFurniture } from '../RoomFurniture';
-import { Texture } from 'pixi.js';
+import { ImageResource, Texture } from 'pixi.js';
 
 interface Configuration {
   furniture: RoomFurniture;
@@ -40,11 +40,11 @@ export class FurnitureGuildCustomizedVisualization extends FurnitureAnimatedVisu
   }
 
   public getLayerTexture(id: number): Texture {
-    const tag = this.getLayerTag(id);
+    const tag = super.getLayerTag(id);
     const trim = super.getLayerTexture(id)?.trim;
 
     if (tag === FurnitureGuildCustomizedVisualization.BADGE_TAG && this._badge && trim) {
-      const texture = Texture.from(this._badge);
+      const texture = new Texture(Texture.from(this._badge).baseTexture);
       texture.trim = trim;
 
       return texture;
