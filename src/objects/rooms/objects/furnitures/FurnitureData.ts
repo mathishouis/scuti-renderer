@@ -23,7 +23,7 @@ export class FurnitureData {
   private _initialize(): void {
     let data;
 
-    if (this.furniture instanceof FloorFurniture && this.furniture.id !== 4010) {
+    if (this.furniture instanceof FloorFurniture) {
       data = this.furniture.room.renderer.data.furnitures.floors.get(this.furniture.id);
     } else {
       data = this.furniture.room.renderer.data.furnitures.walls.get(this.furniture.id);
