@@ -4,10 +4,10 @@ import { register } from './utils/Assets';
 import { Layer, Stage } from '@pixi/layers';
 import { addStats, StatsJSAdapter } from 'pixi-stats';
 import { ScutiConfiguration } from './ScutiConfiguration';
-import { loadBundle } from './objects/bundles/BundleParser';
+import { loadBundle } from './objects/parsers/BundleParser';
 import { log, perf } from './utils/Logger';
 import { benchmark } from './utils/Benchmark';
-import { loadData } from './objects/bundles/DataParser';
+import { loadData } from './objects/parsers/DataParser';
 import { ScutiData } from './ScutiData';
 
 interface Configuration {
