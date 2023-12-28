@@ -22,14 +22,15 @@ export class FurnitureVoteCounterVisualization extends FurnitureAnimatedVisualiz
 
   public getLayerFrame(id: number): number {
     const tag = this.getLayerTag(id);
+    const value = this.value;
 
     switch (tag) {
       case FurnitureVoteCounterVisualization.ONES_TAG:
-        return this.value % 10;
+        return Math.floor(value % 10);
       case FurnitureVoteCounterVisualization.TENS_TAG:
-        return Math.floor(this.value / 10) % 10;
+        return Math.floor((value / 10) % 10);
       case FurnitureVoteCounterVisualization.HUNDREDS_TAG:
-        return Math.floor(this.value / 100);
+        return Math.floor((value / 100) % 10);
       default:
         return super.getLayerFrame(id);
     }

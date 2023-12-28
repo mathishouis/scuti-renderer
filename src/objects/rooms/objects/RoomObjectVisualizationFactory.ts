@@ -13,6 +13,7 @@ import { FurnitureVoteCounterVisualization } from './furnitures/visualizations/F
 import { FurnitureVoteMajorityVisualization } from './furnitures/visualizations/FurnitureVoteMajorityVisualization.ts';
 import { FurnitureWaterAreaVisualization } from './furnitures/visualizations/FurnitureWaterAreaVisualization.ts';
 import { FurnitureQueueTileVisualization } from './furnitures/visualizations/FurnitureQueueTileVisualization.ts';
+import { FurnitureScoreBoardVisualization } from './furnitures/visualizations/FurnitureScoreBoardVisualization.ts';
 
 export class RoomObjectVisualizationFactory {
   public static VISUALIZATIONS: Record<string, new (configuration: any) => RoomObjectVisualization> = {
@@ -30,6 +31,7 @@ export class RoomObjectVisualizationFactory {
     furniture_vote_majority: FurnitureVoteMajorityVisualization,
     furniture_water_area: FurnitureWaterAreaVisualization,
     furniture_queue_tile: FurnitureQueueTileVisualization,
+    furniture_score_board: FurnitureScoreBoardVisualization,
   };
 
   public static get(visualization: string): { new (configuration: any): RoomObjectVisualization } {

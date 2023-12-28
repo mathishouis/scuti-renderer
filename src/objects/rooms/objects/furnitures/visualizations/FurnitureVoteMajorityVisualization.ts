@@ -23,21 +23,25 @@ export class FurnitureVoteMajorityVisualization extends FurnitureAnimatedVisuali
 
   public getLayerFrame(id: number): number {
     const tag = this.getLayerTag(id);
+    const value = this.value;
 
     switch (tag) {
       case FurnitureVoteMajorityVisualization.ONES_TAG:
-        return this.value % 10;
+        return Math.floor(value % 10);
       case FurnitureVoteMajorityVisualization.TENS_TAG:
-        return Math.floor(this.value / 10) % 10;
+        return Math.floor((value / 10) % 10);
       case FurnitureVoteMajorityVisualization.HUNDREDS_TAG:
-        return Math.floor(this.value / 100);
+        return Math.floor((value / 100) % 10);
       default:
         return super.getLayerFrame(id);
     }
   }
 
   public getLayerAlpha(id: number): number {
-    if (!(this.furniture.state === -1) || this.value === FurnitureVoteMajorityVisualization.HIDE_RESULTS_VALUE) {
+    if (
+      !(FurnitureVoteMajorityVisualization.HIDE_RESULTS_STATES.indexOf(this.furniture.state) === -1) ||
+      this.value === FurnitureVoteMajorityVisualization.HIDE_RESULTS_VALUE
+    ) {
       const tag = this.getLayerTag(id);
 
       switch (tag) {

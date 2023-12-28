@@ -404,6 +404,22 @@ setInterval(() => {
   counter2.setState(counter2.state - 1);
 }, 1000);
 
+const scoreBoard = new FloorFurniture({
+  id: 3756,
+  position: {
+    x: -10,
+    y: 0,
+    z: 16,
+  },
+  direction: 0,
+  state: 10,
+});
+room.add(scoreBoard);
+
+setInterval(() => {
+  scoreBoard.setState(scoreBoard.state - 1);
+}, 1000);
+
 const votecounter = new FloorFurniture({
   id: 4367,
   position: {
