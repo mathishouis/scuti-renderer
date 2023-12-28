@@ -442,6 +442,22 @@ const water = new FloorFurniture({
 });
 room.add(water);
 
+const roller = new FloorFurniture({
+  id: 1649,
+  position: {
+    x: 2,
+    y: 2,
+    z: 16,
+  },
+  direction: 4,
+  state: 0,
+});
+room.add(roller);
+
+setInterval(() => {
+  roller.setState(2);
+}, 1000);
+
 const fireworks = new FloorFurniture({
   id: 3784,
   position: {

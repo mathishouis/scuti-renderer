@@ -136,7 +136,8 @@ export class FurnitureVisualizationData {
           if (animationLayer && animationLayer.frames) {
             if (animationLayer.loopCount) layer.loopCount = animationLayer.loopCount;
             if (animationLayer.frameRepeat) layer.frameRepeat = animationLayer.frameRepeat;
-
+            //if (this.visualization.usesStateResetting()) layer.currentLoopCount = 0;
+            //if (this.visualization.usesStateResetting()) layer.currentFrameRepeat = 0;
             layer.frames = animationLayer.frames;
             layer.frameIndex = 0;
             layer.needUpdate = true;

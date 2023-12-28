@@ -13,6 +13,10 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
     this.furniture.room.visualization.furnituresTicker.remove(() => this.next());
   }
 
+  public next() {
+    super.next();
+  }
+
   public getLastFramePlayed(id: number): boolean {
     const layer = this.data.layers.get(id);
 

@@ -53,6 +53,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
   }
 
   public next(): void {
+    console.log('a');
     for (let i = 0; i < this.data.layers.size; i++) {
       const layer = this.data.layers.get(i);
 
@@ -92,13 +93,14 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     this.updateState();
   }
   public update(): void {}
-  public destroy(): void {}
-
-  public reset(): void {
+  public destroy(): void {
     this.layers.forEach((layer: FurnitureLayer) => layer.destroy());
     this.layers = new Map();
     this.data.reset();
-    this.render();
+  }
+
+  public reset(): void {
+    this.destroy();
   }
 
   public getLayerColor(id: number): number {
