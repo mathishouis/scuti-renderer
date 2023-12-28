@@ -430,6 +430,18 @@ const votecounter2 = new FloorFurniture({
 });
 room.add(votecounter2);
 
+const water = new FloorFurniture({
+  id: 3541,
+  position: {
+    x: 2,
+    y: 2,
+    z: 12,
+  },
+  direction: 4,
+  state: 0,
+});
+room.add(water);
+
 const fireworks = new FloorFurniture({
   id: 3784,
   position: {
