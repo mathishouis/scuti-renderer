@@ -6,11 +6,12 @@ interface Configuration {
   value: number;
 }
 
-export class FurnitureVoteCounterVisualization extends FurnitureAnimatedVisualization {
+export class FurnitureVoteMajorityVisualization extends FurnitureAnimatedVisualization {
   private static ONES_TAG: string = 'ones_sprite';
   private static TENS_TAG: string = 'tens_sprite';
   private static HUNDREDS_TAG: string = 'hundreds_sprite';
-  private static HIDE_COUNTER_SCORE: number = -1;
+  private static HIDE_RESULTS_STATES: number[] = [-1, 1];
+  private static HIDE_RESULTS_VALUE: number = -1;
 
   private value: number;
 
@@ -24,11 +25,11 @@ export class FurnitureVoteCounterVisualization extends FurnitureAnimatedVisualiz
     const tag = this.getLayerTag(id);
 
     switch (tag) {
-      case FurnitureVoteCounterVisualization.ONES_TAG:
+      case FurnitureVoteMajorityVisualization.ONES_TAG:
         return this.value % 10;
-      case FurnitureVoteCounterVisualization.TENS_TAG:
+      case FurnitureVoteMajorityVisualization.TENS_TAG:
         return Math.floor(this.value / 10) % 10;
-      case FurnitureVoteCounterVisualization.HUNDREDS_TAG:
+      case FurnitureVoteMajorityVisualization.HUNDREDS_TAG:
         return Math.floor(this.value / 100);
       default:
         return super.getLayerFrame(id);
@@ -36,13 +37,13 @@ export class FurnitureVoteCounterVisualization extends FurnitureAnimatedVisualiz
   }
 
   public getLayerAlpha(id: number): number {
-    if (this.value === FurnitureVoteCounterVisualization.HIDE_COUNTER_SCORE) {
+    if (!(this.furniture.state === -1) || this.value === FurnitureVoteMajorityVisualization.HIDE_RESULTS_VALUE) {
       const tag = this.getLayerTag(id);
 
       switch (tag) {
-        case FurnitureVoteCounterVisualization.ONES_TAG:
-        case FurnitureVoteCounterVisualization.TENS_TAG:
-        case FurnitureVoteCounterVisualization.HUNDREDS_TAG:
+        case FurnitureVoteMajorityVisualization.ONES_TAG:
+        case FurnitureVoteMajorityVisualization.TENS_TAG:
+        case FurnitureVoteMajorityVisualization.HUNDREDS_TAG:
           return 0;
       }
     }

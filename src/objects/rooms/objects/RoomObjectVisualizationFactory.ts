@@ -10,6 +10,7 @@ import { FurnitureCounterClockVisualization } from './furnitures/visualizations/
 import { FurnitureFireworksVisualization } from './furnitures/visualizations/FurnitureFireworksVisualization';
 import { RoomObjectVisualization } from './RoomObjectVisualization';
 import { FurnitureVoteCounterVisualization } from './furnitures/visualizations/FurnitureVoteCounterVisualization';
+import { FurnitureVoteMajorityVisualization } from './furnitures/visualizations/FurnitureVoteMajorityVisualization.ts';
 
 export class RoomObjectVisualizationFactory {
   public static VISUALIZATIONS: Record<string, new (configuration: any) => RoomObjectVisualization> = {
@@ -24,6 +25,7 @@ export class RoomObjectVisualizationFactory {
     furniture_counter_clock: FurnitureCounterClockVisualization,
     furniture_fireworks: FurnitureFireworksVisualization,
     furniture_vote_counter: FurnitureVoteCounterVisualization,
+    furniture_vote_majority: FurnitureVoteMajorityVisualization,
   };
 
   public static get(visualization: string): { new (configuration: any): RoomObjectVisualization } {
