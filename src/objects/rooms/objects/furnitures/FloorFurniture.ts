@@ -6,8 +6,7 @@ import { FurnitureData } from './FurnitureData';
 import { Room } from '../../Room';
 import { asset, register } from '../../../../utils/Assets';
 import { FurniturePlaceholder } from './FurniturePlaceholder';
-import { ScutiData } from '../../../../ScutiData';
-import { RoomObjectVisualizationFactory } from '../RoomObjectVisualizationFactory.ts';
+import { RoomObjectVisualizationFactory } from '../RoomObjectVisualizationFactory';
 
 interface Configuration {
   id: number;
