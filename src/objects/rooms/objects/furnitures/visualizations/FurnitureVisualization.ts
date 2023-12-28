@@ -181,4 +181,8 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     const layer = this.data.layers.get(id);
     return layer ? layer.flipped : false;
   }
+
+  public getLayer(id: number): FurnitureLayer | undefined {
+    return this.layers.get(id);
+  }
 }

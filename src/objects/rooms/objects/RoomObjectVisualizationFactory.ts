@@ -10,11 +10,12 @@ import { FurnitureCounterClockVisualization } from './furnitures/visualizations/
 import { FurnitureFireworksVisualization } from './furnitures/visualizations/FurnitureFireworksVisualization';
 import { RoomObjectVisualization } from './RoomObjectVisualization';
 import { FurnitureVoteCounterVisualization } from './furnitures/visualizations/FurnitureVoteCounterVisualization';
-import { FurnitureVoteMajorityVisualization } from './furnitures/visualizations/FurnitureVoteMajorityVisualization.ts';
-import { FurnitureWaterAreaVisualization } from './furnitures/visualizations/FurnitureWaterAreaVisualization.ts';
-import { FurnitureQueueTileVisualization } from './furnitures/visualizations/FurnitureQueueTileVisualization.ts';
-import { FurnitureScoreBoardVisualization } from './furnitures/visualizations/FurnitureScoreBoardVisualization.ts';
-import { FurnitureGuildIsometricBadgeVisualization } from './furnitures/visualizations/FurnitureGuildIsometricBadgeVisualization.ts';
+import { FurnitureVoteMajorityVisualization } from './furnitures/visualizations/FurnitureVoteMajorityVisualization';
+import { FurnitureWaterAreaVisualization } from './furnitures/visualizations/FurnitureWaterAreaVisualization';
+import { FurnitureQueueTileVisualization } from './furnitures/visualizations/FurnitureQueueTileVisualization';
+import { FurnitureScoreBoardVisualization } from './furnitures/visualizations/FurnitureScoreBoardVisualization';
+import { FurnitureGuildIsometricBadgeVisualization } from './furnitures/visualizations/FurnitureGuildIsometricBadgeVisualization';
+import { FurniturePartyBeamerVisualization } from './furnitures/visualizations/FurniturePartyBeamerVisualization';
 
 export class RoomObjectVisualizationFactory {
   public static VISUALIZATIONS: Record<string, new (configuration: any) => RoomObjectVisualization> = {
@@ -34,6 +35,7 @@ export class RoomObjectVisualizationFactory {
     furniture_queue_tile: FurnitureQueueTileVisualization,
     furniture_score_board: FurnitureScoreBoardVisualization,
     furniture_guild_isometric_badge: FurnitureGuildIsometricBadgeVisualization,
+    furniture_party_beamer: FurniturePartyBeamerVisualization,
   };
 
   public static get(visualization: string): { new (configuration: any): RoomObjectVisualization } {

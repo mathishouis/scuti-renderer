@@ -340,6 +340,18 @@ const forum = new FloorFurniture({
 });
 room.add(forum);
 
+const beamer = new FloorFurniture({
+  id: 2961,
+  position: {
+    x: 0,
+    y: 0,
+    z: 25,
+  },
+  direction: 2,
+  state: 1,
+});
+room.add(beamer);
+
 const bottle = new FloorFurniture({
   id: 129,
   position: {
