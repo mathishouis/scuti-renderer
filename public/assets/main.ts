@@ -404,6 +404,19 @@ setInterval(() => {
   counter2.setState(counter2.state - 1);
 }, 1000);
 
+const votecounter = new FloorFurniture({
+  id: 4367,
+  position: {
+    x: -10,
+    y: 0,
+    z: 10,
+  },
+  direction: 4,
+  state: 0,
+  value: 9,
+});
+room.add(votecounter);
+
 const fireworks = new FloorFurniture({
   id: 3784,
   position: {
