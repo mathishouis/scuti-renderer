@@ -78,7 +78,16 @@ export class RoomCamera extends Container {
   public isOutOfBounds(): boolean {
     const { x, y } = this.pivot;
     const { width, height } = this.room.renderer.application.view;
-    if (x - width / 2 > this.width || x + width / 2 < 0 || y - height / 2 > this.height || y + height / 2 < 0) return true;
+    const scaledWidth = (width / this.scale.x / 2) * this.scale.x;
+    const scaledHeight = (height / this.scale.y / 2) * this.scale.y;
+
+    if (
+      x - scaledWidth > this.width / this.scale.x ||
+      x + scaledWidth < 0 ||
+      y - scaledHeight > this.height / this.scale.y ||
+      y + scaledHeight < 0
+    )
+      return true;
     else return false;
   }
 
@@ -90,8 +99,8 @@ export class RoomCamera extends Container {
       ease: 'easeOut',
     });
     gsap.to(this.pivot, {
-      x: Math.floor(this.width / 2),
-      y: Math.floor(this.height / 2),
+      x: Math.floor(this.width / this.scale.x / 2),
+      y: Math.floor(this.height / this.scale.y / 2),
       duration,
       ease: 'easeOut',
     });
