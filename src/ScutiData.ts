@@ -9,6 +9,7 @@ import { FurnitureBrandedImageVisualization } from './objects/rooms/objects/furn
 import { FurnitureBBVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureBBVisualization';
 import { FurnitureRoomBackgroundVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureRoomBackgroundVisualization';
 import { FurnitureCounterClockVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureCounterClockVisualization';
+import { FurnitureFireworksVisualization } from './objects/rooms/objects/furnitures/visualizations/FurnitureFireworksVisualization';
 
 interface FurnitureData {
   id: number;
@@ -30,6 +31,7 @@ export class ScutiData {
     furniture_bb: FurnitureBBVisualization,
     furniture_bg: FurnitureRoomBackgroundVisualization,
     furniture_counter_clock: FurnitureCounterClockVisualization,
+    furniture_fireworks: FurnitureFireworksVisualization,
   };
   public furnitures: Map<number, FurnitureData> = new Map();
 

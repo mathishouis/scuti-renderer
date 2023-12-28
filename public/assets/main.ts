@@ -6,6 +6,8 @@ import { WallMaterial } from '../../src/objects/rooms/materials/WallMaterial';
 import { TileEvent } from '../../src/entities/Events';
 import { LandscapeMaterial } from '../../src';
 import { FloorFurniture } from '../../src/objects/rooms/objects/furnitures/FloorFurniture';
+import { benchmark } from '../../src/utils/Benchmark';
+import { perf } from '../../src/utils/Logger';
 
 const renderer: Scuti = new Scuti({
   canvas: document.getElementById('app') as HTMLElement,
@@ -153,6 +155,7 @@ const room: Room = new Room({
 });
 
 renderer.add(room);
+benchmark('123a');
 const tv = new FloorFurniture({
   id: 3886,
   position: {
@@ -400,6 +403,19 @@ room.add(counter2);
 setInterval(() => {
   counter2.setState(counter2.state - 1);
 }, 1000);
+
+const fireworks = new FloorFurniture({
+  id: 3784,
+  position: {
+    x: -10,
+    y: 0,
+    z: 5,
+  },
+  direction: 0,
+  state: 2,
+});
+room.add(fireworks);
+perf('123a', '123a');
 
 /*const pennant = new FloorFurniture({
   id: 4253,

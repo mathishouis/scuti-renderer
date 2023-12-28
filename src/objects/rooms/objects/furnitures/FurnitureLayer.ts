@@ -44,7 +44,7 @@ export class FurnitureLayer {
   public render(): void {
     this.sprite = new Sprite(this.furniture.visualization.getLayerTexture(this.id));
     this.sprite.parentLayer = this.furniture.room.renderer.layer;
-    this.sprite.zOrder = this.furniture.visualization.getLayerZOffset(this.id);
+    this.sprite.zOrder = 0;
 
     if (this.flip) this.sprite.scale.x = -1;
     if (this.offsets.x) this.sprite.x += this.offsets.x;
@@ -53,6 +53,8 @@ export class FurnitureLayer {
     if (this.alpha) this.sprite.alpha = this.alpha;
     if (this.tint) this.sprite.tint = this.tint;
     if (this.blend) this.sprite.blendMode = this.blend;
+
+    //this.sprite.tint = '#' + Math.random().toString(16).substr(-6);
 
     this.furniture.visualization.container.addChild(this.sprite);
   }

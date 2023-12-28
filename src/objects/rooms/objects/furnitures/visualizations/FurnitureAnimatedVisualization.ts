@@ -1,5 +1,4 @@
 import { FurnitureVisualization } from './FurnitureVisualization';
-import { asset } from '../../../../../utils/Assets';
 
 export class FurnitureAnimatedVisualization extends FurnitureVisualization {
   public render(): void {
@@ -15,16 +14,9 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
   }
 
   public getLastFramePlayed(id: number): boolean {
-    const spritesheet = asset(this.getAssetName());
-    const { animations } = spritesheet.data.properties;
-    const animation = animations.find((animation: any) => animation.state === this.furniture.state);
+    const layer = this.data.layers.get(id);
 
-    if (animation) {
-      const animationLayer = animation.layers.find((layer: any) => layer.id === id);
-      if (animationLayer && animationLayer.frames) {
-        return this.frames.get(id) === animationLayer.frames.length - 1;
-      }
-    }
+    if (layer) return layer.frameIndex === layer.frames.length - 1;
 
     return false;
   }
