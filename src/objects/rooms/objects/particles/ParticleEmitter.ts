@@ -126,6 +126,8 @@ export class ParticleEmitter {
     this.age++;
   }
 
+  public destroy(): void {}
+
   private _getDirection(shape: 'sphere' | 'cone' | 'plane'): Vector2D {
     switch (shape) {
       case 'sphere':

@@ -203,6 +203,21 @@ setInterval(() => {
   firework3.setState(2);
 }, 5000);
 
+const fireworka = new FloorFurniture({
+  id: 3784,
+  position: {
+    x: -10,
+    y: 5,
+    z: 1,
+  },
+  direction: 2,
+  state: 1,
+});
+setInterval(() => {
+  fireworka.setState(2);
+}, 1000);
+room.add(fireworka);
+
 let zoom = 1;
 const [min_zoom, max_zoom] = [0.5, 5];
 
