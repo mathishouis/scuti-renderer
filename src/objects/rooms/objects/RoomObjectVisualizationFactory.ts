@@ -18,6 +18,7 @@ import { FurnitureGuildIsometricBadgeVisualization } from './furnitures/visualiz
 import { FurniturePartyBeamerVisualization } from './furnitures/visualizations/FurniturePartyBeamerVisualization';
 import { FurnitureHabboWheelVisualization } from './furnitures/visualizations/FurnitureHabboWheelVisualization';
 import { FurnitureStickieVisualization } from './furnitures/visualizations/FurnitureStickieVisualization';
+import { FurnitureValRandomizerVisualization } from './furnitures/visualizations/FurnitureValRandomizerVisualization';
 
 export class RoomObjectVisualizationFactory {
   public static VISUALIZATIONS: Record<string, new (configuration: any) => RoomObjectVisualization> = {
@@ -40,6 +41,7 @@ export class RoomObjectVisualizationFactory {
     furniture_party_beamer: FurniturePartyBeamerVisualization,
     furniture_habbowheel: FurnitureHabboWheelVisualization,
     furniture_stickie: FurnitureStickieVisualization,
+    furniture_val_randomizer: FurnitureValRandomizerVisualization,
   };
 
   public static get(visualization: string): { new (configuration: any): RoomObjectVisualization } {

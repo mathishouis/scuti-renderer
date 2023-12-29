@@ -199,39 +199,35 @@ const firework3 = new FloorFurniture({
 });
 room.add(firework3);
 
-setInterval(() => {
-  firework3.setState(2);
-}, 4000);
-
-const fireworka = new FloorFurniture({
-  id: 3784,
-  position: {
-    x: -10,
-    y: 5,
-    z: 1,
-  },
-  direction: 2,
-  state: 1,
-});
-setInterval(() => {
-  fireworka.setState(2);
-}, 4000);
-room.add(fireworka);
-
-const fireworkb = new FloorFurniture({
-  id: 3784,
+const valRandomizer = new FloorFurniture({
+  id: 2696,
   position: {
     x: -10,
     y: 6,
     z: 1,
   },
   direction: 2,
-  state: 1,
+  state: 2,
 });
-setInterval(() => {
-  fireworkb.setState(2);
-}, 4000);
-room.add(fireworkb);
+room.add(valRandomizer);
+setTimeout(() => {
+  valRandomizer.setState(0);
+}, 3000);
+setTimeout(() => {
+  valRandomizer.setState(2);
+}, 5000);
+
+const bottle = new FloorFurniture({
+  id: 129,
+  position: {
+    x: -10,
+    y: 10,
+    z: 1,
+  },
+  direction: 2,
+  state: -1,
+});
+room.add(bottle);
 
 let zoom = 1;
 const [min_zoom, max_zoom] = [0.5, 5];
