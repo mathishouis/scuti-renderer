@@ -190,14 +190,18 @@ const firework3 = new FloorFurniture({
   //id: 3782,
   id: 3784,
   position: {
-    x: -5,
+    x: -10,
     y: 4,
     z: 1,
   },
   direction: 2,
-  state: 2,
+  state: 0,
 });
 room.add(firework3);
+
+setInterval(() => {
+  firework3.setState(2);
+}, 5000);
 
 let zoom = 1;
 const [min_zoom, max_zoom] = [0.5, 5];

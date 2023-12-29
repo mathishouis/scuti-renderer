@@ -17,41 +17,55 @@ export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualizat
   }
 
   public render() {
-    super.render();
+    this._layerData = new Map();
+    if (this.furniture.state === FurnitureFireworksVisualization.BURST_STATE) {
+      this._particleSystem = new ParticleSystem({ visualization: this });
+    }
 
-    this._particleSystem = new ParticleSystem({ visualization: this });
+    super.render();
+  }
+
+  public reset() {
+    super.reset();
+
+    if (this.furniture.state === FurnitureFireworksVisualization.BURST_STATE) {
+      this._particleSystem = new ParticleSystem({ visualization: this });
+    }
+    this._layerData = new Map<number, { running: boolean; y: number; speed: number }>();
   }
 
   public next() {
     super.next();
 
-    if (this.furniture.state === FurnitureFireworksVisualization.BURST_STATE && this._particleSystem) {
-      for (let i = 0; i < this.furniture.visualization.data.layerCount; i++) {
-        const emitter = this._particleSystem.getLayerEmitter(i);
-        if (emitter) {
-          if (this._layerData.get(i) === undefined) {
-            this._layerData.set(i, {
-              running: false,
-              y: 0,
-              speed: 1,
-            });
-          }
+    if (this._particleSystem) {
+      if (this.furniture.state === FurnitureFireworksVisualization.BURST_STATE) {
+        for (let i = 0; i < this.furniture.visualization.data.layerCount; i++) {
+          const emitter = this._particleSystem.getLayerEmitter(i);
+          if (emitter) {
+            if (this._layerData.get(i) === undefined) {
+              this._layerData.set(i, {
+                running: false,
+                y: 0,
+                speed: 1,
+              });
+            }
 
-          const layerData = this._layerData.get(i);
+            const layerData = this._layerData.get(i);
 
-          if (layerData) {
-            if (!layerData.running && layerData.y < emitter.fuseTime) {
-              layerData.running = true;
-            } else if (layerData.running) {
-              layerData.speed *= 1 - emitter.airFriction;
-              layerData.y += layerData.speed;
+            if (layerData) {
+              if (!layerData.running && layerData.y < emitter.fuseTime) {
+                layerData.running = true;
+              } else if (layerData.running) {
+                layerData.speed *= 1 - emitter.airFriction;
+                layerData.y += layerData.speed;
+              }
             }
           }
         }
       }
-    }
 
-    this._particleSystem.next();
+      this._particleSystem.next();
+    }
   }
 
   public getLayerYOffset(id: number, direction: number): number {
