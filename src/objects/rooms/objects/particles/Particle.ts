@@ -1,5 +1,5 @@
 import { Vector2D } from '../../../../types/Vector.ts';
-import { Graphics, Sprite } from 'pixi.js';
+import { Sprite } from 'pixi.js';
 import { RoomObjectVisualization } from '../RoomObjectVisualization.ts';
 import { asset } from '../../../../utils/Assets.ts';
 
@@ -24,7 +24,6 @@ export class Particle {
   public direction: Vector2D;
   public gravity: number;
   public airFriction: number;
-  public force: number;
   public age: number;
   public fade: boolean;
   public fadeTime: number;
@@ -32,51 +31,14 @@ export class Particle {
   public sprite!: Sprite;
   public alpha: number;
   public finished: boolean = false;
-  public frames: string[]; /* = [
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_1',
-    'fireworks_04_c_0_2',
-    'fireworks_04_c_0_3',
-    'fireworks_04_c_0_4',
-    'fireworks_04_c_0_5',
-    'fireworks_04_c_0_6',
-    'fireworks_04_c_0_7',
-  ];*/
+  public frames: string[];
 
-  constructor({
-    visualization,
-    position,
-    direction,
-    gravity,
-    airFriction,
-    force,
-    age,
-    fade,
-    fadeTime,
-    alpha,
-    energy,
-    frames,
-  }: Configuration) {
+  constructor({ visualization, position, direction, gravity, airFriction, age, fade, fadeTime, alpha, energy, frames }: Configuration) {
     this.visualization = visualization;
     this.position = position;
     this.direction = direction;
     this.gravity = gravity ?? 0.95;
     this.airFriction = airFriction ?? 0.95;
-    this.force = force ?? 10;
     this.age = age ?? 0;
     this.fade = fade ?? true;
     this.fadeTime = fadeTime ?? 50;
@@ -86,7 +48,7 @@ export class Particle {
   }
 
   public render(): void {
-    this.sprite = new Sprite(asset('furnitures/fireworks_04').textures[this.frames[0]]);
+    this.sprite = new Sprite(asset(this.visualization.getAssetName()).textures[this.frames[0]]);
     this.sprite.alpha = 1;
     this.sprite.x = this.position.x;
     this.sprite.y = this.position.y;
@@ -106,16 +68,16 @@ export class Particle {
         return;
       }
 
-      this.sprite.texture = asset('furnitures/fireworks_04').textures[this.frames[this.age]];
+      this.sprite.texture = asset(this.visualization.getAssetName()).textures[this.frames[this.age]];
 
       if (this.fade && this.age > this.frames.length - this.fadeTime) {
-        this.alpha -= 0.05;
+        this.alpha -= 1 / this.fadeTime;
         this.sprite.alpha = this.alpha;
       }
 
-      this.sprite.x += (this.direction.x * this.force) / 20;
-      this.sprite.y += (this.direction.y * this.force) / 20 + this.gravity / 4;
-      this.force *= 1 - this.airFriction;
+      this.sprite.x += (this.direction.x * this.energy) / 8;
+      this.sprite.y += (this.direction.y * this.energy) / 8 + this.gravity / 15;
+      this.energy *= 1 - this.airFriction;
       this.age++;
     }
   }

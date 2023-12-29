@@ -15,6 +15,7 @@ const renderer: Scuti = new Scuti({
   height: window.innerHeight,
   resources: 'http://127.0.0.1:8081',
   backgroundColor: 0x0c567c,
+  //backgroundColor: 0x000000,
   resizeTo: window,
 });
 
@@ -156,7 +157,7 @@ const room: Room = new Room({
 
 renderer.add(room);
 
-const firework = new FloorFurniture({
+/*const firework = new FloorFurniture({
   id: 3784,
   position: {
     x: -5,
@@ -166,7 +167,37 @@ const firework = new FloorFurniture({
   direction: 2,
   state: 2,
 });
-room.add(firework);
+room.add(firework);*/
+/*const firework2 = new FloorFurniture({
+  id: 3782,
+  position: {
+    x: -5,
+    y: 2,
+    z: 1,
+  },
+  direction: 2,
+  state: 2,
+});
+room.add(firework2);*/
+
+const firework3 = new FloorFurniture({
+  //id: 4840,
+  //id: 4373,
+  //id: 4371,
+  //id: 4380,
+  //id: 4384,
+  //id: 4411,
+  //id: 3782,
+  id: 3784,
+  position: {
+    x: -5,
+    y: 4,
+    z: 1,
+  },
+  direction: 2,
+  state: 2,
+});
+room.add(firework3);
 
 let zoom = 1;
 const [min_zoom, max_zoom] = [0.5, 5];
