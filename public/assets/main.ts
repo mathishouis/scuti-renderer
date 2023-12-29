@@ -164,7 +164,7 @@ const firework = new FloorFurniture({
     z: 14,
   },
   direction: 2,
-  state: 0,
+  state: 2,
 });
 room.add(firework);
 
