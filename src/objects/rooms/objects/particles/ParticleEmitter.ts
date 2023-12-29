@@ -1,6 +1,7 @@
-import { Particle } from './Particle.ts';
-import { RoomObjectVisualization } from '../RoomObjectVisualization.ts';
-import { Vector2D } from '../../../../types/Vector.ts';
+import { Particle } from './Particle';
+import { RoomObjectVisualization } from '../RoomObjectVisualization';
+import { Vector2D } from '../../../../types/Vector';
+import { ParticleData } from './ParticleData';
 
 interface Configuration {
   visualization: RoomObjectVisualization;
@@ -17,13 +18,6 @@ interface Configuration {
   blend?: number;
   layerId: number;
   fuseTime?: number;
-}
-
-interface ParticleData {
-  lifeTime: number;
-  fade: boolean;
-  emitter: boolean;
-  frames: string[];
 }
 
 export class ParticleEmitter {

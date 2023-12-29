@@ -16,8 +16,8 @@ import { FurnitureQueueTileVisualization } from './furnitures/visualizations/Fur
 import { FurnitureScoreBoardVisualization } from './furnitures/visualizations/FurnitureScoreBoardVisualization';
 import { FurnitureGuildIsometricBadgeVisualization } from './furnitures/visualizations/FurnitureGuildIsometricBadgeVisualization';
 import { FurniturePartyBeamerVisualization } from './furnitures/visualizations/FurniturePartyBeamerVisualization';
-import { FurnitureHabboWheelVisualization } from './furnitures/visualizations/FurnitureHabboWheelVisualization.ts';
-import { FurnitureStickieVisualization } from './furnitures/visualizations/FurnitureStickieVisualization.ts';
+import { FurnitureHabboWheelVisualization } from './furnitures/visualizations/FurnitureHabboWheelVisualization';
+import { FurnitureStickieVisualization } from './furnitures/visualizations/FurnitureStickieVisualization';
 
 export class RoomObjectVisualizationFactory {
   public static VISUALIZATIONS: Record<string, new (configuration: any) => RoomObjectVisualization> = {

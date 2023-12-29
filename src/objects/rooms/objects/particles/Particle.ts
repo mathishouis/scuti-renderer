@@ -1,7 +1,7 @@
-import { Vector2D } from '../../../../types/Vector.ts';
+import { Vector2D } from '../../../../types/Vector';
 import { Sprite } from 'pixi.js';
-import { RoomObjectVisualization } from '../RoomObjectVisualization.ts';
-import { asset } from '../../../../utils/Assets.ts';
+import { RoomObjectVisualization } from '../RoomObjectVisualization';
+import { asset } from '../../../../utils/Assets';
 
 interface Configuration {
   visualization: RoomObjectVisualization;

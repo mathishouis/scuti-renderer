@@ -1,6 +1,6 @@
 import { RoomFurniture } from './RoomFurniture';
 import { error } from '../../../../utils/Logger';
-import { FloorFurniture } from './FloorFurniture.ts';
+import { FloorFurniture } from './FloorFurniture';
 
 interface Configuration {
   furniture: RoomFurniture;

@@ -1,38 +1,9 @@
-import { ParticleEmitter } from './ParticleEmitter.ts';
-import { FurnitureVisualization } from '../furnitures/visualizations/FurnitureVisualization.ts';
-import { Vector2D } from '../../../../types/Vector.ts';
+import { ParticleEmitter } from './ParticleEmitter';
+import { FurnitureVisualization } from '../furnitures/visualizations/FurnitureVisualization';
+import { ParticleEmitterData, ParticleSystemData } from './ParticleData';
 
 interface Configuration {
   visualization: FurnitureVisualization;
-}
-
-interface ParticleData {
-  lifeTime: number;
-  fade: boolean;
-  emitter: boolean;
-  frames: string[];
-}
-
-interface EmitterData {
-  id: number;
-  layerId: number;
-  fuseTime: number;
-  maxNumParticles: number;
-  particlesPerFrame: number;
-  burstPulse: number;
-  force: number;
-  direction: number;
-  energy: number;
-  shape: string;
-  gravity: number;
-  airFriction: number;
-  particles: ParticleData[];
-}
-
-interface ParticleSystemData {
-  blend: number;
-  offsets: Vector2D;
-  emitters: EmitterData[];
 }
 
 export class ParticleSystem {
@@ -55,7 +26,7 @@ export class ParticleSystem {
   }
 
   private _particleSystem(particleSystem: ParticleSystemData): void {
-    particleSystem?.emitters.forEach((emitter: EmitterData) => {
+    particleSystem?.emitters.forEach((emitter: ParticleEmitterData) => {
       const particleEmitter = new ParticleEmitter({
         visualization: this.visualization,
         maxNumParticles: emitter.maxNumParticles,

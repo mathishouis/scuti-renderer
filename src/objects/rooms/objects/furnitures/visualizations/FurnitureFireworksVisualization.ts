@@ -1,6 +1,6 @@
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
-import { RoomFurniture } from '../RoomFurniture.ts';
-import { ParticleSystem } from '../../particles/ParticleSystem.ts';
+import { RoomFurniture } from '../RoomFurniture';
+import { ParticleSystem } from '../../particles/ParticleSystem';
 
 interface Configuration {
   furniture: RoomFurniture;
