@@ -17,6 +17,7 @@ export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualizat
   }
 
   public render() {
+    if (this._particleSystem) this._particleSystem.destroy();
     this._layerData = new Map();
     if (this.furniture.state === FurnitureFireworksVisualization.BURST_STATE) {
       this._particleSystem = new ParticleSystem({ visualization: this });
@@ -25,8 +26,15 @@ export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualizat
     super.render();
   }
 
+  public destroy() {
+    if (this._particleSystem) this._particleSystem.destroy();
+    super.destroy();
+  }
+
   public reset() {
     super.reset();
+
+    if (this._particleSystem) this._particleSystem.destroy();
 
     if (this.furniture.state === FurnitureFireworksVisualization.BURST_STATE) {
       this._particleSystem = new ParticleSystem({ visualization: this });

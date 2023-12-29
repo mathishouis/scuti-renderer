@@ -57,7 +57,7 @@ export class Particle {
 
   public destroy(): void {
     this.finished = true;
-    this.sprite.destroy();
+    if (this.sprite) this.sprite.destroy();
     this.sprite = undefined as any;
   }
 

@@ -66,4 +66,8 @@ export class ParticleSystem {
   public next(): void {
     this.emitters.forEach((emitter: ParticleEmitter) => emitter.next());
   }
+
+  public destroy(): void {
+    this.emitters.forEach((emitter: ParticleEmitter) => emitter.destroy());
+  }
 }

@@ -126,7 +126,11 @@ export class ParticleEmitter {
     this.age++;
   }
 
-  public destroy(): void {}
+  public destroy(): void {
+    if (this.running && this.onEnd) this.onEnd();
+    this.running = false;
+    this.generatedParticles.forEach((particle: Particle) => particle.destroy());
+  }
 
   private _getDirection(shape: 'sphere' | 'cone' | 'plane'): Vector2D {
     switch (shape) {

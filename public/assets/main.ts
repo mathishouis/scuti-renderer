@@ -195,13 +195,13 @@ const firework3 = new FloorFurniture({
     z: 1,
   },
   direction: 2,
-  state: 0,
+  state: 1,
 });
 room.add(firework3);
 
 setInterval(() => {
   firework3.setState(2);
-}, 5000);
+}, 4000);
 
 const fireworka = new FloorFurniture({
   id: 3784,
@@ -215,8 +215,23 @@ const fireworka = new FloorFurniture({
 });
 setInterval(() => {
   fireworka.setState(2);
-}, 1000);
+}, 4000);
 room.add(fireworka);
+
+const fireworkb = new FloorFurniture({
+  id: 3784,
+  position: {
+    x: -10,
+    y: 6,
+    z: 1,
+  },
+  direction: 2,
+  state: 1,
+});
+setInterval(() => {
+  fireworkb.setState(2);
+}, 4000);
+room.add(fireworkb);
 
 let zoom = 1;
 const [min_zoom, max_zoom] = [0.5, 5];
