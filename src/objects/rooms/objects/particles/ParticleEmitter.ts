@@ -1,67 +1,64 @@
 import { Particle } from './Particle.ts';
 import { RoomObjectVisualization } from '../RoomObjectVisualization.ts';
+import { Vector2D } from '../../../../types/Vector.ts';
 
 interface Configuration {
   visualization: RoomObjectVisualization;
-  fuseTime: number;
   maxNumParticles: number;
   particlesPerFrame: number;
-  burstPulse: number;
   force: number;
-  direction: number;
+  position: Vector2D;
+  direction: Vector2D;
   energy: number;
   shape: string;
   gravity: number;
   airFriction: number;
   lifeTime: number;
-  duration: number;
+  frames: string[];
 }
 
 export class ParticleEmitter {
   public visualization: RoomObjectVisualization;
-  public fuseTime: number;
   public maxNumParticles: number;
   public particlesPerFrame: number;
-  public burstPulse: number;
   public force: number;
-  public direction: number;
+  public position: Vector2D;
+  public direction: Vector2D;
   public energy: number;
   public shape: string;
   public gravity: number;
   public airFriction: number;
   public lifeTime: number;
   public particles: Particle[] = [];
-  public currentDuration: number = 0;
-  public duration: number;
+  public age: number = 0;
+  public frames: string[];
 
   constructor({
     visualization,
-    fuseTime,
     maxNumParticles,
     particlesPerFrame,
     gravity,
     airFriction,
     energy,
-    burstPulse,
     shape,
     force,
+    position,
     direction,
     lifeTime,
-    duration,
+    frames,
   }: Configuration) {
     this.visualization = visualization;
-    this.fuseTime = fuseTime;
     this.maxNumParticles = maxNumParticles;
     this.particlesPerFrame = particlesPerFrame;
     this.gravity = gravity;
     this.airFriction = airFriction;
     this.energy = energy;
-    this.burstPulse = burstPulse;
     this.shape = shape;
     this.force = force;
+    this.position = position;
     this.direction = direction;
     this.lifeTime = lifeTime;
-    this.duration = duration;
+    this.frames = frames;
   }
 
   public next(): void {
@@ -81,14 +78,11 @@ export class ParticleEmitter {
       }
     }
 
-    if (this.currentDuration <= this.duration) {
+    if (this.age <= this.lifeTime) {
       for (let i = 0; i < this.particlesPerFrame / 2; i++) {
         const particle = new Particle({
           visualization: this.visualization,
-          position: {
-            x: 100,
-            y: 100,
-          },
+          position: this.position,
           direction: {
             x: Math.random() * 2 - 1,
             y: Math.random() * 2 - 1,
@@ -96,14 +90,14 @@ export class ParticleEmitter {
           airFriction: this.airFriction,
           force: this.force,
           gravity: this.gravity,
-          lifeTime: this.lifeTime,
+          frames: this.frames,
           energy: this.energy,
           fade: false,
         });
         particle.render();
         this.particles.push(particle);
       }
-      this.currentDuration++;
+      this.age++;
     }
   }
 }

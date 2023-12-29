@@ -159,9 +159,9 @@ renderer.add(room);
 const firework = new FloorFurniture({
   id: 3784,
   position: {
-    x: 10,
+    x: -5,
     y: 0,
-    z: 14,
+    z: 1,
   },
   direction: 2,
   state: 2,
