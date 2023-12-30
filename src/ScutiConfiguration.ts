@@ -22,16 +22,7 @@ export class ScutiConfiguration {
   private _backgroundAlpha: number;
   private _resizeTo: HTMLElement | Window | undefined;
 
-  constructor({
-    canvas,
-    width,
-    height,
-    backgroundColor,
-    backgroundAlpha,
-    resizeTo,
-    resources,
-    renderer,
-  }: Configuration) {
+  constructor({ canvas, width, height, backgroundColor, backgroundAlpha, resizeTo, resources, renderer }: Configuration) {
     this.renderer = renderer;
 
     this._canvas = canvas;

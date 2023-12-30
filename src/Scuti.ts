@@ -45,9 +45,9 @@ export class Scuti {
       height: this.configuration.height,
       antialias: false,
       autoDensity: true,
-      resolution: window.devicePixelRatio,
-      backgroundColor: new Color(this.configuration.backgroundColor ?? 0x0c567c).toHex(),
-      backgroundAlpha: this.configuration.backgroundAlpha ?? 1,
+      resolution: Math.max(window.devicePixelRatio, 2),
+      backgroundColor: new Color(this.configuration.backgroundColor).toHex(),
+      backgroundAlpha: this.configuration.backgroundAlpha,
       resizeTo: this.configuration.resizeTo,
     });
     this.application.stage = new Stage();
