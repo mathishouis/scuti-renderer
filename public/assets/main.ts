@@ -275,6 +275,25 @@ const bottle = new FloorFurniture({
 });
 room.add(bottle);
 
+const diamondBox = new FloorFurniture({
+  id: 10322,
+  position: {
+    x: -10,
+    y: 24,
+    z: 1,
+  },
+  direction: 2,
+  state: 2,
+});
+room.add(diamondBox);
+
+setTimeout(() => {
+  diamondBox.destroy();
+}, 3000);
+setTimeout(() => {
+  diamondBox.render();
+}, 4000);
+
 let zoom = 1;
 const [min_zoom, max_zoom] = [0.5, 5];
 

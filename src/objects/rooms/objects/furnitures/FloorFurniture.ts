@@ -71,4 +71,8 @@ export class FloorFurniture extends RoomFurniture {
     this.visualization.setState(state);
     this.visualization.update();
   }
+
+  public destroy() {
+    this.visualization.destroy();
+  }
 }

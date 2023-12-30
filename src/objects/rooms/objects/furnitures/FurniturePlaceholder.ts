@@ -27,6 +27,9 @@ export class FurniturePlaceholder {
   }
 
   public destroy(): void {
-    this.sprite.destroy();
+    if (this.sprite !== undefined) {
+      this.sprite.destroy();
+      this.sprite = undefined as any;
+    }
   }
 }

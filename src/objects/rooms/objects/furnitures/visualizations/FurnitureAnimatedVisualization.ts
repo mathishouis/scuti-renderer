@@ -17,9 +17,10 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
   }
 
   public destroy(): void {
-    super.destroy();
-
+    this.stopAnimation();
     this.furniture.room.visualization.furnituresTicker.remove(() => this.next());
+
+    super.destroy();
   }
 
   public next(): void {
