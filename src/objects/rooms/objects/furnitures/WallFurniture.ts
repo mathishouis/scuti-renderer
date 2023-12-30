@@ -119,11 +119,5 @@ export class WallFurniture extends RoomFurniture {
 
   public move({ position, duration }: { position: OffsetVector2D; duration?: number }): void {
     this._position = position;
-    /*gsap.to(this.visualization.container, {
-      x: 32 * this.position.x - 32 * this.position.y + 32,
-      y: 16 * this.position.x + 16 * this.position.y - 32 * this.position.z,
-      duration: duration ?? 0,
-      ease: 'linear',
-    });*/
   }
 }
