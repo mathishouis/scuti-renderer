@@ -22,126 +22,13 @@ const renderer: Scuti = new Scuti({
 // @ts-ignore
 await renderer.load();
 
-/*const heightMap: string =`
-xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-x2222xx1111111111xx11111111
-x2222xx1111111111xx11111111
-222222111111111111111111111
-x22222111222222222211211111
-x22222111111111111111211111
-x22222111111111111111211111
-x2222xx1112111111xx11222211
-x2222xx1112211111xx11111111
-x2222xx1222221111xxxx1111xx
-x2222xx1112111111xxxx0000xx
-xxxxxxx1111111111xx00000000
-xxxxxxx1111111111xx00111000
-x22222111111111111000122000
-x22222111112111111000111000
-x22222111122211111000111000
-x22222111112111111000010000
-x2222xx1111111111xx00000000
-x2222xx1111111111xx00000000
-x2222xxxx1111xxxxxxxxxxxxxx
-x2222xxxx0000xxxxxxxxxxxxxx
-x2222x0000000000xxxxxxxxxxx
-x2222x0011111100xxxxxxxxxxx
-x2222x0010000100xxxxxxxxxxx
-x2222x0010000100xxxxxxxxxxx
-x2222x0010000100xxxxxxxxxxx
-x2222x0000000000xxxxxxxxxxx
-`;*/
-
-/*const heightMap: string = `
-xxxxxxxxxx
-3321000100
-x100000000
-x000000000
-x000001000
-xxx00111xx
-xxx0001000
-x00000x000
-x00000xx00
-x000xxxxx0
-x400000000
-x300000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-`;*/
-
 const heightMap: string = `
-xxxxxxxxxx
-xxxx000400
-xxxx000000
-x000000000
-xx00000000
-xxx00000xx
-xxx0000000
-x00000x000
-x00000xx00
-x000xxxxx0
-x000000000
-x000000000
-xx00000000
-xx00000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
+00000
+00000
+00000
+00000
+00000
 `;
-/*const heightMap: string = `
-xxxxxxxxxx
-x000000000
-0000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-x000000000
-`;*/
-
-/*const heightMap: string = `
-xxxxxxxxxx
-3310000100
-x200000000
-x100000000
-x000001000
-xxx00111xx
-xxx0001000
-x00000x000
-x00000xx00
-x000xxxxx0
-`;*/
 
 const room: Room = new Room({
   heightMap: heightMap,
@@ -157,78 +44,12 @@ const room: Room = new Room({
 
 renderer.add(room);
 
-/*const firework = new FloorFurniture({
-  id: 3784,
-  position: {
-    x: -5,
-    y: 0,
-    z: 1,
-  },
-  direction: 2,
-  state: 2,
-});
-room.add(firework);*/
-/*const firework2 = new FloorFurniture({
-  id: 3782,
-  position: {
-    x: -5,
-    y: 2,
-    z: 1,
-  },
-  direction: 2,
-  state: 2,
-});
-room.add(firework2);*/
-
-const firework3 = new FloorFurniture({
-  //id: 4840,
-  //id: 4373,
-  //id: 4371,
-  //id: 4380,
-  //id: 4384,
-  //id: 4411,
-  //id: 3782,
-  id: 3784,
-  position: {
-    x: -10,
-    y: 4,
-    z: 1,
-  },
-  direction: 2,
-  state: 1,
-});
-room.add(firework3);
-
-const valRandomizer = new FloorFurniture({
-  id: 2696,
-  position: {
-    x: -10,
-    y: 6,
-    z: 1,
-  },
-  direction: 2,
-  state: 2,
-});
-room.add(valRandomizer);
-setTimeout(() => {
-  valRandomizer.setState(0);
-}, 3000);
-setTimeout(() => {
-  firework3.setState(2);
-}, 5000);
-setTimeout(() => {
-  firework3.setState(1);
-}, 8000);
-setTimeout(() => {
-  firework3.setState(2);
-}, 9000);
-
 const present = new FloorFurniture({
   id: 3372,
   position: {
-    x: -10,
-    y: 20,
-    z: 1,
+    x: 0,
+    y: 0,
+    z: 0,
   },
   direction: 2,
   state: 0,
@@ -237,7 +58,7 @@ const present = new FloorFurniture({
 });
 room.add(present);
 setTimeout(() => {
-  present.setState(1);
+  present.state = 1;
 }, 5000);
 const dragon1 = new FloorFurniture({
   id: 8213,
@@ -251,94 +72,37 @@ const dragon1 = new FloorFurniture({
 });
 room.add(dragon1);
 setTimeout(() => {
+  //present.destroy();
   const dragon = new FloorFurniture({
     id: 8213,
     position: {
-      x: -10,
-      y: 20,
-      z: 1,
+      x: 0,
+      y: 0,
+      z: 0,
     },
-    direction: 2,
+    direction: 4,
     state: 0,
   });
   room.add(dragon);
+  setTimeout(() => {
+    dragon.position = {
+      x: 0,
+      y: 2,
+      z: 0,
+    };
+    setTimeout(() => {
+      dragon.rotate({
+        direction: 2,
+        duration: 0.5,
+      });
+    }, 1000);
+    setTimeout(() => {
+      dragon.state = 1;
+    }, 2000);
+    //dragon.direction = 4;
+  }, 2000);
+
+  room.events.tiles.onPointerMove = (event: TileEvent) => {
+    dragon.move({ position: event.position, duration: 0.5 });
+  };
 }, 6000);
-const bottle = new FloorFurniture({
-  id: 129,
-  position: {
-    x: -10,
-    y: 10,
-    z: 1,
-  },
-  direction: 2,
-  state: -1,
-});
-room.add(bottle);
-
-const diamondBox = new FloorFurniture({
-  id: 10322,
-  position: {
-    x: -10,
-    y: 24,
-    z: 1,
-  },
-  direction: 2,
-  state: 2,
-});
-room.add(diamondBox);
-
-setTimeout(() => {
-  diamondBox.destroy();
-}, 3000);
-setTimeout(() => {
-  diamondBox.render();
-}, 4000);
-
-let zoom = 1;
-const [min_zoom, max_zoom] = [0.5, 5];
-
-renderer.application.view.addEventListener(
-  'wheel',
-  // @ts-ignore
-  ({ deltaY }) => {
-    // todo(): add support accross browsers
-    const delta = deltaY > 0 ? -0.25 : 0.25;
-
-    zoom += delta;
-    zoom = Math.max(min_zoom, Math.min(max_zoom, zoom));
-
-    room.camera.zoom(zoom, 0.25);
-  },
-  { passive: true },
-);
-
-/*setInterval(() => {
-    const random = Math.floor(Math.random() * (111 - 101 + 1)) + 101;
-    room.configuration.floorMaterial = new FloorMaterial(random)
-    room.configuration.floorThickness = 8;
-}, 1000);*/
-
-room.events.tiles.onPointerUp = (event: TileEvent) => {
-  console.log(event.position);
-};
-
-//setTimeout(() => renderer.configuration.backgroundColor = 0xFF0000, 2000);
-//setTimeout(() => renderer.configuration.width = 200, 3000);
-//setTimeout(() => renderer.configuration.resizeTo = window, 4000);
-//setTimeout(() => renderer.configuration.canvas = document.getElementById("stats") ?? document.body, 4000);
-
-/*setTimeout(() => room.camera.zoom(2), 1000);
-setTimeout(() => room.camera.zoom(4), 2000);
-setTimeout(() => room.camera.zoom(5), 3000);
-setTimeout(() => room.camera.zoom(8, 1), 4000);
-
-setTimeout(() => room.camera.zoom(2), 5000);
-setTimeout(() => room.camera.zoom(4), 6000);
-setTimeout(() => room.camera.zoom(0.5), 7000);
-
-setTimeout(() => room.camera.zoom(5), 8000);*/
-
-/*setTimeout(() => room.camera.zoom = 3, 3000);
-setTimeout(() => room.camera.zoom = 0.5, 4000);
-setTimeout(() => room.camera.zoom = 2, 5000);
-setTimeout(() => room.camera.zoom = 1, 6000);*/

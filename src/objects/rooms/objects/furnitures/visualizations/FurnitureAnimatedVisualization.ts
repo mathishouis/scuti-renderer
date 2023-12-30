@@ -6,7 +6,7 @@ interface Configuration {
 }
 
 export class FurnitureAnimatedVisualization extends FurnitureVisualization {
-  private _running: boolean = true;
+  private _animationRunning: boolean = true;
 
   constructor({ furniture }: Configuration) {
     super({ furniture });
@@ -24,17 +24,17 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
   }
 
   public next(): void {
-    if (!this._running) return;
+    if (!this._animationRunning) return;
 
     super.next();
   }
 
   public startAnimation(): void {
-    this._running = true;
+    this._animationRunning = true;
   }
 
   public stopAnimation(): void {
-    this._running = false;
+    this._animationRunning = false;
   }
 
   public setState(id: number): void {

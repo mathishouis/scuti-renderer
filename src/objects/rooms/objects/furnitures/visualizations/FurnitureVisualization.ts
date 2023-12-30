@@ -24,14 +24,16 @@ export class FurnitureVisualization extends RoomObjectVisualization {
   public render(): void {
     this.data = new FurnitureVisualizationData({ visualization: this });
 
+    if (!this.data.directions.includes(this.furniture.direction)) {
+      this.furniture.rotate({ direction: this.furniture.data.direction ?? this.data.directions[0] ?? 0, update: false });
+      return;
+    }
+
     for (let i = 0; i < this.data.layers.size; i++) this.layer(i);
   }
 
   public layer(id: number): void {
-    if (!this.data.directions.includes(this.furniture.direction))
-      this.furniture.direction = this.furniture.data.direction ?? this.data.directions[0] ?? 0;
-
-    const furnitureLayer = new FurnitureLayer({
+    const layerConfiguration = {
       furniture: this.furniture,
       id: id,
       frame: this.getLayerFrame(id),
@@ -46,10 +48,16 @@ export class FurnitureVisualization extends RoomObjectVisualization {
       flip: this.getLayerFlipped(id),
       interactive: this.getLayerInteractive(id),
       tag: this.getLayerTag(id),
-    });
+    };
 
-    furnitureLayer.render();
-    this.layers.set(id, furnitureLayer);
+    if (this.layers.get(id)) {
+      this.layers.get(id)!.update(layerConfiguration);
+    } else {
+      const furnitureLayer = new FurnitureLayer(layerConfiguration);
+
+      furnitureLayer.render();
+      this.layers.set(id, furnitureLayer);
+    }
   }
 
   public next(): void {
@@ -93,8 +101,6 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     this.updateState();
   }
   public update(): void {
-    this.layers.forEach((layer: FurnitureLayer) => layer.destroy());
-    this.layers = new Map();
     this.data.reset();
     this.render();
   }
@@ -140,7 +146,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
   }
 
   public setState(id: number): void {
-    this.furniture.state = id;
+    if (this.furniture.state !== id) this.furniture.state = id;
     if (this.data) this.data.setState(id);
   }
 
