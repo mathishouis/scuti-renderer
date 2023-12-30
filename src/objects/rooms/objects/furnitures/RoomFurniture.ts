@@ -15,5 +15,5 @@ export abstract class RoomFurniture extends RoomObject {
   public abstract get state(): number;
   public abstract set state(state: number);
   public abstract rotate(configuration: { direction: Direction; duration?: number; update?: boolean }): void;
-  public abstract move(configuration: { position: Vector3D; duration?: number; update?: boolean }): void;
+  public abstract move(configuration: { position: Vector3D; duration?: number }): void;
 }

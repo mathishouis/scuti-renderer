@@ -21,21 +21,22 @@ export class FloorFurniture extends RoomFurniture {
   public room!: Room;
   public visualization!: FurnitureVisualization;
   public placeholder!: FurniturePlaceholder;
-
-  public _position: Vector3D;
-  public _direction: Direction;
-  public _state: number;
   public data!: FurnitureData;
-  public parameters: any;
+
+  private _position: Vector3D;
+  private _direction: Direction;
+  private _state: number;
+  private _parameters: Record<string, any>;
 
   constructor({ id, position, direction, state, ...parameters }: Configuration) {
     super();
 
     this.id = id;
+
     this._position = position;
     this._direction = direction;
     this._state = state;
-    this.parameters = parameters;
+    this._parameters = parameters;
   }
 
   public render(): void {
@@ -55,7 +56,7 @@ export class FloorFurniture extends RoomFurniture {
     if (this.placeholder) this.placeholder.destroy();
 
     this.visualization = RoomObjectVisualizationFactory.create(spritesheet.data.properties.visualization, {
-      ...this.parameters,
+      ...this._parameters,
       ...{ furniture: this },
     }) as FurnitureVisualization;
 
