@@ -1,15 +1,15 @@
 import { Sprite } from 'pixi.js';
-import { RoomFurniture } from './RoomFurniture';
-import { Vector3D } from '../../../../types/Vector';
-import { asset } from '../../../../utils/Assets';
+import { Vector3D } from '../../../../../types/Vector';
+import { asset } from '../../../../../utils/Assets';
+import { FloorFurniture } from '../FloorFurniture';
 
 interface Configuration {
-  furniture: RoomFurniture;
+  furniture: FloorFurniture;
   position: Vector3D;
 }
 
-export class FurniturePlaceholder {
-  public furniture: RoomFurniture;
+export class FloorFurniturePlaceholder {
+  public furniture: FloorFurniture;
   public sprite!: Sprite;
   public position: Vector3D;
 

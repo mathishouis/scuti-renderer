@@ -5,7 +5,7 @@ import { Direction } from '../../../../enums/Direction';
 import { FurnitureData } from './FurnitureData';
 import { Room } from '../../Room';
 import { asset, register } from '../../../../utils/Assets';
-import { FurniturePlaceholder } from './FurniturePlaceholder';
+import { FloorFurniturePlaceholder } from './placeholders/FloorFurniturePlaceholder';
 import { RoomObjectVisualizationFactory } from '../RoomObjectVisualizationFactory';
 import { gsap } from 'gsap';
 
@@ -20,7 +20,7 @@ export class FloorFurniture extends RoomFurniture {
   public id: number;
   public room!: Room;
   public visualization!: FurnitureVisualization;
-  public placeholder!: FurniturePlaceholder;
+  public placeholder!: FloorFurniturePlaceholder;
   public data!: FurnitureData;
 
   private _position: Vector3D;
@@ -47,7 +47,7 @@ export class FloorFurniture extends RoomFurniture {
     const spritesheet = asset(key);
 
     if (!spritesheet) {
-      this.placeholder = new FurniturePlaceholder({ furniture: this, position: this.position });
+      this.placeholder = new FloorFurniturePlaceholder({ furniture: this, position: this.position });
       this.placeholder.render();
       register(key, path).then(() => this.render());
       return;

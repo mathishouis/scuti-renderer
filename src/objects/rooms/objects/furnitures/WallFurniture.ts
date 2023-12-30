@@ -1,13 +1,12 @@
-import { Room } from '../../Room.ts';
-import { FurnitureVisualization } from './visualizations/FurnitureVisualization.ts';
-import { FurniturePlaceholder } from './FurniturePlaceholder.ts';
-import { FurnitureData } from './FurnitureData.ts';
-import { OffsetVector2D } from '../../../../types/Vector.ts';
-import { Direction } from '../../../../enums/Direction.ts';
-import { RoomFurniture } from './RoomFurniture.ts';
-import { asset, register } from '../../../../utils/Assets.ts';
-import { RoomObjectVisualizationFactory } from '../RoomObjectVisualizationFactory.ts';
-import { gsap } from 'gsap';
+import { Room } from '../../Room';
+import { FurnitureVisualization } from './visualizations/FurnitureVisualization';
+import { FurnitureData } from './FurnitureData';
+import { OffsetVector2D } from '../../../../types/Vector';
+import { Direction } from '../../../../enums/Direction';
+import { RoomFurniture } from './RoomFurniture';
+import { asset, register } from '../../../../utils/Assets';
+import { RoomObjectVisualizationFactory } from '../RoomObjectVisualizationFactory';
+import { WallFurniturePlaceholder } from './placeholders/WallFurniturePlaceholder';
 
 interface Configuration {
   id: number;
@@ -20,7 +19,7 @@ export class WallFurniture extends RoomFurniture {
   public id: number;
   public room!: Room;
   public visualization!: FurnitureVisualization;
-  public placeholder!: FurniturePlaceholder;
+  public placeholder!: WallFurniturePlaceholder;
   public data!: FurnitureData;
 
   private _position: OffsetVector2D;
@@ -47,8 +46,8 @@ export class WallFurniture extends RoomFurniture {
     const spritesheet = asset(key);
 
     if (!spritesheet) {
-      /*this.placeholder = new FurniturePlaceholder({ furniture: this, position: this.position });
-      this.placeholder.render();*/
+      this.placeholder = new WallFurniturePlaceholder({ furniture: this, position: this.position });
+      this.placeholder.render();
       register(key, path).then(() => this.render());
       return;
     }
