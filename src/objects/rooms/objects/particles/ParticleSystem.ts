@@ -1,6 +1,7 @@
 import { ParticleEmitter } from './ParticleEmitter';
 import { FurnitureVisualization } from '../furnitures/visualizations/FurnitureVisualization';
 import { ParticleEmitterData, ParticleSystemData } from './ParticleData';
+import { FurnitureAnimatedVisualization } from '../furnitures/visualizations/FurnitureAnimatedVisualization.ts';
 
 interface Configuration {
   visualization: FurnitureVisualization;
@@ -49,11 +50,17 @@ export class ParticleSystem {
         layerId: emitter.layerId,
       });
       particleEmitter.onStart = () => {
+        if (this.visualization instanceof FurnitureAnimatedVisualization) {
+          this.visualization.stopAnimation();
+        }
+        const layer = this.visualization.getLayer(emitter.layerId);
         particleEmitter.position = {
           x: 0,
           y: this.visualization.getLayerYOffset(particleEmitter.layerId, 0),
         };
-        this.visualization.setState(0);
+        if (layer !== undefined) {
+          layer.destroy();
+        }
       };
       this.emitters.push(particleEmitter);
     });
@@ -69,5 +76,6 @@ export class ParticleSystem {
 
   public destroy(): void {
     this.emitters.forEach((emitter: ParticleEmitter) => emitter.destroy());
+    this.emitters = [];
   }
 }

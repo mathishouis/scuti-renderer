@@ -76,7 +76,9 @@ export class ParticleEmitter {
   }
 
   public next(): void {
-    if (this.age >= this.fuseTime && !this.running) {
+    const randomParticle = this.particles[Math.floor(Math.random() * this.particles.length)];
+
+    if (this.age >= this.fuseTime && this.age - this.fuseTime < randomParticle.lifeTime && !this.running) {
       this.running = true;
       if (this.onStart) this.onStart();
     }
@@ -95,8 +97,6 @@ export class ParticleEmitter {
         particle?.destroy();
       }
     }
-
-    const randomParticle = this.particles[Math.floor(Math.random() * this.particles.length)];
 
     if ((this.age - this.fuseTime <= randomParticle.lifeTime && this.running) || randomParticle.emitter) {
       for (let i = 0; i < this.particlesPerFrame / 3; i++) {

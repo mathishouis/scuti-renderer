@@ -7,7 +7,7 @@ interface Configuration {
 }
 
 export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualization {
-  private static BURST_STATE: number = 2;
+  protected _burstState: number = 2;
 
   private _particleSystem!: ParticleSystem;
   private _layerData: Map<number, { running: boolean; y: number; speed: number }> = new Map();
@@ -19,7 +19,7 @@ export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualizat
   public render() {
     if (this._particleSystem) this._particleSystem.destroy();
     this._layerData = new Map();
-    if (this.furniture.state === FurnitureFireworksVisualization.BURST_STATE) {
+    if (this.furniture.state === this._burstState) {
       this._particleSystem = new ParticleSystem({ visualization: this });
     }
 
@@ -36,7 +36,7 @@ export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualizat
 
     if (this._particleSystem) this._particleSystem.destroy();
 
-    if (this.furniture.state === FurnitureFireworksVisualization.BURST_STATE) {
+    if (this.furniture.state === this._burstState) {
       this._particleSystem = new ParticleSystem({ visualization: this });
     }
     this._layerData = new Map<number, { running: boolean; y: number; speed: number }>();
@@ -46,7 +46,7 @@ export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualizat
     super.next();
 
     if (this._particleSystem) {
-      if (this.furniture.state === FurnitureFireworksVisualization.BURST_STATE) {
+      if (this.furniture.state === this._burstState) {
         for (let i = 0; i < this.furniture.visualization.data.layerCount; i++) {
           const emitter = this._particleSystem.getLayerEmitter(i);
           if (emitter) {
@@ -57,7 +57,6 @@ export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualizat
                 speed: 1,
               });
             }
-
             const layerData = this._layerData.get(i);
 
             if (layerData) {
@@ -81,9 +80,9 @@ export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualizat
 
     if (this._particleSystem && layerData !== undefined && layerData.running) {
       const emitter = this._particleSystem.getLayerEmitter(id);
-
       if (emitter) return super.getLayerYOffset(id, direction) - layerData.y * (emitter.force / 10);
     }
+
     return super.getLayerYOffset(id, direction);
   }
 }

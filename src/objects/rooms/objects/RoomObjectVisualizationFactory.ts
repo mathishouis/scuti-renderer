@@ -19,6 +19,7 @@ import { FurniturePartyBeamerVisualization } from './furnitures/visualizations/F
 import { FurnitureHabboWheelVisualization } from './furnitures/visualizations/FurnitureHabboWheelVisualization';
 import { FurnitureStickieVisualization } from './furnitures/visualizations/FurnitureStickieVisualization';
 import { FurnitureValRandomizerVisualization } from './furnitures/visualizations/FurnitureValRandomizerVisualization';
+import { FurnitureGiftWrappedFireworksVisualization } from './furnitures/visualizations/FurnitureGiftWrappedFireworksVisualization.ts';
 
 export class RoomObjectVisualizationFactory {
   public static VISUALIZATIONS: Record<string, new (configuration: any) => RoomObjectVisualization> = {
@@ -42,6 +43,7 @@ export class RoomObjectVisualizationFactory {
     furniture_habbowheel: FurnitureHabboWheelVisualization,
     furniture_stickie: FurnitureStickieVisualization,
     furniture_val_randomizer: FurnitureValRandomizerVisualization,
+    furniture_gift_wrapped_fireworks: FurnitureGiftWrappedFireworksVisualization,
   };
 
   public static get(visualization: string): { new (configuration: any): RoomObjectVisualization } {

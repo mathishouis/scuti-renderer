@@ -6,6 +6,8 @@ interface Configuration {
 }
 
 export class FurnitureAnimatedVisualization extends FurnitureVisualization {
+  private _running: boolean = true;
+
   constructor({ furniture }: Configuration) {
     super({ furniture });
 
@@ -20,15 +22,23 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
     this.furniture.room.visualization.furnituresTicker.remove(() => this.next());
   }
 
-  public next() {
+  public next(): void {
+    if (!this._running) return;
+
     super.next();
   }
 
-  public getLastFramePlayed(id: number): boolean {
-    const layer = this.data.layers.get(id);
+  public startAnimation(): void {
+    this._running = true;
+  }
 
-    if (layer) return layer.frameIndex === layer.frames.length - 1;
+  public stopAnimation(): void {
+    this._running = false;
+  }
 
-    return false;
+  public setState(id: number): void {
+    this.startAnimation();
+
+    super.setState(id);
   }
 }

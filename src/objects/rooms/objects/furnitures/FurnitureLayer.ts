@@ -46,13 +46,13 @@ export class FurnitureLayer {
     this.sprite.parentLayer = this.furniture.room.renderer.layer;
     this.sprite.zOrder = 0;
 
-    if (this.flip) this.sprite.scale.x = -1;
-    if (this.offsets.x) this.sprite.x += this.offsets.x;
-    if (this.offsets.y) this.sprite.y += this.offsets.y;
-    if (this.offsets.z) this.sprite.zOrder += this.offsets.z + 1000;
-    if (this.alpha) this.sprite.alpha = this.alpha;
-    if (this.tint) this.sprite.tint = this.tint;
-    if (this.blend) this.sprite.blendMode = this.blend;
+    if (this.flip !== undefined) this.sprite.scale.x = -1;
+    if (this.offsets.x !== undefined) this.sprite.x += this.offsets.x;
+    if (this.offsets.y !== undefined) this.sprite.y += this.offsets.y;
+    if (this.offsets.z !== undefined) this.sprite.zOrder += this.offsets.z + 1000;
+    if (this.alpha !== undefined) this.sprite.alpha = this.alpha;
+    if (this.tint !== undefined) this.sprite.tint = this.tint;
+    if (this.blend !== undefined) this.sprite.blendMode = this.blend;
 
     //this.sprite.tint = '#' + Math.random().toString(16).substr(-6);
 
@@ -60,6 +60,9 @@ export class FurnitureLayer {
   }
 
   public destroy(): void {
-    this.sprite.destroy();
+    if (this.sprite !== undefined) {
+      this.sprite.destroy();
+      this.sprite = undefined as any;
+    }
   }
 }

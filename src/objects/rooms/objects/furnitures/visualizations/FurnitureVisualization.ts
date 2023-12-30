@@ -57,11 +57,12 @@ export class FurnitureVisualization extends RoomObjectVisualization {
       const layer = this.data.layers.get(i);
 
       if (layer) {
-        if (layer.currentLoopCount >= layer.loopCount) {
-          layer.currentLoopCount = 0;
-        } else {
-          layer.currentLoopCount += 1;
-          continue;
+        if (layer.loopCount !== 0) {
+          if (layer.currentLoopCount >= layer.loopCount && this.getLastFramePlayed(i)) {
+            continue;
+          } else {
+            layer.currentLoopCount += 1;
+          }
         }
 
         if (layer.currentFrameRepeat >= layer.frameRepeat) {
@@ -164,7 +165,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
   public getLayerAlpha(id: number): number {
     const layer = this.data.layers.get(id);
-    return layer ? layer.alpha : 0;
+    return layer ? layer.alpha : 1;
   }
 
   public getLayerInteractive(id: number): boolean {
@@ -184,5 +185,13 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
   public getLayer(id: number): FurnitureLayer | undefined {
     return this.layers.get(id);
+  }
+
+  public getLastFramePlayed(id: number): boolean {
+    const layer = this.data.layers.get(id);
+
+    if (layer) return layer.frameIndex === layer.frames.length - 1;
+
+    return false;
   }
 }

@@ -214,9 +214,55 @@ setTimeout(() => {
   valRandomizer.setState(0);
 }, 3000);
 setTimeout(() => {
-  valRandomizer.setState(2);
+  firework3.setState(2);
 }, 5000);
+setTimeout(() => {
+  firework3.setState(1);
+}, 8000);
+setTimeout(() => {
+  firework3.setState(2);
+}, 9000);
 
+const present = new FloorFurniture({
+  id: 3372,
+  position: {
+    x: -10,
+    y: 20,
+    z: 1,
+  },
+  direction: 2,
+  state: 0,
+  ribbonType: 2,
+  packetType: 3,
+});
+room.add(present);
+setTimeout(() => {
+  present.setState(1);
+}, 5000);
+const dragon1 = new FloorFurniture({
+  id: 8213,
+  position: {
+    x: -10,
+    y: 12,
+    z: 100,
+  },
+  direction: 2,
+  state: 0,
+});
+room.add(dragon1);
+setTimeout(() => {
+  const dragon = new FloorFurniture({
+    id: 8213,
+    position: {
+      x: -10,
+      y: 20,
+      z: 1,
+    },
+    direction: 2,
+    state: 0,
+  });
+  room.add(dragon);
+}, 6000);
 const bottle = new FloorFurniture({
   id: 129,
   position: {

@@ -69,7 +69,7 @@ export class FurnitureVisualizationData {
       currentFrameRepeat: 0,
       color: 0xffffff,
       tag: '',
-      alpha: 0,
+      alpha: 1,
       interactive: true,
       blend: undefined,
       flipped: false,
