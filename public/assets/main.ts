@@ -8,6 +8,7 @@ import { LandscapeMaterial } from '../../src';
 import { FloorFurniture } from '../../src/objects/rooms/objects/furnitures/FloorFurniture';
 import { benchmark } from '../../src/utils/Benchmark';
 import { perf } from '../../src/utils/Logger';
+import { WallFurniture } from '../../src/objects/rooms/objects/furnitures/WallFurniture';
 
 const renderer: Scuti = new Scuti({
   canvas: document.getElementById('app') as HTMLElement,
@@ -106,3 +107,37 @@ setTimeout(() => {
     dragon.move({ position: event.position, duration: 0.5 });
   };
 }, 6000);
+
+const wheel = new WallFurniture({
+  id: 4010,
+  position: {
+    x: -1,
+    y: 1,
+    offsets: {
+      x: 7,
+      y: -25,
+    },
+  },
+  direction: 2,
+  state: 0,
+});
+room.add(wheel);
+
+const wheel2 = new WallFurniture({
+  id: 4010,
+  position: {
+    x: 2,
+    y: -1,
+    offsets: {
+      x: 0,
+      y: -31,
+    },
+  },
+  direction: 4,
+  state: -1,
+});
+
+setTimeout(() => {
+  wheel2.state = 2;
+}, 1000);
+room.add(wheel2);

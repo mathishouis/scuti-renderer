@@ -142,7 +142,7 @@ export class RoomVisualization {
             corner: wall.corner,
           }),
         );
-        this.add(
+        /*this.add(
           new LandscapePart({
             material: this.room.configuration.landscapeMaterial,
             position: wall.position,
@@ -151,7 +151,7 @@ export class RoomVisualization {
             height: this.room.configuration.wallHeight,
             direction: wall.direction,
           }),
-        );
+        );*/
       });
 
     perf('Room Visualization', 'room-visualization');

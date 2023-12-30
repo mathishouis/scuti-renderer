@@ -62,8 +62,8 @@ export class FloorFurniture extends RoomFurniture {
 
     this.visualization.setState(this.state);
     this.visualization.render();
-    this.visualization.container.x = 32 * this.position.x - 32 * this.position.y + 32;
-    this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 * this.position.z;
+
+    this.position = this._position;
 
     this.room.visualization.container.addChild(this.visualization.container);
   }
@@ -108,8 +108,7 @@ export class FloorFurniture extends RoomFurniture {
     }
   }
 
-  public rotate(configuration: { direction: Direction; duration?: number; update?: boolean }): void {
-    const { direction, duration, update } = configuration;
+  public rotate({ direction, duration, update }: { direction: Direction; duration?: number; update?: boolean }): void {
     this._direction = direction;
     gsap.to(this.visualization.container, {
       x: 32 * this.position.x - 32 * this.position.y + 32,
@@ -128,8 +127,7 @@ export class FloorFurniture extends RoomFurniture {
     });
   }
 
-  public move(configuration: { position: Vector3D; duration?: number }): void {
-    const { position, duration } = configuration;
+  public move({ position, duration }: { position: Vector3D; duration?: number }): void {
     this._position = position;
     gsap.to(this.visualization.container, {
       x: 32 * this.position.x - 32 * this.position.y + 32,
