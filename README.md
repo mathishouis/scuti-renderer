@@ -69,3 +69,10 @@ These screenshots were taken from [scuti-client](https://github.com/kozennnn/scu
 ![Hotel Reception](https://media.discordapp.net/attachments/724222275104276540/1008490888344903710/unknown.png?width=1103&height=676)
 ![Ping Pong](https://j.gifs.com/99m4Rz.gif)
 ![Dice](https://j.gifs.com/w0lJ9r.gif)
+
+## A special thanks to
+- [tetreum](https://github.com/tetreum)
+- [Walidoux](https://github.com/Walidoux)
+- [marcus-sa](https://github.com/marcus-sa)
+- [Khloé]()
+- And all the Scuti community!
