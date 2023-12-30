@@ -19,7 +19,7 @@ import { FurniturePartyBeamerVisualization } from './furnitures/visualizations/F
 import { FurnitureHabboWheelVisualization } from './furnitures/visualizations/FurnitureHabboWheelVisualization';
 import { FurnitureStickieVisualization } from './furnitures/visualizations/FurnitureStickieVisualization';
 import { FurnitureValRandomizerVisualization } from './furnitures/visualizations/FurnitureValRandomizerVisualization';
-import { FurnitureGiftWrappedFireworksVisualization } from './furnitures/visualizations/FurnitureGiftWrappedFireworksVisualization.ts';
+import { FurnitureGiftWrappedFireworksVisualization } from './furnitures/visualizations/FurnitureGiftWrappedFireworksVisualization';
 
 export class RoomObjectVisualizationFactory {
   public static VISUALIZATIONS: Record<string, new (configuration: any) => RoomObjectVisualization> = {

@@ -1,5 +1,5 @@
 import { FurnitureFireworksVisualization } from './FurnitureFireworksVisualization';
-import { RoomFurniture } from '../RoomFurniture.ts';
+import { RoomFurniture } from '../RoomFurniture';
 
 interface Configuration {
   furniture: RoomFurniture;

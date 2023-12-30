@@ -1,7 +1,7 @@
 import { ParticleEmitter } from './ParticleEmitter';
 import { FurnitureVisualization } from '../furnitures/visualizations/FurnitureVisualization';
 import { ParticleEmitterData, ParticleSystemData } from './ParticleData';
-import { FurnitureAnimatedVisualization } from '../furnitures/visualizations/FurnitureAnimatedVisualization.ts';
+import { FurnitureAnimatedVisualization } from '../furnitures/visualizations/FurnitureAnimatedVisualization';
 
 interface Configuration {
   visualization: FurnitureVisualization;
