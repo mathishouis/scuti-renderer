@@ -4,9 +4,11 @@ import { register } from './utils/Assets';
 import { Layer, Stage } from '@pixi/layers';
 import { addStats, StatsJSAdapter } from 'pixi-stats';
 import { ScutiConfiguration } from './ScutiConfiguration';
-import { loadBundle } from './objects/bundles/BundleParser';
+import { loadBundle } from './objects/parsers/BundleParser';
 import { log, perf } from './utils/Logger';
 import { benchmark } from './utils/Benchmark';
+import { loadData } from './objects/parsers/DataParser';
+import { ScutiData } from './ScutiData';
 
 interface Configuration {
   canvas: HTMLElement;
@@ -23,6 +25,7 @@ export class Scuti {
   public canvas!: HTMLElement;
   public application!: Application;
   public layer: Layer = new Layer();
+  public data!: ScutiData;
 
   constructor(configuration: Configuration) {
     log('🚀 SCUTI', 'v0.0.0');
@@ -35,6 +38,7 @@ export class Scuti {
     benchmark('renderer');
     // Pixi settings
     extensions.add(loadBundle);
+    extensions.add(loadData);
     settings.ROUND_PIXELS = true;
     Container.defaultSortableChildren = true;
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
@@ -69,10 +73,12 @@ export class Scuti {
     benchmark('resources');
 
     await Promise.all([
-      register('room/materials', '/room/materials.bundle'),
-      register('room/cursor', '/room/cursor/cursor.json'),
-      register('room/door', '/room/door/door.png'),
+      register('room/materials', '/bundles/room/materials.bundle'),
+      register('room/content', '/bundles/room/content.bundle'),
+      register('data/furnitures', '/data/furnitures.data'),
     ]);
+
+    this.data = new ScutiData();
 
     perf('Resources', 'resources');
   }

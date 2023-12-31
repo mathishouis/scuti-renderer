@@ -43,6 +43,8 @@ export class LandscapeAnimatedLayerItem {
     this.sprite = new Sprite(spritesheet.textures[this.texture]);
     this.sprite.skew.x = 0;
     this.sprite.skew.y = (this.layer.part.configuration.direction === Direction.WEST ? -1 : 1) * 0.466;
+    this.sprite.parentLayer = this.layer.part.container.parentLayer;
+    this.sprite.mask = this.layer.part.mask;
 
     if (this.door && door) {
       const filter: DoorMaskFilter = new DoorMaskFilter(door.sprite);

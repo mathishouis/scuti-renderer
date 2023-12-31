@@ -48,7 +48,7 @@ export abstract class LandscapeLayer {
     const { visualization, renderer } = this.part.room;
     const { door } = visualization.layers.parts;
     const cube: Cube = new Cube({
-      layer: renderer.layer,
+      layer: this.part.container.parentLayer,
       size: this.size,
       zOrders: {
         [CubeFace.TOP]: -3,

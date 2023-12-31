@@ -1,6 +1,6 @@
 import { RoomPart } from '../../RoomPart';
 import { Room } from '../../../Room';
-import { Container } from 'pixi.js';
+import { Container, Sprite, SpriteMaskFilter } from 'pixi.js';
 import { EventManager } from '../../../../events/EventManager';
 import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
@@ -63,6 +63,7 @@ export class LandscapePart extends RoomPart {
 
     this.container.addChild(this.mask);
     this.container.mask = this.mask;
+    this.container.parentLayer = this.room.visualization.layers.parts.landscapes;
     this.container.x = baseX;
     this.container.y = baseY - 32 * position.z - size.z * 32 + floorThickness;
 
