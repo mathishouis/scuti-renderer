@@ -62,7 +62,13 @@ export class WallFurniture extends RoomFurniture {
     this.visualization.setState(this.state);
     this.visualization.render();
 
-    this.position = this._position;
+    if (this.direction === Direction.EAST) {
+      this.visualization.container.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2;
+      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
+    } else if (this.direction === Direction.SOUTH) {
+      this.visualization.container.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2 - 32;
+      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
+    }
 
     this.room.visualization.container.addChild(this.visualization.container);
   }
@@ -80,14 +86,22 @@ export class WallFurniture extends RoomFurniture {
   }
 
   public set position(position: OffsetVector2D) {
+    if (this._position === position) return;
+
     this._position = position;
-    // @todo() move this to utils or something like that
+
+    // todo(): move this to utils or something like that
     if (this.direction === Direction.EAST) {
       this.visualization.container.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2;
       this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
     } else if (this.direction === Direction.SOUTH) {
       this.visualization.container.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2 - 32;
       this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
+    }
+
+    if (this.visualization && this.visualization.data && this.visualization.data.masks && this.room) {
+      this.room.visualization.layers.masks.update();
+      this.visualization.renderMasks();
     }
   }
 
@@ -96,6 +110,8 @@ export class WallFurniture extends RoomFurniture {
   }
 
   public set direction(direction: Direction) {
+    if (this._direction === direction) return;
+
     this._direction = direction;
     this.update();
   }
@@ -105,7 +121,10 @@ export class WallFurniture extends RoomFurniture {
   }
 
   public set state(state: number) {
+    if (this._state === state) return;
+
     this._state = state;
+
     if (this.visualization) {
       this.visualization.setState(state);
       this.visualization.update();
@@ -119,5 +138,6 @@ export class WallFurniture extends RoomFurniture {
 
   public move({ position, duration }: { position: OffsetVector2D; duration?: number }): void {
     this._position = position;
+    // todo(): implement this
   }
 }

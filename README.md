@@ -20,11 +20,11 @@ Join our [Discord](https://discord.gg/s6fQAPt) server and get in touch with memb
   - [x] Walls
   - [x] Materials
   - [x] Landscapes
-- [ ] Furnitures
-  - [ ] Wall
+- [x] Furnitures
+  - [x] Wall
   - [x] Floor
   - [x] Particles
-  - [x] Visualizations
+  - [x] Visualizations ~ Missing some visualizations
 - [ ] Avatars
   - [ ] Figures 
   - [ ] Effects 

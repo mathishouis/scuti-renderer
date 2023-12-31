@@ -5,6 +5,8 @@ import { BLEND_MODES } from '@pixi/constants';
 import { RoomFurniture } from '../RoomFurniture';
 import { Texture } from 'pixi.js';
 import { FurnitureVisualizationData } from './FurnitureVisualizationData';
+import { LandscapeWindowMask } from '../../../parts/wall/landscapes/layers/items/LandscapeWindowMask';
+import { WallFurniture } from '../WallFurniture';
 
 interface Configuration {
   furniture: RoomFurniture;
@@ -13,6 +15,7 @@ interface Configuration {
 export class FurnitureVisualization extends RoomObjectVisualization {
   public furniture: RoomFurniture;
   public layers: Map<number, FurnitureLayer> = new Map();
+  public masks: Map<string, LandscapeWindowMask> = new Map();
   public data!: FurnitureVisualizationData;
 
   constructor({ furniture }: Configuration) {
@@ -24,12 +27,35 @@ export class FurnitureVisualization extends RoomObjectVisualization {
   public render(): void {
     this.data = new FurnitureVisualizationData({ visualization: this });
 
+    this.renderMasks();
+
     if (!this.data.directions.includes(this.furniture.direction)) {
       this.furniture.rotate({ direction: this.furniture.data.direction ?? this.data.directions[0] ?? 0, update: false });
       return;
     }
 
     for (let i = 0; i < this.data.layers.size; i++) this.layer(i);
+  }
+
+  public renderMasks(): void {
+    if (this.furniture instanceof WallFurniture && this.data.masks) {
+      this.data.masks.forEach(mask => {
+        const storedMask = this.masks.get(mask.id);
+
+        if (storedMask) {
+          this.furniture.room.visualization.layers.masks.remove(storedMask);
+          storedMask.destroy();
+        }
+
+        const windowMask = new LandscapeWindowMask({
+          furniture: this.furniture as WallFurniture,
+        });
+        windowMask.render();
+
+        this.masks.set(mask.id, windowMask);
+        this.furniture.room.visualization.layers.masks.add(windowMask);
+      });
+    }
   }
 
   public layer(id: number): void {

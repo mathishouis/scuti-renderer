@@ -23,11 +23,7 @@ export class ScutiData {
   }
 
   private _prepare(): void {
-    asset('data/furnitures').floors.forEach((furniture: FurnitureData) => {
-      this.furnitures.floors.set(furniture.id, furniture);
-    });
-    asset('data/furnitures').walls.forEach((furniture: FurnitureData) => {
-      this.furnitures.walls.set(furniture.id, furniture);
-    });
+    asset('data/furnitures').floors.forEach((furniture: FurnitureData) => this.furnitures.floors.set(furniture.id, furniture));
+    asset('data/furnitures').walls.forEach((furniture: FurnitureData) => this.furnitures.walls.set(furniture.id, furniture));
   }
 }

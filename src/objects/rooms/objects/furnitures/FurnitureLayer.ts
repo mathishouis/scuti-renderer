@@ -83,7 +83,7 @@ export class FurnitureLayer {
     if (this.flip) this.sprite.scale.x = -1;
     if (this.offsets.x !== undefined) this.sprite.x += this.offsets.x;
     if (this.offsets.y !== undefined) this.sprite.y += this.offsets.y;
-    if (this.offsets.z !== undefined) this.sprite.zOrder! += this.offsets.z + 1000;
+    if (this.offsets.z !== undefined) this.sprite.zOrder! += this.offsets.z + 100000;
     if (this.alpha !== undefined) this.sprite.alpha = this.alpha;
     if (this.tint !== undefined) this.sprite.tint = this.tint;
     if (this.blend !== undefined) this.sprite.blendMode = this.blend;

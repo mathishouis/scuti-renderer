@@ -24,11 +24,12 @@ const renderer: Scuti = new Scuti({
 await renderer.load();
 
 const heightMap: string = `
-00000
-00000
-00000
-00000
-00000
+xxxxxx
+x00000
+x00000
+x00000
+x00000
+x00000
 `;
 
 const room: Room = new Room({
@@ -44,6 +45,24 @@ const room: Room = new Room({
 });
 
 renderer.add(room);
+
+let zoom = 1;
+const [min_zoom, max_zoom] = [0.5, 5];
+
+renderer.application.view.addEventListener(
+  'wheel',
+  // @ts-ignore
+  ({ deltaY }) => {
+    // todo(): add support accross browsers
+    const delta = deltaY > 0 ? -0.25 : 0.25;
+
+    zoom += delta;
+    zoom = Math.max(min_zoom, Math.min(max_zoom, zoom));
+
+    room.camera.zoom(zoom, 0.25);
+  },
+  { passive: true },
+);
 
 const present = new FloorFurniture({
   id: 3372,
@@ -61,7 +80,7 @@ room.add(present);
 setTimeout(() => {
   present.state = 1;
 }, 5000);
-const dragon1 = new FloorFurniture({
+/*const dragon1 = new FloorFurniture({
   id: 8213,
   position: {
     x: -10,
@@ -71,7 +90,7 @@ const dragon1 = new FloorFurniture({
   direction: 2,
   state: 0,
 });
-room.add(dragon1);
+room.add(dragon1);*/
 setTimeout(() => {
   //present.destroy();
   const dragon = new FloorFurniture({
@@ -103,9 +122,9 @@ setTimeout(() => {
     //dragon.direction = 4;
   }, 2000);
 
-  room.events.tiles.onPointerMove = (event: TileEvent) => {
-    dragon.move({ position: event.position, duration: 0.5 });
-  };
+  /*room.events.tiles.onPointerMove = (event: TileEvent) => {
+    //dragon.move({ position: event.position, duration: 0.5 });
+  };*/
 }, 6000);
 
 const wheel = new WallFurniture({
@@ -121,23 +140,69 @@ const wheel = new WallFurniture({
   direction: 2,
   state: 0,
 });
-room.add(wheel);
+//room.add(wheel);
 
-const wheel2 = new WallFurniture({
-  id: 4010,
+const windowFurniture = new WallFurniture({
+  id: 4054,
   position: {
-    x: 2,
-    y: -1,
+    x: 3,
+    y: 0,
     offsets: {
       x: 0,
       y: -31,
     },
   },
+  /*position: {
+    x: -1,
+    y: 1,
+    offsets: {
+      x: 7,
+      y: -25,
+    },
+  },*/
   direction: 4,
-  state: -1,
+  state: 0,
 });
 
-setTimeout(() => {
+const windowFurniture2 = new WallFurniture({
+  id: 4039,
+  position: {
+    x: -1,
+    y: 1,
+    offsets: {
+      x: 7,
+      y: -25,
+    },
+  },
+  direction: 2,
+  state: 0,
+});
+
+const windowFurniture3 = new WallFurniture({
+  id: 4037,
+  position: {
+    x: -1,
+    y: 3,
+    offsets: {
+      x: 7,
+      y: -25,
+    },
+  },
+  direction: 2,
+  state: 0,
+});
+
+/*setTimeout(() => {
   wheel2.state = 2;
-}, 1000);
-room.add(wheel2);
+}, 1000);*/
+room.add(windowFurniture);
+room.add(windowFurniture2);
+room.add(windowFurniture3);
+
+room.events.tiles.onPointerMove = (event: TileEvent) => {
+  windowFurniture.position = {
+    x: event.position.x - 1,
+    y: event.position.y - 3,
+    offsets: { x: -7, y: 0 },
+  };
+};

@@ -57,7 +57,7 @@ export class FurnitureVisualizationData {
     const { furniture } = this.visualization;
     const { colorId } = furniture.data;
     const { frames, properties } = this.spritesheet.data as any;
-    const { colors, layers, animations, layerCount } = properties;
+    const { colors, layers, animations, layerCount, masks } = properties;
     const letter = layerId == layerCount ? 'sd' : String.fromCharCode(97 + layerId);
     const name = `${furniture.data.name}_${letter}_${furniture.direction}_0`;
     const layer = {
@@ -120,6 +120,10 @@ export class FurnitureVisualizationData {
 
   public get directions(): number[] {
     return (this.spritesheet.data as any).properties.directions;
+  }
+
+  public get masks(): { id: string }[] {
+    return (this.spritesheet.data as any).properties.masks;
   }
 
   public setState(id: number): void {

@@ -63,7 +63,8 @@ export class FloorFurniture extends RoomFurniture {
     this.visualization.setState(this.state);
     this.visualization.render();
 
-    this.position = this._position;
+    this.visualization.container.x = 32 * this.position.x - 32 * this.position.y + 32;
+    this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 * this.position.z;
 
     this.room.visualization.container.addChild(this.visualization.container);
   }
@@ -81,7 +82,10 @@ export class FloorFurniture extends RoomFurniture {
   }
 
   public set position(position: Vector3D) {
+    if (this._position && this._position === position) return;
+
     this._position = position;
+
     // @todo() move this to utils or something like that
     this.visualization.container.x = 32 * position.x - 32 * position.y + 32;
     this.visualization.container.y = 16 * position.x + 16 * position.y - 32 * position.z;
@@ -92,6 +96,8 @@ export class FloorFurniture extends RoomFurniture {
   }
 
   public set direction(direction: Direction) {
+    if (this._direction === direction) return;
+
     this._direction = direction;
     this.update();
   }
@@ -101,7 +107,10 @@ export class FloorFurniture extends RoomFurniture {
   }
 
   public set state(state: number) {
+    if (this._state === state) return;
+
     this._state = state;
+
     if (this.visualization) {
       this.visualization.setState(state);
       this.visualization.update();
