@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js';
+import { Container, Ticker } from 'pixi.js';
 import { Room } from './Room';
 import { TilePart } from './parts/floor/TilePart';
 import { PartLayer } from './layers/PartLayer';
@@ -13,18 +13,23 @@ import { benchmark } from '../../utils/Benchmark';
 import { perf } from '../../utils/Logger';
 import { LandscapePart } from './parts/wall/landscapes/LandscapePart';
 import { DoorPart } from './parts/wall/DoorPart';
+import { MaskLayer } from './layers/MaskLayer.ts';
 
 type RoomLayers = {
   parts: PartLayer;
+  masks: MaskLayer;
 };
 
 export class RoomVisualization {
   public container: Container = new Container();
   public layers: RoomLayers = {} as RoomLayers;
+  public furnituresTicker!: Ticker;
+  public greedyMesher!: GreedyMesher;
 
   constructor(public room: Room) {
     this._initializeMaterials();
     this._initializeLayers();
+    this._initializeTickers();
   }
 
   private _initializeMaterials(): void {
@@ -34,6 +39,15 @@ export class RoomVisualization {
 
   private _initializeLayers(): void {
     this.layers.parts = new PartLayer(this.room);
+    this.room.renderer.layer.addChild(this.layers.parts.landscapes);
+    this.layers.masks = new MaskLayer(this.room);
+    //this.layers.landscapes = new LandscapeLayer(this.room);
+  }
+
+  private _initializeTickers(): void {
+    this.furnituresTicker = new Ticker();
+    this.furnituresTicker.maxFPS = 24;
+    this.furnituresTicker.start();
   }
 
   private _registerCursor(): void {
@@ -91,10 +105,23 @@ export class RoomVisualization {
     this._registerCursor();
     this._registerDoor();
 
-    const greedyMesher: GreedyMesher = new GreedyMesher(this.room.heightMap);
+    this.greedyMesher = new GreedyMesher(this.room.heightMap);
 
-    if (!this.room.configuration.floorHidden)
-      greedyMesher.tiles.forEach((tile: TileMesh): void =>
+    this.renderFloors();
+    this.renderWalls();
+
+    perf('Room Visualization', 'room-visualization');
+
+    // Resets room position to the top-left corner by default
+    this.container.pivot.x = this.container.getBounds().left;
+    this.container.pivot.y = this.container.getBounds().top;
+
+    this.room.camera.centerCamera(0);
+  }
+
+  public renderFloors(): void {
+    if (!this.room.configuration.floorHidden) {
+      this.greedyMesher.tiles.forEach((tile: TileMesh): void =>
         this._registerFloorPart(
           new TilePart({
             material: this.room.configuration.floorMaterial,
@@ -106,8 +133,7 @@ export class RoomVisualization {
         ),
       );
 
-    if (!this.room.configuration.floorHidden)
-      greedyMesher.stairs.forEach((stair: StairMesh): void =>
+      this.greedyMesher.stairs.forEach((stair: StairMesh): void =>
         this._registerFloorPart(
           new StairPart({
             material: this.room.configuration.floorMaterial,
@@ -119,9 +145,12 @@ export class RoomVisualization {
           }),
         ),
       );
+    }
+  }
 
+  public renderWalls(): void {
     if (!this.room.configuration.wallHidden)
-      greedyMesher.walls.forEach((wall: WallMesh): void => {
+      this.greedyMesher.walls.forEach((wall: WallMesh): void => {
         this.add(
           new WallPart({
             material: this.room.configuration.wallMaterial,
@@ -134,6 +163,12 @@ export class RoomVisualization {
             corner: wall.corner,
           }),
         );
+      });
+  }
+
+  public renderLandscapes(): void {
+    if (!this.room.configuration.wallHidden)
+      this.greedyMesher.walls.forEach((wall: WallMesh): void => {
         this.add(
           new LandscapePart({
             material: this.room.configuration.landscapeMaterial,
@@ -145,14 +180,6 @@ export class RoomVisualization {
           }),
         );
       });
-
-    perf('Room Visualization', 'room-visualization');
-
-    // Resets room position to the top-left corner by default
-    this.container.pivot.x = this.container.getBounds().left;
-    this.container.pivot.y = this.container.getBounds().top;
-
-    this.room.camera.centerCamera(0);
   }
 
   public update(): void {
