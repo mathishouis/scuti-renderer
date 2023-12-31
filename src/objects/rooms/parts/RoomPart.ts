@@ -7,4 +7,5 @@ export abstract class RoomPart {
   public abstract room: Room;
   public abstract eventManager: EventManager;
   public abstract render(): void;
+  public abstract destroy(): void;
 }

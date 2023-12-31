@@ -13,12 +13,13 @@ export class FurnitureAnimatedVisualization extends FurnitureVisualization {
 
     this.furniture = furniture;
 
-    this.furniture.room.visualization.furnituresTicker.add(() => this.next());
+    if (this.furniture.room.visualization) this.furniture.room.visualization.furnituresTicker.add(() => this.next());
   }
 
   public destroy(): void {
     this.stopAnimation();
-    this.furniture.room.visualization.furnituresTicker.remove(() => this.next());
+
+    if (this.furniture.room.visualization) this.furniture.room.visualization.furnituresTicker.remove(() => this.next());
 
     super.destroy();
   }

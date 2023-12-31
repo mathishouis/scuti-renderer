@@ -39,4 +39,11 @@ export class CursorPart extends RoomPart {
     this.container.x = 32 * x - 32 * y;
     this.container.y = 16 * x + 16 * y - 32 * z - 20;
   }
+
+  public destroy(): void {
+    if (this.container !== undefined) {
+      this.container.destroy();
+      this.container = undefined as any;
+    }
+  }
 }

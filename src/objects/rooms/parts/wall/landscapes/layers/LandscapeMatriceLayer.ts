@@ -119,7 +119,7 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
         align === 'bottom'
           ? configuration.height !== -1
             ? 115 + 64 * configuration.height - this.texture.height
-            : room.heightMap.maxHeight * 32 + 115 - this.texture.height
+            : room.parsedHeightMap.maxHeight * 32 + 115 - this.texture.height
           : 0,
     };
   }

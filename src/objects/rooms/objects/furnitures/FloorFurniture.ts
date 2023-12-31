@@ -66,7 +66,7 @@ export class FloorFurniture extends RoomFurniture {
     this.visualization.container.x = 32 * this.position.x - 32 * this.position.y + 32;
     this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 * this.position.z;
 
-    this.room.visualization.container.addChild(this.visualization.container);
+    if (this.room.visualization) this.room.visualization.container.addChild(this.visualization.container);
   }
 
   public update(): void {
@@ -74,7 +74,10 @@ export class FloorFurniture extends RoomFurniture {
   }
 
   public destroy(): void {
-    this.visualization.destroy();
+    if (this.visualization !== undefined) {
+      this.visualization.destroy();
+      this.visualization = undefined as any;
+    }
   }
 
   public get position(): Vector3D {

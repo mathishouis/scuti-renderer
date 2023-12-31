@@ -36,7 +36,10 @@ export class LandscapePart extends RoomPart {
       size: {
         x: this.configuration.direction === Direction.NORTH ? this.configuration.length : 0,
         y: this.configuration.direction === Direction.WEST ? this.configuration.length : 0,
-        z: this.configuration.height === -1 ? this.room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * this.configuration.height,
+        z:
+          this.configuration.height === -1
+            ? this.room.parsedHeightMap.maxHeight + 115 / 32
+            : 115 / 32 + (64 / 32) * this.configuration.height,
       },
       zOrders: {
         [CubeFace.TOP]: -4,
@@ -56,7 +59,8 @@ export class LandscapePart extends RoomPart {
     const size: Vector3D = {
       x: direction === Direction.NORTH ? length : 0,
       y: direction === Direction.WEST ? length : 0,
-      z: floorThickness / 32 - position.z + (height === -1 ? this.room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height),
+      z:
+        floorThickness / 32 - position.z + (height === -1 ? this.room.parsedHeightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height),
     };
 
     material.layers.forEach((layer: any) => new layer.layer({ ...layer.params, ...{ part: this } }).render());
@@ -68,5 +72,12 @@ export class LandscapePart extends RoomPart {
     this.container.y = baseY - 32 * position.z - size.z * 32 + floorThickness;
 
     this.room.visualization.container.addChild(this.container);
+  }
+
+  public destroy() {
+    if (this.container !== undefined) {
+      this.container.destroy();
+      this.container = undefined as any;
+    }
   }
 }

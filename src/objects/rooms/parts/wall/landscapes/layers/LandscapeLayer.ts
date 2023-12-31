@@ -19,7 +19,7 @@ export abstract class LandscapeLayer {
     return {
       x: direction === Direction.NORTH ? length : 0,
       y: direction === Direction.WEST ? length : 0,
-      z: height === -1 ? room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height,
+      z: height === -1 ? room.parsedHeightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height,
     };
   }
 
@@ -34,11 +34,11 @@ export abstract class LandscapeLayer {
     const { room, configuration } = this.part;
 
     return (
-      (room.heightMap.door &&
+      (room.parsedHeightMap.door &&
         room.visualization.layers.parts.door &&
-        configuration.position.x - 1 === room.heightMap.door.x &&
-        configuration.position.y <= room.heightMap.door.y &&
-        room.heightMap.door.y <= configuration.position.y + configuration.length - 1 &&
+        configuration.position.x - 1 === room.parsedHeightMap.door.x &&
+        configuration.position.y <= room.parsedHeightMap.door.y &&
+        room.parsedHeightMap.door.y <= configuration.position.y + configuration.length - 1 &&
         configuration.direction === Direction.WEST) ??
       false
     );

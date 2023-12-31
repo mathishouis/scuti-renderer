@@ -63,11 +63,9 @@ export class StairPart extends RoomPart {
   public render(): void {
     if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
       this.container.x = 32 * this.configuration.position.x - 32 * this.configuration.position.y;
-      this.container.y =
-        16 * this.configuration.position.x + 16 * this.configuration.position.y - 32 * this.configuration.position.z;
+      this.container.y = 16 * this.configuration.position.x + 16 * this.configuration.position.y - 32 * this.configuration.position.z;
     } else {
-      this.container.x =
-        32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.length - 1);
+      this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.length - 1);
       this.container.y =
         16 * this.configuration.position.x +
         16 * (this.configuration.position.y + this.configuration.length - 1) -
@@ -110,10 +108,7 @@ export class StairPart extends RoomPart {
       this.container.hitArea = new Polygon(
         new Point(0, 0),
         new Point(32 * 1, -16 * 1),
-        new Point(
-          32 * (this.configuration.length + 1) + 32 * (1 - 1),
-          -16 * (1 - 1) + 16 * (this.configuration.length - 1),
-        ),
+        new Point(32 * (this.configuration.length + 1) + 32 * (1 - 1), -16 * (1 - 1) + 16 * (this.configuration.length - 1)),
         new Point(32 * this.configuration.length, 16 * this.configuration.length),
         new Point(0, 0),
       );
@@ -319,6 +314,13 @@ export class StairPart extends RoomPart {
       if (this.configuration.direction === Direction.EAST) cube.zIndex = -i;
 
       this.container.addChild(cube);
+    }
+  }
+
+  public destroy() {
+    if (this.container !== undefined) {
+      this.container.destroy();
+      this.container = undefined as any;
     }
   }
 

@@ -25,9 +25,9 @@ await renderer.load();
 
 const heightMap: string = `
 xxxxxx
+x10000
 x00000
-x00000
-x00000
+000000
 x00000
 x00000
 `;
@@ -203,6 +203,20 @@ room.events.tiles.onPointerMove = (event: TileEvent) => {
   windowFurniture.position = {
     x: event.position.x - 1,
     y: event.position.y - 3,
-    offsets: { x: -7, y: 0 },
+    offsets: { x: -7, y: -event.position.z * 16 },
   };
 };
+
+/*setInterval(() => {
+  room.floorThickness = Math.floor(Math.random() * (32 - 8 + 1) + 8);
+  room.wallThickness = Math.floor(Math.random() * (32 - 8 + 1) + 8);
+}, 2000);*/
+
+setTimeout(() => {
+  room.destroy();
+}, 6000);
+
+setTimeout(() => {
+  room.render();
+  room.add(windowFurniture3);
+}, 9000);
