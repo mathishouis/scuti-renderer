@@ -17,6 +17,7 @@ const renderer: Scuti = new Scuti({
   resources: 'http://127.0.0.1:8081',
   backgroundColor: 0x0c567c,
   //backgroundColor: 0x000000,
+  zoom: { type: 'both', direction: 'cursor' },
 });
 
 // @ts-ignore

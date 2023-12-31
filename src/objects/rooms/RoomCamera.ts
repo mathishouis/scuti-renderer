@@ -104,7 +104,20 @@ export class RoomCamera extends Container {
     });
   }
 
-  public zoom(zoom: number, duration: number = 0.8) {
+  public zoom(zoom: number, duration: number = 0.8): void {
+    const { direction } = this.room.renderer.configuration.zoom!;
+
+    if (direction === 'cursor') {
+      const localPivot = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
+
+      gsap.to(this.pivot, {
+        x: localPivot.x,
+        y: localPivot.y,
+        duration,
+        ease: 'easeOut',
+      });
+    }
+
     gsap.to(this.scale, {
       x: zoom,
       y: zoom,
