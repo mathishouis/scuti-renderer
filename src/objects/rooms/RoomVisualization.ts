@@ -15,8 +15,8 @@ import { LandscapePart } from './parts/wall/landscapes/LandscapePart';
 import { DoorPart } from './parts/wall/DoorPart';
 import { MaskLayer } from './layers/MaskLayer';
 import { ObjectLayer } from './layers/ObjectLayer';
-import { LandscapeWindowMask } from './parts/wall/landscapes/layers/items/LandscapeWindowMask.ts';
-import { RoomObject } from './objects/RoomObject.ts';
+import { LandscapeWindowMask } from './parts/wall/landscapes/layers/items/LandscapeWindowMask';
+import { RoomObject } from './objects/RoomObject';
 
 type RoomLayers = {
   parts: PartLayer;

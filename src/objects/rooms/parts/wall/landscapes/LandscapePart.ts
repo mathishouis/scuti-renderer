@@ -7,7 +7,7 @@ import { Direction } from '../../../../../enums/Direction';
 import { LandscapeMaterial } from '../../../materials/LandscapeMaterial';
 import { Cube } from '../../../geometry/Cube';
 import { CubeFace } from '../../../../../enums/CubeFace';
-import { LandscapeLayer } from './layers/LandscapeLayer.ts';
+import { LandscapeLayer } from './layers/LandscapeLayer';
 
 interface Configuration {
   material?: LandscapeMaterial;
