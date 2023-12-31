@@ -62,7 +62,7 @@ export class RoomVisualization {
   }
 
   private _registerDoor(): void {
-    if (this.room.parsedHeightMap.door) {
+    if (this.room.parsedHeightMap.door && !this.room.wallHidden) {
       this.layers.parts.door = new DoorPart({
         position: {
           x: this.room.parsedHeightMap.door.x,

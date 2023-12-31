@@ -218,10 +218,18 @@ setTimeout(() => {
 
 setTimeout(() => {
   room.render();
+  room.add(windowFurniture);
+  room.add(windowFurniture2);
   room.add(windowFurniture3);
 
   setInterval(() => {
     room.floorMaterial = new FloorMaterial(Math.floor(Math.random() * (111 - 101 + 1) + 101));
     room.wallMaterial = new FloorMaterial(Math.floor(Math.random() * (111 - 101 + 1) + 101));
+    room.floorThickness = Math.floor(Math.random() * (32 - 8 + 1) + 8);
+    room.wallThickness = Math.floor(Math.random() * (32 - 8 + 1) + 8);
   }, 2000);
+
+  setTimeout(() => {
+    room.wallHidden = true;
+  }, 5000);
 }, 9000);
