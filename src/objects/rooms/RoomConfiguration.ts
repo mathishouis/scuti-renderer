@@ -16,14 +16,6 @@ export interface Configuration {
   landscapeMaterial?: LandscapeMaterial;
   dragging?: boolean;
   centerCamera?: boolean;
-  zoom?: {
-    type?: 'wheel' | 'keydown' | 'both';
-    level?: number;
-    min?: number;
-    max?: number;
-    step?: number;
-    duration?: number;
-  };
 }
 
 export class RoomConfiguration {
@@ -44,7 +36,6 @@ export class RoomConfiguration {
 
   private _dragging: boolean;
   private _centerCamera: boolean;
-  private _zoom: Configuration['zoom'];
 
   constructor({
     room,
@@ -59,7 +50,6 @@ export class RoomConfiguration {
     landscapeMaterial,
     dragging,
     centerCamera,
-    zoom,
   }: Configuration) {
     this.room = room;
     this._heightMap = heightMap;
@@ -77,7 +67,6 @@ export class RoomConfiguration {
 
     this._dragging = dragging ?? true;
     this._centerCamera = centerCamera ?? true;
-    this._zoom = { level: 1, min: 0.5, max: 2, step: 0.5, duration: 0.4, ...zoom };
   }
 
   public get heightMap(): string {
@@ -175,13 +164,5 @@ export class RoomConfiguration {
 
   public set centerCamera(centerCamera: boolean) {
     this._centerCamera = centerCamera;
-  }
-
-  public get zoom(): Configuration['zoom'] {
-    return this._zoom;
-  }
-
-  public set zoom(zoom: Configuration['zoom']) {
-    this._zoom = zoom;
   }
 }

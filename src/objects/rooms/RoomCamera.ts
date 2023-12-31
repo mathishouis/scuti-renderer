@@ -18,11 +18,13 @@ export class RoomCamera extends Container {
   }
 
   private _initializeListeners(): void {
-    if (this.room.configuration.zoom?.type === 'wheel' || this.room.configuration.zoom?.type === 'both') {
+    const zoomType = this.room.renderer.configuration.zoom?.type;
+
+    if (zoomType === 'wheel' || zoomType === 'both') {
       this.room.renderer.canvas.addEventListener('wheel', this._onZoom, { passive: true });
     }
 
-    if (this.room.configuration.zoom?.type === 'keydown' || this.room.configuration.zoom?.type === 'both') {
+    if (zoomType === 'keydown' || zoomType === 'both') {
       window.addEventListener('keypress', this._onZoom, { passive: true });
     }
 
@@ -34,7 +36,7 @@ export class RoomCamera extends Container {
   }
 
   private _onZoom = (event: WheelEvent | KeyboardEvent): void => {
-    const zoom = this.room.configuration.zoom!;
+    const zoom = this.room.renderer.configuration.zoom!;
     const { step, level, min, max, duration } = zoom;
 
     if (event instanceof KeyboardEvent) {

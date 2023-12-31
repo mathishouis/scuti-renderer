@@ -49,7 +49,7 @@ export class Scuti {
       height: this.configuration.height,
       antialias: false,
       autoDensity: true,
-      resolution: Math.min(Math.round(window.devicePixelRatio || 1), 2),
+      resolution: Math.min(Math.round(devicePixelRatio ?? 1), 2),
       backgroundColor: new Color(this.configuration.backgroundColor).toHex(),
       backgroundAlpha: this.configuration.backgroundAlpha,
       resizeTo: this.configuration.resizeTo,
