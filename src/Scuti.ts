@@ -47,10 +47,11 @@ export class Scuti {
     this.application = new Application({
       width: this.configuration.width,
       height: this.configuration.height,
-      resolution: 1,
       antialias: false,
-      backgroundColor: new Color(this.configuration.backgroundColor ?? 0x0c567c).toHex(),
-      backgroundAlpha: this.configuration.backgroundAlpha ?? 1,
+      autoDensity: true,
+      resolution: Math.min(Math.round(window.devicePixelRatio || 1), 2),
+      backgroundColor: new Color(this.configuration.backgroundColor).toHex(),
+      backgroundAlpha: this.configuration.backgroundAlpha,
       resizeTo: this.configuration.resizeTo,
     });
     this.application.stage = new Stage();

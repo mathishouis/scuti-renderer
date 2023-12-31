@@ -7,7 +7,7 @@ export class RoomCamera extends Container {
   public hasDragged: boolean = false;
 
   private _lastClickTime: number = 0;
-  private _clickThreshold: number = 75;
+  private _clickThreshold: number = 100;
 
   constructor(public room: Room) {
     super();
@@ -18,25 +18,34 @@ export class RoomCamera extends Container {
   }
 
   private _initializeListeners(): void {
-    if (this.room.configuration.scrollZoom) {
+    if (this.room.configuration.zoom?.type === 'wheel' || this.room.configuration.zoom?.type === 'both') {
       this.room.renderer.canvas.addEventListener('wheel', this._onZoom, { passive: true });
+    }
+
+    if (this.room.configuration.zoom?.type === 'keydown' || this.room.configuration.zoom?.type === 'both') {
+      window.addEventListener('keypress', this._onZoom, { passive: true });
     }
 
     if (this.room.configuration.dragging) {
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
-      this.room.renderer.application.renderer.events.domElement.addEventListener('pointermove', (event: PointerEvent) =>
-        this._dragMove(event.movementX, event.movementY),
-      );
+      this.room.renderer.application.renderer.events.domElement.addEventListener('pointermove', this._dragMove);
     }
   }
 
-  private _onZoom = ({ deltaY }: WheelEvent): void => {
-    this.room.configuration.zoomLevel += deltaY > 0 ? -0.5 : 0.5;
-    this.room.configuration.zoomLevel = Math.max(
-      this.room.configuration.minZoom,
-      Math.min(this.room.configuration.maxZoom, this.room.configuration.zoomLevel),
-    );
+  private _onZoom = (event: WheelEvent | KeyboardEvent): void => {
+    const zoom = this.room.configuration.zoom!;
+    const { step, level, min, max, duration } = zoom;
+
+    if (event instanceof KeyboardEvent) {
+      if (event.key === '+' || event.key === '-') {
+        zoom.level = Math.max(min!, Math.min(max!, level! + (event.key === '+' ? step! : -step!)));
+      }
+    } else if (event instanceof WheelEvent) {
+      zoom.level = Math.max(min!, Math.min(max!, level! + (event.deltaY > 0 ? -step! : step!)));
+    }
+
+    this.zoom(zoom.level!, duration!);
   };
 
   private _dragStart = (): void => {
@@ -54,18 +63,27 @@ export class RoomCamera extends Container {
     if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
   };
 
-  private _dragMove = (x: number, y: number): void => {
+  private _dragMove = (event: PointerEvent): void => {
     if (this.dragging) {
       this.hasDragged = true;
-      this.pivot.x = Math.floor(this.pivot.x - x / this.scale.x);
-      this.pivot.y = Math.floor(this.pivot.y - y / this.scale.y);
+      this.pivot.x -= event.movementX / (this.scale.x * window.devicePixelRatio);
+      this.pivot.y -= event.movementY / (this.scale.y * window.devicePixelRatio);
     }
   };
 
   public isOutOfBounds(): boolean {
     const { x, y } = this.pivot;
     const { width, height } = this.room.renderer.application.view;
-    if (x - width / 2 > this.width || x + width / 2 < 0 || y - height / 2 > this.height || y + height / 2 < 0) return true;
+    const scaledWidth = (width / this.scale.x / 2) * this.scale.x;
+    const scaledHeight = (height / this.scale.y / 2) * this.scale.y;
+
+    if (
+      x - scaledWidth > this.width / this.scale.x ||
+      x + scaledWidth < 0 ||
+      y - scaledHeight > this.height / this.scale.y ||
+      y + scaledHeight < 0
+    )
+      return true;
     else return false;
   }
 
@@ -77,8 +95,8 @@ export class RoomCamera extends Container {
       ease: 'easeOut',
     });
     gsap.to(this.pivot, {
-      x: Math.floor(this.width / 2),
-      y: Math.floor(this.height / 2),
+      x: Math.floor(this.width / this.scale.x / 2),
+      y: Math.floor(this.height / this.scale.y / 2),
       duration,
       ease: 'easeOut',
     });

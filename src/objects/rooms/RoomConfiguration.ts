@@ -3,7 +3,7 @@ import { Room } from './Room';
 import { WallMaterial } from './materials/WallMaterial';
 import { LandscapeMaterial } from './materials/LandscapeMaterial';
 
-interface Configuration {
+export interface Configuration {
   room: Room;
   heightMap: string;
   floorMaterial?: FloorMaterial;
@@ -16,11 +16,14 @@ interface Configuration {
   landscapeMaterial?: LandscapeMaterial;
   dragging?: boolean;
   centerCamera?: boolean;
-  zoomLevel?: number;
-  scrollZoom?: boolean;
-  zoomDuration?: number;
-  minZoom?: number;
-  maxZoom?: number;
+  zoom?: {
+    type?: 'wheel' | 'keydown' | 'both';
+    level?: number;
+    min?: number;
+    max?: number;
+    step?: number;
+    duration?: number;
+  };
 }
 
 export class RoomConfiguration {
@@ -41,11 +44,7 @@ export class RoomConfiguration {
 
   private _dragging: boolean;
   private _centerCamera: boolean;
-  private _zoomLevel: number;
-  private _scrollZoom: boolean;
-  private _zoomDuration: number;
-  private _minZoom: number;
-  private _maxZoom: number;
+  private _zoom: Configuration['zoom'];
 
   constructor({
     room,
@@ -60,11 +59,7 @@ export class RoomConfiguration {
     landscapeMaterial,
     dragging,
     centerCamera,
-    zoomLevel,
-    scrollZoom,
-    zoomDuration,
-    minZoom,
-    maxZoom,
+    zoom,
   }: Configuration) {
     this.room = room;
     this._heightMap = heightMap;
@@ -82,11 +77,7 @@ export class RoomConfiguration {
 
     this._dragging = dragging ?? true;
     this._centerCamera = centerCamera ?? true;
-    this._zoomLevel = zoomLevel ?? 1;
-    this._scrollZoom = scrollZoom ?? false;
-    this._zoomDuration = zoomDuration ?? 0.5;
-    this._minZoom = minZoom ?? 0.5;
-    this._maxZoom = maxZoom ?? 3;
+    this._zoom = { level: 1, min: 0.5, max: 2, step: 0.5, duration: 0.4, ...zoom };
   }
 
   public get heightMap(): string {
@@ -186,44 +177,11 @@ export class RoomConfiguration {
     this._centerCamera = centerCamera;
   }
 
-  public get zoomLevel(): number {
-    return this._zoomLevel;
+  public get zoom(): Configuration['zoom'] {
+    return this._zoom;
   }
 
-  public set zoomLevel(value: number) {
-    this._zoomLevel = value;
-    this.room.camera.zoom(value, this._zoomDuration);
-  }
-
-  public get scrollZoom(): boolean {
-    return this._scrollZoom;
-  }
-
-  public set scrollZoom(scrollZoom: boolean) {
-    this._scrollZoom = scrollZoom;
-  }
-
-  public get zoomDuration(): number {
-    return this._zoomDuration;
-  }
-
-  public set zoomDuration(value: number) {
-    this._zoomDuration = value;
-  }
-
-  public get minZoom(): number {
-    return this._minZoom;
-  }
-
-  public set minZoom(value: number) {
-    this._minZoom = value;
-  }
-
-  public get maxZoom(): number {
-    return this._maxZoom;
-  }
-
-  public set maxZoom(value: number) {
-    this._maxZoom = value;
+  public set zoom(zoom: Configuration['zoom']) {
+    this._zoom = zoom;
   }
 }
