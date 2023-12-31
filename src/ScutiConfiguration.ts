@@ -2,7 +2,7 @@ import { Scuti } from './Scuti';
 import { Color } from 'pixi.js';
 import { registerPath } from './utils/Assets';
 
-interface Configuration {
+export interface Configuration {
   renderer: Scuti;
   canvas: HTMLElement;
   width: number;
@@ -11,15 +11,19 @@ interface Configuration {
   backgroundColor?: number;
   backgroundAlpha?: number;
   resizeTo?: HTMLElement | Window;
-  zoom?: {
-    type?: 'wheel' | 'keydown' | 'both';
-    level?: number;
-    min?: number;
-    max?: number;
-    step?: number;
-    duration?: number;
-  };
+  zoom?: Partial<ZoomConfiguration>;
 }
+
+interface ZoomConfiguration {
+  type: 'wheel' | 'keydown' | 'both';
+  level: number;
+  min: number;
+  max: number;
+  step: number;
+  duration: number;
+  direction: 'cursor' | 'center';
+}
+
 export class ScutiConfiguration {
   public renderer: Scuti;
 
@@ -40,7 +44,7 @@ export class ScutiConfiguration {
     this._backgroundColor = backgroundColor ?? 0x000000;
     this._backgroundAlpha = backgroundAlpha ?? 1;
     this._resizeTo = resizeTo ?? window;
-    this._zoom = { level: 1, min: 0.5, max: 3, step: 0.5, duration: 0.4, ...zoom };
+    this._zoom = { level: 1, min: 0.5, max: 3, step: 0.5, duration: 0.4, direction: 'center', ...zoom };
 
     registerPath(resources);
   }

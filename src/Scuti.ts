@@ -3,22 +3,12 @@ import { GameObject } from './objects/GameObject';
 import { register } from './utils/Assets';
 import { Layer, Stage } from '@pixi/layers';
 import { addStats, StatsJSAdapter } from 'pixi-stats';
-import { ScutiConfiguration } from './ScutiConfiguration';
+import { Configuration, ScutiConfiguration } from './ScutiConfiguration';
 import { loadBundle } from './objects/parsers/BundleParser';
 import { log, perf } from './utils/Logger';
 import { benchmark } from './utils/Benchmark';
 import { loadData } from './objects/parsers/DataParser';
 import { ScutiData } from './ScutiData';
-
-interface Configuration {
-  canvas: HTMLElement;
-  width: number;
-  height: number;
-  resources: string;
-  backgroundColor?: number;
-  backgroundAlpha?: number;
-  resizeTo?: HTMLElement | Window;
-}
 
 export class Scuti {
   public configuration: ScutiConfiguration;
@@ -27,7 +17,7 @@ export class Scuti {
   public layer: Layer = new Layer();
   public data!: ScutiData;
 
-  constructor(configuration: Configuration) {
+  constructor(configuration: Omit<Configuration, 'renderer'>) {
     log('🚀 SCUTI', 'v0.0.0');
 
     this.configuration = new ScutiConfiguration({ ...configuration, ...{ renderer: this } });
@@ -55,7 +45,7 @@ export class Scuti {
       resizeTo: this.configuration.resizeTo,
     });
     this.application.stage = new Stage();
-    (globalThis as any).__PIXI_APP__ = this.application; // Support for PIXI.js dev-tool.
+    globalThis.__PIXI_APP__ = this.application; // Support for PIXI.js dev-tool.
     this.canvas = this.configuration.canvas;
     this.canvas.append(this.application.view as HTMLCanvasElement);
 

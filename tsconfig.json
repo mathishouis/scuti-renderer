@@ -7,6 +7,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
+    "types": ["./src/types/Globals.d.ts"],
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
