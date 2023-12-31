@@ -60,10 +60,16 @@ export class LandscapeAnimatedLayer extends LandscapeLayer {
     );
 
     this.items.forEach((item: LandscapeAnimatedLayerItem) => item.render());
-    this.part.room.renderer.application.ticker.add(() => this.next());
+    this.part.room.renderer.application.ticker.add(this.next, this);
   }
 
   public next(): void {
-    this.items.forEach((item: LandscapeAnimatedLayerItem) => item.next());
+    if (this.items.length > 0) this.items.forEach((item: LandscapeAnimatedLayerItem) => item.next());
+  }
+
+  public destroy(): void {
+    this.part.room.renderer.application.ticker.remove(this.next, this);
+    this.items.forEach((item: LandscapeAnimatedLayerItem) => item.destroy());
+    this.items = [];
   }
 }

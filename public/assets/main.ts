@@ -219,4 +219,9 @@ setTimeout(() => {
 setTimeout(() => {
   room.render();
   room.add(windowFurniture3);
+
+  setInterval(() => {
+    room.floorMaterial = new FloorMaterial(Math.floor(Math.random() * (111 - 101 + 1) + 101));
+    room.wallMaterial = new FloorMaterial(Math.floor(Math.random() * (111 - 101 + 1) + 101));
+  }, 2000);
 }, 9000);

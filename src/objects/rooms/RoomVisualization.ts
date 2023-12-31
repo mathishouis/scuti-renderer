@@ -223,6 +223,7 @@ export class RoomVisualization {
         item.destroy();
         this.layers.objects.remove(item);
       });
+      this.layers.masks.destroy();
     }
   }
 

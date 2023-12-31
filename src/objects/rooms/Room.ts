@@ -118,6 +118,9 @@ export class Room extends GameObject {
   }
 
   public set floorMaterial(material: FloorMaterial) {
+    this._floorMaterial.destroy();
+    material.room = this;
+    material.render();
     this._floorMaterial = material;
     this.update(true, false, false);
   }
@@ -145,6 +148,9 @@ export class Room extends GameObject {
   }
 
   public set wallMaterial(material: WallMaterial) {
+    this._wallMaterial.destroy();
+    material.room = this;
+    material.render();
     this._wallMaterial = material;
     this.update(true, false, false);
   }

@@ -28,7 +28,13 @@ export class MaskLayer extends RoomLayer {
     this.childrens = this.childrens.filter((filteredItem: LandscapeWindowMask) => filteredItem !== item);
   }
 
-  public destroy(): void {}
+  public destroy(): void {
+    if (this.sprite !== undefined) {
+      this.room.visualization.layers.parts.landscapes.filters = [];
+      this.sprite.destroy(true);
+      this.sprite = undefined as any;
+    }
+  }
 
   public update(): void {
     if (this.sprite) {
@@ -37,7 +43,6 @@ export class MaskLayer extends RoomLayer {
     }
 
     this.sprite = this.landscapeSprite();
-
     this.room.visualization.container.addChild(this.sprite);
     this.room.visualization.layers.parts.landscapes.filters = [new BlackSpriteMaskFilter(this.sprite)];
   }

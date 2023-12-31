@@ -18,6 +18,7 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
   public color: number = 0xffffff;
 
   private _texture!: Texture;
+  private _generatedTextures: Texture[] = [];
 
   constructor({ part, name }: Configuration) {
     super();
@@ -53,7 +54,10 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
     container.addChild(background);
     sprites.forEach((sprite: Sprite) => container.addChild(sprite));
 
-    return this.part.room.renderer.application.renderer.generateTexture(container);
+    const generatedTexture = this.part.room.renderer.application.renderer.generateTexture(container);
+    this._generatedTextures.push(generatedTexture);
+
+    return generatedTexture;
   }
 
   private _random(textures: Texture[]): Texture {
@@ -73,7 +77,10 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
       offset += sprite.width;
     }
 
-    return this.part.room.renderer.application.renderer.generateTexture(container);
+    const generatedTexture = this.part.room.renderer.application.renderer.generateTexture(container);
+    this._generatedTextures.push(generatedTexture);
+
+    return generatedTexture;
   }
 
   private _order(textures: Texture[]): Texture {
@@ -93,7 +100,10 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
       index = (index + 1) % textures.length;
     }
 
-    return this.part.room.renderer.application.renderer.generateTexture(container);
+    const generatedTexture = this.part.room.renderer.application.renderer.generateTexture(container);
+    this._generatedTextures.push(generatedTexture);
+
+    return generatedTexture;
   }
 
   public get size(): Vector3D {
@@ -137,5 +147,14 @@ export class LandscapeMatriceLayer extends LandscapeLayer {
     if (repeat === 'none') this._texture = this._order(textures);
 
     return this._texture;
+  }
+
+  public destroy(): void {
+    if (this._generatedTextures.length > 0) {
+      this._generatedTextures.forEach((texture: Texture) => texture.destroy(true));
+      this._generatedTextures = [];
+    }
+
+    if (this._texture !== undefined) this._texture.destroy(true);
   }
 }

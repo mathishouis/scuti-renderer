@@ -1,12 +1,13 @@
 import { RoomPart } from '../../RoomPart';
 import { Room } from '../../../Room';
-import { Container, Sprite, SpriteMaskFilter } from 'pixi.js';
+import { Container } from 'pixi.js';
 import { EventManager } from '../../../../events/EventManager';
 import { Vector3D } from '../../../../../types/Vector';
 import { Direction } from '../../../../../enums/Direction';
 import { LandscapeMaterial } from '../../../materials/LandscapeMaterial';
 import { Cube } from '../../../geometry/Cube';
 import { CubeFace } from '../../../../../enums/CubeFace';
+import { LandscapeLayer } from './layers/LandscapeLayer.ts';
 
 interface Configuration {
   material?: LandscapeMaterial;
@@ -23,6 +24,7 @@ export class LandscapePart extends RoomPart {
   public eventManager: EventManager = new EventManager();
 
   private _mask!: Cube;
+  private _layers: LandscapeLayer[] = [];
 
   constructor(public configuration: Configuration) {
     super();
@@ -63,7 +65,13 @@ export class LandscapePart extends RoomPart {
         floorThickness / 32 - position.z + (height === -1 ? this.room.parsedHeightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height),
     };
 
-    material.layers.forEach((layer: any) => new layer.layer({ ...layer.params, ...{ part: this } }).render());
+    this._layers = [];
+
+    material.layers.forEach((layer: any) => {
+      const landscapeLayer = new layer.layer({ ...layer.params, ...{ part: this } });
+      this._layers.push(landscapeLayer);
+      landscapeLayer.render();
+    });
 
     this.container.addChild(this.mask);
     this.container.mask = this.mask;
@@ -75,6 +83,16 @@ export class LandscapePart extends RoomPart {
   }
 
   public destroy() {
+    if (this._mask !== undefined) {
+      this._mask.destroy();
+      this._mask = undefined as any;
+    }
+
+    if (this._layers.length > 0) {
+      this._layers.forEach((layer: LandscapeLayer) => layer.destroy());
+      this._layers = [];
+    }
+
     if (this.container !== undefined) {
       this.container.destroy();
       this.container = undefined as any;

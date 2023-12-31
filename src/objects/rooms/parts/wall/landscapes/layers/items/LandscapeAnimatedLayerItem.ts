@@ -72,4 +72,11 @@ export class LandscapeAnimatedLayerItem {
     );
     this.sprite.y = random(seed, 0, 1, 2) * (maxY - minY) + minY + (direction === Direction.WEST ? -1 : 1) * (this.sprite.x / 2);
   }
+
+  public destroy(): void {
+    if (this.sprite !== undefined) {
+      this.sprite.destroy();
+      this.sprite = undefined as any;
+    }
+  }
 }
