@@ -3,7 +3,7 @@ import { Scuti } from '../../src/Scuti';
 import { Room } from '../../src/objects/rooms/Room';
 import { FloorMaterial } from '../../src/objects/rooms/materials/FloorMaterial';
 import { WallMaterial } from '../../src/objects/rooms/materials/WallMaterial';
-import { TileEvent } from '../../src/entities/Events';
+import { TileEvent, WallEvent } from '../../src/entities/Events';
 import { LandscapeMaterial } from '../../src';
 import { FloorFurniture } from '../../src/objects/rooms/objects/furnitures/FloorFurniture';
 import { benchmark } from '../../src/utils/Benchmark';
@@ -30,6 +30,9 @@ x00000
 000000
 x00000
 x00000
+x00000
+x00000
+x00000
 `;
 
 const room: Room = new Room({
@@ -40,7 +43,7 @@ const room: Room = new Room({
   floorThickness: 8,
   wallMaterial: new WallMaterial(108),
   wallThickness: 8,
-  wallHeight: -1,
+  wallHeight: 1,
   landscapeMaterial: new LandscapeMaterial(101),
 });
 
@@ -145,11 +148,11 @@ const wheel = new WallFurniture({
 const windowFurniture = new WallFurniture({
   id: 4054,
   position: {
-    x: 3,
-    y: 0,
+    x: 1,
+    y: 1,
     offsets: {
       x: 0,
-      y: -31,
+      y: 0,
     },
   },
   /*position: {
@@ -160,18 +163,19 @@ const windowFurniture = new WallFurniture({
       y: -25,
     },
   },*/
-  direction: 4,
+  direction: 2,
   state: 0,
 });
 
 const windowFurniture2 = new WallFurniture({
-  id: 4039,
+  //id: 4039,
+  id: 4037,
   position: {
-    x: -1,
-    y: 1,
+    x: 0,
+    y: 5,
     offsets: {
-      x: 7,
-      y: -25,
+      x: 5,
+      y: 43,
     },
   },
   direction: 2,
@@ -181,14 +185,14 @@ const windowFurniture2 = new WallFurniture({
 const windowFurniture3 = new WallFurniture({
   id: 4037,
   position: {
-    x: -1,
-    y: 3,
+    x: 4,
+    y: 0,
     offsets: {
       x: 7,
-      y: -25,
+      y: 57,
     },
   },
-  direction: 2,
+  direction: 4,
   state: 0,
 });
 
@@ -207,12 +211,25 @@ room.events.tiles.onPointerMove = (event: TileEvent) => {
   };
 };
 
-/*setInterval(() => {
-  room.floorThickness = Math.floor(Math.random() * (32 - 8 + 1) + 8);
-  room.wallThickness = Math.floor(Math.random() * (32 - 8 + 1) + 8);
-}, 2000);*/
+room.events.walls.onPointerMove = (event: WallEvent) => {
+  //console.log(event.position);
+  windowFurniture.position = event.position;
+  //windowFurniture2.position = event.position;
+  /*console.log('x:', event.position.x);
+  console.log('y:', event.position.y);
+  console.log('offsetX:', event.position.offsets.x);
+  console.log('offsety:', event.position.offsets.y);
+  console.log('=======================');*/
+  windowFurniture3.position = event.position;
 
-setTimeout(() => {
+  if (event.direction === 6) {
+    windowFurniture3.direction = 2;
+  } else if (event.direction === 0) {
+    windowFurniture3.direction = 4;
+  }
+};
+
+/*setTimeout(() => {
   room.destroy();
 }, 6000);
 
@@ -232,4 +249,13 @@ setTimeout(() => {
   setTimeout(() => {
     room.wallHidden = true;
   }, 5000);
-}, 9000);
+
+  setTimeout(() => {
+    room.wallHidden = false;
+  }, 7000);
+
+  room.events.walls.onPointerMove = (event: WallEvent) => {
+    console.log(event.position);
+    windowFurniture.position = event.position;
+  };
+}, 9000);*/

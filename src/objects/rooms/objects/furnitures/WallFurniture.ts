@@ -62,12 +62,18 @@ export class WallFurniture extends RoomFurniture {
     this.visualization.setState(this.state);
     this.visualization.render();
 
+    const wallHeight =
+      this.room.floorThickness -
+      this.room.parsedHeightMap.getTileHeight(this.position) /* POSITION Z */ +
+      115 +
+      (this.room.wallHeight === -1 ? this.room.parsedHeightMap.maxHeight * 32 : 64 * this.room.wallHeight);
+
     if (this.direction === Direction.EAST) {
       this.visualization.container.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2;
-      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
+      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31 - wallHeight + 8;
     } else if (this.direction === Direction.SOUTH) {
       this.visualization.container.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2 - 32;
-      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
+      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31 - wallHeight + 8;
     }
 
     this.room.visualization.container.addChild(this.visualization.container);
@@ -90,13 +96,21 @@ export class WallFurniture extends RoomFurniture {
 
     this._position = position;
 
+    if (this.visualization === undefined) return;
+
     // todo(): move this to utils or something like that
+    const wallHeight =
+      this.room.floorThickness -
+      this.room.parsedHeightMap.getTileHeight(this.position) /* POSITION Z */ +
+      115 +
+      (this.room.wallHeight === -1 ? this.room.parsedHeightMap.maxHeight * 32 : 64 * this.room.wallHeight);
+
     if (this.direction === Direction.EAST) {
       this.visualization.container.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2;
-      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
+      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31 - wallHeight + 8;
     } else if (this.direction === Direction.SOUTH) {
       this.visualization.container.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2 - 32;
-      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
+      this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31 - wallHeight + 8;
     }
 
     if (this.visualization && this.visualization.data && this.visualization.data.masks && this.room) {

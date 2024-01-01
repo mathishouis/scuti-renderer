@@ -1,9 +1,9 @@
 import { RoomPart } from '../RoomPart';
 import { Room } from '../../Room';
-import { Container } from 'pixi.js';
+import { Container, FederatedPointerEvent, Graphics, Point, Polygon } from 'pixi.js';
 import { Cube } from '../../geometry/Cube';
 import { EventManager } from '../../../events/EventManager';
-import { Vector2D, Vector3D } from '../../../../types/Vector';
+import { OffsetVector2D, Vector2D, Vector3D } from '../../../../types/Vector';
 import { CubeFace } from '../../../../enums/CubeFace';
 import { WallMaterial } from '../../materials/WallMaterial';
 import { Direction } from '../../../../enums/Direction';
@@ -46,6 +46,41 @@ export class WallPart extends RoomPart {
     this._height = height ?? -1;
     this._direction = direction;
     this._corner = corner;
+
+    this._registerEvents();
+  }
+
+  private _registerEvents(): void {
+    this.container.onpointerdown = (event: FederatedPointerEvent) =>
+      this.eventManager.handlePointerDown({
+        position: this.getGlobalWallPosition(event.global),
+        dragging: this.room.camera.hasDragged,
+        direction: this.direction,
+      });
+    this.container.onpointerup = (event: FederatedPointerEvent) =>
+      this.eventManager.handlePointerUp({
+        position: this.getGlobalWallPosition(event.global),
+        dragging: this.room.camera.hasDragged,
+        direction: this.direction,
+      });
+    this.container.onpointermove = (event: FederatedPointerEvent) =>
+      this.eventManager.handlePointerMove({
+        position: this.getGlobalWallPosition(event.global),
+        dragging: this.room.camera.hasDragged,
+        direction: this.direction,
+      });
+    this.container.onpointerout = (event: FederatedPointerEvent) =>
+      this.eventManager.handlePointerOut({
+        position: this.getGlobalWallPosition(event.global),
+        dragging: this.room.camera.hasDragged,
+        direction: this.direction,
+      });
+    this.container.onpointerover = (event: FederatedPointerEvent) =>
+      this.eventManager.handlePointerOver({
+        position: this.getGlobalWallPosition(event.global),
+        dragging: this.room.camera.hasDragged,
+        direction: this.direction,
+      });
   }
 
   public render(): void {
@@ -69,6 +104,27 @@ export class WallPart extends RoomPart {
       cube.faces[CubeFace.RIGHT].filters = [filter];
     }
 
+    const graphics = new Graphics();
+
+    if (this.direction === Direction.WEST) {
+      this.container.hitArea = new Polygon(
+        new Point(32 * size.x, 16 * size.x),
+        new Point(32 * size.x, 16 * size.x + size.z * 32),
+        new Point(32 * (size.x + 1) + 32 * (size.y - 1), -16 * (size.y - 1) + 16 * (size.x - 1) + size.z * 32),
+        new Point(32 * (size.x + 1) + 32 * (size.y - 1), -16 * (size.y - 1) + 16 * (size.x - 1)),
+        new Point(32 * size.x, 16 * size.x),
+      );
+    } else if (this.direction === Direction.NORTH) {
+      this.container.hitArea = new Polygon(
+        new Point(0, 0),
+        new Point(0, size.z * 32),
+        new Point(32 * size.x, 16 * size.x + size.z * 32),
+        new Point(32 * size.x, 16 * size.x),
+      );
+    }
+
+    this.container.addChild(graphics);
+    this.container.eventMode = 'static';
     this.container.x = this.calculateContainerPosition(size).x;
     this.container.y = this.calculateContainerPosition(size).y;
 
@@ -119,6 +175,31 @@ export class WallPart extends RoomPart {
             this.thickness / 2 +
             this.floorThickness
           : 16 * this.position.x + 16 * (this.position.y - 1) - 32 * this.position.z - size.z * 32 + this.floorThickness,
+    };
+  }
+
+  public getGlobalWallPosition(point: Point): OffsetVector2D {
+    const localPosition: Point = this.container.toLocal(point);
+
+    let x = this.position.x;
+    let y = this.length - (this.position.y + Math.floor(Math.abs(localPosition.x - this.thickness - 31) / 32)) + 1;
+    let offsetX = ((localPosition.x - this.thickness - 31) % 32) / 2;
+    let offsetY = localPosition.y / 2 - y * 8 + 78;
+
+    if (this.direction === Direction.NORTH) {
+      x = this.position.x + Math.floor((localPosition.x + 32) / 32);
+      y = this.position.y;
+      offsetX = ((localPosition.x + 32) % 32) / 2;
+      offsetY = localPosition.y / 2 - x * 8 + 16;
+    }
+
+    return {
+      x: x - 1,
+      y: y - 1,
+      offsets: {
+        x: offsetX,
+        y: offsetY,
+      },
     };
   }
 

@@ -5,7 +5,7 @@ import { PartLayer } from './layers/PartLayer';
 import { RoomPart } from './parts/RoomPart';
 import { StairPart } from './parts/floor/StairPart';
 import { GreedyMesher } from './geometry/GreedyMesher';
-import { TileEvent } from '../../entities/Events';
+import { TileEvent, WallEvent } from '../../entities/Events';
 import { CursorPart } from './parts/floor/CursorPart';
 import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh';
 import { WallPart } from './parts/wall/WallPart';
@@ -17,6 +17,7 @@ import { MaskLayer } from './layers/MaskLayer';
 import { ObjectLayer } from './layers/ObjectLayer';
 import { LandscapeWindowMask } from './parts/wall/landscapes/layers/items/LandscapeWindowMask';
 import { RoomObject } from './objects/RoomObject';
+import { Vector3D } from '../../types/Vector';
 
 type RoomLayers = {
   parts: PartLayer;
@@ -80,26 +81,49 @@ export class RoomVisualization {
   private _registerFloorPart(part: TilePart | StairPart): void {
     this.add(part);
 
-    part.eventManager.onPointerDown = (event: TileEvent): void => {
+    part.eventManager.onPointerDown = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerDown) this.room.events.tiles.onPointerDown(event);
     };
-    part.eventManager.onPointerUp = (event: TileEvent): void => {
+    part.eventManager.onPointerUp = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerUp) this.room.events.tiles.onPointerUp(event);
     };
-    part.eventManager.onPointerMove = (event: TileEvent): void => {
+    part.eventManager.onPointerMove = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerMove) this.room.events.tiles.onPointerMove(event);
-      if (this.layers.parts.cursor) this.layers.parts.cursor.move(event.position);
+      if (this.layers.parts.cursor) this.layers.parts.cursor.move(event.position as Vector3D);
     };
-    part.eventManager.onPointerOut = (event: TileEvent): void => {
+    part.eventManager.onPointerOut = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerOut) this.room.events.tiles.onPointerOut(event);
       if (this.layers.parts.cursor) this.layers.parts.cursor.hide();
     };
-    part.eventManager.onPointerOver = (event: TileEvent): void => {
+    part.eventManager.onPointerOver = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerOver) this.room.events.tiles.onPointerOver(event);
       if (this.layers.parts.cursor) this.layers.parts.cursor.show();
     };
-    part.eventManager.onDoublePointerDown = (event: TileEvent): void => {
+    part.eventManager.onDoublePointerDown = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onDoublePointerDown) this.room.events.tiles.onDoublePointerDown(event);
+    };
+  }
+
+  private _registerWallPart(part: WallPart): void {
+    this.add(part);
+
+    part.eventManager.onPointerDown = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerDown) this.room.events.walls.onPointerDown(event);
+    };
+    part.eventManager.onPointerUp = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerUp) this.room.events.walls.onPointerUp(event);
+    };
+    part.eventManager.onPointerMove = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerMove) this.room.events.walls.onPointerMove(event);
+    };
+    part.eventManager.onPointerOut = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerOut) this.room.events.walls.onPointerOut(event);
+    };
+    part.eventManager.onPointerOver = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerOver) this.room.events.walls.onPointerOver(event);
+    };
+    part.eventManager.onDoublePointerDown = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onDoublePointerDown) this.room.events.walls.onDoublePointerDown(event);
     };
   }
 
@@ -156,7 +180,7 @@ export class RoomVisualization {
   public renderWalls(): void {
     if (!this.room.wallHidden)
       this.greedyMesher.walls.forEach((wall: WallMesh): void => {
-        this.add(
+        this._registerWallPart(
           new WallPart({
             material: this.room.wallMaterial,
             position: wall.position,

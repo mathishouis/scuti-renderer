@@ -53,9 +53,7 @@ export class RoomHeightmap {
   }
 
   public getTile({ x, y }: Vector2D): string {
-    return x < 0 || y < 0 || this.heightMap[y] === undefined || this.heightMap[y][x] === undefined
-      ? 'x'
-      : this.heightMap[y][x];
+    return x < 0 || y < 0 || this.heightMap[y] === undefined || this.heightMap[y][x] === undefined ? 'x' : this.heightMap[y][x];
   }
 
   public getTileHeight({ x, y }: Vector2D): number {
