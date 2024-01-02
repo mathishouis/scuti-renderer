@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { Vector2D } from '../../types/Vector';
 
 export class RoomCamera extends Container {
+  public zooming: boolean = false;
   public dragging: boolean = false;
   public hasDragged: boolean = false;
 
@@ -29,6 +30,7 @@ export class RoomCamera extends Container {
       window.addEventListener('keypress', this._onZoom, { passive: true });
     }
 
+    // todo(): removeEventListener when destroying containers
     if (this.room.configuration.dragging) {
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
@@ -69,8 +71,8 @@ export class RoomCamera extends Container {
   private _dragMove = (event: PointerEvent): void => {
     if (this.dragging) {
       this.hasDragged = true;
-      this.pivot.x -= event.movementX / (this.scale.x * window.devicePixelRatio);
-      this.pivot.y -= event.movementY / (this.scale.y * window.devicePixelRatio);
+      this.pivot.x -= event.movementX / (this.scale.x * devicePixelRatio);
+      this.pivot.y -= event.movementY / (this.scale.y * devicePixelRatio);
     }
   };
 
@@ -81,7 +83,7 @@ export class RoomCamera extends Container {
     renderer.render(this.room.renderer.application.stage, { renderTexture });
     const canvas = renderer.extract.canvas(renderTexture);
 
-    console.log(canvas.toDataURL?.('image/jpeg'));
+    // console.log(canvas.toDataURL?.('image/jpeg'));
 
     // blob
     /* const blob = renderer.plugins['extract']
@@ -126,21 +128,35 @@ export class RoomCamera extends Container {
   public zoom(zoom: number, duration: number = 0.8): void {
     const { direction } = this.room.renderer.configuration.zoom!;
 
-    if (direction === 'cursor') {
-      const localPivot = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
+    this.zooming = true;
 
-      gsap.to(this.pivot, {
-        x: localPivot.x,
-        y: localPivot.y,
+    if (direction === 'cursor') {
+      const { x: x1, y: y1 } = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
+
+      gsap.to(this.scale, {
+        x: zoom,
+        y: zoom,
         duration,
-        ease: 'easeOut',
+        // fix(): check if cursor's position relative to the window hasn't changed when cursor is moving as soon as onUpdate gets called, cuz it changes the position of the container accorcding to the last position of the cursor
+        onUpdate: () => {
+          const { x: x2, y: y2 } = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
+
+          this.pivot.x += x1 - x2;
+          this.pivot.y += y1 - y2;
+        },
+        onComplete: () => {
+          this.zooming = false;
+        },
+      });
+    } else {
+      gsap.to(this.scale, {
+        x: zoom,
+        y: zoom,
+        duration,
+        onComplete: () => {
+          this.zooming = false;
+        },
       });
     }
-
-    gsap.to(this.scale, {
-      x: zoom,
-      y: zoom,
-      duration,
-    });
   }
 }
