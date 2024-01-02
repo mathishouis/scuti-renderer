@@ -6,6 +6,7 @@ import { Cube } from '../../geometry/Cube';
 import { EventManager } from '../../../events/EventManager';
 import { Vector2D, Vector3D } from '../../../../types/Vector';
 import { CubeFace } from '../../../../enums/CubeFace';
+import { floorOrder } from '../../../../utils/Sorting';
 
 interface Configuration {
   material?: FloorMaterial;
@@ -67,7 +68,10 @@ export class TilePart extends RoomPart {
   }
 
   public render(): void {
-    const zOrder: number = (this._position.z - 1) * 4;
+    let zOrder: number = floorOrder(this._position);
+
+    if (this._door) zOrder = floorOrder(this._position, true);
+
     const position = this._containerPosition();
     const cube: Cube = new Cube({
       layer: this.room.renderer.layer,

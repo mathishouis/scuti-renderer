@@ -8,6 +8,7 @@ import { CubeFace } from '../../../../enums/CubeFace';
 import { WallMaterial } from '../../materials/WallMaterial';
 import { Direction } from '../../../../enums/Direction';
 import { ReverseSpriteMaskFilter } from '../../../filters/ReverseSpriteMaskFilter';
+import { wallOrder } from '../../../../utils/Sorting';
 
 interface Configuration {
   material?: WallMaterial;
@@ -81,7 +82,7 @@ export class WallPart extends RoomPart {
   }
 
   public render(): void {
-    const zOrder: number = (this.position.z - 1) * 4;
+    const zOrder: number = wallOrder(this.position);
     const size = this._cubeSize();
     const position = this._containerPosition(size);
 

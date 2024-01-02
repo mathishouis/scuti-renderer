@@ -4,6 +4,7 @@ import { Container, Sprite, Texture } from 'pixi.js';
 import { EventManager } from '../../../events/EventManager';
 import { Vector3D } from '../../../../types/Vector';
 import { asset } from '../../../../utils/Assets';
+import { cursorOrder } from '../../../../utils/Sorting';
 
 interface Configuration {
   position?: Vector3D;
@@ -15,6 +16,7 @@ export class CursorPart extends RoomPart {
   public eventManager!: EventManager;
 
   private _position: Vector3D;
+  private _sprite!: Sprite;
 
   constructor({ position }: Configuration) {
     super();
@@ -24,9 +26,17 @@ export class CursorPart extends RoomPart {
 
   public render(): void {
     const texture: Texture = asset('room/content').textures['tile_cursor'];
-    const sprite: Sprite = new Sprite(texture);
 
-    this.container.addChild(sprite);
+    this._sprite = new Sprite(texture);
+    this._sprite.parentLayer = this.room.renderer.layer;
+
+    if (this.room.parsedHeightMap.door === this._position) {
+      this._sprite.zOrder = cursorOrder(this._position, true);
+    } else {
+      this._sprite.zOrder = cursorOrder(this._position);
+    }
+
+    this.container.addChild(this._sprite);
   }
 
   public show(): void {
@@ -41,6 +51,14 @@ export class CursorPart extends RoomPart {
     this._position = { x, y, z };
     this.container.x = 32 * x - 32 * y;
     this.container.y = 16 * x + 16 * y - 32 * z - 20;
+
+    if (this.room.parsedHeightMap.door) {
+      if (this.room.parsedHeightMap.door.x === x && this.room.parsedHeightMap.door.y === y) {
+        this._sprite.zOrder = cursorOrder(this._position, true);
+      } else {
+        this._sprite.zOrder = cursorOrder(this._position);
+      }
+    }
   }
 
   public destroy(): void {

@@ -118,7 +118,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
         if (layer.needUpdate) {
           layer.needUpdate = false;
-          this.layers.get(i)?.destroy();
+          //this.layers.get(i)?.destroy();
           this.layer(i);
         }
       }

@@ -18,6 +18,7 @@ import { LandscapeWindowMask } from './parts/wall/landscapes/layers/items/Landsc
 import { RoomObject } from './objects/RoomObject';
 import { Vector3D } from '../../types/Vector';
 import { ObjectLayer } from './layers/ObjectLayer';
+import { landscapeOrder } from '../../utils/Sorting';
 
 type RoomLayers = {
   parts: PartLayer;
@@ -52,6 +53,7 @@ export class RoomVisualization {
   private _initializeLayers(): void {
     this.layers.parts = new PartLayer(this.room);
     this.room.renderer.layer.addChild(this.layers.parts.landscapes);
+    this.layers.parts.landscapes.zOrder = landscapeOrder();
     this.layers.masks = new MaskLayer(this.room);
     this.layers.objects = new ObjectLayer(this.room);
   }

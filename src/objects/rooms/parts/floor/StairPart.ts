@@ -8,6 +8,7 @@ import { CubeFace } from '../../../../enums/CubeFace';
 import { EventManager } from '../../../events/EventManager';
 import { StairType } from '../../../../enums/StairType';
 import { Direction } from '../../../../enums/Direction';
+import { floorOrder } from '../../../../utils/Sorting';
 
 interface Corners {
   left: StairType;
@@ -249,12 +250,12 @@ export class StairPart extends RoomPart {
       }
 
       const zOrders = {
-        [CubeFace.TOP]: (this._position.z - 1) * 4,
-        [CubeFace.LEFT]: (this._position.z - 1) * 4,
-        [CubeFace.RIGHT]: (this._position.z - 1) * 4,
+        [CubeFace.TOP]: floorOrder(this._position),
+        [CubeFace.LEFT]: floorOrder(this._position) - 0.5,
+        [CubeFace.RIGHT]: floorOrder(this._position) - 0.6,
       };
 
-      if (this._direction === Direction.WEST || this._direction === Direction.EAST) {
+      /*if (this._direction === Direction.WEST || this._direction === Direction.EAST) {
         zOrders[CubeFace.TOP] += 3 - i;
         zOrders[CubeFace.LEFT] += 3 - i;
         zOrders[CubeFace.RIGHT] += 3 - i;
@@ -266,7 +267,7 @@ export class StairPart extends RoomPart {
         zOrders[CubeFace.RIGHT] += i;
 
         if (this._direction === Direction.SOUTH) zOrders[CubeFace.LEFT] -= 100;
-      }
+      }*/
 
       const cube: Cube = new Cube({
         layer: this.room.renderer.layer,

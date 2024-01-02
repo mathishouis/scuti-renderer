@@ -74,6 +74,7 @@ export class LandscapePart extends RoomPart {
       landscapeLayer.render();
     });
 
+    this.container.interactiveChildren = false;
     this.container.addChild(this.mask);
     this.container.mask = this.mask;
     this.container.parentLayer = this.room.visualization.layers.parts.landscapes;
