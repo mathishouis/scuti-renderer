@@ -1,6 +1,7 @@
 import { Room } from './Room';
-import { Container } from 'pixi.js';
+import { Rectangle, Container, RenderTexture } from 'pixi.js';
 import { gsap } from 'gsap';
+import { Vector2D } from '../../types/Vector';
 
 export class RoomCamera extends Container {
   public dragging: boolean = false;
@@ -72,6 +73,24 @@ export class RoomCamera extends Container {
       this.pivot.y -= event.movementY / (this.scale.y * window.devicePixelRatio);
     }
   };
+
+  public screenShot({ x, y, height, width }: Vector2D & Partial<{ height: number; width: number }>) {
+    const renderer = this.room.renderer.application.renderer;
+    const renderTexture = RenderTexture.create({ height: renderer.height, width: renderer.width });
+
+    renderer.render(this.room.renderer.application.stage, { renderTexture });
+    const canvas = renderer.extract.canvas(renderTexture);
+
+    console.log(canvas.toDataURL?.('image/jpeg'));
+
+    // blob
+    /* const blob = renderer.plugins['extract']
+      .image(this.room.renderer.application.stage)
+      .then(async data => await data)
+      .then(data => {
+        console.log(data.src.replace('image/png', 'image/octet-stream'));
+      }); */
+  }
 
   public isOutOfBounds(): boolean {
     const { x, y } = this.pivot;

@@ -131,7 +131,7 @@ setTimeout(() => {
   /*room.events.tiles.onPointerMove = (event: TileEvent) => {
     //dragon.move({ position: event.position, duration: 0.5 });
   };*/
-}, 6000);
+}, 500);
 
 const wheel = new WallFurniture({
   id: 4010,
@@ -212,3 +212,7 @@ room.events.tiles.onPointerMove = (event: TileEvent) => {
     offsets: { x: -7, y: 0 },
   };
 };
+
+setTimeout(() => {
+  room.camera.screenShot({ x: 500, y: 2000 });
+}, 1000);
