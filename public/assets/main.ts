@@ -229,7 +229,7 @@ room.events.walls.onPointerMove = (event: WallEvent) => {
   }
 };
 
-/*setTimeout(() => {
+setTimeout(() => {
   room.destroy();
 }, 6000);
 
@@ -258,4 +258,4 @@ setTimeout(() => {
     console.log(event.position);
     windowFurniture.position = event.position;
   };
-}, 9000);*/
+}, 9000);

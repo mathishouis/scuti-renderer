@@ -1,6 +1,6 @@
 import { RoomPart } from '../RoomPart';
 import { Room } from '../../Room';
-import { Container, FederatedPointerEvent, Graphics, Point, Polygon } from 'pixi.js';
+import { Container, FederatedPointerEvent, Point, Polygon } from 'pixi.js';
 import { Cube } from '../../geometry/Cube';
 import { EventManager } from '../../../events/EventManager';
 import { OffsetVector2D, Vector2D, Vector3D } from '../../../../types/Vector';
@@ -14,7 +14,6 @@ interface Configuration {
   position: Vector3D;
   length: number;
   thickness?: number;
-  floorThickness?: number;
   height?: number;
   direction: Direction;
   corner: boolean;
@@ -26,26 +25,24 @@ export class WallPart extends RoomPart {
   public container: Container = new Container();
   public eventManager: EventManager = new EventManager();
 
-  private _material: WallMaterial;
-  private _position: Vector3D;
-  private _length: number;
-  private _thickness: number;
-  private _floorThickness: number;
-  private _height: number;
-  private _direction: Direction;
-  private _corner: boolean;
+  public material: WallMaterial;
+  public position: Vector3D;
+  public length: number;
+  public thickness: number;
+  public height: number;
+  public direction: Direction;
+  public corner: boolean;
 
-  constructor({ material, position, length, thickness, floorThickness, height, direction, corner }: Configuration) {
+  constructor({ material, position, length, thickness, height, direction, corner }: Configuration) {
     super();
 
-    this._material = material ?? new WallMaterial(101);
-    this._position = position;
-    this._length = length;
-    this._thickness = thickness ?? 8;
-    this._floorThickness = floorThickness ?? 8;
-    this._height = height ?? -1;
-    this._direction = direction;
-    this._corner = corner;
+    this.material = material ?? new WallMaterial(101);
+    this.position = position;
+    this.length = length;
+    this.thickness = thickness ?? 8;
+    this.height = height ?? -1;
+    this.direction = direction;
+    this.corner = corner;
 
     this._registerEvents();
   }
@@ -85,7 +82,8 @@ export class WallPart extends RoomPart {
 
   public render(): void {
     const zOrder: number = (this.position.z - 1) * 4;
-    const size = this.calculateCubeSize();
+    const size = this._cubeSize();
+    const position = this._containerPosition(size);
 
     const cube: Cube = new Cube({
       layer: this.room.renderer.layer,
@@ -99,34 +97,15 @@ export class WallPart extends RoomPart {
       size: size,
     });
 
-    if (this.isDoor()) {
+    if (this._isDoor()) {
       const filter: DoorMaskFilter = new DoorMaskFilter(this.room.visualization.layers.parts.door.sprite);
       cube.faces[CubeFace.RIGHT].filters = [filter];
     }
 
-    const graphics = new Graphics();
-
-    if (this.direction === Direction.WEST) {
-      this.container.hitArea = new Polygon(
-        new Point(32 * size.x, 16 * size.x),
-        new Point(32 * size.x, 16 * size.x + size.z * 32),
-        new Point(32 * (size.x + 1) + 32 * (size.y - 1), -16 * (size.y - 1) + 16 * (size.x - 1) + size.z * 32),
-        new Point(32 * (size.x + 1) + 32 * (size.y - 1), -16 * (size.y - 1) + 16 * (size.x - 1)),
-        new Point(32 * size.x, 16 * size.x),
-      );
-    } else if (this.direction === Direction.NORTH) {
-      this.container.hitArea = new Polygon(
-        new Point(0, 0),
-        new Point(0, size.z * 32),
-        new Point(32 * size.x, 16 * size.x + size.z * 32),
-        new Point(32 * size.x, 16 * size.x),
-      );
-    }
-
-    this.container.addChild(graphics);
+    this.container.hitArea = this._hitArea(this.direction, size);
     this.container.eventMode = 'static';
-    this.container.x = this.calculateContainerPosition(size).x;
-    this.container.y = this.calculateContainerPosition(size).y;
+    this.container.x = position.x;
+    this.container.y = position.y;
 
     this.container.addChild(cube);
     this.room.visualization.container.addChild(this.container);
@@ -139,7 +118,7 @@ export class WallPart extends RoomPart {
     }
   }
 
-  public isDoor(): boolean {
+  private _isDoor(): boolean {
     return (
       (this.room.parsedHeightMap.door &&
         this.room.visualization.layers.parts.door &&
@@ -151,19 +130,38 @@ export class WallPart extends RoomPart {
     );
   }
 
-  public calculateCubeSize(): Vector3D {
+  private _hitArea(direction: Direction, size: Vector3D): Polygon {
+    if (direction === Direction.WEST) {
+      return new Polygon(
+        new Point(32 * size.x, 16 * size.x),
+        new Point(32 * size.x, 16 * size.x + size.z * 32),
+        new Point(32 * (size.x + 1) + 32 * (size.y - 1), -16 * (size.y - 1) + 16 * (size.x - 1) + size.z * 32),
+        new Point(32 * (size.x + 1) + 32 * (size.y - 1), -16 * (size.y - 1) + 16 * (size.x - 1)),
+        new Point(32 * size.x, 16 * size.x),
+      );
+    }
+
+    return new Polygon(
+      new Point(0, 0),
+      new Point(0, size.z * 32),
+      new Point(32 * size.x, 16 * size.x + size.z * 32),
+      new Point(32 * size.x, 16 * size.x),
+    );
+  }
+
+  private _cubeSize(): Vector3D {
     return {
       x: this.direction === Direction.WEST ? this.thickness / 32 : this.length,
-      y: this.direction === Direction.WEST ? this.length + (this._corner ? this.thickness / 32 : 0) : this.thickness / 32,
+      y: this.direction === Direction.WEST ? this.length + (this.corner ? this.thickness / 32 : 0) : this.thickness / 32,
       z:
-        this.floorThickness / 32 -
+        this.room.floorThickness / 32 -
         this.position.z +
         115 / 32 +
         (this.height === -1 ? this.room.parsedHeightMap.maxHeight : (64 / 32) * this.height),
     };
   }
 
-  public calculateContainerPosition(size: Vector3D): Vector2D {
+  private _containerPosition(size: Vector3D): Vector2D {
     return {
       x:
         this.direction === Direction.WEST
@@ -173,8 +171,8 @@ export class WallPart extends RoomPart {
         this.direction === Direction.WEST
           ? 16 * (this.position.x + this.position.y + this.length - 1 - 2 * (this.position.z + size.z)) -
             this.thickness / 2 +
-            this.floorThickness
-          : 16 * this.position.x + 16 * (this.position.y - 1) - 32 * this.position.z - size.z * 32 + this.floorThickness,
+            this.room.floorThickness
+          : 16 * this.position.x + 16 * (this.position.y - 1) - 32 * this.position.z - size.z * 32 + this.room.floorThickness,
     };
   }
 
@@ -201,68 +199,5 @@ export class WallPart extends RoomPart {
         y: offsetY,
       },
     };
-  }
-
-  public get material(): WallMaterial {
-    return this._material;
-  }
-
-  public set material(material: WallMaterial) {
-    this._material = material;
-    this.render();
-  }
-
-  public get position(): Vector3D {
-    return this._position;
-  }
-
-  public set position(position: Vector3D) {
-    this._position = position;
-    this.render();
-  }
-
-  public get length(): number {
-    return this._length;
-  }
-
-  public set length(length: number) {
-    this._length = length;
-    this.render();
-  }
-
-  public get thickness(): number {
-    return this._thickness;
-  }
-
-  public set thickness(thickness: number) {
-    this._thickness = thickness;
-    this.render();
-  }
-
-  public get floorThickness(): number {
-    return this._floorThickness;
-  }
-
-  public set floorThickness(thickness: number) {
-    this._floorThickness = thickness;
-    this.render();
-  }
-
-  public get height(): number {
-    return this._height;
-  }
-
-  public set height(height: number) {
-    this._height = height;
-    this.render();
-  }
-
-  public get direction(): Direction {
-    return this._direction;
-  }
-
-  public set direction(direction: Direction) {
-    this._direction = direction;
-    this.render();
   }
 }

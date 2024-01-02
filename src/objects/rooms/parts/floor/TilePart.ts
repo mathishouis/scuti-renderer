@@ -20,8 +20,20 @@ export class TilePart extends RoomPart {
   public container: Container = new Container();
   public eventManager: EventManager = new EventManager();
 
-  constructor(public configuration: Configuration) {
+  private _material: FloorMaterial;
+  private _position: Vector3D;
+  private _size: Vector2D;
+  private _thickness: number;
+  private _door: boolean;
+
+  constructor({ material, position, size, thickness, door }: Configuration) {
     super();
+
+    this._material = material ?? new FloorMaterial(101);
+    this._position = position;
+    this._size = size;
+    this._thickness = thickness;
+    this._door = door ?? false;
 
     this._registerEvents();
   }
@@ -55,43 +67,30 @@ export class TilePart extends RoomPart {
   }
 
   public render(): void {
-    const zOrder: number = (this.configuration.position.z - 1) * 4;
-    const material: FloorMaterial = this.configuration.material ?? new FloorMaterial(101);
+    const zOrder: number = (this._position.z - 1) * 4;
+    const position = this._containerPosition();
     const cube: Cube = new Cube({
       layer: this.room.renderer.layer,
       zOrders: {
-        [CubeFace.TOP]: this.configuration.door ? zOrder - 0.6 : zOrder + 1,
+        [CubeFace.TOP]: this._door ? zOrder - 0.6 : zOrder + 1,
         [CubeFace.LEFT]: zOrder - 0.5,
         [CubeFace.RIGHT]: zOrder - 0.6,
       },
-      texture: material.texture,
-      color: material.color,
+      texture: this._material.texture,
+      color: this._material.color,
       size: {
-        x: this.configuration.size.x,
-        y: this.configuration.size.y,
-        z: this.configuration.door ? 0 : this.configuration.thickness / 32,
+        x: this._size.x,
+        y: this._size.y,
+        z: this._door ? 0 : this._thickness / 32,
       },
     });
 
-    this.container.hitArea = new Polygon(
-      new Point(0, 0),
-      new Point(32 * this.configuration.size.y, -16 * this.configuration.size.y),
-      new Point(
-        32 * (this.configuration.size.x + 1) + 32 * (this.configuration.size.y - 1),
-        -16 * (this.configuration.size.y - 1) + 16 * (this.configuration.size.x - 1),
-      ),
-      new Point(32 * this.configuration.size.x, 16 * this.configuration.size.x),
-      new Point(0, 0),
-    );
-
+    this.container.hitArea = this._hitArea();
     this.container.eventMode = 'static';
-    this.container.addChild(cube);
-    this.container.x = 32 * this.configuration.position.x - 32 * (this.configuration.position.y + this.configuration.size.y - 1);
-    this.container.y =
-      16 * this.configuration.position.x +
-      16 * (this.configuration.position.y + this.configuration.size.y - 1) -
-      32 * this.configuration.position.z;
+    this.container.x = position.x;
+    this.container.y = position.y;
 
+    this.container.addChild(cube);
     this.room.visualization.container.addChild(this.container);
   }
 
@@ -102,14 +101,31 @@ export class TilePart extends RoomPart {
     }
   }
 
+  private _hitArea(): Polygon {
+    return new Polygon(
+      new Point(0, 0),
+      new Point(32 * this._size.y, -16 * this._size.y),
+      new Point(32 * (this._size.x + 1) + 32 * (this._size.y - 1), -16 * (this._size.y - 1) + 16 * (this._size.x - 1)),
+      new Point(32 * this._size.x, 16 * this._size.x),
+      new Point(0, 0),
+    );
+  }
+
+  private _containerPosition(): Vector2D {
+    return {
+      x: 32 * this._position.x - 32 * (this._position.y + this._size.y - 1),
+      y: 16 * this._position.x + 16 * (this._position.y + this._size.y - 1) - 32 * this._position.z,
+    };
+  }
+
   public getGlobalTilePosition(point: Point): Vector3D {
     const localPosition: Point = this.container.toLocal(point);
     const localX: number = Math.floor(localPosition.x / 64 + localPosition.y / 32),
-      localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64 - 0.01) + this.configuration.size.y;
+      localY: number = Math.floor(localPosition.y / 32 - localPosition.x / 64 - 0.01) + this._size.y;
     return {
-      x: localX + this.configuration.position.x,
-      y: localY + this.configuration.position.y,
-      z: this.configuration.position.z,
+      x: localX + this._position.x,
+      y: localY + this._position.y,
+      z: this._position.z,
     };
   }
 }

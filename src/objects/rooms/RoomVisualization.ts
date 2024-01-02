@@ -185,7 +185,7 @@ export class RoomVisualization {
             material: this.room.wallMaterial,
             position: wall.position,
             length: wall.length,
-            floorThickness: this.room.floorThickness,
+            //floorThickness: this.room.floorThickness,
             thickness: this.room.wallThickness,
             height: this.room.wallHeight,
             direction: wall.direction,

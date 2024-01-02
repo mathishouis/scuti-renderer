@@ -14,8 +14,12 @@ export class CursorPart extends RoomPart {
   public container: Container = new Container();
   public eventManager!: EventManager;
 
-  constructor(public configuration: Configuration) {
+  private _position: Vector3D;
+
+  constructor({ position }: Configuration) {
     super();
+
+    this._position = position ?? { x: 0, y: 0, z: 0 };
   }
 
   public render(): void {
@@ -35,7 +39,7 @@ export class CursorPart extends RoomPart {
   }
 
   public move({ x, y, z }: Vector3D): void {
-    this.configuration.position = { x, y, z };
+    this._position = { x, y, z };
     this.container.x = 32 * x - 32 * y;
     this.container.y = 16 * x + 16 * y - 32 * z - 20;
   }
