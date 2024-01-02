@@ -90,7 +90,7 @@ export class Room extends GameObject {
 
   public update({ parts, objects, cursor, mesher }: UpdateConfiguration): void {
     if (parts) this.parsedHeightMap = new RoomHeightmap(this.heightMap);
-    console.log(this.wallHidden);
+
     this.visualization.update({ parts, objects, cursor, mesher });
   }
 

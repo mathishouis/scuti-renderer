@@ -20,15 +20,22 @@ export class WallFurniturePlaceholder {
   }
 
   public render(): void {
+    const { floorThickness, wallHeight, parsedHeightMap } = this.furniture.room;
     this.sprite = new Sprite(asset('room/content').textures['wall_placeholder']);
+
+    const wallSize =
+      floorThickness -
+      parsedHeightMap.getTileHeight(this.position) +
+      115 +
+      (wallHeight === -1 ? parsedHeightMap.maxHeight * 32 : 64 * wallHeight);
 
     if (this.furniture.direction === Direction.EAST) {
       this.sprite.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2;
-      this.sprite.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
-    } else {
-      this.sprite.scale.x = -1;
+      this.sprite.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31 - wallSize + 8;
+    } else if (this.furniture.direction === Direction.SOUTH) {
       this.sprite.x = 32 + 32 * this.position.x - 32 * this.position.y + this.position.offsets.x * 2 - 32;
-      this.sprite.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31;
+      this.sprite.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31 - wallSize + 8;
+      this.sprite.scale.x = -1;
     }
 
     this.furniture.room.visualization.container.addChild(this.sprite);

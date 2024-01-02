@@ -55,8 +55,6 @@ export class FurnitureLayer {
     if (this.blend !== undefined) this.sprite.blendMode = this.blend;
 
     //this.sprite.tint = '#' + Math.random().toString(16).substr(-6);
-
-    this.furniture.visualization.container.addChild(this.sprite);
   }
 
   public update({ furniture, id, frame, alpha, tint, offsets, blend, flip, interactive, tag }: Configuration): void {
