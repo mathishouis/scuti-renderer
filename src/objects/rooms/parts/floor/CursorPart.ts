@@ -25,9 +25,8 @@ export class CursorPart extends RoomPart {
   public render(): void {
     const texture: Texture = asset('room/content').textures['tile_cursor'];
     const sprite: Sprite = new Sprite(texture);
-    this.container.addChild(sprite);
 
-    this.room.visualization.container.addChild(this.container);
+    this.container.addChild(sprite);
   }
 
   public show(): void {

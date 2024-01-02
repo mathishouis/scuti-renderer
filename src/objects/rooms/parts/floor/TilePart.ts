@@ -91,7 +91,6 @@ export class TilePart extends RoomPart {
     this.container.y = position.y;
 
     this.container.addChild(cube);
-    this.room.visualization.container.addChild(this.container);
   }
 
   public destroy() {

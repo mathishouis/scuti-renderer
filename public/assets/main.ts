@@ -254,6 +254,20 @@ setTimeout(() => {
     room.wallHidden = false;
   }, 7000);
 
+  setTimeout(() => {
+    room.heightMap = `
+xxxxxx
+x00000
+x00000
+102222
+x01111
+x00000
+x00000
+x00000
+x00000
+      `;
+  }, 9000);
+
   room.events.walls.onPointerMove = (event: WallEvent) => {
     console.log(event.position);
     windowFurniture.position = event.position;

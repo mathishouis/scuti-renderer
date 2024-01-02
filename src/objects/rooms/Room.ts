@@ -1,5 +1,5 @@
 import { Scuti } from '../../Scuti';
-import { RoomVisualization } from './RoomVisualization';
+import { RoomVisualization, UpdateConfiguration } from './RoomVisualization';
 import { RoomCamera } from './RoomCamera';
 import { GameObject } from '../GameObject';
 import { RoomHeightmap } from './RoomHeightmap';
@@ -88,14 +88,15 @@ export class Room extends GameObject {
     this.renderer.application.stage.addChild(this.camera);
   }
 
-  public update(parts = true, objects = true, cursor = true): void {
+  public update({ parts, objects, cursor, mesher }: UpdateConfiguration): void {
     if (parts) this.parsedHeightMap = new RoomHeightmap(this.heightMap);
-    this.visualization.update(parts, objects, cursor);
+    console.log(this.wallHidden);
+    this.visualization.update({ parts, objects, cursor, mesher });
   }
 
   public destroy(): void {
     if (this.visualization !== undefined) {
-      this.visualization.destroy();
+      this.visualization.destroy(true, true, true);
       this.visualization = undefined as any;
     }
   }
@@ -110,7 +111,10 @@ export class Room extends GameObject {
 
   public set heightMap(heightMap: string) {
     this._heightMap = heightMap;
-    this.update(true, false, false);
+    this.update({
+      parts: true,
+      mesher: true,
+    });
   }
 
   public get floorMaterial(): FloorMaterial {
@@ -122,7 +126,9 @@ export class Room extends GameObject {
     material.room = this;
     material.render();
     this._floorMaterial = material;
-    this.update(true, false, false);
+    this.update({
+      parts: true,
+    });
   }
 
   public get floorThickness(): number {
@@ -131,7 +137,9 @@ export class Room extends GameObject {
 
   public set floorThickness(thickness: number) {
     this._floorThickness = thickness;
-    this.update(true, false, false);
+    this.update({
+      parts: true,
+    });
   }
 
   public get floorHidden(): boolean {
@@ -140,7 +148,9 @@ export class Room extends GameObject {
 
   public set floorHidden(hidden: boolean) {
     this._floorHidden = hidden;
-    this.update(true, false, false);
+    this.update({
+      parts: true,
+    });
   }
 
   public get wallMaterial(): WallMaterial {
@@ -152,7 +162,9 @@ export class Room extends GameObject {
     material.room = this;
     material.render();
     this._wallMaterial = material;
-    this.update(true, false, false);
+    this.update({
+      parts: true,
+    });
   }
 
   public get wallThickness(): number {
@@ -161,7 +173,9 @@ export class Room extends GameObject {
 
   public set wallThickness(thickness: number) {
     this._wallThickness = thickness;
-    this.update(true, false, false);
+    this.update({
+      parts: true,
+    });
   }
 
   public get wallHidden(): boolean {
@@ -170,7 +184,9 @@ export class Room extends GameObject {
 
   public set wallHidden(hidden: boolean) {
     this._wallHidden = hidden;
-    this.update(true, false, false);
+    this.update({
+      parts: true,
+    });
   }
 
   public get wallHeight(): number {
@@ -179,7 +195,9 @@ export class Room extends GameObject {
 
   public set wallHeight(height: number) {
     this._wallHeight = height;
-    this.update(true, false, false);
+    this.update({
+      parts: true,
+    });
   }
 
   public get landscapeMaterial(): LandscapeMaterial {
@@ -188,7 +206,9 @@ export class Room extends GameObject {
 
   public set landscapeMaterial(material: LandscapeMaterial) {
     this._landscapeMaterial = material;
-    this.update(true, false, false);
+    this.update({
+      parts: true,
+    });
   }
 
   public get dragging(): boolean {

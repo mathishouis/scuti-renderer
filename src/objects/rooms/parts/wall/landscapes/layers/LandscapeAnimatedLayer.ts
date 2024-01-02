@@ -59,7 +59,11 @@ export class LandscapeAnimatedLayer extends LandscapeLayer {
       ),
     );
 
-    this.items.forEach((item: LandscapeAnimatedLayerItem) => item.render());
+    this.items.forEach((item: LandscapeAnimatedLayerItem) => {
+      item.render();
+      this.container.addChild(item.sprite);
+    });
+
     this.part.room.renderer.application.ticker.add(this.next, this);
   }
 

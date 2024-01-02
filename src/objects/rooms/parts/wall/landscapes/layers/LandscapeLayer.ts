@@ -74,7 +74,7 @@ export abstract class LandscapeLayer {
     cube.x = x;
     cube.y = y;
 
-    this.part.container.addChild(cube);
+    this.container.addChild(cube);
   }
 
   public destroy(): void {}

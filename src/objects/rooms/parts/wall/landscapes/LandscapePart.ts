@@ -68,8 +68,9 @@ export class LandscapePart extends RoomPart {
     this._layers = [];
 
     material.layers.forEach((layer: any) => {
-      const landscapeLayer = new layer.layer({ ...layer.params, ...{ part: this } });
+      const landscapeLayer: LandscapeLayer = new layer.layer({ ...layer.params, ...{ part: this } });
       this._layers.push(landscapeLayer);
+      this.container.addChild(landscapeLayer.container);
       landscapeLayer.render();
     });
 
@@ -78,8 +79,6 @@ export class LandscapePart extends RoomPart {
     this.container.parentLayer = this.room.visualization.layers.parts.landscapes;
     this.container.x = baseX;
     this.container.y = baseY - 32 * position.z - size.z * 32 + floorThickness;
-
-    this.room.visualization.container.addChild(this.container);
   }
 
   public destroy() {

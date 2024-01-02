@@ -50,8 +50,6 @@ export class LandscapeAnimatedLayerItem {
       const filter: DoorMaskFilter = new DoorMaskFilter(door.sprite);
       this.sprite.filters = [filter];
     }
-
-    this.layer.part.container.addChild(this.sprite);
   }
 
   public next(): void {

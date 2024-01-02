@@ -14,16 +14,23 @@ import { perf } from '../../utils/Logger';
 import { LandscapePart } from './parts/wall/landscapes/LandscapePart';
 import { DoorPart } from './parts/wall/DoorPart';
 import { MaskLayer } from './layers/MaskLayer';
-import { ObjectLayer } from './layers/ObjectLayer';
 import { LandscapeWindowMask } from './parts/wall/landscapes/layers/items/LandscapeWindowMask';
 import { RoomObject } from './objects/RoomObject';
 import { Vector3D } from '../../types/Vector';
+import { ObjectLayer } from './layers/ObjectLayer';
 
 type RoomLayers = {
   parts: PartLayer;
   masks: MaskLayer;
   objects: ObjectLayer;
 };
+
+export interface UpdateConfiguration {
+  parts?: boolean;
+  objects?: boolean;
+  cursor?: boolean;
+  mesher?: boolean;
+}
 
 export class RoomVisualization {
   public container: Container = new Container();
@@ -56,15 +63,17 @@ export class RoomVisualization {
   }
 
   private _registerCursor(): void {
-    this.layers.parts.cursor = new CursorPart({});
-    this.layers.parts.cursor.room = this.room;
-    this.layers.parts.cursor.render();
-    this.layers.parts.cursor.hide();
+    const cursor = new CursorPart({});
+    this.layers.parts.cursor = cursor;
+    cursor.room = this.room;
+    cursor.render();
+    this.container.addChild(cursor.container);
+    cursor.hide();
   }
 
   private _registerDoor(): void {
     if (this.room.parsedHeightMap.door && !this.room.wallHidden) {
-      this.layers.parts.door = new DoorPart({
+      const door = new DoorPart({
         position: {
           x: this.room.parsedHeightMap.door.x,
           y: this.room.parsedHeightMap.door.y,
@@ -73,8 +82,11 @@ export class RoomVisualization {
         floorThickness: this.room.floorThickness,
         thickness: this.room.wallThickness,
       });
-      this.layers.parts.door.room = this.room;
-      this.layers.parts.door.render();
+      this.layers.parts.door = door;
+      this.add(door);
+      //door.room = this.room;
+      //this.container.addChild(door.container);
+      //door.render();
     }
   }
 
@@ -211,8 +223,10 @@ export class RoomVisualization {
       });
   }
 
-  public update(parts = true, objects = true, cursor = true): void {
+  public update({ parts, objects, cursor, mesher }: UpdateConfiguration): void {
     this.destroy(parts, objects, cursor);
+
+    if (mesher) this.greedyMesher = new GreedyMesher(this.room.parsedHeightMap);
 
     if (parts) {
       if (this.layers.parts.cursor === undefined) this._registerCursor();
@@ -224,7 +238,7 @@ export class RoomVisualization {
     }
   }
 
-  public destroy(parts = true, objects = true, cursor = true): void {
+  public destroy(parts = false, objects = false, cursor = false): void {
     if (cursor) {
       this.layers.parts.cursor.destroy();
       this.layers.parts.cursor = undefined as any;
@@ -252,8 +266,14 @@ export class RoomVisualization {
   }
 
   public add(item: RoomPart | RoomObject): void {
-    if (item instanceof RoomPart) this.layers.parts.add(item);
-    if (item instanceof RoomObject) this.layers.objects.add(item);
+    if (item instanceof RoomPart) {
+      this.layers.parts.add(item);
+      this.container.addChild(item.container);
+    }
+
+    if (item instanceof RoomObject) {
+      this.layers.objects.add(item);
+    }
 
     item.room = this.room;
     item.render();

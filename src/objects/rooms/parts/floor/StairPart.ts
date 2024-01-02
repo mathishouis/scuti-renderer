@@ -150,8 +150,6 @@ export class StairPart extends RoomPart {
     }
 
     this.container.eventMode = 'static';
-
-    this.room.visualization.container.addChild(this.container);
   }
 
   private _renderStair(offsets: Vector2D): void {
