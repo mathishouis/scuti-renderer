@@ -4,7 +4,7 @@ import { LandscapeSpritesheet } from '../../entities/Landscape';
 import { asset } from '../../../../../../../utils/Assets';
 import { random } from '../../../../../../../utils/Random';
 import { Direction } from '../../../../../../../enums/Direction';
-import { DoorMaskFilter } from '../../../../../../filters/DoorMaskFilter';
+import { ReverseSpriteMaskFilter } from '../../../../../../filters/ReverseSpriteMaskFilter';
 
 interface Configuration {
   layer: LandscapeAnimatedLayer;
@@ -47,7 +47,7 @@ export class LandscapeAnimatedLayerItem {
     this.sprite.mask = this.layer.part.mask;
 
     if (this.door && door) {
-      const filter: DoorMaskFilter = new DoorMaskFilter(door.sprite);
+      const filter: ReverseSpriteMaskFilter = new ReverseSpriteMaskFilter(door.sprite);
       this.sprite.filters = [filter];
     }
   }

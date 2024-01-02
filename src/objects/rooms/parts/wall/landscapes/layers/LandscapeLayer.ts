@@ -4,7 +4,7 @@ import { LandscapePart } from '../LandscapePart';
 import { Cube } from '../../../../geometry/Cube';
 import { CubeFace } from '../../../../../../enums/CubeFace';
 import { Direction } from '../../../../../../enums/Direction';
-import { DoorMaskFilter } from '../../../../../filters/DoorMaskFilter';
+import { ReverseSpriteMaskFilter } from '../../../../../filters/ReverseSpriteMaskFilter';
 
 export abstract class LandscapeLayer {
   public container: Container = new Container();
@@ -65,7 +65,7 @@ export abstract class LandscapeLayer {
     });
 
     if (this.door) {
-      const filter: DoorMaskFilter = new DoorMaskFilter(door.sprite);
+      const filter: ReverseSpriteMaskFilter = new ReverseSpriteMaskFilter(door.sprite);
       cube.faces[CubeFace.RIGHT].filters = [filter];
       cube.faces[CubeFace.RIGHT].filterArea = door.sprite.filterArea;
     }

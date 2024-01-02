@@ -7,7 +7,7 @@ import { OffsetVector2D, Vector2D, Vector3D } from '../../../../types/Vector';
 import { CubeFace } from '../../../../enums/CubeFace';
 import { WallMaterial } from '../../materials/WallMaterial';
 import { Direction } from '../../../../enums/Direction';
-import { DoorMaskFilter } from '../../../filters/DoorMaskFilter';
+import { ReverseSpriteMaskFilter } from '../../../filters/ReverseSpriteMaskFilter';
 
 interface Configuration {
   material?: WallMaterial;
@@ -98,7 +98,7 @@ export class WallPart extends RoomPart {
     });
 
     if (this._isDoor()) {
-      const filter: DoorMaskFilter = new DoorMaskFilter(this.room.visualization.layers.parts.door.sprite);
+      const filter: ReverseSpriteMaskFilter = new ReverseSpriteMaskFilter(this.room.visualization.layers.parts.door.sprite);
       cube.faces[CubeFace.RIGHT].filters = [filter];
     }
 
