@@ -1,6 +1,6 @@
 import { RoomPart } from '../RoomPart';
 import { Room } from '../../Room';
-import { Container, FederatedPointerEvent, Point, Polygon } from 'pixi.js';
+import { Container, FederatedPointerEvent, Graphics, Point, Polygon } from 'pixi.js';
 import { FloorMaterial } from '../../materials/FloorMaterial';
 import { Cube } from '../../geometry/Cube';
 import { EventManager } from '../../../events/EventManager';
@@ -68,17 +68,17 @@ export class TilePart extends RoomPart {
   }
 
   public render(): void {
-    let zOrder: number = floorOrder(this._position);
+    let zOrder: number = floorOrder(this._position, this._size);
 
-    if (this._door) zOrder = floorOrder(this._position, true);
+    if (this._door) zOrder = floorOrder(this._position, this._size, true);
 
     const position = this._containerPosition();
     const cube: Cube = new Cube({
       layer: this.room.renderer.layer,
       zOrders: {
-        [CubeFace.TOP]: this._door ? zOrder - 0.6 : zOrder + 1,
-        [CubeFace.LEFT]: zOrder - 0.5,
-        [CubeFace.RIGHT]: zOrder - 0.6,
+        [CubeFace.TOP]: zOrder,
+        [CubeFace.LEFT]: zOrder,
+        [CubeFace.RIGHT]: zOrder,
       },
       texture: this._material.texture,
       color: this._material.color,
@@ -88,7 +88,7 @@ export class TilePart extends RoomPart {
         z: this._door ? 0 : this._thickness / 32,
       },
     });
-
+    this.container.addChild(new Graphics().lineStyle(2, 0xff0000).drawPolygon(this._hitArea()).endFill());
     this.container.hitArea = this._hitArea();
     this.container.eventMode = 'static';
     this.container.x = position.x;

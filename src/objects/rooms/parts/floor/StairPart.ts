@@ -250,24 +250,24 @@ export class StairPart extends RoomPart {
       }
 
       const zOrders = {
-        [CubeFace.TOP]: floorOrder(this._position),
-        [CubeFace.LEFT]: floorOrder(this._position) - 0.5,
-        [CubeFace.RIGHT]: floorOrder(this._position) - 0.6,
+        [CubeFace.TOP]: floorOrder(this._position, size),
+        [CubeFace.LEFT]: floorOrder(this._position, size),
+        [CubeFace.RIGHT]: floorOrder(this._position, size),
       };
 
-      /*if (this._direction === Direction.WEST || this._direction === Direction.EAST) {
-        zOrders[CubeFace.TOP] += 3 - i;
-        zOrders[CubeFace.LEFT] += 3 - i;
-        zOrders[CubeFace.RIGHT] += 3 - i;
+      if (this._direction === Direction.WEST || this._direction === Direction.EAST) {
+        zOrders[CubeFace.TOP] += 3 + i;
+        zOrders[CubeFace.LEFT] += 3 + i;
+        zOrders[CubeFace.RIGHT] += 3 + i;
 
         if (this._direction === Direction.EAST) zOrders[CubeFace.RIGHT] -= 100;
       } else {
-        zOrders[CubeFace.TOP] += i;
-        zOrders[CubeFace.LEFT] += i;
-        zOrders[CubeFace.RIGHT] += i;
+        zOrders[CubeFace.TOP] -= 3 + i;
+        zOrders[CubeFace.LEFT] -= 3 + i;
+        zOrders[CubeFace.RIGHT] -= 3 + i;
 
         if (this._direction === Direction.SOUTH) zOrders[CubeFace.LEFT] -= 100;
-      }*/
+      }
 
       const cube: Cube = new Cube({
         layer: this.room.renderer.layer,

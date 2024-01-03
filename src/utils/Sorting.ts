@@ -14,9 +14,9 @@ const PRIORITY_MULTIPLIER = 10000000;
 const COMPARABLE_X_Y = 1000000;
 const COMPARABLE_Z = 10000;
 
-function floorOrder(position: Vector3D, door = false): number {
+function floorOrder(position: Vector3D, size: Vector2D, door = false): number {
   if (door) return (position.x + position.y) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_DOOR;
-  return (position.x + position.y + position.z) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_FLOOR;
+  return (position.x ** 2 + position.y + position.z * 2) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_FLOOR;
 }
 
 function wallOrder(position: Vector2D): number {
@@ -25,7 +25,7 @@ function wallOrder(position: Vector2D): number {
 
 function cursorOrder(position: Vector3D, door = false): number {
   if (door) return (position.x + position.y) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_TILE_CURSOR_DOOR;
-  return (position.x + position.y + position.z) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_TILE_CURSOR;
+  return (position.x ** 2 + position.y ** 2 + position.z ** 2) * COMPARABLE_X_Y + PRIORITY_MULTIPLIER * PRIORITY_TILE_CURSOR;
 }
 
 function floorFurnitureOrder(position: Vector3D, z: number): number {

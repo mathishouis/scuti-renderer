@@ -11,7 +11,7 @@ export class GreedyMesher {
 
   public get tiles(): Array<TileMesh> {
     const sizes: Record<number, Record<number, Vector3D | undefined>> = {};
-    const tiles: Array<TileMesh> = [];
+    let tiles: Array<TileMesh> = [];
 
     for (let y: number = 0; y < this.heightMap.heightMap.length; y++) {
       sizes[y] = {};
@@ -72,6 +72,10 @@ export class GreedyMesher {
       }
     }
 
+    tiles = tiles.sort((a, b) => {
+      if (a.position.x + a.size.x <= b.position.x || a.position.y + a.size.y <= b.position.y || a.position.z <= b.position.z) return 1;
+      return -1;
+    });
     return tiles;
   }
 

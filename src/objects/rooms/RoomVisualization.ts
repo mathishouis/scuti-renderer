@@ -161,7 +161,7 @@ export class RoomVisualization {
 
   public renderFloors(): void {
     if (!this.room.floorHidden) {
-      this.greedyMesher.tiles.forEach((tile: TileMesh): void =>
+      this.greedyMesher.tiles.forEach((tile: TileMesh, index: number): void =>
         this._registerFloorPart(
           new TilePart({
             material: this.room.floorMaterial,
