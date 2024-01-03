@@ -1,5 +1,5 @@
 import { Room } from './Room';
-import { Rectangle, Container, RenderTexture } from 'pixi.js';
+import { Container, RenderTexture } from 'pixi.js';
 import { gsap } from 'gsap';
 import { Vector2D } from '../../types/Vector';
 
@@ -19,6 +19,7 @@ export class RoomCamera extends Container {
     this.addChild(room.visualization.container);
   }
 
+  // todo(): removeEventListener when destroying containers
   private _initializeListeners(): void {
     const zoomType = this.room.renderer.configuration.zoom?.type;
 
@@ -27,10 +28,9 @@ export class RoomCamera extends Container {
     }
 
     if (zoomType === 'keydown' || zoomType === 'both') {
-      window.addEventListener('keypress', this._onZoom, { passive: true });
+      window.addEventListener('keydown', this._onZoom, { passive: true });
     }
 
-    // todo(): removeEventListener when destroying containers
     if (this.room.configuration.dragging) {
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
@@ -40,22 +40,23 @@ export class RoomCamera extends Container {
 
   private _onZoom = (event: WheelEvent | KeyboardEvent): void => {
     const zoom = this.room.renderer.configuration.zoom!;
-    const { step, level, min, max, duration } = zoom;
+    const { step, level, min, max } = zoom;
 
     if (event instanceof KeyboardEvent) {
       if (event.key === '+' || event.key === '-') {
         zoom.level = Math.max(min!, Math.min(max!, level! + (event.key === '+' ? step! : -step!)));
-      }
+      } else return;
     } else if (event instanceof WheelEvent) {
       zoom.level = Math.max(min!, Math.min(max!, level! + (event.deltaY > 0 ? -step! : step!)));
     }
 
-    this.zoom(zoom.level!, duration!);
+    if (level === zoom.level && (level === min || level === max)) return;
+
+    this.zoom(zoom.level!, zoom.duration!);
   };
 
   private _dragStart = (): void => {
-    const currentTime = Date.now();
-    if (currentTime - this._lastClickTime > this._clickThreshold) {
+    if (Date.now() - this._lastClickTime > this._clickThreshold) {
       this.dragging = true;
     }
   };
@@ -76,6 +77,57 @@ export class RoomCamera extends Container {
     }
   };
 
+  public isOutOfBounds(): boolean {
+    const { x, y } = this.pivot;
+    const { width, height } = this.room.renderer.application.view;
+    const { x: scaleX, y: scaleY } = { x: this.scale.x * devicePixelRatio, y: this.scale.y * devicePixelRatio };
+    const { width: scaledWidth, height: scaledHeight } = { width: width / scaleX / 2, height: height / scaleY / 2 };
+
+    return x - scaledWidth > this.width / scaleX || x + scaledWidth < 0 || y - scaledHeight > this.height / scaleY || y + scaledHeight < 0;
+  }
+
+  public centerCamera(duration: number = 0.6): void {
+    gsap.to(this, {
+      x: Math.floor(this.room.renderer.application.view.width / 2),
+      y: Math.floor(this.room.renderer.application.view.height / 2),
+      duration,
+      ease: 'expo.inOut',
+    });
+    gsap.to(this.pivot, {
+      x: Math.floor(this.width / this.scale.x / 2),
+      y: Math.floor(this.height / this.scale.y / 2),
+      duration,
+      ease: 'expo.inOut',
+    });
+  }
+
+  public zoom(zoom: number, duration: number | undefined = this.room.renderer.configuration.zoom?.duration): void {
+    const options: gsap.TweenVars = {
+      x: zoom,
+      y: zoom,
+      duration,
+      onStart: () => {
+        this.zooming = true;
+      },
+      onComplete: () => {
+        if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
+        this.zooming = false;
+      },
+    };
+
+    if (this.room.renderer.configuration.zoom?.direction === 'cursor') {
+      const { x: x1, y: y1 } = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
+
+      options.onUpdate = () => {
+        const { x: x2, y: y2 } = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
+        this.pivot.x += x1 - x2;
+        this.pivot.y += y1 - y2;
+      };
+    }
+
+    gsap.to(this.scale, options);
+  }
+
   public screenShot({ x, y, height, width }: Vector2D & Partial<{ height: number; width: number }>) {
     const renderer = this.room.renderer.application.renderer;
     const renderTexture = RenderTexture.create({ height: renderer.height, width: renderer.width });
@@ -92,71 +144,5 @@ export class RoomCamera extends Container {
       .then(data => {
         console.log(data.src.replace('image/png', 'image/octet-stream'));
       }); */
-  }
-
-  public isOutOfBounds(): boolean {
-    const { x, y } = this.pivot;
-    const { width, height } = this.room.renderer.application.view;
-    const scaledWidth = (width / this.scale.x / 2) * this.scale.x;
-    const scaledHeight = (height / this.scale.y / 2) * this.scale.y;
-
-    if (
-      x - scaledWidth > this.width / this.scale.x ||
-      x + scaledWidth < 0 ||
-      y - scaledHeight > this.height / this.scale.y ||
-      y + scaledHeight < 0
-    )
-      return true;
-    else return false;
-  }
-
-  public centerCamera(duration: number = 0.8): void {
-    gsap.to(this, {
-      x: Math.floor(this.room.renderer.application.view.width / 2),
-      y: Math.floor(this.room.renderer.application.view.height / 2),
-      duration,
-      ease: 'easeOut',
-    });
-    gsap.to(this.pivot, {
-      x: Math.floor(this.width / this.scale.x / 2),
-      y: Math.floor(this.height / this.scale.y / 2),
-      duration,
-      ease: 'easeOut',
-    });
-  }
-
-  public zoom(zoom: number, duration: number = 0.8): void {
-    const { direction } = this.room.renderer.configuration.zoom!;
-
-    this.zooming = true;
-
-    if (direction === 'cursor') {
-      const { x: x1, y: y1 } = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
-
-      gsap.to(this.scale, {
-        x: zoom,
-        y: zoom,
-        duration,
-        // fix(): check if cursor's position relative to the window hasn't changed when cursor is moving as soon as onUpdate gets called, cuz it changes the position of the container accorcding to the last position of the cursor
-        onUpdate: () => {
-          const { x: x2, y: y2 } = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
-
-          this.pivot.x += x1 - x2;
-          this.pivot.y += y1 - y2;
-        },
-        onComplete: () => {
-          this.zooming = false;
-        },
-      });
-    } else {
-      gsap.to(this.scale, {
-        x: zoom,
-        y: zoom,
-        duration,
-        onComplete: () => {
-          this.zooming = false;
-        },
-      });
-    }
   }
 }
