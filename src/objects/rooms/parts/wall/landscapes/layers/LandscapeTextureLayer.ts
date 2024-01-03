@@ -13,6 +13,8 @@ export class LandscapeTextureLayer extends LandscapeLayer {
   public name: string;
   public color: number = 0xffffff;
 
+  private _texture!: Texture;
+
   constructor({ part, name }: Configuration) {
     super();
 
@@ -24,6 +26,15 @@ export class LandscapeTextureLayer extends LandscapeLayer {
     const spritesheet: Spritesheet = asset('room/materials');
     const sprite: Sprite = new Sprite(spritesheet.textures[this.name]);
 
-    return this.part.room.renderer.application.renderer.generateTexture(sprite);
+    this._texture = this.part.room.renderer.application.renderer.generateTexture(sprite);
+
+    return this._texture;
+  }
+
+  public destroy() {
+    if (this._texture !== undefined) {
+      this._texture.destroy(true);
+      this._texture = undefined as any;
+    }
   }
 }

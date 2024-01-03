@@ -4,7 +4,7 @@ import { LandscapePart } from '../LandscapePart';
 import { Cube } from '../../../../geometry/Cube';
 import { CubeFace } from '../../../../../../enums/CubeFace';
 import { Direction } from '../../../../../../enums/Direction';
-import { DoorMaskFilter } from '../../../../../filters/DoorMaskFilter';
+import { ReverseSpriteMaskFilter } from '../../../../../filters/ReverseSpriteMaskFilter';
 
 export abstract class LandscapeLayer {
   public container: Container = new Container();
@@ -19,7 +19,7 @@ export abstract class LandscapeLayer {
     return {
       x: direction === Direction.NORTH ? length : 0,
       y: direction === Direction.WEST ? length : 0,
-      z: height === -1 ? room.heightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height,
+      z: height === -1 ? room.parsedHeightMap.maxHeight + 115 / 32 : 115 / 32 + (64 / 32) * height,
     };
   }
 
@@ -34,11 +34,11 @@ export abstract class LandscapeLayer {
     const { room, configuration } = this.part;
 
     return (
-      (room.heightMap.door &&
+      (room.parsedHeightMap.door &&
         room.visualization.layers.parts.door &&
-        configuration.position.x - 1 === room.heightMap.door.x &&
-        configuration.position.y <= room.heightMap.door.y &&
-        room.heightMap.door.y <= configuration.position.y + configuration.length - 1 &&
+        configuration.position.x - 1 === room.parsedHeightMap.door.x &&
+        configuration.position.y <= room.parsedHeightMap.door.y &&
+        room.parsedHeightMap.door.y <= configuration.position.y + configuration.length - 1 &&
         configuration.direction === Direction.WEST) ??
       false
     );
@@ -65,7 +65,7 @@ export abstract class LandscapeLayer {
     });
 
     if (this.door) {
-      const filter: DoorMaskFilter = new DoorMaskFilter(door.sprite);
+      const filter: ReverseSpriteMaskFilter = new ReverseSpriteMaskFilter(door.sprite);
       cube.faces[CubeFace.RIGHT].filters = [filter];
       cube.faces[CubeFace.RIGHT].filterArea = door.sprite.filterArea;
     }
@@ -74,6 +74,8 @@ export abstract class LandscapeLayer {
     cube.x = x;
     cube.y = y;
 
-    this.part.container.addChild(cube);
+    this.container.addChild(cube);
   }
+
+  public destroy(): void {}
 }

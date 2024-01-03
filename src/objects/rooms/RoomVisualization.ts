@@ -5,7 +5,7 @@ import { PartLayer } from './layers/PartLayer';
 import { RoomPart } from './parts/RoomPart';
 import { StairPart } from './parts/floor/StairPart';
 import { GreedyMesher } from './geometry/GreedyMesher';
-import { TileEvent } from '../../entities/Events';
+import { TileEvent, WallEvent } from '../../entities/Events';
 import { CursorPart } from './parts/floor/CursorPart';
 import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh';
 import { WallPart } from './parts/wall/WallPart';
@@ -13,12 +13,25 @@ import { benchmark } from '../../utils/Benchmark';
 import { perf } from '../../utils/Logger';
 import { LandscapePart } from './parts/wall/landscapes/LandscapePart';
 import { DoorPart } from './parts/wall/DoorPart';
-import { MaskLayer } from './layers/MaskLayer.ts';
+import { MaskLayer } from './layers/MaskLayer';
+import { LandscapeWindowMask } from './parts/wall/landscapes/layers/items/LandscapeWindowMask';
+import { RoomObject } from './objects/RoomObject';
+import { Vector3D } from '../../types/Vector';
+import { ObjectLayer } from './layers/ObjectLayer';
+import { landscapeOrder } from '../../utils/Sorting';
 
 type RoomLayers = {
   parts: PartLayer;
   masks: MaskLayer;
+  objects: ObjectLayer;
 };
+
+export interface UpdateConfiguration {
+  parts?: boolean;
+  objects?: boolean;
+  cursor?: boolean;
+  mesher?: boolean;
+}
 
 export class RoomVisualization {
   public container: Container = new Container();
@@ -33,15 +46,16 @@ export class RoomVisualization {
   }
 
   private _initializeMaterials(): void {
-    this.room.configuration.floorMaterial.render();
-    this.room.configuration.wallMaterial.render();
+    this.room.floorMaterial.render();
+    this.room.wallMaterial.render();
   }
 
   private _initializeLayers(): void {
     this.layers.parts = new PartLayer(this.room);
     this.room.renderer.layer.addChild(this.layers.parts.landscapes);
+    this.layers.parts.landscapes.zOrder = landscapeOrder();
     this.layers.masks = new MaskLayer(this.room);
-    //this.layers.landscapes = new LandscapeLayer(this.room);
+    this.layers.objects = new ObjectLayer(this.room);
   }
 
   private _initializeTickers(): void {
@@ -51,51 +65,76 @@ export class RoomVisualization {
   }
 
   private _registerCursor(): void {
-    this.layers.parts.cursor = new CursorPart({});
-    this.layers.parts.cursor.room = this.room;
-    this.layers.parts.cursor.render();
-    this.layers.parts.cursor.hide();
+    const cursor = new CursorPart({});
+    this.layers.parts.cursor = cursor;
+    cursor.room = this.room;
+    cursor.render();
+    this.container.addChild(cursor.container);
+    cursor.hide();
   }
 
   private _registerDoor(): void {
-    if (this.room.heightMap.door) {
-      this.layers.parts.door = new DoorPart({
+    if (this.room.parsedHeightMap.door && !this.room.wallHidden) {
+      const door = new DoorPart({
         position: {
-          x: this.room.heightMap.door.x,
-          y: this.room.heightMap.door.y,
-          z: this.room.heightMap.getTileHeight(this.room.heightMap.door),
+          x: this.room.parsedHeightMap.door.x,
+          y: this.room.parsedHeightMap.door.y,
+          z: this.room.parsedHeightMap.getTileHeight(this.room.parsedHeightMap.door),
         },
-        floorThickness: this.room.configuration.floorThickness,
-        thickness: this.room.configuration.wallThickness,
+        floorThickness: this.room.floorThickness,
+        thickness: this.room.wallThickness,
       });
-      this.layers.parts.door.room = this.room;
-      this.layers.parts.door.render();
+      this.layers.parts.door = door;
+      this.add(door);
     }
   }
 
   private _registerFloorPart(part: TilePart | StairPart): void {
     this.add(part);
 
-    part.eventManager.onPointerDown = (event: TileEvent): void => {
+    part.eventManager.onPointerDown = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerDown) this.room.events.tiles.onPointerDown(event);
     };
-    part.eventManager.onPointerUp = (event: TileEvent): void => {
+    part.eventManager.onPointerUp = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerUp) this.room.events.tiles.onPointerUp(event);
     };
-    part.eventManager.onPointerMove = (event: TileEvent): void => {
+    part.eventManager.onPointerMove = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerMove) this.room.events.tiles.onPointerMove(event);
-      if (this.layers.parts.cursor) this.layers.parts.cursor.move(event.position);
+      if (this.layers.parts.cursor) this.layers.parts.cursor.move(event.position as Vector3D);
     };
-    part.eventManager.onPointerOut = (event: TileEvent): void => {
+    part.eventManager.onPointerOut = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerOut) this.room.events.tiles.onPointerOut(event);
       if (this.layers.parts.cursor) this.layers.parts.cursor.hide();
     };
-    part.eventManager.onPointerOver = (event: TileEvent): void => {
+    part.eventManager.onPointerOver = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onPointerOver) this.room.events.tiles.onPointerOver(event);
       if (this.layers.parts.cursor) this.layers.parts.cursor.show();
     };
-    part.eventManager.onDoublePointerDown = (event: TileEvent): void => {
+    part.eventManager.onDoublePointerDown = (event: TileEvent | WallEvent): void => {
       if (this.room.events.tiles.onDoublePointerDown) this.room.events.tiles.onDoublePointerDown(event);
+    };
+  }
+
+  private _registerWallPart(part: WallPart): void {
+    this.add(part);
+
+    part.eventManager.onPointerDown = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerDown) this.room.events.walls.onPointerDown(event);
+    };
+    part.eventManager.onPointerUp = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerUp) this.room.events.walls.onPointerUp(event);
+    };
+    part.eventManager.onPointerMove = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerMove) this.room.events.walls.onPointerMove(event);
+    };
+    part.eventManager.onPointerOut = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerOut) this.room.events.walls.onPointerOut(event);
+    };
+    part.eventManager.onPointerOver = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onPointerOver) this.room.events.walls.onPointerOver(event);
+    };
+    part.eventManager.onDoublePointerDown = (event: TileEvent | WallEvent): void => {
+      if (this.room.events.walls.onDoublePointerDown) this.room.events.walls.onDoublePointerDown(event);
     };
   }
 
@@ -105,10 +144,11 @@ export class RoomVisualization {
     this._registerCursor();
     this._registerDoor();
 
-    this.greedyMesher = new GreedyMesher(this.room.heightMap);
+    this.greedyMesher = new GreedyMesher(this.room.parsedHeightMap);
 
     this.renderFloors();
     this.renderWalls();
+    if (this.layers.masks.childrens.length > 0) this.renderLandscapes();
 
     perf('Room Visualization', 'room-visualization');
 
@@ -120,14 +160,14 @@ export class RoomVisualization {
   }
 
   public renderFloors(): void {
-    if (!this.room.configuration.floorHidden) {
-      this.greedyMesher.tiles.forEach((tile: TileMesh): void =>
+    if (!this.room.floorHidden) {
+      this.greedyMesher.tiles.forEach((tile: TileMesh, index: number): void =>
         this._registerFloorPart(
           new TilePart({
-            material: this.room.configuration.floorMaterial,
+            material: this.room.floorMaterial,
             position: tile.position,
             size: tile.size,
-            thickness: this.room.configuration.floorThickness,
+            thickness: this.room.floorThickness,
             door: tile.door,
           }),
         ),
@@ -136,10 +176,10 @@ export class RoomVisualization {
       this.greedyMesher.stairs.forEach((stair: StairMesh): void =>
         this._registerFloorPart(
           new StairPart({
-            material: this.room.configuration.floorMaterial,
+            material: this.room.floorMaterial,
             position: stair.position,
             length: stair.length,
-            thickness: this.room.configuration.floorThickness,
+            thickness: this.room.floorThickness,
             direction: stair.direction,
             corners: stair.corners,
           }),
@@ -149,16 +189,15 @@ export class RoomVisualization {
   }
 
   public renderWalls(): void {
-    if (!this.room.configuration.wallHidden)
+    if (!this.room.wallHidden)
       this.greedyMesher.walls.forEach((wall: WallMesh): void => {
-        this.add(
+        this._registerWallPart(
           new WallPart({
-            material: this.room.configuration.wallMaterial,
+            material: this.room.wallMaterial,
             position: wall.position,
             length: wall.length,
-            floorThickness: this.room.configuration.floorThickness,
-            thickness: this.room.configuration.wallThickness,
-            height: this.room.configuration.wallHeight,
+            thickness: this.room.wallThickness,
+            height: this.room.wallHeight,
             direction: wall.direction,
             corner: wall.corner,
           }),
@@ -167,36 +206,72 @@ export class RoomVisualization {
   }
 
   public renderLandscapes(): void {
-    if (!this.room.configuration.wallHidden)
+    if (!this.room.wallHidden)
       this.greedyMesher.walls.forEach((wall: WallMesh): void => {
         this.add(
           new LandscapePart({
-            material: this.room.configuration.landscapeMaterial,
+            material: this.room.landscapeMaterial,
             position: wall.position,
             length: wall.length,
-            floorThickness: this.room.configuration.floorThickness,
-            height: this.room.configuration.wallHeight,
+            floorThickness: this.room.floorThickness,
+            height: this.room.wallHeight,
             direction: wall.direction,
           }),
         );
       });
   }
 
-  public update(): void {
-    this.destroy();
-    this.render();
+  public update({ parts, objects, cursor, mesher }: UpdateConfiguration): void {
+    this.destroy(parts, objects, cursor);
+
+    if (mesher) this.greedyMesher = new GreedyMesher(this.room.parsedHeightMap);
+
+    if (parts) {
+      if (this.layers.parts.cursor === undefined) this._registerCursor();
+      this._registerDoor();
+
+      this.renderWalls();
+      this.renderFloors();
+      if (this.layers.masks.childrens.length > 0) this.renderLandscapes();
+    }
   }
 
-  public destroy(): void {
-    this.layers.parts.cursor.container.destroy();
-    [...this.layers.parts.childrens].forEach((part: RoomPart) => {
-      part.container.destroy();
-      this.layers.parts.remove(part);
-    });
+  public destroy(parts = false, objects = false, cursor = false): void {
+    if (cursor) {
+      this.layers.parts.cursor.destroy();
+      this.layers.parts.cursor = undefined as any;
+    }
+
+    if (parts) {
+      this.layers.parts.door.destroy();
+      [...this.layers.parts.childrens].forEach((item: RoomPart) => {
+        item.destroy();
+        this.layers.parts.remove(item);
+      });
+    }
+
+    if (objects) {
+      [...this.layers.masks.childrens].forEach((item: LandscapeWindowMask) => {
+        item.destroy();
+        this.layers.masks.remove(item);
+      });
+      [...this.layers.objects.childrens].forEach((item: RoomObject) => {
+        item.destroy();
+        this.layers.objects.remove(item);
+      });
+      this.layers.masks.destroy();
+    }
   }
 
-  public add(item: RoomPart): void {
-    this.layers.parts.add(item);
+  public add(item: RoomPart | RoomObject): void {
+    if (item instanceof RoomPart) {
+      this.layers.parts.add(item);
+      this.container.addChild(item.container);
+    }
+
+    if (item instanceof RoomObject) {
+      this.layers.objects.add(item);
+    }
 
     item.room = this.room;
     item.render();

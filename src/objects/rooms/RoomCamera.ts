@@ -16,7 +16,7 @@ export class RoomCamera extends Container {
   }
 
   private _initializeListeners(): void {
-    if (this.room.configuration.dragging) {
+    if (this.room.dragging) {
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
       this.room.renderer.application.renderer.events.domElement.addEventListener('pointermove', (event: PointerEvent) =>
@@ -37,7 +37,7 @@ export class RoomCamera extends Container {
     this.dragging = false;
     this._lastClickTime = Date.now();
 
-    if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
+    if (this.isOutOfBounds() && this.room.centerCamera) this.centerCamera();
   };
 
   private _dragMove = (x: number, y: number): void => {
@@ -51,8 +51,7 @@ export class RoomCamera extends Container {
   public isOutOfBounds(): boolean {
     const { x, y } = this.pivot;
     const { width, height } = this.room.renderer.application.view;
-    if (x - width / 2 > this.width || x + width / 2 < 0 || y - height / 2 > this.height || y + height / 2 < 0)
-      return true;
+    if (x - width / 2 > this.width || x + width / 2 < 0 || y - height / 2 > this.height || y + height / 2 < 0) return true;
     else return false;
   }
 
@@ -72,7 +71,7 @@ export class RoomCamera extends Container {
   }
 
   public zoom(zoom: number, duration: number = 0.8) {
-    this.room.configuration.zoom = zoom;
+    this.room.zoom = zoom;
 
     gsap.to(this.scale, {
       x: zoom,

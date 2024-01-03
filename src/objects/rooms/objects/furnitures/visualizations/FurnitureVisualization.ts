@@ -80,8 +80,8 @@ export class FurnitureVisualization extends RoomObjectVisualization {
       this.layers.get(id)!.update(layerConfiguration);
     } else {
       const furnitureLayer = new FurnitureLayer(layerConfiguration);
-
       furnitureLayer.render();
+      this.container.addChild(furnitureLayer.sprite);
       this.layers.set(id, furnitureLayer);
     }
   }
@@ -118,7 +118,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
         if (layer.needUpdate) {
           layer.needUpdate = false;
-          this.layers.get(i)?.destroy();
+          //this.layers.get(i)?.destroy();
           this.layer(i);
         }
       }

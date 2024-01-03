@@ -40,7 +40,7 @@ export class Scuti {
     extensions.add(loadBundle);
     extensions.add(loadData);
     settings.RESOLUTION = 1;
-    Container.defaultSortableChildren = true;
+    Container.defaultSortableChildren = false;
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
 
     // Application
@@ -52,6 +52,7 @@ export class Scuti {
       backgroundColor: new Color(this.configuration.backgroundColor ?? 0x0c567c).toHex(),
       backgroundAlpha: this.configuration.backgroundAlpha ?? 1,
       resizeTo: this.configuration.resizeTo,
+      eventMode: 'passive',
     });
     this.application.stage = new Stage();
     (globalThis as any).__PIXI_APP__ = this.application; // Support for PIXI.js dev-tool.
