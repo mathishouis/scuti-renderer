@@ -213,6 +213,6 @@ room.events.tiles.onPointerMove = (event: TileEvent) => {
   };
 };
 
-setTimeout(() => {
-  room.camera.capture('blob', document.getElementById('camera') as HTMLElement);
+setTimeout(async () => {
+  await room.camera.capture(document.getElementById('camera') as HTMLElement);
 }, 1000);
