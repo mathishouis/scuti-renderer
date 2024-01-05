@@ -1,5 +1,5 @@
 import { Room } from './Room';
-import { Container, RenderTexture } from 'pixi.js';
+import { Container, Matrix, Point, Rectangle, RenderTexture } from 'pixi.js';
 import { gsap } from 'gsap';
 import { Vector2D } from '../../types/Vector';
 
@@ -128,21 +128,43 @@ export class RoomCamera extends Container {
     gsap.to(this.scale, options);
   }
 
-  public screenShot({ x, y, height, width }: Vector2D & Partial<{ height: number; width: number }>) {
+  // feat(): find a way to change backgroundColor of stage instead of application
+  public async capture(image: 'base64' | 'blob', target: HTMLElement): Promise<string | Blob> {
     const renderer = this.room.renderer.application.renderer;
-    const renderTexture = RenderTexture.create({ height: renderer.height, width: renderer.width });
+    const frame = target.getBoundingClientRect();
 
-    renderer.render(this.room.renderer.application.stage, { renderTexture });
-    const canvas = renderer.extract.canvas(renderTexture);
+    if (image === 'base64') {
+      const { left, top } = this.room.renderer.canvas.getBoundingClientRect();
+      const rectPosition = new Point(frame.left - left, frame.top - top);
+      const renderTexture = RenderTexture.create({ height: frame.height, width: frame.width });
 
-    // console.log(canvas.toDataURL?.('image/jpeg'));
+      renderer.render(this.room.renderer.application.stage, {
+        renderTexture,
+        transform: new Matrix().translate(-rectPosition.x, -rectPosition.y),
+      });
 
-    // blob
-    /* const blob = renderer.plugins['extract']
-      .image(this.room.renderer.application.stage)
-      .then(async data => await data)
-      .then(data => {
-        console.log(data.src.replace('image/png', 'image/octet-stream'));
-      }); */
+      return await renderer.extract.base64(renderTexture);
+    } else if (image === 'blob') {
+      const { left, top } = this.room.renderer.canvas.getBoundingClientRect();
+      const rectPosition = new Point(frame.left - left, frame.top - top);
+      const renderTexture = RenderTexture.create({ height: frame.height, width: frame.width });
+
+      renderer.render(this.room.renderer.application.stage, {
+        renderTexture,
+        transform: new Matrix().translate(-rectPosition.x, -rectPosition.y),
+      });
+
+      return new Promise<Blob>(resolve => {
+        const canvas = renderer.extract.canvas(renderTexture);
+        canvas.toBlob!(blob => {
+          if (blob) {
+            console.log(blob);
+            resolve(blob);
+          }
+        });
+      });
+    }
+
+    throw new Error('Invalid image type');
   }
 }

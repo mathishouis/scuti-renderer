@@ -14,3 +14,13 @@ div#stats {
   opacity: 0.8;
   user-select: none;
 }
+
+#camera {
+  position: absolute;
+  height: 400px;
+  width: 400px;
+  top: 200px;
+  left: 200px;
+  border: 1px solid red;
+  pointer-events: none;
+}

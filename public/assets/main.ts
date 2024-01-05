@@ -214,5 +214,5 @@ room.events.tiles.onPointerMove = (event: TileEvent) => {
 };
 
 setTimeout(() => {
-  room.camera.screenShot({ x: 500, y: 2000 });
+  room.camera.capture('blob', document.getElementById('camera') as HTMLElement);
 }, 1000);
