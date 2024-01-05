@@ -212,7 +212,3 @@ room.events.tiles.onPointerMove = (event: TileEvent) => {
     offsets: { x: -7, y: 0 },
   };
 };
-
-setTimeout(async () => {
-  await room.camera.capture(document.getElementById('camera') as HTMLElement);
-}, 1000);

@@ -20,20 +20,21 @@ export class RoomCamera extends Container {
 
   // todo(): removeEventListener when destroying containers
   private _initializeListeners(): void {
+    const rootEvents = this.room.renderer.application.renderer.events.domElement;
     const zoomType = this.room.renderer.configuration.zoom?.type;
 
     if (zoomType === 'wheel' || zoomType === 'both') {
-      this.room.renderer.canvas.addEventListener('wheel', this._onZoom, { passive: true });
+      rootEvents.addEventListener('wheel', this._onZoom, { passive: true });
     }
 
     if (zoomType === 'keydown' || zoomType === 'both') {
-      window.addEventListener('keydown', this._onZoom, { passive: true });
+      rootEvents.addEventListener('keydown', this._onZoom, { passive: true });
     }
 
     if (this.room.configuration.dragging) {
-      this.room.renderer.application.renderer.events.domElement.addEventListener('pointerdown', this._dragStart);
-      this.room.renderer.application.renderer.events.domElement.addEventListener('pointerup', this._dragEnd);
-      this.room.renderer.application.renderer.events.domElement.addEventListener('pointermove', this._dragMove);
+      rootEvents.addEventListener('pointerdown', this._dragStart);
+      rootEvents.addEventListener('pointerup', this._dragEnd);
+      rootEvents.addEventListener('pointermove', this._dragMove);
     }
   }
 
@@ -135,7 +136,7 @@ export class RoomCamera extends Container {
     const renderTexture: RenderTexture = RenderTexture.create({ height: frame.height, width: frame.width });
     const transform: Matrix = new Matrix().translate(-rectPosition.x, -rectPosition.y);
 
-    renderTexture.baseTexture.clearColor = this.room.renderer.configuration.backgroundColor;
+    renderTexture.baseTexture.clear.setValue(this.room.renderer.configuration.backgroundColor);
     renderTexture.baseTexture.clear.setAlpha(this.room.renderer.configuration.backgroundAlpha);
     renderer.render(this.room.renderer.application.stage, { renderTexture, transform });
 
