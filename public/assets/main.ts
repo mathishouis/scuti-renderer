@@ -9,6 +9,7 @@ import { FloorFurniture } from '../../src/objects/rooms/objects/furnitures/Floor
 import { benchmark } from '../../src/utils/Benchmark';
 import { perf } from '../../src/utils/Logger';
 import { WallFurniture } from '../../src/objects/rooms/objects/furnitures/WallFurniture';
+import { Avatar } from '../../src/objects/rooms/objects/entities/avatars/Avatar';
 
 const renderer: Scuti = new Scuti({
   canvas: document.getElementById('app') as HTMLElement,
@@ -272,6 +273,17 @@ const windowFurniture3 = new WallFurniture({
 room.add(windowFurniture);
 room.add(windowFurniture2);
 room.add(windowFurniture3);
+
+const avatar = new Avatar({
+  figure: 'hd-180-1.hr-110-61.ch-210-66-31.lg-280-110.sh-305-62',
+  headDirection: 0,
+  bodyDirection: 0,
+  position: {
+    x: 0,
+    y: 0,
+    z: 0,
+  },
+});
 
 /*room.events.tiles.onPointerMove = (event: TileEvent) => {
   windowFurniture.position = {
