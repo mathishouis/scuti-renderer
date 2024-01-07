@@ -33,17 +33,11 @@ export class RoomCamera extends Container {
     }
   }
 
-  private _onZoom = (event: WheelEvent | KeyboardEvent): void => {
+  private _onZoom = (event: WheelEvent): void => {
     const zoom = this.room.renderer.configuration.zoom!;
     const { step, level, min, max } = zoom;
 
-    if (event instanceof KeyboardEvent) {
-      if (event.key === '+' || event.key === '-') {
-        zoom.level = Math.max(min!, Math.min(max!, level! + (event.key === '+' ? step! : -step!)));
-      } else return;
-    } else if (event instanceof WheelEvent) {
-      zoom.level = Math.max(min!, Math.min(max!, level! + (event.deltaY > 0 ? -step! : step!)));
-    }
+    zoom.level = Math.max(min!, Math.min(max!, level! + (event.deltaY > 0 ? -step! : step!)));
 
     if (level === zoom.level && (level === min || level === max)) return;
 
