@@ -1,6 +1,8 @@
 import { BLEND_MODES, Sprite } from 'pixi.js';
 import { RoomFurniture } from './RoomFurniture';
-import { Vector3D } from '../../../../types/Vector';
+import { OffsetVector2D, Vector3D } from '../../../../types/Vector';
+import { floorFurnitureOrder, wallFurnitureOrder } from '../../../../utils/Sorting';
+import { FloorFurniture } from './FloorFurniture';
 
 interface Configuration {
   furniture: RoomFurniture;
@@ -44,19 +46,21 @@ export class FurnitureLayer {
   public render(): void {
     this.sprite = new Sprite(this.furniture.visualization.getLayerTexture(this.id));
     this.sprite.parentLayer = this.furniture.room.renderer.layer;
-    this.sprite.zOrder = 0;
+
+    if (this.furniture instanceof FloorFurniture) {
+      this.sprite.zOrder = floorFurnitureOrder(this.furniture.position as Vector3D, this.offsets.z ?? 0);
+    } else {
+      this.sprite.zOrder = wallFurnitureOrder(this.furniture.position as OffsetVector2D, this.offsets.z ?? 0);
+    }
 
     if (this.flip) this.sprite.scale.x = -1;
     if (this.offsets.x !== undefined) this.sprite.x += this.offsets.x;
     if (this.offsets.y !== undefined) this.sprite.y += this.offsets.y;
-    if (this.offsets.z !== undefined) this.sprite.zOrder += this.offsets.z + 1000;
     if (this.alpha !== undefined) this.sprite.alpha = this.alpha;
     if (this.tint !== undefined) this.sprite.tint = this.tint;
     if (this.blend !== undefined) this.sprite.blendMode = this.blend;
 
     //this.sprite.tint = '#' + Math.random().toString(16).substr(-6);
-
-    this.furniture.visualization.container.addChild(this.sprite);
   }
 
   public update({ furniture, id, frame, alpha, tint, offsets, blend, flip, interactive, tag }: Configuration): void {
@@ -74,7 +78,13 @@ export class FurnitureLayer {
     if (this.sprite === undefined) {
       this.sprite = new Sprite(this.furniture.visualization.getLayerTexture(this.id));
       this.sprite.parentLayer = this.furniture.room.renderer.layer;
-      this.sprite.zOrder = 0;
+
+      if (this.furniture instanceof FloorFurniture) {
+        this.sprite.zOrder = floorFurnitureOrder(this.furniture.position as Vector3D, this.offsets.z ?? 0);
+      } else {
+        this.sprite.zOrder = wallFurnitureOrder(this.furniture.position as OffsetVector2D, this.offsets.z ?? 0);
+      }
+
       this.furniture.visualization.container.addChild(this.sprite);
     } else {
       this.sprite.texture = this.furniture.visualization.getLayerTexture(this.id);
@@ -83,7 +93,6 @@ export class FurnitureLayer {
     if (this.flip) this.sprite.scale.x = -1;
     if (this.offsets.x !== undefined) this.sprite.x += this.offsets.x;
     if (this.offsets.y !== undefined) this.sprite.y += this.offsets.y;
-    if (this.offsets.z !== undefined) this.sprite.zOrder! += this.offsets.z + 100000;
     if (this.alpha !== undefined) this.sprite.alpha = this.alpha;
     if (this.tint !== undefined) this.sprite.tint = this.tint;
     if (this.blend !== undefined) this.sprite.blendMode = this.blend;

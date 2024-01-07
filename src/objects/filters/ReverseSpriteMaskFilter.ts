@@ -30,7 +30,7 @@ const fragment = `
     }
 `;
 
-export class DoorMaskFilter extends SpriteMaskFilter {
+export class ReverseSpriteMaskFilter extends SpriteMaskFilter {
   constructor(maskSprite: Sprite) {
     super(vertex, fragment);
 

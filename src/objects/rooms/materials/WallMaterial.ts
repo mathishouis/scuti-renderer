@@ -14,12 +14,17 @@ export class WallMaterial extends RoomMaterial {
   }
 
   public render(): void {
-    const material: Material = asset('room/materials').data.materials.walls.find(
-      (material: Material) => material.id === this.id,
-    );
+    const material: Material = asset('room/materials').data.materials.walls.find((material: Material) => material.id === this.id);
     const sprite: Sprite = new Sprite(asset('room/materials').textures[material.texture]);
 
     this.texture = new Texture(this.room.renderer.application.renderer.generateTexture(sprite).baseTexture);
     this.color = material.color;
+  }
+
+  public destroy(): void {
+    if (this.texture !== undefined) {
+      this.texture.destroy(true);
+      this.texture = undefined as any;
+    }
   }
 }

@@ -15,7 +15,7 @@ export interface Configuration {
 }
 
 interface ZoomConfiguration {
-  type: 'wheel' | 'keydown' | 'both';
+  wheel: boolean;
   level: number;
   min: number;
   max: number;
@@ -44,7 +44,7 @@ export class ScutiConfiguration {
     this._backgroundColor = backgroundColor ?? 0x000000;
     this._backgroundAlpha = backgroundAlpha ?? 1;
     this._resizeTo = resizeTo ?? window;
-    this._zoom = { level: 1, min: 0.5, max: 3, step: 0.5, duration: 0.125, direction: 'center', ...zoom };
+    this._zoom = { wheel: true, level: 1, min: 0.5, max: 3, step: 0.5, duration: 0.125, direction: 'center', ...zoom };
 
     registerPath(resources);
   }

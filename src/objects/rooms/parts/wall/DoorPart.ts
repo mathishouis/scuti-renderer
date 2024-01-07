@@ -36,6 +36,17 @@ export class DoorPart extends RoomPart {
       this.sprite.height +
       2;
     this.container.addChild(this.sprite);
-    this.room.visualization.container.addChild(this.container);
+  }
+
+  public destroy(): void {
+    if (this.sprite !== undefined) {
+      this.sprite.destroy();
+      this.sprite = undefined as any;
+    }
+
+    if (this.container !== undefined) {
+      this.container.destroy();
+      this.container = undefined as any;
+    }
   }
 }

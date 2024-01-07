@@ -20,21 +20,16 @@ export class RoomCamera extends Container {
 
   // todo(): removeEventListener when destroying containers
   private _initializeListeners(): void {
-    const rootEvents = this.room.renderer.application.renderer.events.domElement;
-    const zoomType = this.room.renderer.configuration.zoom?.type;
+    const events = this.room.renderer.application.renderer.events.domElement;
 
-    if (zoomType === 'wheel' || zoomType === 'both') {
-      rootEvents.addEventListener('wheel', this._onZoom, { passive: true });
+    if (this.room.renderer.configuration.zoom?.wheel) {
+      events.addEventListener('wheel', this._onZoom, { passive: true });
     }
 
-    if (zoomType === 'keydown' || zoomType === 'both') {
-      rootEvents.addEventListener('keydown', this._onZoom, { passive: true });
-    }
-
-    if (this.room.configuration.dragging) {
-      rootEvents.addEventListener('pointerdown', this._dragStart);
-      rootEvents.addEventListener('pointerup', this._dragEnd);
-      rootEvents.addEventListener('pointermove', this._dragMove);
+    if (this.room.dragging) {
+      events.addEventListener('pointerdown', this._dragStart);
+      events.addEventListener('pointerup', this._dragEnd);
+      events.addEventListener('pointermove', this._dragMove);
     }
   }
 
@@ -66,7 +61,7 @@ export class RoomCamera extends Container {
     this.dragging = false;
     this._lastClickTime = Date.now();
 
-    if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
+    if (this.isOutOfBounds() && this.room.centerCamera) this.centerCamera();
   };
 
   private _dragMove = (event: PointerEvent): void => {
@@ -101,7 +96,7 @@ export class RoomCamera extends Container {
     });
   }
 
-  public zoom(zoom: number, duration: number | undefined = this.room.renderer.configuration.zoom?.duration): void {
+  public zoom(zoom: number, duration: number = 0.8): void {
     const options: gsap.TweenVars = {
       x: zoom,
       y: zoom,
@@ -110,7 +105,7 @@ export class RoomCamera extends Container {
         this.zooming = true;
       },
       onComplete: () => {
-        if (this.isOutOfBounds() && this.room.configuration.centerCamera) this.centerCamera();
+        if (this.isOutOfBounds() && this.room.centerCamera) this.centerCamera();
         this.zooming = false;
       },
     };

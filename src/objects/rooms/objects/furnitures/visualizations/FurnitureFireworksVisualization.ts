@@ -45,9 +45,9 @@ export class FurnitureFireworksVisualization extends FurnitureAnimatedVisualizat
   public next() {
     super.next();
 
-    if (this._particleSystem) {
+    if (this._particleSystem && this.data) {
       if (this.furniture.state === this._burstState) {
-        for (let i = 0; i < this.furniture.visualization.data.layerCount; i++) {
+        for (let i = 0; i < this.data.layerCount; i++) {
           const emitter = this._particleSystem.getLayerEmitter(i);
           if (emitter) {
             if (this._layerData.get(i) === undefined) {
