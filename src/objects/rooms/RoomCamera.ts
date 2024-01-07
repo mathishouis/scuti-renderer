@@ -116,10 +116,11 @@ export class RoomCamera extends Container {
     };
 
     if (this.room.renderer.configuration.zoom?.direction === 'cursor') {
-      const { x: x1, y: y1 } = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
+      const pointer = Object.assign({}, this.room.renderer.application.renderer.events.pointer.global);
+      const { x: x1, y: y1 } = this.toLocal(pointer);
 
       options.onUpdate = () => {
-        const { x: x2, y: y2 } = this.toLocal(this.room.renderer.application.renderer.events.pointer.global);
+        const { x: x2, y: y2 } = this.toLocal(pointer);
         this.pivot.x += x1 - x2;
         this.pivot.y += y1 - y2;
       };
