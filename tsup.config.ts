@@ -6,6 +6,7 @@ export const tsup = {
   clean: true,
   bundle: true,
   minify: true,
+  noExternal: [/(.*)/],
   entry: ['src/index.ts'],
   dts: true,
 } satisfies Options;

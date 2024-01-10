@@ -4,10 +4,10 @@ import { RoomCamera } from './RoomCamera';
 import { GameObject } from '../GameObject';
 import { RoomHeightmap } from './RoomHeightmap';
 import { RoomEvents } from './RoomEvents';
-import { FloorMaterial } from './materials/FloorMaterial';
-import { WallMaterial } from './materials/WallMaterial';
-import { LandscapeMaterial } from './materials/LandscapeMaterial';
 import { RoomObject } from './objects/RoomObject';
+import { FloorMaterial } from './materials/FloorMaterial.ts';
+import { WallMaterial } from './materials/WallMaterial.ts';
+import { LandscapeMaterial } from './materials/LandscapeMaterial.ts';
 
 interface Configuration {
   heightMap: string;

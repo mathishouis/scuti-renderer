@@ -17,7 +17,7 @@ const renderer: Scuti = new Scuti({
   resources: 'http://127.0.0.1:8081',
   backgroundColor: 0x0c567c,
   //backgroundColor: 0x000000,
-  resizeTo: window,
+  zoom: { type: 'both', direction: 'cursor' },
 });
 
 // @ts-ignore
@@ -117,88 +117,10 @@ const room: Room = new Room({
   wallThickness: 8,
   wallHeight: 1,
   landscapeMaterial: new LandscapeMaterial(101),
+  zoom: { type: 'both' },
 });
 
 renderer.add(room);
-
-let zoom = 1;
-const [min_zoom, max_zoom] = [0.5, 5];
-
-renderer.application.view.addEventListener(
-  'wheel',
-  // @ts-ignore
-  ({ deltaY }) => {
-    // todo(): add support accross browsers
-    const delta = deltaY > 0 ? -0.25 : 0.25;
-
-    zoom += delta;
-    zoom = Math.max(min_zoom, Math.min(max_zoom, zoom));
-
-    room.camera.zoom(zoom, 0.25);
-  },
-  { passive: true },
-);
-
-const present = new FloorFurniture({
-  id: 3372,
-  position: {
-    x: 0,
-    y: 0,
-    z: 0,
-  },
-  direction: 2,
-  state: 0,
-  ribbonType: 2,
-  packetType: 3,
-});
-//room.add(present);
-setTimeout(() => {
-  present.state = 1;
-}, 5000);
-/*const dragon1 = new FloorFurniture({
-  id: 8213,
-  position: {
-    x: -10,
-    y: 12,
-    z: 100,
-  },
-  direction: 2,
-  state: 0,
-});
-room.add(dragon1);*/
-/*setTimeout(() => {
-  //present.destroy();
-  const dragon = new FloorFurniture({
-    id: 8213,
-    position: {
-      x: 1,
-      y: 2,
-      z: 0,
-    },
-    direction: 4,
-    state: 0,
-  });
-  room.add(dragon);
-  setTimeout(() => {
-    dragon.position = {
-      x: 1,
-      y: 4,
-      z: 0,
-    };
-    setTimeout(() => {
-      dragon.rotate({
-        direction: 2,
-        duration: 0.5,
-      });
-    }, 1000);
-    setTimeout(() => {
-      dragon.state = 1;
-    }, 2000);
-    //dragon.direction = 4;
-  }, 2000);
-
-
-}, 6000);*/
 
 const wheel = new WallFurniture({
   id: 4010,

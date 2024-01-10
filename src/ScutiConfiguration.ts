@@ -2,7 +2,7 @@ import { Scuti } from './Scuti';
 import { Color } from 'pixi.js';
 import { registerPath } from './utils/Assets';
 
-interface Configuration {
+export interface Configuration {
   renderer: Scuti;
   canvas: HTMLElement;
   width: number;
@@ -11,7 +11,19 @@ interface Configuration {
   backgroundColor?: number;
   backgroundAlpha?: number;
   resizeTo?: HTMLElement | Window;
+  zoom?: Partial<ZoomConfiguration>;
 }
+
+interface ZoomConfiguration {
+  wheel: boolean;
+  level: number;
+  min: number;
+  max: number;
+  step: number;
+  duration: number;
+  direction: 'cursor' | 'center';
+}
+
 export class ScutiConfiguration {
   public renderer: Scuti;
 
@@ -20,18 +32,10 @@ export class ScutiConfiguration {
   private _height: number;
   private _backgroundColor: number;
   private _backgroundAlpha: number;
-  private _resizeTo: HTMLElement | Window | undefined;
+  private _resizeTo: Configuration['resizeTo'];
+  private _zoom: Configuration['zoom'];
 
-  constructor({
-    canvas,
-    width,
-    height,
-    backgroundColor,
-    backgroundAlpha,
-    resizeTo,
-    resources,
-    renderer,
-  }: Configuration) {
+  constructor({ canvas, width, height, backgroundColor, backgroundAlpha, resizeTo, resources, renderer, zoom }: Configuration) {
     this.renderer = renderer;
 
     this._canvas = canvas;
@@ -39,7 +43,8 @@ export class ScutiConfiguration {
     this._height = height;
     this._backgroundColor = backgroundColor ?? 0x000000;
     this._backgroundAlpha = backgroundAlpha ?? 1;
-    this._resizeTo = resizeTo;
+    this._resizeTo = resizeTo ?? window;
+    this._zoom = { wheel: true, level: 1, min: 0.5, max: 3, step: 0.5, duration: 0.125, direction: 'center', ...zoom };
 
     registerPath(resources);
   }
@@ -90,11 +95,19 @@ export class ScutiConfiguration {
     this.renderer.application.renderer.background.alpha = alpha;
   }
 
-  public get resizeTo(): HTMLElement | Window | undefined {
+  public get resizeTo(): Configuration['resizeTo'] {
     return this._resizeTo;
   }
 
-  public set resizeTo(element: HTMLElement | Window) {
+  public set resizeTo(element: NonNullable<Configuration['resizeTo']>) {
     this.renderer.application.resizeTo = element;
+  }
+
+  public get zoom(): Configuration['zoom'] {
+    return this._zoom;
+  }
+
+  public set zoom(zoom: Configuration['zoom']) {
+    this._zoom = zoom;
   }
 }
