@@ -9,41 +9,55 @@ export class RoomHeightmap {
   public heightMap: HeightMap;
   public door: Vector2D | undefined;
 
+  private stairMap: Map<string, ReturnType<typeof this.getStair>> = new Map();
+
   constructor(heightMap: string) {
     this.heightMap = RoomHeightmap.parse(heightMap);
-    this.door = this.calculateDoor();
+
+    for (let y: number = 0; y < this.heightMap.length; y++) {
+      for (let x: number = 0; x < this.heightMap[y].length; x++) {
+        // Pre-compute stairs for later use
+        this.stairMap.set(`${x}-${y}`, this.getStair({ x, y }));
+
+        if (this.door === undefined && this.isEntrance({ x, y })) {
+          this.door = { x, y };
+        }
+      }
+    }
   }
 
   public static parse(heightMap: string): HeightMap {
     return heightMap
       .trim()
       .split(/\r?\n/)
-      .map((line: string) => {
-        return line.split('');
-      });
+      .map((line: string): string[] => line.split(''));
   }
 
-  public calculateDoor(): Vector2D | undefined {
+  public isEntrance({ x, y }: Vector2D): typeof this.door {
+    const topLeftTile: Vector2D = { x: x - 1, y: y - 1 };
+    const topTile: Vector2D = { x, y: y - 1 };
+
+    const midLeftTile: Vector2D = { x: x - 1, y };
+    const midTile: Vector2D = { x: x, y: y };
+
+    const botLeftTile: Vector2D = { x: x - 1, y: y + 1 };
+    const botTile: Vector2D = { x, y: y + 1 };
+
+    if (
+      !this.isTile(topTile) &&
+      !this.isTile(topLeftTile) &&
+      !this.isTile(midLeftTile) &&
+      !this.isTile(botLeftTile) &&
+      !this.isTile(botTile) &&
+      this.isTile(midTile)
+    )
+      return { x, y };
+  }
+
+  public calculateDoor(): typeof this.door {
     for (let y: number = 0; y < this.heightMap.length; y++) {
       for (let x: number = 0; x < this.heightMap[y].length; x++) {
-        const topLeftTile: Vector2D = { x: x - 1, y: y - 1 };
-        const topTile: Vector2D = { x, y: y - 1 };
-
-        const midLeftTile: Vector2D = { x: x - 1, y };
-        const midTile: Vector2D = { x: x, y: y };
-
-        const botLeftTile: Vector2D = { x: x - 1, y: y + 1 };
-        const botTile: Vector2D = { x, y: y + 1 };
-
-        if (
-          !this.isTile(topTile) &&
-          !this.isTile(topLeftTile) &&
-          !this.isTile(midLeftTile) &&
-          !this.isTile(botLeftTile) &&
-          !this.isTile(botTile) &&
-          this.isTile(midTile)
-        )
-          return { x, y };
+        return this.isEntrance({ x, y });
       }
     }
   }
@@ -62,16 +76,19 @@ export class RoomHeightmap {
     return tile === 'x' ? 0 : isNaN(Number(tile)) ? tile.charCodeAt(0) - 96 + 9 : Number(tile);
   }
 
-  public getTileDifference(position1: Vector2D, position2: Vector2D): number {
-    return Number(this.getTileHeight(position1)) - Number(this.getTileHeight(position2));
+  public getTileHeightDiff(position1: Vector2D, position2: Vector2D): number {
+    return this.getTileHeight(position1) - this.getTileHeight(position2);
   }
 
   public getStair({ x, y }: Vector2D): Stair | undefined {
+    if (!this.isTile({ x, y })) return undefined;
+
     const topLeftTile: Vector2D = { x: x - 1, y: y - 1 };
     const topTile: Vector2D = { x: x, y: y - 1 };
     const topRightTile: Vector2D = { x: x + 1, y: y - 1 };
 
     const midLeftTile: Vector2D = { x: x - 1, y: y };
+    const midTile: Vector2D = { x: x, y: y };
     const midRightTile: Vector2D = { x: x + 1, y: y };
 
     const botLeftTile: Vector2D = { x: x - 1, y: y + 1 };
@@ -79,11 +96,10 @@ export class RoomHeightmap {
     const botRightTile: Vector2D = { x: x + 1, y: y + 1 };
 
     if (
-      this.isTile({ x, y }) &&
       this.isTile(topRightTile) &&
-      this.getTileDifference(topRightTile, { x, y }) === 1 &&
-      this.getTileDifference(midRightTile, { x, y }) === 1 &&
-      this.getTileDifference(topTile, { x, y }) === 1
+      this.getTileHeightDiff(topRightTile, midTile) === 1 &&
+      this.getTileHeightDiff(midRightTile, midTile) === 1 &&
+      this.getTileHeightDiff(topTile, midTile) === 1
     )
       return {
         type: StairType.INNER_CORNER_STAIR,
@@ -91,11 +107,10 @@ export class RoomHeightmap {
       };
 
     if (
-      this.isTile({ x, y }) &&
       this.isTile(botRightTile) &&
-      this.getTileDifference(botRightTile, { x, y }) === 1 &&
-      this.getTileDifference(midRightTile, { x, y }) === 1 &&
-      this.getTileDifference(botTile, { x, y }) === 1
+      this.getTileHeightDiff(botRightTile, midTile) === 1 &&
+      this.getTileHeightDiff(midRightTile, midTile) === 1 &&
+      this.getTileHeightDiff(botTile, midTile) === 1
     )
       return {
         type: StairType.INNER_CORNER_STAIR,
@@ -103,11 +118,10 @@ export class RoomHeightmap {
       };
 
     if (
-      this.isTile({ x, y }) &&
       this.isTile(botLeftTile) &&
-      this.getTileDifference(botLeftTile, { x, y }) === 1 &&
-      this.getTileDifference(midLeftTile, { x, y }) === 1 &&
-      this.getTileDifference(botTile, { x, y }) === 1
+      this.getTileHeightDiff(botLeftTile, midTile) === 1 &&
+      this.getTileHeightDiff(midLeftTile, midTile) === 1 &&
+      this.getTileHeightDiff(botTile, midTile) === 1
     )
       return {
         type: StairType.INNER_CORNER_STAIR,
@@ -115,28 +129,26 @@ export class RoomHeightmap {
       };
 
     if (
-      this.isTile({ x, y }) &&
       this.isTile(topLeftTile) &&
-      this.getTileDifference(topLeftTile, { x, y }) === 1 &&
-      this.getTileDifference(midLeftTile, { x, y }) === 1 &&
-      this.getTileDifference(topTile, { x, y }) === 1
+      this.getTileHeightDiff(topLeftTile, { x, y }) === 1 &&
+      this.getTileHeightDiff(midLeftTile, { x, y }) === 1 &&
+      this.getTileHeightDiff(topTile, { x, y }) === 1
     )
       return {
         type: StairType.INNER_CORNER_STAIR,
         direction: Direction.NORTH_WEST,
       };
 
-    if (this.isTile({ x, y }) && this.isTile(topTile) && this.getTileDifference(topTile, { x, y }) === 1)
+    if (this.isTile(topTile) && this.getTileHeightDiff(topTile, midTile) === 1)
       return { type: StairType.STAIR, direction: Direction.NORTH };
 
     if (
-      this.isTile({ x, y }) &&
       this.isTile(topRightTile) &&
-      this.getTileDifference(topRightTile, { x, y }) === 1 &&
-      this.getTileDifference(midRightTile, { x, y }) !== 1 &&
-      this.getTileDifference(topTile, { x, y }) !== 1
+      this.getTileHeightDiff(topRightTile, midTile) === 1 &&
+      this.getTileHeightDiff(midRightTile, midTile) !== 1 &&
+      this.getTileHeightDiff(topTile, midTile) !== 1
     ) {
-      if (this.getTileDifference(midLeftTile, { x, y }) === 1)
+      if (this.getTileHeightDiff(midLeftTile, midTile) === 1)
         return {
           type: StairType.INNER_CORNER_STAIR,
           direction: Direction.NORTH_EAST,
@@ -148,52 +160,53 @@ export class RoomHeightmap {
       };
     }
 
-    if (this.isTile({ x, y }) && this.isTile(midRightTile) && this.getTileDifference(midRightTile, { x, y }) === 1)
+    if (this.isTile(midRightTile) && this.getTileHeightDiff(midRightTile, midTile) === 1)
       return { type: StairType.STAIR, direction: Direction.EAST };
 
     if (
-      this.isTile({ x, y }) &&
       this.isTile(botRightTile) &&
-      this.getTileDifference(botRightTile, { x, y }) === 1 &&
-      this.getTileDifference(midRightTile, { x, y }) !== 1 &&
-      this.getTileDifference(botTile, { x, y }) !== 1
+      this.getTileHeightDiff(botRightTile, midTile) === 1 &&
+      this.getTileHeightDiff(midRightTile, midTile) !== 1 &&
+      this.getTileHeightDiff(botTile, midTile) !== 1
     )
       return {
         type: StairType.OUTER_CORNER_STAIR,
         direction: Direction.SOUTH_EAST,
       };
 
-    if (this.isTile({ x, y }) && this.isTile(botTile) && this.getTileDifference(botTile, { x, y }) === 1)
+    if (this.isTile(botTile) && this.getTileHeightDiff(botTile, midTile) === 1)
       return { type: StairType.STAIR, direction: Direction.SOUTH };
 
     if (
-      this.isTile({ x, y }) &&
       this.isTile(botLeftTile) &&
-      this.getTileDifference(botLeftTile, { x, y }) === 1 &&
-      this.getTileDifference(midLeftTile, { x, y }) !== 1 &&
-      this.getTileDifference(botTile, { x, y }) !== 1
+      this.getTileHeightDiff(botLeftTile, midTile) === 1 &&
+      this.getTileHeightDiff(midLeftTile, midTile) !== 1 &&
+      this.getTileHeightDiff(botTile, midTile) !== 1
     )
       return {
         type: StairType.OUTER_CORNER_STAIR,
         direction: Direction.SOUTH_WEST,
       };
 
-    if (this.isTile({ x, y }) && this.isTile(midLeftTile) && this.getTileDifference(midLeftTile, { x, y }) === 1)
+    if (this.isTile(midLeftTile) && this.getTileHeightDiff(midLeftTile, midTile) === 1)
       return { type: StairType.STAIR, direction: Direction.WEST };
 
     if (
-      this.isTile({ x, y }) &&
       this.isTile(topLeftTile) &&
-      this.getTileDifference(topLeftTile, { x, y }) === 1 &&
-      this.getTileDifference(midLeftTile, { x, y }) !== 1 &&
-      this.getTileDifference(topTile, { x, y }) !== 1
+      this.getTileHeightDiff(topLeftTile, midTile) === 1 &&
+      this.getTileHeightDiff(midLeftTile, midTile) !== 1 &&
+      this.getTileHeightDiff(topTile, midTile) !== 1
     )
       return {
         type: StairType.OUTER_CORNER_STAIR,
         direction: Direction.NORTH_WEST,
       };
 
-    return;
+    return undefined;
+  }
+
+  public getComputedStair({ x, y }: Parameters<typeof this.getStair>[number]): ReturnType<typeof this.getStair> {
+    return this.stairMap.get(`${x}-${y}`) ?? this.getStair({ x, y });
   }
 
   public getWall({ x, y }: Vector2D): WallType | undefined {
