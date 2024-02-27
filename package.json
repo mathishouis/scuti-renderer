@@ -9,11 +9,12 @@
     "dist/*"
   ],
   "scripts": {
-    "dev": "vite --host",
     "build": "tsup",
-    "preview": "vite preview",
+    "dev": "vite serve public",
+    "preview": "vite preview public",
+    "build:production": "vite build public",
     "lint": "eslint --fix . --ignore-path .gitignore --ext .js,.ts src",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(ts|html|css)\""
   },
   "dependencies": {
     "@pixi/layers": "^2.1.0",

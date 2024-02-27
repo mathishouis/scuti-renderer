@@ -35,7 +35,7 @@ export abstract class LandscapeLayer {
 
     return (
       (room.parsedHeightMap.door &&
-        room.visualization.layers.parts.door &&
+        room.visualization!.layers.parts.door &&
         configuration.position.x - 1 === room.parsedHeightMap.door.x &&
         configuration.position.y <= room.parsedHeightMap.door.y &&
         room.parsedHeightMap.door.y <= configuration.position.y + configuration.length - 1 &&
@@ -45,10 +45,9 @@ export abstract class LandscapeLayer {
   }
 
   public render(): void {
-    const { visualization, renderer } = this.part.room;
-    const { door } = visualization.layers.parts;
+    const { door } = this.part.room.visualization!.layers.parts;
     const cube: Cube = new Cube({
-      layer: this.part.container.parentLayer,
+      layer: this.part.container!.parentLayer,
       size: this.size,
       zOrders: {
         [CubeFace.TOP]: -3,

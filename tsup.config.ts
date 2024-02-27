@@ -1,12 +1,13 @@
-import { Options } from 'tsup';
+import { Options, defineConfig } from 'tsup';
 
-export const tsup = {
-  target: 'esnext',
-  format: 'esm',
-  clean: true,
-  bundle: true,
-  minify: true,
-  noExternal: [/(.*)/],
-  entry: ['src/index.ts'],
-  dts: true,
-} satisfies Options;
+export default defineConfig(
+  (options): Options => ({
+    target: 'esnext',
+    format: 'esm',
+    clean: true,
+    minify: !options.watch,
+    noExternal: [/(.*)/],
+    entry: ['src/**/index.ts'],
+    dts: true,
+  }),
+);

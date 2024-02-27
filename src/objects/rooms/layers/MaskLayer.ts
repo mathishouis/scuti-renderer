@@ -3,21 +3,20 @@ import { Room } from '../Room';
 import { LandscapeWindowMask } from '../parts/wall/landscapes/layers/items/LandscapeWindowMask';
 import { LandscapePart } from '../parts/wall/landscapes/LandscapePart';
 import { Container, Sprite } from 'pixi.js';
-import { Layer } from '@pixi/layers';
 import { BlackSpriteMaskFilter } from '../../filters/BlackSpriteMaskFilter';
 
 export class MaskLayer extends RoomLayer {
   public childrens: LandscapeWindowMask[] = [];
   public container: Container = new Container();
-  public sprite!: Sprite;
+  public sprite: Sprite | undefined;
 
   constructor(public room: Room) {
     super();
   }
 
   public add(item: LandscapeWindowMask): void {
-    const landscapeParts = this.room.visualization.layers.parts.childrens.filter(children => children instanceof LandscapePart);
-    if (landscapeParts.length === 0) this.room.visualization.renderLandscapes();
+    const landscapeParts = this.room.visualization!.layers.parts.childrens.filter(children => children instanceof LandscapePart);
+    if (landscapeParts.length === 0) this.room.visualization!.renderLandscapes();
     this.container.addChild(item.sprite);
     this.childrens.push(item);
     this.update();
@@ -25,26 +24,27 @@ export class MaskLayer extends RoomLayer {
 
   public remove(item: LandscapeWindowMask): void {
     this.container.removeChild(item.sprite);
-    this.childrens = this.childrens.filter((filteredItem: LandscapeWindowMask) => filteredItem !== item);
+    const index = this.childrens.indexOf(item);
+    if (index !== -1) this.childrens.splice(index, 1);
   }
 
   public destroy(): void {
     if (this.sprite !== undefined) {
-      this.room.visualization.layers.parts.landscapes.filters = [];
+      this.room.visualization!.layers.parts.landscapes.filters = [];
       this.sprite.destroy(true);
-      this.sprite = undefined as any;
+      this.sprite = undefined;
     }
   }
 
   public update(): void {
     if (this.sprite) {
-      this.room.visualization.container.removeChild(this.sprite);
+      this.room.visualization!.container.removeChild(this.sprite);
       this.sprite.destroy(true);
     }
 
     this.sprite = this.landscapeSprite();
-    this.room.visualization.container.addChild(this.sprite);
-    this.room.visualization.layers.parts.landscapes.filters = [new BlackSpriteMaskFilter(this.sprite)];
+    this.room.visualization!.container.addChild(this.sprite);
+    this.room.visualization!.layers.parts.landscapes.filters = [new BlackSpriteMaskFilter(this.sprite)];
   }
 
   public landscapeSprite(): Sprite {

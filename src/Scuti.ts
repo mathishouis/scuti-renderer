@@ -5,7 +5,7 @@ import { Layer, Stage } from '@pixi/layers';
 import { addStats, StatsJSAdapter } from 'pixi-stats';
 import { Configuration, ScutiConfiguration } from './ScutiConfiguration';
 import { loadBundle } from './objects/parsers/BundleParser';
-import { log, perf } from './utils/Logger';
+import { log } from './utils/Logger';
 import { benchmark } from './utils/Benchmark';
 import { loadData } from './objects/parsers/DataParser';
 import { ScutiData } from './ScutiData';
@@ -25,7 +25,7 @@ export class Scuti {
   }
 
   private _initialize(): void {
-    benchmark('renderer');
+    const { perf } = benchmark('renderer');
     // Pixi settings
     extensions.add(loadBundle);
     extensions.add(loadData);
@@ -46,7 +46,7 @@ export class Scuti {
       eventMode: 'passive',
     });
     this.application.stage = new Stage();
-    globalThis.__PIXI_APP__ = this.application; // Support for PIXI.js dev-tool.
+    globalThis.__PIXI_APP__ = this.application; // Pixi dev-tools
     this.canvas = this.configuration.canvas;
     this.canvas.append(this.application.view as HTMLCanvasElement);
 
@@ -58,11 +58,12 @@ export class Scuti {
 
     this.layer.group.enableSort = true;
     this.application.stage.addChild(this.layer);
-    perf('Renderer', 'renderer');
+
+    perf();
   }
 
   public async load(): Promise<void> {
-    benchmark('resources');
+    const { perf } = benchmark('resources');
 
     await Promise.all([
       register('room/materials', '/bundles/room/materials.bundle'),
@@ -72,7 +73,7 @@ export class Scuti {
 
     this.data = new ScutiData();
 
-    perf('Resources', 'resources');
+    perf();
   }
 
   public add(item: GameObject): void {

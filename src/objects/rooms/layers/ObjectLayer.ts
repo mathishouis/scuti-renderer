@@ -14,6 +14,7 @@ export class ObjectLayer extends RoomLayer {
   }
 
   public remove(item: RoomObject): void {
-    this.childrens = this.childrens.filter((filteredItem: RoomObject) => filteredItem !== item);
+    const index = this.childrens.indexOf(item);
+    if (index !== -1) this.childrens.splice(index, 1);
   }
 }

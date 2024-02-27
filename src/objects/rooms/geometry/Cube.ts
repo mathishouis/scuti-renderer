@@ -15,6 +15,7 @@ interface Configuration {
 
 export class Cube extends Container {
   public faces: Record<number, Graphics> = {};
+
   constructor(public configuration: Configuration) {
     super();
 

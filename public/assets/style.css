@@ -14,3 +14,11 @@ div#stats {
   opacity: 0.8;
   user-select: none;
 }
+
+#preview {
+  position: fixed;
+  inset: 0;
+  width: 600px;
+  height: 250px;
+  overflow: auto;
+}

@@ -4,10 +4,10 @@ import { registerPath } from './utils/Assets';
 
 export interface Configuration {
   renderer: Scuti;
-  canvas: HTMLElement;
-  width: number;
-  height: number;
   resources: string;
+  canvas: HTMLElement;
+  width?: number;
+  height?: number;
   backgroundColor?: number;
   backgroundAlpha?: number;
   resizeTo?: HTMLElement | Window;
@@ -39,12 +39,12 @@ export class ScutiConfiguration {
     this.renderer = renderer;
 
     this._canvas = canvas;
-    this._width = width;
-    this._height = height;
+    this._width = width ?? window.innerWidth;
+    this._height = height ?? window.innerHeight;
     this._backgroundColor = backgroundColor ?? 0x000000;
     this._backgroundAlpha = backgroundAlpha ?? 1;
     this._resizeTo = resizeTo ?? window;
-    this._zoom = { wheel: true, level: 1, min: 0.5, max: 3, step: 0.5, duration: 0.125, direction: 'center', ...zoom };
+    this._zoom = { wheel: true, level: 2, min: 0.5, max: 8, step: 0.5, duration: 0.125, direction: 'center', ...zoom };
 
     registerPath(resources);
   }

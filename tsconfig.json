@@ -7,7 +7,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "types": ["./src/types/Globals.d.ts"],
+    "types": ["./src/types/Globals.d.ts", "vite/client"],
     "moduleResolution": "bundler",
     "isolatedModules": true,
     "noEmit": true,
@@ -22,6 +22,6 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitAny": true
   },
-  "include": ["src"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

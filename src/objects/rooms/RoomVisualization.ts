@@ -7,24 +7,23 @@ import { StairPart } from './parts/floor/StairPart';
 import { GreedyMesher } from './geometry/GreedyMesher';
 import { TileEvent, WallEvent } from '../../entities/Events';
 import { CursorPart } from './parts/floor/CursorPart';
-import { StairMesh, TileMesh, WallMesh } from '../../types/Mesh';
+import { StairMesh, TileMesh, WallMesh, Vector3D } from '../../types';
 import { WallPart } from './parts/wall/WallPart';
 import { benchmark } from '../../utils/Benchmark';
-import { perf } from '../../utils/Logger';
 import { LandscapePart } from './parts/wall/landscapes/LandscapePart';
 import { DoorPart } from './parts/wall/DoorPart';
 import { MaskLayer } from './layers/MaskLayer';
 import { LandscapeWindowMask } from './parts/wall/landscapes/layers/items/LandscapeWindowMask';
 import { RoomObject } from './objects/RoomObject';
-import { Vector3D } from '../../types/Vector';
 import { ObjectLayer } from './layers/ObjectLayer';
-import { landscapeOrder } from '../../utils/Sorting';
+import { landscapeOrder } from '../../utils';
+import { Direction, StairType } from '../..';
 
-type RoomLayers = {
+interface RoomLayers {
   parts: PartLayer;
   masks: MaskLayer;
   objects: ObjectLayer;
-};
+}
 
 export interface UpdateConfiguration {
   parts?: boolean;
@@ -35,7 +34,7 @@ export interface UpdateConfiguration {
 
 export class RoomVisualization {
   public container: Container = new Container();
-  public layers: RoomLayers = {} as RoomLayers;
+  public layers = {} as RoomLayers;
   public furnituresTicker!: Ticker;
   public greedyMesher!: GreedyMesher;
 
@@ -65,11 +64,11 @@ export class RoomVisualization {
   }
 
   private _registerCursor(): void {
-    const cursor = new CursorPart({});
+    const cursor = new CursorPart();
     this.layers.parts.cursor = cursor;
     cursor.room = this.room;
     cursor.render();
-    this.container.addChild(cursor.container);
+    this.container.addChild(cursor.container!);
     cursor.hide();
   }
 
@@ -139,7 +138,7 @@ export class RoomVisualization {
   }
 
   public render(): void {
-    benchmark('room-visualization');
+    const { perf } = benchmark('room-visualization');
 
     this._registerCursor();
     this._registerDoor();
@@ -150,18 +149,44 @@ export class RoomVisualization {
     this.renderWalls();
     if (this.layers.masks.childrens.length > 0) this.renderLandscapes();
 
-    perf('Room Visualization', 'room-visualization');
+    perf();
 
     // Resets room position to the top-left corner by default
     this.container.pivot.x = this.container.getBounds().left;
     this.container.pivot.y = this.container.getBounds().top;
 
-    this.room.camera.centerCamera(0);
+    this.room.camera!.centerCamera(0);
   }
 
   public renderFloors(): void {
-    if (!this.room.floorHidden) {
-      this.greedyMesher.tiles.forEach((tile: TileMesh, index: number): void =>
+    const stair = new StairPart({
+      material: this.room.floorMaterial,
+      position: { x: 0, y: 0, z: 0 },
+      length: 1,
+      thickness: this.room.floorThickness,
+      direction: Direction.WEST,
+      corners: {
+        left: StairType.STAIR,
+        right: StairType.TWIN_CORNER_STAIR,
+      },
+    });
+
+    const stair2 = new StairPart({
+      material: this.room.floorMaterial,
+      position: { x: 0, y: 0, z: 0 },
+      length: 1,
+      thickness: this.room.floorThickness,
+      direction: Direction.NORTH,
+      corners: {
+        left: StairType.TWIN_CORNER_STAIR,
+        right: StairType.STAIR,
+      },
+    });
+
+    [stair, stair2].forEach(stair => this.add(stair));
+
+    /* if (!this.room.floorHidden) {
+      this.greedyMesher.tiles.forEach((tile: TileMesh): void =>
         this._registerFloorPart(
           new TilePart({
             material: this.room.floorMaterial,
@@ -185,7 +210,7 @@ export class RoomVisualization {
           }),
         ),
       );
-    }
+    } */
   }
 
   public renderWalls(): void {
@@ -222,7 +247,7 @@ export class RoomVisualization {
   }
 
   public update({ parts, objects, cursor, mesher }: UpdateConfiguration): void {
-    this.destroy(parts, objects, cursor);
+    this.destroy({ parts, objects, cursor });
 
     if (mesher) this.greedyMesher = new GreedyMesher(this.room.parsedHeightMap);
 
@@ -236,29 +261,35 @@ export class RoomVisualization {
     }
   }
 
-  public destroy(parts = false, objects = false, cursor = false): void {
+  public destroy({ parts, objects, cursor }: Omit<UpdateConfiguration, 'mesher'>): void {
     if (cursor) {
-      this.layers.parts.cursor.destroy();
-      this.layers.parts.cursor = undefined as any;
+      this.layers.parts.cursor?.destroy();
+      this.layers.parts.cursor = undefined;
     }
 
     if (parts) {
-      this.layers.parts.door.destroy();
-      [...this.layers.parts.childrens].forEach((item: RoomPart) => {
+      this.layers.parts.door?.destroy();
+      this.layers.parts.door = undefined;
+      console.log(this.layers.parts);
+
+      [...this.layers.parts.childrens].forEach((item: RoomPart): void => {
         item.destroy();
         this.layers.parts.remove(item);
       });
+
+      console.log(this.layers.parts);
     }
 
     if (objects) {
-      [...this.layers.masks.childrens].forEach((item: LandscapeWindowMask) => {
+      [...this.layers.masks.childrens].forEach((item: LandscapeWindowMask): void => {
         item.destroy();
         this.layers.masks.remove(item);
       });
-      [...this.layers.objects.childrens].forEach((item: RoomObject) => {
+      [...this.layers.objects.childrens].forEach((item: RoomObject): void => {
         item.destroy();
         this.layers.objects.remove(item);
       });
+
       this.layers.masks.destroy();
     }
   }
@@ -266,7 +297,7 @@ export class RoomVisualization {
   public add(item: RoomPart | RoomObject): void {
     if (item instanceof RoomPart) {
       this.layers.parts.add(item);
-      this.container.addChild(item.container);
+      this.container.addChild(item.container!);
     }
 
     if (item instanceof RoomObject) {

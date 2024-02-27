@@ -5,9 +5,10 @@ import { GameObject } from '../GameObject';
 import { RoomHeightmap } from './RoomHeightmap';
 import { RoomEvents } from './RoomEvents';
 import { RoomObject } from './objects/RoomObject';
-import { FloorMaterial } from './materials/FloorMaterial.ts';
-import { WallMaterial } from './materials/WallMaterial.ts';
-import { LandscapeMaterial } from './materials/LandscapeMaterial.ts';
+import { FloorMaterial } from './materials/FloorMaterial';
+import { WallMaterial } from './materials/WallMaterial';
+import { LandscapeMaterial } from './materials/LandscapeMaterial';
+import { RoomPreview } from './RoomPreview';
 
 interface Configuration {
   heightMap: string;
@@ -21,15 +22,15 @@ interface Configuration {
   landscapeMaterial?: LandscapeMaterial;
   dragging?: boolean;
   centerCamera?: boolean;
-  zoom?: number;
 }
 
 export class Room extends GameObject {
   public renderer!: Scuti;
   public parsedHeightMap!: RoomHeightmap;
-  public visualization!: RoomVisualization;
-  public camera!: RoomCamera;
+  public visualization: RoomVisualization | undefined;
+  public camera: RoomCamera | undefined;
   public events!: RoomEvents;
+  public previewme!: RoomPreview;
 
   private _heightMap: string;
   private _floorMaterial: FloorMaterial;
@@ -42,7 +43,6 @@ export class Room extends GameObject {
   private _landscapeMaterial: LandscapeMaterial;
   private _dragging: boolean;
   private _centerCamera: boolean;
-  private _zoom: number;
 
   constructor({
     heightMap,
@@ -56,7 +56,6 @@ export class Room extends GameObject {
     landscapeMaterial,
     dragging,
     centerCamera,
-    zoom,
   }: Configuration) {
     super();
 
@@ -71,7 +70,6 @@ export class Room extends GameObject {
     this._landscapeMaterial = landscapeMaterial ?? new LandscapeMaterial(101);
     this._dragging = dragging ?? true;
     this._centerCamera = centerCamera ?? true;
-    this._zoom = zoom ?? 1;
 
     this._floorMaterial.room = this;
     this._wallMaterial.room = this;
@@ -85,24 +83,33 @@ export class Room extends GameObject {
     //this.renderer.application.ticker.maxFPS = 144; todo(): Add configurable FPS
 
     this.visualization.render();
-    this.renderer.application.stage.addChild(this.camera);
+    this.renderer.application.stage.addChild(this.camera.container!);
   }
 
   public update({ parts, objects, cursor, mesher }: UpdateConfiguration): void {
     if (parts) this.parsedHeightMap = new RoomHeightmap(this.heightMap);
 
-    this.visualization.update({ parts, objects, cursor, mesher });
+    this.visualization?.update({ parts, objects, cursor, mesher });
   }
 
   public destroy(): void {
-    if (this.visualization !== undefined) {
-      this.visualization.destroy(true, true, true);
-      this.visualization = undefined as any;
+    if (this.visualization != undefined) {
+      this.visualization.destroy({ parts: true, objects: true, cursor: true });
+      this.visualization = undefined;
+    }
+
+    if (this.camera != undefined) {
+      this.camera.destroy();
+      this.camera = undefined;
     }
   }
 
+  public preview(canvas: HTMLElement): void {
+    this.previewme = new RoomPreview({ canvas, heightMap: this._heightMap });
+  }
+
   public add(object: RoomObject): void {
-    this.visualization.add(object);
+    this.visualization?.add(object);
   }
 
   public get heightMap(): string {
@@ -225,13 +232,5 @@ export class Room extends GameObject {
 
   public set centerCamera(centerCamera: boolean) {
     this._centerCamera = centerCamera;
-  }
-
-  public get zoom(): number {
-    return this._zoom;
-  }
-
-  public set zoom(zoom: number) {
-    this._zoom = zoom;
   }
 }

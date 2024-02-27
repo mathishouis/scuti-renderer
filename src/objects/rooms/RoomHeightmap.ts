@@ -9,21 +9,9 @@ export class RoomHeightmap {
   public heightMap: HeightMap;
   public door: Vector2D | undefined;
 
-  private stairMap: Map<string, ReturnType<typeof this.getStair>> = new Map();
-
   constructor(heightMap: string) {
     this.heightMap = RoomHeightmap.parse(heightMap);
-
-    for (let y: number = 0; y < this.heightMap.length; y++) {
-      for (let x: number = 0; x < this.heightMap[y].length; x++) {
-        // Pre-compute stairs for later use
-        this.stairMap.set(`${x}-${y}`, this.getStair({ x, y }));
-
-        if (this.door === undefined && this.isEntrance({ x, y })) {
-          this.door = { x, y };
-        }
-      }
-    }
+    this.door = this.calculateDoor();
   }
 
   public static parse(heightMap: string): HeightMap {
@@ -80,7 +68,7 @@ export class RoomHeightmap {
     return this.getTileHeight(position1) - this.getTileHeight(position2);
   }
 
-  public getStair({ x, y }: Vector2D): Stair | undefined {
+  public getStair({ x, y }: Vector2D, axis?: 'x' | 'y'): Stair | undefined {
     if (!this.isTile({ x, y })) return undefined;
 
     const topLeftTile: Vector2D = { x: x - 1, y: y - 1 };
@@ -130,9 +118,9 @@ export class RoomHeightmap {
 
     if (
       this.isTile(topLeftTile) &&
-      this.getTileHeightDiff(topLeftTile, { x, y }) === 1 &&
-      this.getTileHeightDiff(midLeftTile, { x, y }) === 1 &&
-      this.getTileHeightDiff(topTile, { x, y }) === 1
+      this.getTileHeightDiff(topLeftTile, { x, y }) >= 1 &&
+      this.getTileHeightDiff(midLeftTile, { x, y }) >= 1 &&
+      this.getTileHeightDiff(topTile, { x, y }) >= 1
     )
       return {
         type: StairType.INNER_CORNER_STAIR,
@@ -142,16 +130,30 @@ export class RoomHeightmap {
     if (this.isTile(topTile) && this.getTileHeightDiff(topTile, midTile) === 1)
       return { type: StairType.STAIR, direction: Direction.NORTH };
 
-    if (
+    const IS_NORTH_EAST_STAIR = (): boolean =>
       this.isTile(topRightTile) &&
       this.getTileHeightDiff(topRightTile, midTile) === 1 &&
       this.getTileHeightDiff(midRightTile, midTile) !== 1 &&
-      this.getTileHeightDiff(topTile, midTile) !== 1
-    ) {
+      this.getTileHeightDiff(topTile, midTile) !== 1;
+
+    const IS_SOUTH_WEST_STAIR = (): boolean =>
+      this.isTile(botLeftTile) &&
+      !this.isEntrance(botLeftTile) &&
+      this.getTileHeightDiff(botLeftTile, midTile) === 1 &&
+      this.getTileHeightDiff(midLeftTile, midTile) !== 1 &&
+      this.getTileHeightDiff(botTile, midTile) !== 1;
+
+    if (IS_NORTH_EAST_STAIR()) {
       if (this.getTileHeightDiff(midLeftTile, midTile) === 1)
         return {
           type: StairType.INNER_CORNER_STAIR,
           direction: Direction.NORTH_EAST,
+        };
+
+      if (IS_SOUTH_WEST_STAIR())
+        return {
+          type: StairType.TWIN_CORNER_STAIR,
+          direction: axis === 'x' ? Direction.NORTH_EAST : Direction.SOUTH_WEST,
         };
 
       return {
@@ -177,12 +179,7 @@ export class RoomHeightmap {
     if (this.isTile(botTile) && this.getTileHeightDiff(botTile, midTile) === 1)
       return { type: StairType.STAIR, direction: Direction.SOUTH };
 
-    if (
-      this.isTile(botLeftTile) &&
-      this.getTileHeightDiff(botLeftTile, midTile) === 1 &&
-      this.getTileHeightDiff(midLeftTile, midTile) !== 1 &&
-      this.getTileHeightDiff(botTile, midTile) !== 1
-    )
+    if (IS_SOUTH_WEST_STAIR())
       return {
         type: StairType.OUTER_CORNER_STAIR,
         direction: Direction.SOUTH_WEST,
@@ -203,10 +200,6 @@ export class RoomHeightmap {
       };
 
     return undefined;
-  }
-
-  public getComputedStair({ x, y }: Parameters<typeof this.getStair>[number]): ReturnType<typeof this.getStair> {
-    return this.stairMap.get(`${x}-${y}`) ?? this.getStair({ x, y });
   }
 
   public getWall({ x, y }: Vector2D): WallType | undefined {
@@ -252,7 +245,7 @@ export class RoomHeightmap {
   }
 
   public get sizeX(): number {
-    return this.heightMap.sort((a, b) => b.length - a.length)[0].length;
+    return this.heightMap.sort((a, b): number => b.length - a.length)[0].length;
   }
 
   public get sizeY(): number {

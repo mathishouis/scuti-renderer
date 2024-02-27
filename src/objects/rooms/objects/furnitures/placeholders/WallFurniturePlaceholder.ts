@@ -1,5 +1,5 @@
 import { Sprite } from 'pixi.js';
-import { OffsetVector2D, Vector3D } from '../../../../../types/Vector';
+import { OffsetVector2D } from '../../../../../types/Vector';
 import { asset } from '../../../../../utils/Assets';
 import { Direction } from '../../../../../enums/Direction';
 import { WallFurniture } from '../WallFurniture';
@@ -11,7 +11,7 @@ interface Configuration {
 
 export class WallFurniturePlaceholder {
   public furniture: WallFurniture;
-  public sprite!: Sprite;
+  public sprite: Sprite | undefined;
   public position: OffsetVector2D;
 
   constructor({ furniture, position }: Configuration) {
@@ -38,13 +38,13 @@ export class WallFurniturePlaceholder {
       this.sprite.scale.x = -1;
     }
 
-    this.furniture.room.visualization.container.addChild(this.sprite);
+    this.furniture.room.visualization!.container.addChild(this.sprite);
   }
 
   public destroy(): void {
     if (this.sprite !== undefined) {
       this.sprite.destroy();
-      this.sprite = undefined as any;
+      this.sprite = undefined;
     }
   }
 }

@@ -20,14 +20,16 @@ interface Configuration {
 
 export class LandscapePart extends RoomPart {
   public room!: Room;
-  public container: Container = new Container();
+  public container: Container | undefined;
   public eventManager: EventManager = new EventManager();
 
-  private _mask!: Cube;
+  private _mask: Cube | undefined;
   private _layers: LandscapeLayer[] = [];
 
   constructor(public configuration: Configuration) {
     super();
+
+    this.container = new Container();
   }
 
   public get mask(): Cube {
@@ -70,22 +72,22 @@ export class LandscapePart extends RoomPart {
     material.layers.forEach((layer: any) => {
       const landscapeLayer: LandscapeLayer = new layer.layer({ ...layer.params, ...{ part: this } });
       this._layers.push(landscapeLayer);
-      this.container.addChild(landscapeLayer.container);
+      this.container!.addChild(landscapeLayer.container);
       landscapeLayer.render();
     });
 
-    this.container.interactiveChildren = false;
-    this.container.addChild(this.mask);
-    this.container.mask = this.mask;
-    this.container.parentLayer = this.room.visualization.layers.parts.landscapes;
-    this.container.x = baseX;
-    this.container.y = baseY - 32 * position.z - size.z * 32 + floorThickness;
+    this.container!.interactiveChildren = false;
+    this.container!.addChild(this.mask);
+    this.container!.mask = this.mask;
+    this.container!.parentLayer = this.room.visualization!.layers.parts.landscapes;
+    this.container!.x = baseX;
+    this.container!.y = baseY - 32 * position.z - size.z * 32 + floorThickness;
   }
 
   public destroy() {
     if (this._mask !== undefined) {
       this._mask.destroy();
-      this._mask = undefined as any;
+      this._mask = undefined;
     }
 
     if (this._layers.length > 0) {
@@ -95,7 +97,7 @@ export class LandscapePart extends RoomPart {
 
     if (this.container !== undefined) {
       this.container.destroy();
-      this.container = undefined as any;
+      this.container = undefined;
     }
   }
 }
