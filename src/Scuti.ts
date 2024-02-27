@@ -1,24 +1,28 @@
-import { Application, BaseTexture, Color, Container, extensions, SCALE_MODES, settings, Ticker, UPDATE_PRIORITY } from 'pixi.js';
+import { Application, BaseTexture, Color, Container, extensions, SCALE_MODES, settings } from 'pixi.js';
 import { GameObject } from './objects/GameObject';
 import { register } from './utils/Assets';
 import { Layer, Stage } from '@pixi/layers';
-import { addStats, StatsJSAdapter } from 'pixi-stats';
 import { Configuration, ScutiConfiguration } from './ScutiConfiguration';
 import { loadBundle } from './objects/parsers/BundleParser';
 import { log } from './utils/Logger';
 import { benchmark } from './utils/Benchmark';
 import { loadData } from './objects/parsers/DataParser';
 import { ScutiData } from './ScutiData';
+import { Room } from '.';
 
 export class Scuti {
   public configuration: ScutiConfiguration;
-  public canvas!: HTMLElement;
+  public canvas!: ScutiConfiguration['canvas'];
   public application!: Application;
   public layer: Layer = new Layer();
   public data!: ScutiData;
 
+  private _rooms: Room[] = [];
+
   constructor(configuration: Omit<Configuration, 'renderer'>) {
     log('🚀 SCUTI', 'v0.0.0');
+
+    console.log(this.application);
 
     this.configuration = new ScutiConfiguration({ ...configuration, ...{ renderer: this } });
     this._initialize();
@@ -26,15 +30,15 @@ export class Scuti {
 
   private _initialize(): void {
     const { perf } = benchmark('renderer');
-    // Pixi settings
+
     extensions.add(loadBundle);
     extensions.add(loadData);
     settings.ROUND_PIXELS = true;
     Container.defaultSortableChildren = false;
     BaseTexture.defaultOptions.scaleMode = SCALE_MODES.NEAREST;
 
-    // Application
     this.application = new Application({
+      view: this.configuration.canvas,
       width: this.configuration.width,
       height: this.configuration.height,
       antialias: false,
@@ -45,17 +49,9 @@ export class Scuti {
       resizeTo: this.configuration.resizeTo,
       eventMode: 'passive',
     });
+
+    this.configuration.preloadFn(this);
     this.application.stage = new Stage();
-    globalThis.__PIXI_APP__ = this.application; // Pixi dev-tools
-    this.canvas = this.configuration.canvas;
-    this.canvas.append(this.application.view as HTMLCanvasElement);
-
-    // Pixi stats
-    const stats: StatsJSAdapter = addStats(document, this.application);
-    const ticker: Ticker = Ticker.shared;
-
-    ticker.add(stats.update, stats, UPDATE_PRIORITY.UTILITY);
-
     this.layer.group.enableSort = true;
     this.application.stage.addChild(this.layer);
 
@@ -79,5 +75,13 @@ export class Scuti {
   public add(item: GameObject): void {
     item.renderer = this;
     item.render();
+
+    if (item instanceof Room) {
+      this._rooms.push(item);
+    }
+  }
+
+  public get rooms(): Room[] {
+    return this.rooms;
   }
 }

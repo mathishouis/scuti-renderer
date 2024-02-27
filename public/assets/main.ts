@@ -1,42 +1,28 @@
-import './style.css';
-import { Scuti } from '../../src/Scuti';
-import { Room } from '../../src/objects/rooms/Room';
-import { FloorMaterial } from '../../src/objects/rooms/materials/FloorMaterial';
-import { WallMaterial } from '../../src/objects/rooms/materials/WallMaterial';
-import { LandscapeMaterial } from '../../src';
+/// <reference types="vite/client" />
 
-export const renderer: Scuti = new Scuti({
-  canvas: document.getElementById('app')!,
-  resources: 'http://127.0.0.1:8081',
-  backgroundColor: 0x0c567c,
-  zoom: { direction: 'center' },
-});
+import { type Application, Ticker, UPDATE_PRIORITY, type ICanvas } from 'pixi.js';
+import { addStats } from 'pixi-stats';
 
-await renderer.load();
+import('./test');
 
-const heightMap: string = `
-x10012xxxxxxxxxx
-x20000xxxxxxxxxx
-000000xxx0000012
-0000000000022000
-x000000000001000
-x10003xxx0000000
-x10002xxx0000000
-x20001xxx1200000
-xxxxxxxxx0330000
-`;
+declare global {
+  // eslint-disable-next-line no-var
+  var __PIXI_APP__: Application<ICanvas>;
+}
 
-const room: Room = new Room({
-  heightMap: heightMap,
-  dragging: true,
-  centerCamera: true,
-  floorMaterial: new FloorMaterial(101),
-  floorThickness: 8,
-  wallHidden: true,
-  wallMaterial: new WallMaterial(108),
-  wallThickness: 8,
-  wallHeight: -1,
-  landscapeMaterial: new LandscapeMaterial(101),
-});
+export function preload(app: Application): void {
+  // pixi-stats
+  const stats = addStats(document, app);
+  const ticker = Ticker.shared;
+  ticker.add(stats.update, stats, UPDATE_PRIORITY.UTILITY);
 
-renderer.add(room);
+  // pixi dev-tools
+  globalThis.__PIXI_APP__ = app;
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(() => {
+    const stats = document.getElementById('stats');
+    stats?.remove();
+  });
+}

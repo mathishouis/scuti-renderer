@@ -7,7 +7,6 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "types": ["./src/types/Globals.d.ts", "vite/client"],
     "moduleResolution": "bundler",
     "isolatedModules": true,
     "noEmit": true,

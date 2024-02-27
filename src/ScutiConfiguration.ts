@@ -5,13 +5,14 @@ import { registerPath } from './utils/Assets';
 export interface Configuration {
   renderer: Scuti;
   resources: string;
-  canvas: HTMLElement;
+  canvas: HTMLCanvasElement;
   width?: number;
   height?: number;
   backgroundColor?: number;
   backgroundAlpha?: number;
   resizeTo?: HTMLElement | Window;
   zoom?: Partial<ZoomConfiguration>;
+  preload?: (app: Scuti['application']) => void;
 }
 
 interface ZoomConfiguration {
@@ -27,15 +28,16 @@ interface ZoomConfiguration {
 export class ScutiConfiguration {
   public renderer: Scuti;
 
-  private _canvas: HTMLElement;
-  private _width: number;
-  private _height: number;
-  private _backgroundColor: number;
-  private _backgroundAlpha: number;
+  private _canvas: Configuration['canvas'];
+  private _width: Configuration['width'];
+  private _height: Configuration['height'];
+  private _backgroundColor: Configuration['backgroundColor'];
+  private _backgroundAlpha: Configuration['backgroundAlpha'];
   private _resizeTo: Configuration['resizeTo'];
+  private _preload: Configuration['preload'];
   private _zoom: Configuration['zoom'];
 
-  constructor({ canvas, width, height, backgroundColor, backgroundAlpha, resizeTo, resources, renderer, zoom }: Configuration) {
+  constructor({ canvas, width, height, backgroundColor, backgroundAlpha, resizeTo, resources, renderer, preload, zoom }: Configuration) {
     this.renderer = renderer;
 
     this._canvas = canvas;
@@ -45,52 +47,53 @@ export class ScutiConfiguration {
     this._backgroundAlpha = backgroundAlpha ?? 1;
     this._resizeTo = resizeTo ?? window;
     this._zoom = { wheel: true, level: 2, min: 0.5, max: 8, step: 0.5, duration: 0.125, direction: 'center', ...zoom };
+    this._preload = preload;
 
     registerPath(resources);
   }
 
-  public get canvas(): HTMLElement {
+  public get canvas(): Configuration['canvas'] {
     return this._canvas;
   }
 
-  public set canvas(element: HTMLElement) {
+  public set canvas(element: Configuration['canvas']) {
     this._canvas = element;
     this.renderer.canvas = element;
     this.renderer.canvas.append(this.renderer.application.view as HTMLCanvasElement);
   }
 
-  public get width(): number {
+  public get width(): Configuration['width'] {
     return this._width;
   }
 
-  public set width(width: number) {
+  public set width(width: NonNullable<Configuration['width']>) {
     this._width = width;
     this.renderer.application.renderer.view.width = width;
   }
 
-  public get height(): number {
+  public get height(): Configuration['height'] {
     return this._height;
   }
 
-  public set height(height: number) {
+  public set height(height: NonNullable<Configuration['height']>) {
     this._height = height;
     this.renderer.application.renderer.view.height = height;
   }
 
-  public get backgroundColor(): number {
+  public get backgroundColor(): Configuration['backgroundColor'] {
     return this._backgroundColor;
   }
 
-  public set backgroundColor(color: number) {
+  public set backgroundColor(color: NonNullable<Configuration['backgroundColor']>) {
     this._backgroundColor = color;
     this.renderer.application.renderer.background.color = new Color(color);
   }
 
-  public get backgroundAlpha(): number {
+  public get backgroundAlpha(): Configuration['backgroundAlpha'] {
     return this._backgroundAlpha;
   }
 
-  public set backgroundAlpha(alpha: number) {
+  public set backgroundAlpha(alpha: NonNullable<Configuration['backgroundAlpha']>) {
     this._backgroundAlpha = alpha;
     this.renderer.application.renderer.background.alpha = alpha;
   }
@@ -101,6 +104,10 @@ export class ScutiConfiguration {
 
   public set resizeTo(element: NonNullable<Configuration['resizeTo']>) {
     this.renderer.application.resizeTo = element;
+  }
+
+  public preloadFn(app: Scuti): void {
+    this._preload?.(app.application);
   }
 
   public get zoom(): Configuration['zoom'] {
