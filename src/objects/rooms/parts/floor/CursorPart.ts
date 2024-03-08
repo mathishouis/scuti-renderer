@@ -48,8 +48,8 @@ export class CursorPart extends RoomPart {
 
   public move({ x, y, z }: Vector3D): void {
     this._position = { x, y, z };
-    this.container!.x = 32 * x - 32 * y - 0.75;
-    this.container!.y = 16 * x + 16 * y - 32 * z - 19.25;
+    this.container!.x = 32 * x - 32 * y - 1;
+    this.container!.y = 16 * x + 16 * y - 32 * z - 19;
 
     if (this.room.parsedHeightMap.door) {
       if (this.room.parsedHeightMap.door.x === x && this.room.parsedHeightMap.door.y === y) {

@@ -7,8 +7,6 @@ export const renderer: Scuti = new Scuti({
   canvas: document.getElementById('app') as HTMLCanvasElement,
   resources: 'http://127.0.0.1:8081',
   backgroundColor: 0x0c567c,
-  zoom: { direction: 'center' },
-  // camera: { position: { x: 200, y: 200 } },
   preload,
 });
 

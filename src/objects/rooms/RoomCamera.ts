@@ -17,7 +17,7 @@ export class RoomCamera {
   private _initListeners(): void {
     const events = this.room.renderer.application.renderer.events.domElement;
 
-    if (this.room.renderer.configuration.zoom?.wheel) {
+    if (this.room.renderer.configuration.zoom.wheel) {
       events.addEventListener('wheel', this._onZoom, { passive: true });
     }
 
@@ -31,7 +31,7 @@ export class RoomCamera {
   private unBindListeners(): void {
     const events = this.room.renderer.application.renderer.events.domElement;
 
-    if (this.room.renderer.configuration.zoom?.wheel) {
+    if (this.room.renderer.configuration.zoom.wheel) {
       events.removeEventListener('wheel', this._onZoom);
     }
 
@@ -43,14 +43,15 @@ export class RoomCamera {
   }
 
   private _onZoom(event: WheelEvent): void {
-    const zoom = this.room.renderer.configuration.zoom!;
+    console.log(this);
+    const zoom = this.room.renderer.configuration.zoom;
     const { step, level, min, max } = zoom;
 
-    zoom.level = Math.max(min!, Math.min(max!, level! + (event.deltaY > 0 ? -step! : step!)));
+    zoom.level = Math.max(min, Math.min(max, level + (event.deltaY > 0 ? -step : step)));
 
     if (level === zoom.level && (level === min || level === max)) return;
 
-    this.zoom(zoom.level!, zoom.duration!);
+    this.zoom(zoom.level, zoom.duration);
   }
 
   private _dragStart(): void {
@@ -64,7 +65,7 @@ export class RoomCamera {
     this.dragging = false;
     this._lastClickTime = Date.now();
 
-    if (this.isOutOfBounds() && this.room.renderer.configuration.camera?.center) this.centerCamera();
+    if (this.isOutOfBounds() && this.room.renderer.configuration.camera.center) this.centerCamera();
   }
 
   private _dragMove(event: PointerEvent): void {
@@ -80,10 +81,9 @@ export class RoomCamera {
 
   public _positionate(): void {
     const container = this.room.visualization!.container;
-    const camera = this.room.renderer.configuration.camera!;
+    const camera = this.room.renderer.configuration.camera;
     const bounds = container.getBounds();
 
-    // ts is dumb, camera.position values are always defined in scuticonfig
     container.pivot.x = bounds.right - container.width / 2 - camera.position.x;
     container.pivot.y = bounds.bottom - container.height / 2 - camera.position.y;
     container.x = this.room.renderer.application.view.width / 2;
@@ -123,14 +123,14 @@ export class RoomCamera {
         this.zooming = true;
       },
       onComplete: () => {
-        if (this.isOutOfBounds() && this.room.renderer.configuration.camera?.center) this.centerCamera();
+        if (this.isOutOfBounds() && this.room.renderer.configuration.camera.center) this.centerCamera();
         this.zooming = false;
       },
     };
 
     const container = this.room.visualization!.container;
 
-    if (this.room.renderer.configuration.zoom?.direction === 'cursor') {
+    if (this.room.renderer.configuration.zoom.direction === 'cursor') {
       const pointer = Object.assign({}, this.room.renderer.application.renderer.events.pointer.global);
       const { x: x1, y: y1 } = container.toLocal(pointer);
 
@@ -160,7 +160,7 @@ export class RoomCamera {
   }
 
   public destroy(): void {
-    if (this.room.visualization?.container != undefined) {
+    if (this.room.visualization!.container != undefined) {
       this.unBindListeners();
     }
   }

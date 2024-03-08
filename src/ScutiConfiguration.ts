@@ -17,6 +17,10 @@ export interface Configuration {
   preload?: (app: Scuti['application']) => void;
 }
 
+type Require<T> = {
+  [K in keyof T]: T[K] extends object ? Required<T[K]> : T[K];
+};
+
 interface ZoomConfiguration {
   wheel: boolean;
   level: number;
@@ -36,14 +40,14 @@ export class ScutiConfiguration {
   public renderer: Scuti;
 
   private _canvas: Configuration['canvas'];
-  private _width: Configuration['width'];
-  private _height: Configuration['height'];
-  private _backgroundColor: Configuration['backgroundColor'];
-  private _backgroundAlpha: Configuration['backgroundAlpha'];
-  private _resizeTo: Configuration['resizeTo'];
+  private _width: NonNullable<Configuration['width']>;
+  private _height: NonNullable<Configuration['height']>;
+  private _backgroundColor: NonNullable<Configuration['backgroundColor']>;
+  private _backgroundAlpha: NonNullable<Configuration['backgroundAlpha']>;
+  private _resizeTo: NonNullable<Configuration['resizeTo']>;
   private _preload: Configuration['preload'];
-  private _zoom: Configuration['zoom'];
-  private _camera: Configuration['camera'];
+  private _zoom: Require<ZoomConfiguration>;
+  private _camera: Require<CameraConfiguration>;
 
   constructor({
     canvas,
@@ -73,77 +77,78 @@ export class ScutiConfiguration {
     registerPath(resources);
   }
 
+  public preloadFn(app: Scuti): void {
+    if (this._preload == undefined) return;
+    this._preload(app.application);
+  }
+
   public get canvas(): Configuration['canvas'] {
     return this._canvas;
   }
 
-  public set canvas(element: Configuration['canvas']) {
+  public set canvas(element: typeof this._canvas) {
     this._canvas = element;
     this.renderer.canvas = element;
     this.renderer.canvas.append(this.renderer.application.view as HTMLCanvasElement);
   }
 
-  public get width(): Configuration['width'] {
+  public get width(): typeof this._width {
     return this._width;
   }
 
-  public set width(width: NonNullable<Configuration['width']>) {
+  public set width(width: typeof this._width) {
     this._width = width;
     this.renderer.application.renderer.view.width = width;
   }
 
-  public get height(): Configuration['height'] {
+  public get height(): typeof this._height {
     return this._height;
   }
 
-  public set height(height: NonNullable<Configuration['height']>) {
+  public set height(height: typeof this._height) {
     this._height = height;
     this.renderer.application.renderer.view.height = height;
   }
 
-  public get backgroundColor(): Configuration['backgroundColor'] {
+  public get backgroundColor(): typeof this._backgroundColor {
     return this._backgroundColor;
   }
 
-  public set backgroundColor(color: NonNullable<Configuration['backgroundColor']>) {
+  public set backgroundColor(color: typeof this._backgroundColor) {
     this._backgroundColor = color;
     this.renderer.application.renderer.background.color = new Color(color);
   }
 
-  public get backgroundAlpha(): Configuration['backgroundAlpha'] {
+  public get backgroundAlpha(): typeof this._backgroundAlpha {
     return this._backgroundAlpha;
   }
 
-  public set backgroundAlpha(alpha: NonNullable<Configuration['backgroundAlpha']>) {
+  public set backgroundAlpha(alpha: typeof this._backgroundAlpha) {
     this._backgroundAlpha = alpha;
     this.renderer.application.renderer.background.alpha = alpha;
   }
 
-  public get resizeTo(): Configuration['resizeTo'] {
+  public get resizeTo(): typeof this._resizeTo {
     return this._resizeTo;
   }
 
-  public set resizeTo(element: NonNullable<Configuration['resizeTo']>) {
+  public set resizeTo(element: typeof this._resizeTo) {
     this.renderer.application.resizeTo = element;
   }
 
-  public preloadFn(app: Scuti): void {
-    this._preload?.(app.application);
-  }
-
-  public get zoom(): Configuration['zoom'] {
+  public get zoom(): typeof this._zoom {
     return this._zoom;
   }
 
-  public set zoom(zoom: Configuration['zoom']) {
+  public set zoom(zoom: typeof this._zoom) {
     this._zoom = zoom;
   }
 
-  public get camera(): Configuration['camera'] {
+  public get camera(): typeof this._camera {
     return this._camera;
   }
 
-  public set camera(camera: Configuration['camera']) {
+  public set camera(camera: typeof this._camera) {
     this._camera = camera;
   }
 }

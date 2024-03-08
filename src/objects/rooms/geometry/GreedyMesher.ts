@@ -127,7 +127,6 @@ export class GreedyMesher {
         const stair: Stair | undefined = this.heightMap.getStair({ x, y: y - 1 }, 'y');
 
         if (!stair || !currentStair) continue;
-        console.log(stair, currentStair);
         if ([Direction.WEST, Direction.EAST].includes(stair.direction) || stair.type !== StairType.STAIR) {
           if (this.heightMap.getTileHeight({ x, y }) === this.heightMap.getTileHeight({ x, y: y - 1 })) {
             if (
@@ -201,7 +200,6 @@ export class GreedyMesher {
 
           // Check if it's a tiny stair
           if (size.x === 1 && size.y === 1) {
-            // || leftStair.direction === Direction.NORTH_WEST
             if (leftStair.direction === Direction.NORTH_EAST || leftStair.direction === Direction.NORTH_WEST) {
               rightStair.type = StairType.STAIR;
             } else if (leftStair.direction === Direction.SOUTH_EAST || leftStair.direction === Direction.SOUTH_WEST) {

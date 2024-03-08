@@ -21,6 +21,10 @@ export class StairPart extends RoomPart {
   constructor(public configuration: Configuration) {
     super();
 
+    this.container!.name = `x: ${this.configuration.position.x}, y: ${this.configuration.position.y} | ${
+      StairType[this.configuration.corners.left]
+    } -- ${StairType[this.configuration.corners.right]}`;
+
     this._registerEvents();
   }
 
@@ -192,7 +196,7 @@ export class StairPart extends RoomPart {
 
       if (this.configuration.corners.right === StairType.INNER_CORNER_STAIR) {
         if (this.configuration.direction === Direction.NORTH || this.configuration.direction === Direction.SOUTH) {
-          size.x -= (8 / 32) * (4 - i) + 0.25;
+          size.x -= (8 / 32) * (3 - i);
         } else if (this.configuration.direction === Direction.WEST || this.configuration.direction === Direction.EAST) {
           size.y -= (8 / 32) * i;
         }
