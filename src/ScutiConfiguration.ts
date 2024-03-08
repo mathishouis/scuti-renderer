@@ -1,6 +1,7 @@
 import { Scuti } from './Scuti';
 import { Color } from 'pixi.js';
 import { registerPath } from './utils/Assets';
+import { Vector2D } from '.';
 
 export interface Configuration {
   renderer: Scuti;
@@ -12,6 +13,7 @@ export interface Configuration {
   backgroundAlpha?: number;
   resizeTo?: HTMLElement | Window;
   zoom?: Partial<ZoomConfiguration>;
+  camera?: Partial<CameraConfiguration>;
   preload?: (app: Scuti['application']) => void;
 }
 
@@ -25,6 +27,11 @@ interface ZoomConfiguration {
   direction: 'cursor' | 'center';
 }
 
+interface CameraConfiguration {
+  center: boolean;
+  position: Partial<Vector2D>;
+}
+
 export class ScutiConfiguration {
   public renderer: Scuti;
 
@@ -36,8 +43,21 @@ export class ScutiConfiguration {
   private _resizeTo: Configuration['resizeTo'];
   private _preload: Configuration['preload'];
   private _zoom: Configuration['zoom'];
+  private _camera: Configuration['camera'];
 
-  constructor({ canvas, width, height, backgroundColor, backgroundAlpha, resizeTo, resources, renderer, preload, zoom }: Configuration) {
+  constructor({
+    canvas,
+    width,
+    height,
+    backgroundColor,
+    backgroundAlpha,
+    resizeTo,
+    resources,
+    renderer,
+    preload,
+    zoom,
+    camera,
+  }: Configuration) {
     this.renderer = renderer;
 
     this._canvas = canvas;
@@ -47,6 +67,7 @@ export class ScutiConfiguration {
     this._backgroundAlpha = backgroundAlpha ?? 1;
     this._resizeTo = resizeTo ?? window;
     this._zoom = { wheel: true, level: 2, min: 0.5, max: 8, step: 0.5, duration: 0.125, direction: 'center', ...zoom };
+    this._camera = { center: true, ...camera, position: { x: 0, y: 0, ...camera?.position } };
     this._preload = preload;
 
     registerPath(resources);
@@ -116,5 +137,13 @@ export class ScutiConfiguration {
 
   public set zoom(zoom: Configuration['zoom']) {
     this._zoom = zoom;
+  }
+
+  public get camera(): Configuration['camera'] {
+    return this._camera;
+  }
+
+  public set camera(camera: Configuration['camera']) {
+    this._camera = camera;
   }
 }

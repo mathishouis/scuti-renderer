@@ -22,8 +22,6 @@ export class Scuti {
   constructor(configuration: Omit<Configuration, 'renderer'>) {
     log('🚀 SCUTI', 'v0.0.0');
 
-    console.log(this.application);
-
     this.configuration = new ScutiConfiguration({ ...configuration, ...{ renderer: this } });
     this._initialize();
   }

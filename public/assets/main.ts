@@ -21,8 +21,9 @@ export function preload(app: Application): void {
 }
 
 if (import.meta.hot) {
-  import.meta.hot.accept(() => {
+  import.meta.hot.accept((): void => {
+    console.clear();
     const stats = document.getElementById('stats');
-    stats?.remove();
+    stats!.remove();
   });
 }

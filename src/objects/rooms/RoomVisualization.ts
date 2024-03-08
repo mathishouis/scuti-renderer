@@ -17,7 +17,6 @@ import { LandscapeWindowMask } from './parts/wall/landscapes/layers/items/Landsc
 import { RoomObject } from './objects/RoomObject';
 import { ObjectLayer } from './layers/ObjectLayer';
 import { landscapeOrder } from '../../utils';
-import { Direction, StairType } from '../..';
 
 interface RoomLayers {
   parts: PartLayer;
@@ -147,45 +146,14 @@ export class RoomVisualization {
 
     this.renderFloors();
     this.renderWalls();
+    this.room.camera!._positionate();
     if (this.layers.masks.childrens.length > 0) this.renderLandscapes();
 
     perf();
-
-    // Resets room position to the top-left corner by default
-    this.container.pivot.x = this.container.getBounds().left;
-    this.container.pivot.y = this.container.getBounds().top;
-
-    this.room.camera!.centerCamera(0);
   }
 
   public renderFloors(): void {
-    const stair = new StairPart({
-      material: this.room.floorMaterial,
-      position: { x: 0, y: 0, z: 0 },
-      length: 1,
-      thickness: this.room.floorThickness,
-      direction: Direction.WEST,
-      corners: {
-        left: StairType.STAIR,
-        right: StairType.TWIN_CORNER_STAIR,
-      },
-    });
-
-    const stair2 = new StairPart({
-      material: this.room.floorMaterial,
-      position: { x: 0, y: 0, z: 0 },
-      length: 1,
-      thickness: this.room.floorThickness,
-      direction: Direction.NORTH,
-      corners: {
-        left: StairType.TWIN_CORNER_STAIR,
-        right: StairType.STAIR,
-      },
-    });
-
-    [stair, stair2].forEach(stair => this.add(stair));
-
-    /* if (!this.room.floorHidden) {
+    if (!this.room.floorHidden) {
       this.greedyMesher.tiles.forEach((tile: TileMesh): void =>
         this._registerFloorPart(
           new TilePart({
@@ -210,7 +178,7 @@ export class RoomVisualization {
           }),
         ),
       );
-    } */
+    }
   }
 
   public renderWalls(): void {

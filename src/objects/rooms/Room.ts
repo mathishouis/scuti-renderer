@@ -21,7 +21,6 @@ interface Configuration {
   wallHidden?: boolean;
   landscapeMaterial?: LandscapeMaterial;
   dragging?: boolean;
-  centerCamera?: boolean;
 }
 
 export class Room extends GameObject {
@@ -42,7 +41,6 @@ export class Room extends GameObject {
   private _wallHeight: number;
   private _landscapeMaterial: LandscapeMaterial;
   private _dragging: boolean;
-  private _centerCamera: boolean;
 
   constructor({
     heightMap,
@@ -55,7 +53,6 @@ export class Room extends GameObject {
     wallHidden,
     landscapeMaterial,
     dragging,
-    centerCamera,
   }: Configuration) {
     super();
 
@@ -69,7 +66,6 @@ export class Room extends GameObject {
     this._wallHeight = wallHeight ?? 0;
     this._landscapeMaterial = landscapeMaterial ?? new LandscapeMaterial(101);
     this._dragging = dragging ?? true;
-    this._centerCamera = centerCamera ?? true;
 
     this._floorMaterial.room = this;
     this._wallMaterial.room = this;
@@ -83,7 +79,7 @@ export class Room extends GameObject {
     //this.renderer.application.ticker.maxFPS = 144; todo(): Add configurable FPS
 
     this.visualization.render();
-    this.renderer.application.stage.addChild(this.camera.container!);
+    this.renderer.application.stage.addChild(this.visualization.container);
   }
 
   public update({ parts, objects, cursor, mesher }: UpdateConfiguration): void {
@@ -224,13 +220,5 @@ export class Room extends GameObject {
 
   public set dragging(dragging: boolean) {
     this._dragging = dragging;
-  }
-
-  public get centerCamera(): boolean {
-    return this._centerCamera;
-  }
-
-  public set centerCamera(centerCamera: boolean) {
-    this._centerCamera = centerCamera;
   }
 }
