@@ -33,6 +33,7 @@ interface ZoomConfiguration {
 
 interface CameraConfiguration {
   center: boolean;
+  speed: number;
   position: Partial<Vector2D>;
 }
 
@@ -71,7 +72,7 @@ export class ScutiConfiguration {
     this._backgroundAlpha = backgroundAlpha ?? 1;
     this._resizeTo = resizeTo ?? window;
     this._zoom = { wheel: true, level: 2, min: 0.5, max: 8, step: 0.5, duration: 0.125, direction: 'center', ...zoom };
-    this._camera = { center: true, ...camera, position: { x: 0, y: 0, ...camera?.position } };
+    this._camera = { center: true, speed: 0.6, ...camera, position: { x: 0, y: 0, ...camera?.position } };
     this._preload = preload;
 
     registerPath(resources);

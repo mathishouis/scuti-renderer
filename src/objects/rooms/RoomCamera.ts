@@ -24,7 +24,7 @@ export class RoomCamera {
     window.addEventListener('resize', () => {
       // refactor(): ugly workaround
       setTimeout(() => {
-        this._positionate();
+        this.render();
         this.centerCamera(0);
       }, 10);
     });
@@ -88,7 +88,7 @@ export class RoomCamera {
     }
   };
 
-  public _positionate = (): void => {
+  public render = (): void => {
     const container = this.room.visualization!.container;
     const camera = this.room.renderer.configuration.camera;
     const { width: screenWidth, height: screenHeight } = this.room.renderer.application.view;
@@ -99,6 +99,8 @@ export class RoomCamera {
     container.pivot.y = bounds.bottom - container.height / 2 - camera.position.y;
     container.x = screenWidth / resolution / 2;
     container.y = screenHeight / resolution / 2;
+
+    this.zoom(this.room.renderer.configuration.zoom.level);
   };
 
   public isOutOfBounds = (): boolean => {
@@ -114,7 +116,7 @@ export class RoomCamera {
     );
   };
 
-  public centerCamera(duration: number = 0.6): void {
+  public centerCamera(duration: number = this.room.renderer.configuration.camera.speed): void {
     const container = this.room.visualization!.container;
 
     gsap.to(container.pivot, {
