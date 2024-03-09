@@ -1,7 +1,7 @@
 import { StairType } from '../enums/StairType';
 import { Direction } from '../enums/Direction';
 
-export type Stair = {
+export interface Stair {
   type: StairType;
   direction: Direction;
-};
+}

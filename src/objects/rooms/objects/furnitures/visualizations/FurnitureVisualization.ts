@@ -43,7 +43,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
         const storedMask = this.masks.get(mask.id);
 
         if (storedMask) {
-          this.furniture.room.visualization.layers.masks.remove(storedMask);
+          this.furniture.room.visualization!.layers.masks.remove(storedMask);
           storedMask.destroy();
         }
 
@@ -53,7 +53,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
         windowMask.render();
 
         this.masks.set(mask.id, windowMask);
-        this.furniture.room.visualization.layers.masks.add(windowMask);
+        this.furniture.room.visualization!.layers.masks.add(windowMask);
       });
     }
   }
@@ -70,15 +70,17 @@ export class FurnitureVisualization extends RoomObjectVisualization {
         y: this.getLayerYOffset(id, this.furniture.direction),
         z: this.getLayerZOffset(id, this.furniture.direction),
       },
-      blend: this.getLayerBlend(id) as any,
+      blend: this.getLayerBlend(id),
       flip: this.getLayerFlipped(id),
       interactive: this.getLayerInteractive(id),
       tag: this.getLayerTag(id),
     };
 
     if (this.layers.get(id)) {
+      // @ts-expect-error incompatible blend type definition
       this.layers.get(id)!.update(layerConfiguration);
     } else {
+      // @ts-expect-error incompatible blend type definition
       const furnitureLayer = new FurnitureLayer(layerConfiguration);
       furnitureLayer.render();
       this.container.addChild(furnitureLayer.sprite);
@@ -180,17 +182,17 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     return 0;
   }
 
-  public getLayerXOffset(id: number, direction: number): number {
+  public getLayerXOffset(id: number, _direction: number): number {
     const layer = this.data.layers.get(id);
     return layer ? layer.offsets.x : 0;
   }
 
-  public getLayerYOffset(id: number, direction: number): number {
+  public getLayerYOffset(id: number, _direction: number): number {
     const layer = this.data.layers.get(id);
     return layer ? layer.offsets.y : 0;
   }
 
-  public getLayerZOffset(id: number, direction: number): number {
+  public getLayerZOffset(id: number, _direction: number): number {
     const layer = this.data.layers.get(id);
     return layer ? layer.offsets.z : 0;
   }

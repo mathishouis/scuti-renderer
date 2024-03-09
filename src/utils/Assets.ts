@@ -9,8 +9,7 @@ let assetsPath: string;
 
 async function register(key: string, path: string, onUncached?: () => void): Promise<void> {
   if (loadedKeys[key] !== undefined) {
-    await loadedKeys[key];
-    return;
+    return await loadedKeys[key];
   }
 
   if (!Cache.has(key)) {

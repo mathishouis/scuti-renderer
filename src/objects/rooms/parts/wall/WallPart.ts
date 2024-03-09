@@ -9,21 +9,17 @@ import { WallMaterial } from '../../materials/WallMaterial';
 import { Direction } from '../../../../enums/Direction';
 import { ReverseSpriteMaskFilter } from '../../../filters/ReverseSpriteMaskFilter';
 import { wallOrder } from '../../../../utils/Sorting';
+import { WallMesh } from '../../../..';
 
-interface Configuration {
-  material?: WallMaterial;
-  position: Vector3D;
-  length: number;
-  thickness?: number;
-  height?: number;
-  direction: Direction;
-  corner: boolean;
-  dorr?: number;
+interface Configuration extends WallMesh {
+  material: WallMaterial;
+  thickness: number;
+  height: number;
 }
 
 export class WallPart extends RoomPart {
   public room!: Room;
-  public container: Container = new Container();
+  public container: Container | undefined = new Container();
   public eventManager: EventManager = new EventManager();
 
   public material: WallMaterial;
@@ -37,7 +33,7 @@ export class WallPart extends RoomPart {
   constructor({ material, position, length, thickness, height, direction, corner }: Configuration) {
     super();
 
-    this.material = material ?? new WallMaterial(101);
+    this.material = material;
     this.position = position;
     this.length = length;
     this.thickness = thickness ?? 8;
@@ -49,34 +45,34 @@ export class WallPart extends RoomPart {
   }
 
   private _registerEvents(): void {
-    this.container.onpointerdown = (event: FederatedPointerEvent) =>
+    this.container!.onpointerdown = (event: FederatedPointerEvent) =>
       this.eventManager.handlePointerDown({
         position: this.getGlobalWallPosition(event.global),
-        dragging: this.room.camera.hasDragged,
+        dragging: this.room.camera!.hasDragged,
         direction: this.direction,
       });
-    this.container.onpointerup = (event: FederatedPointerEvent) =>
+    this.container!.onpointerup = (event: FederatedPointerEvent) =>
       this.eventManager.handlePointerUp({
         position: this.getGlobalWallPosition(event.global),
-        dragging: this.room.camera.hasDragged,
+        dragging: this.room.camera!.hasDragged,
         direction: this.direction,
       });
-    this.container.onpointermove = (event: FederatedPointerEvent) =>
+    this.container!.onpointermove = (event: FederatedPointerEvent) =>
       this.eventManager.handlePointerMove({
         position: this.getGlobalWallPosition(event.global),
-        dragging: this.room.camera.hasDragged,
+        dragging: this.room.camera!.hasDragged,
         direction: this.direction,
       });
-    this.container.onpointerout = (event: FederatedPointerEvent) =>
+    this.container!.onpointerout = (event: FederatedPointerEvent) =>
       this.eventManager.handlePointerOut({
         position: this.getGlobalWallPosition(event.global),
-        dragging: this.room.camera.hasDragged,
+        dragging: this.room.camera!.hasDragged,
         direction: this.direction,
       });
-    this.container.onpointerover = (event: FederatedPointerEvent) =>
+    this.container!.onpointerover = (event: FederatedPointerEvent) =>
       this.eventManager.handlePointerOver({
         position: this.getGlobalWallPosition(event.global),
-        dragging: this.room.camera.hasDragged,
+        dragging: this.room.camera!.hasDragged,
         direction: this.direction,
       });
   }
@@ -99,29 +95,29 @@ export class WallPart extends RoomPart {
     });
 
     if (this._isDoor()) {
-      const filter: ReverseSpriteMaskFilter = new ReverseSpriteMaskFilter(this.room.visualization.layers.parts.door.sprite);
+      const filter: ReverseSpriteMaskFilter = new ReverseSpriteMaskFilter(this.room.visualization!.layers.parts.door.sprite);
       cube.faces[CubeFace.RIGHT].filters = [filter];
     }
 
-    this.container.hitArea = this._hitArea(this.direction, size);
-    this.container.eventMode = 'static';
-    this.container.x = position.x;
-    this.container.y = position.y;
+    this.container!.hitArea = this._hitArea(this.direction, size);
+    this.container!.eventMode = 'static';
+    this.container!.x = position.x;
+    this.container!.y = position.y;
 
-    this.container.addChild(cube);
+    this.container!.addChild(cube);
   }
 
   public destroy() {
     if (this.container !== undefined) {
       this.container.destroy();
-      this.container = undefined as any;
+      this.container = undefined;
     }
   }
 
   private _isDoor(): boolean {
     return (
       (this.room.parsedHeightMap.door &&
-        this.room.visualization.layers.parts.door &&
+        this.room.visualization!.layers.parts.door &&
         this.position.x - 1 === this.room.parsedHeightMap.door.x &&
         this.position.y <= this.room.parsedHeightMap.door.y &&
         this.room.parsedHeightMap.door.y <= this.position.y + this.length - 1 &&
@@ -177,7 +173,7 @@ export class WallPart extends RoomPart {
   }
 
   public getGlobalWallPosition(point: Point): OffsetVector2D {
-    const localPosition: Point = this.container.toLocal(point);
+    const localPosition: Point = this.container!.toLocal(point);
 
     let x = this.position.x;
     let y = this.length - (this.position.y + Math.floor(Math.abs(localPosition.x - this.thickness - 31) / 32)) + 1;

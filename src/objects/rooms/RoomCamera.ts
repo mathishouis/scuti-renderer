@@ -1,8 +1,8 @@
 import { Room } from './Room';
-import { Container, Matrix, Point, RenderTexture } from 'pixi.js';
+import { Matrix, Point, RenderTexture } from 'pixi.js';
 import { gsap } from 'gsap';
 
-export class RoomCamera extends Container {
+export class RoomCamera {
   public zooming: boolean = false;
   public dragging: boolean = false;
   public hasDragged: boolean = false;
@@ -11,20 +11,23 @@ export class RoomCamera extends Container {
   private _clickThreshold: number = 100;
 
   constructor(public room: Room) {
-    super();
-
-    this._initializeListeners();
-
-    this.addChild(room.visualization.container);
+    this._initListeners();
   }
 
-  // todo(): removeEventListener when destroying containers
-  private _initializeListeners(): void {
+  private _initListeners() {
     const events = this.room.renderer.application.renderer.events.domElement;
 
-    if (this.room.renderer.configuration.zoom?.wheel) {
+    if (this.room.renderer.configuration.zoom.wheel) {
       events.addEventListener('wheel', this._onZoom, { passive: true });
     }
+
+    window.addEventListener('resize', () => {
+      // refactor(): ugly workaround
+      setTimeout(() => {
+        this.render();
+        this.centerCamera(0);
+      }, 10);
+    });
 
     if (this.room.dragging) {
       events.addEventListener('pointerdown', this._dragStart);
@@ -33,15 +36,31 @@ export class RoomCamera extends Container {
     }
   }
 
+  private unBindListeners(): void {
+    const events = this.room.renderer.application.renderer.events.domElement;
+
+    if (this.room.renderer.configuration.zoom.wheel) {
+      events.removeEventListener('wheel', this._onZoom);
+    }
+
+    if (this.room.dragging) {
+      events.removeEventListener('pointerdown', this._dragStart);
+      events.removeEventListener('pointerup', this._dragEnd);
+      events.removeEventListener('pointermove', this._dragMove);
+    }
+  }
+
   private _onZoom = (event: WheelEvent): void => {
-    const zoom = this.room.renderer.configuration.zoom!;
+    if (event.ctrlKey) return event.stopPropagation();
+
+    const zoom = this.room.renderer.configuration.zoom;
     const { step, level, min, max } = zoom;
 
-    zoom.level = Math.max(min!, Math.min(max!, level! + (event.deltaY > 0 ? -step! : step!)));
+    zoom.level = Math.max(min, Math.min(max, level + (event.deltaY > 0 ? -step : step)));
 
     if (level === zoom.level && (level === min || level === max)) return;
 
-    this.zoom(zoom.level!, zoom.duration!);
+    this.zoom(zoom.level, zoom.duration);
   };
 
   private _dragStart = (): void => {
@@ -55,42 +74,60 @@ export class RoomCamera extends Container {
     this.dragging = false;
     this._lastClickTime = Date.now();
 
-    if (this.isOutOfBounds() && this.room.centerCamera) this.centerCamera();
+    if (this.isOutOfBounds() && this.room.renderer.configuration.camera.center) this.centerCamera();
   };
 
   private _dragMove = (event: PointerEvent): void => {
     if (this.dragging) {
+      const container = this.room.visualization!.container;
+
       this.hasDragged = true;
-      this.pivot.x -= event.movementX / (this.scale.x * devicePixelRatio);
-      this.pivot.y -= event.movementY / (this.scale.y * devicePixelRatio);
+
+      container.pivot.x -= event.movementX / container.scale.x;
+      container.pivot.y -= event.movementY / container.scale.y;
     }
   };
 
-  public isOutOfBounds(): boolean {
-    const { x, y } = this.pivot;
-    const { width, height } = this.room.renderer.application.view;
-    const { x: scaleX, y: scaleY } = { x: this.scale.x * devicePixelRatio, y: this.scale.y * devicePixelRatio };
-    const { width: scaledWidth, height: scaledHeight } = { width: width / scaleX / 2, height: height / scaleY / 2 };
+  public render = (): void => {
+    const container = this.room.visualization!.container;
+    const camera = this.room.renderer.configuration.camera;
+    const { width: screenWidth, height: screenHeight } = this.room.renderer.application.view;
+    const resolution = this.room.renderer.application.renderer.resolution;
+    const bounds = container.getBounds();
 
-    return x - scaledWidth > this.width / scaleX || x + scaledWidth < 0 || y - scaledHeight > this.height / scaleY || y + scaledHeight < 0;
-  }
+    container.pivot.x = bounds.right - container.width / 2 - camera.position.x;
+    container.pivot.y = bounds.bottom - container.height / 2 - camera.position.y;
+    container.x = screenWidth / resolution / 2;
+    container.y = screenHeight / resolution / 2;
 
-  public centerCamera(duration: number = 0.6): void {
-    gsap.to(this, {
-      x: Math.floor(this.room.renderer.application.view.width / 2),
-      y: Math.floor(this.room.renderer.application.view.height / 2),
+    this.zoom(this.room.renderer.configuration.zoom.level);
+  };
+
+  public isOutOfBounds = (): boolean => {
+    const container = this.room.visualization!.container;
+    const bounds = container.getBounds();
+    const { width: screenWidth, height: screenHeight } = this.room.renderer.application.view;
+
+    return (
+      bounds.right < 0 ||
+      bounds.left > screenWidth / container.scale.x ||
+      bounds.top > screenHeight / container.scale.y ||
+      bounds.bottom < 0
+    );
+  };
+
+  public centerCamera(duration: number = this.room.renderer.configuration.camera.speed): void {
+    const container = this.room.visualization!.container;
+
+    gsap.to(container.pivot, {
+      x: Math.floor(container._localBounds.maxX - container.width / container.scale.x / 2),
+      y: Math.floor(container._localBounds.maxY - container.height / container.scale.y / 2),
       duration,
       ease: 'expo.inOut',
     });
-    gsap.to(this.pivot, {
-      x: Math.floor(this.width / this.scale.x / 2),
-      y: Math.floor(this.height / this.scale.y / 2),
-      duration,
-      ease: 'expo.inOut',
-    });
   }
 
-  public zoom(zoom: number, duration: number = 0.8): void {
+  public zoom(zoom: number, duration: number = this.room.renderer.configuration.zoom.duration): void {
     const options: gsap.TweenVars = {
       x: zoom,
       y: zoom,
@@ -99,23 +136,25 @@ export class RoomCamera extends Container {
         this.zooming = true;
       },
       onComplete: () => {
-        if (this.isOutOfBounds() && this.room.centerCamera) this.centerCamera();
+        if (this.isOutOfBounds() && this.room.renderer.configuration.camera.center) this.centerCamera();
         this.zooming = false;
       },
     };
 
-    if (this.room.renderer.configuration.zoom?.direction === 'cursor') {
+    const container = this.room.visualization!.container;
+
+    if (this.room.renderer.configuration.zoom.direction === 'cursor') {
       const pointer = Object.assign({}, this.room.renderer.application.renderer.events.pointer.global);
-      const { x: x1, y: y1 } = this.toLocal(pointer);
+      const { x: x1, y: y1 } = container.toLocal(pointer);
 
       options.onUpdate = () => {
-        const { x: x2, y: y2 } = this.toLocal(pointer);
-        this.pivot.x += x1 - x2;
-        this.pivot.y += y1 - y2;
+        const { x: x2, y: y2 } = container.toLocal(pointer);
+        container.pivot.x += x1 - x2;
+        container.pivot.y += y1 - y2;
       };
     }
 
-    gsap.to(this.scale, options);
+    gsap.to(container.scale, options);
   }
 
   public async screenshot(target: HTMLElement): Promise<string> {
@@ -131,5 +170,9 @@ export class RoomCamera extends Container {
     renderer.render(this.room.renderer.application.stage, { renderTexture, transform });
 
     return await renderer.extract.base64(renderTexture);
+  }
+
+  public destroy(): void {
+    this.unBindListeners();
   }
 }

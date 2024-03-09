@@ -76,7 +76,7 @@ export class WallFurniture extends RoomFurniture {
       this.visualization.container.y = 16 * this.position.x + 16 * this.position.y - 32 + this.position.offsets.y * 2 + 31 - wallSize + 8;
     }
 
-    this.room.visualization.container.addChild(this.visualization.container);
+    this.room.visualization!.container.addChild(this.visualization.container);
   }
 
   public update(): void {
@@ -114,7 +114,7 @@ export class WallFurniture extends RoomFurniture {
     }
 
     if (this.visualization && this.visualization.data && this.visualization.data.masks && this.room) {
-      this.room.visualization.layers.masks.update();
+      this.room.visualization!.layers.masks.update();
       this.visualization.renderMasks();
     }
   }
@@ -150,7 +150,7 @@ export class WallFurniture extends RoomFurniture {
     if (update === undefined || update) this.visualization.update();
   }
 
-  public move({ position, duration }: { position: OffsetVector2D; duration?: number }): void {
+  public move({ position }: { position: OffsetVector2D; duration?: number }): void {
     this._position = position;
     // todo(): implement this
   }

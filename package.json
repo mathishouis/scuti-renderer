@@ -9,17 +9,16 @@
     "dist/*"
   ],
   "scripts": {
-    "dev": "vite --host",
     "build": "tsup",
-    "preview": "vite preview",
+    "dev": "vite serve public",
+    "preview": "vite build public vite preview public",
     "lint": "eslint --fix . --ignore-path .gitignore --ext .js,.ts src",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(ts|html|css)\""
   },
   "dependencies": {
     "@pixi/layers": "^2.1.0",
     "buffer": "^6.0.3",
     "gsap": "^3.12.4",
-    "pixi-stats": "^1.2.2",
     "pixi.js": "^7.2.4",
     "scuti-bundle": "^1.0.7",
     "seedrandom": "^3.0.5"
@@ -28,6 +27,7 @@
     "@types/seedrandom": "^3.0.8",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
+    "pixi-stats": "^1.2.2",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.1",

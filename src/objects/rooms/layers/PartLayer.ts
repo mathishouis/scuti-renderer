@@ -10,8 +10,8 @@ import { WallPart } from '../parts/wall/WallPart';
 import { LandscapePart } from '../parts/wall/landscapes/LandscapePart';
 
 export class PartLayer extends RoomLayer {
-  public cursor!: CursorPart;
-  public door!: DoorPart;
+  public cursor: CursorPart | undefined;
+  public door: DoorPart | undefined;
   public landscapes: Layer = new Layer();
   public childrens: RoomPart[] = [];
 
@@ -24,7 +24,8 @@ export class PartLayer extends RoomLayer {
   }
 
   public remove(item: RoomPart): void {
-    this.childrens = this.childrens.filter((filteredItem: RoomPart) => filteredItem !== item);
+    const index = this.childrens.indexOf(item);
+    if (index !== -1) this.childrens.splice(index, 1);
   }
 
   public clear(type?: (new () => TilePart) | (new () => StairPart) | (new () => WallPart) | (new () => LandscapePart)): void {
@@ -32,7 +33,7 @@ export class PartLayer extends RoomLayer {
       this.childrens = [];
       return;
     } else {
-      this.childrens = this.childrens.filter((filteredItem: RoomPart) => !(filteredItem instanceof type));
+      this.childrens = this.childrens.filter((filteredItem: RoomPart): boolean => !(filteredItem instanceof type));
     }
   }
 }

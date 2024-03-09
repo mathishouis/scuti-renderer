@@ -22,7 +22,6 @@ export class FurnitureValRandomizerVisualization extends FurnitureAnimatedVisual
   }
 
   public setState(id: number): void {
-    console.log(id);
     if (id === 0) {
       if (!this._running) {
         this._running = true;

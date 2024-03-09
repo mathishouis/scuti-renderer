@@ -15,6 +15,7 @@ interface Configuration {
 
 export class Cube extends Container {
   public faces: Record<number, Graphics> = {};
+
   constructor(public configuration: Configuration) {
     super();
 
@@ -37,8 +38,6 @@ export class Cube extends Container {
             -0.5,
             this.configuration.offsets?.[CubeFace.TOP]?.x ?? 0,
             this.configuration.offsets?.[CubeFace.TOP]?.y ?? 0,
-            //1 % 2 === 0 ? 32 : 64,
-            //1 % 2 === 0 ? 16 : 0
           ),
         })
         .moveTo(0, 0)

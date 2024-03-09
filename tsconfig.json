@@ -7,9 +7,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "types": ["./src/types/Globals.d.ts"],
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "noEmit": true,
 
@@ -23,6 +21,6 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitAny": true
   },
-  "include": ["src"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
