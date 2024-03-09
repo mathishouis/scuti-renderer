@@ -21,6 +21,14 @@ export class RoomCamera {
       events.addEventListener('wheel', this._onZoom, { passive: true });
     }
 
+    window.addEventListener('resize', () => {
+      // refactor(): ugly workaround
+      setTimeout(() => {
+        this._positionate();
+        this.centerCamera(0);
+      }, 10);
+    });
+
     if (this.room.dragging) {
       events.addEventListener('pointerdown', this._dragStart);
       events.addEventListener('pointerup', this._dragEnd);
@@ -43,6 +51,8 @@ export class RoomCamera {
   }
 
   private _onZoom = (event: WheelEvent): void => {
+    if (event.ctrlKey) return event.stopPropagation();
+
     const zoom = this.room.renderer.configuration.zoom;
     const { step, level, min, max } = zoom;
 
@@ -73,32 +83,34 @@ export class RoomCamera {
 
       this.hasDragged = true;
 
-      container.pivot.x -= event.movementX / (container.scale.x * devicePixelRatio);
-      container.pivot.y -= event.movementY / (container.scale.y * devicePixelRatio);
+      container.pivot.x -= event.movementX / container.scale.x;
+      container.pivot.y -= event.movementY / container.scale.y;
     }
   };
 
-  public _positionate(): void {
+  public _positionate = (): void => {
     const container = this.room.visualization!.container;
     const camera = this.room.renderer.configuration.camera;
+    const { width: screenWidth, height: screenHeight } = this.room.renderer.application.view;
+    const resolution = this.room.renderer.application.renderer.resolution;
     const bounds = container.getBounds();
 
     container.pivot.x = bounds.right - container.width / 2 - camera.position.x;
     container.pivot.y = bounds.bottom - container.height / 2 - camera.position.y;
-    container.x = this.room.renderer.application.view.width / 2;
-    container.y = this.room.renderer.application.view.height / 2;
-  }
+    container.x = screenWidth / resolution / 2;
+    container.y = screenHeight / resolution / 2;
+  };
 
   public isOutOfBounds = (): boolean => {
     const container = this.room.visualization!.container;
-    const containerBounds = container.getBounds();
-    const { width, height } = this.room.renderer.application.view;
+    const bounds = container.getBounds();
+    const { width: screenWidth, height: screenHeight } = this.room.renderer.application.view;
 
     return (
-      containerBounds.right < 0 ||
-      containerBounds.left > width / container.scale.x ||
-      containerBounds.top > height / container.scale.y ||
-      containerBounds.bottom < 0
+      bounds.right < 0 ||
+      bounds.left > screenWidth / container.scale.x ||
+      bounds.top > screenHeight / container.scale.y ||
+      bounds.bottom < 0
     );
   };
 
@@ -106,14 +118,14 @@ export class RoomCamera {
     const container = this.room.visualization!.container;
 
     gsap.to(container.pivot, {
-      x: Math.floor(container._localBounds.maxX - container.width / 2),
-      y: Math.floor(container._localBounds.maxY - container.height / 2),
+      x: Math.floor(container._localBounds.maxX - container.width / container.scale.x / 2),
+      y: Math.floor(container._localBounds.maxY - container.height / container.scale.y / 2),
       duration,
       ease: 'expo.inOut',
     });
   }
 
-  public zoom(zoom: number, duration: number = 0.8): void {
+  public zoom(zoom: number, duration: number = this.room.renderer.configuration.zoom.duration): void {
     const options: gsap.TweenVars = {
       x: zoom,
       y: zoom,
