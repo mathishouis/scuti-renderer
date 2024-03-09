@@ -14,7 +14,7 @@ export class RoomCamera {
     this._initListeners();
   }
 
-  private _initListeners(): void {
+  private _initListeners() {
     const events = this.room.renderer.application.renderer.events.domElement;
 
     if (this.room.renderer.configuration.zoom.wheel) {
@@ -42,8 +42,7 @@ export class RoomCamera {
     }
   }
 
-  private _onZoom(event: WheelEvent): void {
-    console.log(this);
+  private _onZoom = (event: WheelEvent): void => {
     const zoom = this.room.renderer.configuration.zoom;
     const { step, level, min, max } = zoom;
 
@@ -52,23 +51,23 @@ export class RoomCamera {
     if (level === zoom.level && (level === min || level === max)) return;
 
     this.zoom(zoom.level, zoom.duration);
-  }
+  };
 
-  private _dragStart(): void {
+  private _dragStart = (): void => {
     if (Date.now() - this._lastClickTime > this._clickThreshold) {
       this.dragging = true;
     }
-  }
+  };
 
-  private _dragEnd(): void {
+  private _dragEnd = (): void => {
     this.hasDragged = false;
     this.dragging = false;
     this._lastClickTime = Date.now();
 
     if (this.isOutOfBounds() && this.room.renderer.configuration.camera.center) this.centerCamera();
-  }
+  };
 
-  private _dragMove(event: PointerEvent): void {
+  private _dragMove = (event: PointerEvent): void => {
     if (this.dragging) {
       const container = this.room.visualization!.container;
 
@@ -77,7 +76,7 @@ export class RoomCamera {
       container.pivot.x -= event.movementX / (container.scale.x * devicePixelRatio);
       container.pivot.y -= event.movementY / (container.scale.y * devicePixelRatio);
     }
-  }
+  };
 
   public _positionate(): void {
     const container = this.room.visualization!.container;
@@ -90,7 +89,7 @@ export class RoomCamera {
     container.y = this.room.renderer.application.view.height / 2;
   }
 
-  public isOutOfBounds(): boolean {
+  public isOutOfBounds = (): boolean => {
     const container = this.room.visualization!.container;
     const containerBounds = container.getBounds();
     const { width, height } = this.room.renderer.application.view;
@@ -101,7 +100,7 @@ export class RoomCamera {
       containerBounds.top > height / container.scale.y ||
       containerBounds.bottom < 0
     );
-  }
+  };
 
   public centerCamera(duration: number = 0.6): void {
     const container = this.room.visualization!.container;
@@ -160,8 +159,6 @@ export class RoomCamera {
   }
 
   public destroy(): void {
-    if (this.room.visualization!.container != undefined) {
-      this.unBindListeners();
-    }
+    this.unBindListeners();
   }
 }

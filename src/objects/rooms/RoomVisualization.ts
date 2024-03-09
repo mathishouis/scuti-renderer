@@ -148,8 +148,6 @@ export class RoomVisualization {
     this.renderWalls();
     if (this.layers.masks.childrens.length > 0) this.renderLandscapes();
 
-    this.room.camera!._positionate();
-
     perf();
   }
 
