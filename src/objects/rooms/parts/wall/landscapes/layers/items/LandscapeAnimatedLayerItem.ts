@@ -4,7 +4,6 @@ import { LandscapeSpritesheet } from '../../entities/Landscape';
 import { asset } from '../../../../../../../utils/Assets';
 import { random } from '../../../../../../../utils/Random';
 import { Direction } from '../../../../../../../enums/Direction';
-import { ReverseSpriteMaskFilter } from '../../../../../../filters/ReverseSpriteMaskFilter';
 
 interface Configuration {
   layer: LandscapeAnimatedLayer;
@@ -37,26 +36,19 @@ export class LandscapeAnimatedLayerItem {
   }
 
   public render(): void {
-    const { door } = this.layer.part.room.visualization.layers.parts;
     const spritesheet: LandscapeSpritesheet = asset('room/materials');
 
     this.sprite = new Sprite(spritesheet.textures[this.texture]);
     this.sprite.skew.x = 0;
     this.sprite.skew.y = (this.layer.part.configuration.direction === Direction.WEST ? -1 : 1) * 0.466;
-    this.sprite.parentLayer = this.layer.part.container.parentLayer;
     this.sprite.mask = this.layer.part.mask;
-
-    if (this.door && door) {
-      const filter: ReverseSpriteMaskFilter = new ReverseSpriteMaskFilter(door.sprite);
-      this.sprite.filters = [filter];
-    }
   }
 
   public next(): void {
     const { room, configuration } = this.layer.part;
     const { direction, position, length } = configuration;
     const seed = room.parsedHeightMap.sizeY * room.parsedHeightMap.sizeX * this.index;
-    const maxY = (155 - this.sprite.height) * this.randomY; // todo(): i'm not very sure if it's the real use of randomY... :(
+    const maxY = (155 - this.sprite.height) * this.randomY;
     const minY = 0;
     const width = room.parsedHeightMap.sizeY * 32 + room.parsedHeightMap.sizeX * 32 + this.sprite.width;
     const percentage = (random(seed, 0, 12300, 0) + new Date().getTime() / (50 + this.speedX * 1.5)) % width;

@@ -16,11 +16,9 @@
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
   },
   "dependencies": {
-    "@pixi/layers": "^2.1.0",
     "buffer": "^6.0.3",
     "gsap": "^3.12.4",
-    "pixi-stats": "^1.2.2",
-    "pixi.js": "^7.2.4",
+    "pixi.js": "^8.19.0",
     "scuti-bundle": "^1.0.7",
     "seedrandom": "^3.0.5"
   },

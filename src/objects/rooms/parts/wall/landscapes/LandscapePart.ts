@@ -34,7 +34,6 @@ export class LandscapePart extends RoomPart {
     if (this._mask) return this._mask;
 
     this._mask = new Cube({
-      layer: this.room.renderer.layer,
       size: {
         x: this.configuration.direction === Direction.NORTH ? this.configuration.length : 0,
         y: this.configuration.direction === Direction.WEST ? this.configuration.length : 0,
@@ -77,9 +76,10 @@ export class LandscapePart extends RoomPart {
     this.container.interactiveChildren = false;
     this.container.addChild(this.mask);
     this.container.mask = this.mask;
-    this.container.parentLayer = this.room.visualization.layers.parts.landscapes;
     this.container.x = baseX;
     this.container.y = baseY - 32 * position.z - size.z * 32 + floorThickness;
+
+    this.room.visualization.layers.parts.landscapes.addChild(this.container);
   }
 
   public destroy() {

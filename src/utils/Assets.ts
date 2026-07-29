@@ -15,7 +15,7 @@ async function register(key: string, path: string, onUncached?: () => void): Pro
 
   if (!Cache.has(key)) {
     if (onUncached != null) onUncached();
-    Assets.add(key, assetsPath + path);
+    Assets.add({ alias: key, src: assetsPath + path });
     loadedKeys[key] = Assets.load(key);
     await loadedKeys[key];
   }

@@ -51,9 +51,10 @@ export class RoomVisualization {
   }
 
   private _initializeLayers(): void {
+    this.container.sortableChildren = true;
     this.layers.parts = new PartLayer(this.room);
-    this.room.renderer.layer.addChild(this.layers.parts.landscapes);
-    this.layers.parts.landscapes.zOrder = landscapeOrder();
+    this.layers.parts.landscapes.zIndex = landscapeOrder();
+    this.container.addChild(this.layers.parts.landscapes);
     this.layers.masks = new MaskLayer(this.room);
     this.layers.objects = new ObjectLayer(this.room);
   }
@@ -266,7 +267,9 @@ export class RoomVisualization {
   public add(item: RoomPart | RoomObject): void {
     if (item instanceof RoomPart) {
       this.layers.parts.add(item);
-      this.container.addChild(item.container);
+      if (!(item instanceof LandscapePart)) {
+        this.container.addChild(item.container);
+      }
     }
 
     if (item instanceof RoomObject) {

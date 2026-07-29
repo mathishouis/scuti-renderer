@@ -68,7 +68,7 @@ export class RoomCamera extends Container {
 
   public isOutOfBounds(): boolean {
     const { x, y } = this.pivot;
-    const { width, height } = this.room.renderer.application.view;
+    const { width, height } = this.room.renderer.application.canvas;
     const { x: scaleX, y: scaleY } = { x: this.scale.x * devicePixelRatio, y: this.scale.y * devicePixelRatio };
     const { width: scaledWidth, height: scaledHeight } = { width: width / scaleX / 2, height: height / scaleY / 2 };
 
@@ -77,8 +77,8 @@ export class RoomCamera extends Container {
 
   public centerCamera(duration: number = 0.6): void {
     gsap.to(this, {
-      x: Math.floor(this.room.renderer.application.view.width / 2),
-      y: Math.floor(this.room.renderer.application.view.height / 2),
+      x: Math.floor(this.room.renderer.application.canvas.width / 2),
+      y: Math.floor(this.room.renderer.application.canvas.height / 2),
       duration,
       ease: 'expo.inOut',
     });
@@ -126,9 +126,14 @@ export class RoomCamera extends Container {
     const renderTexture: RenderTexture = RenderTexture.create({ height: frame.height, width: frame.width });
     const transform: Matrix = new Matrix().translate(-rectPosition.x, -rectPosition.y);
 
-    renderTexture.baseTexture.clear.setValue(this.room.renderer.configuration.backgroundColor);
-    renderTexture.baseTexture.clear.setAlpha(this.room.renderer.configuration.backgroundAlpha);
-    renderer.render(this.room.renderer.application.stage, { renderTexture, transform });
+    const bg = this.room.renderer.configuration.backgroundColor;
+    const clearColor: [number, number, number, number] = [
+      ((bg >> 16) & 0xff) / 255,
+      ((bg >> 8) & 0xff) / 255,
+      (bg & 0xff) / 255,
+      this.room.renderer.configuration.backgroundAlpha,
+    ];
+    renderer.render({ container: this.room.renderer.application.stage, target: renderTexture, transform, clearColor });
 
     return await renderer.extract.base64(renderTexture);
   }

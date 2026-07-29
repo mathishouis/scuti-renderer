@@ -1,7 +1,6 @@
 import { Color, Container, Graphics, Matrix, Texture } from 'pixi.js';
 import { CubeFace } from '../../../enums/CubeFace';
 import { Vector2D, Vector3D } from '../../../types/Vector';
-import { Layer } from '@pixi/layers';
 
 interface Configuration {
   texture?: Texture;
@@ -10,7 +9,6 @@ interface Configuration {
   offsets?: Record<number, Vector2D>;
   zOrders?: Record<number, number>;
   shadows?: Record<number, number>;
-  layer?: Layer;
 }
 
 export class Cube extends Container {
@@ -27,20 +25,6 @@ export class Cube extends Container {
 
     if (this.configuration.size.x > 0 && this.configuration.size.y > 0)
       this.faces[CubeFace.TOP] = new Graphics()
-        .beginTextureFill({
-          texture: texture,
-          color: new Color(color).premultiply(this.configuration.shadows?.[CubeFace.TOP] ?? 1).toNumber(),
-          matrix: new Matrix(
-            1,
-            0.5,
-            1,
-            -0.5,
-            this.configuration.offsets?.[CubeFace.TOP]?.x ?? 0,
-            this.configuration.offsets?.[CubeFace.TOP]?.y ?? 0,
-            //1 % 2 === 0 ? 32 : 64,
-            //1 % 2 === 0 ? 16 : 0
-          ),
-        })
         .moveTo(0, 0)
         .lineTo(32 * this.configuration.size.y, -16 * this.configuration.size.y)
         .lineTo(
@@ -49,40 +33,52 @@ export class Cube extends Container {
         )
         .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)
         .lineTo(0, 0)
-        .endFill();
-    if (this.configuration.size.x > 0 && this.configuration.size.z > 0)
-      this.faces[CubeFace.LEFT] = new Graphics()
-        .beginTextureFill({
-          texture: texture,
-          color: new Color(color).premultiply(this.configuration.shadows?.[CubeFace.LEFT] ?? 0.8).toNumber(),
+        .fill({
+          texture,
+          color: new Color(color).premultiply(this.configuration.shadows?.[CubeFace.TOP] ?? 1).toNumber(),
           matrix: new Matrix(
             1,
             0.5,
-            0,
             1,
-            this.configuration.offsets?.[CubeFace.LEFT]?.x ?? 0,
-            this.configuration.offsets?.[CubeFace.LEFT]?.y ?? 0,
+            -0.5,
+            this.configuration.offsets?.[CubeFace.TOP]?.x ?? 0,
+            this.configuration.offsets?.[CubeFace.TOP]?.y ?? 0,
           ),
-        })
+          textureSpace: 'global', // ← indispensable pour retrouver le comportement v7
+        });
+
+    if (this.configuration.size.x > 0 && this.configuration.size.z > 0) {
+      const leftMatrix = new Matrix(
+        1, 0.5, 0, 1,
+        this.configuration.offsets?.[CubeFace.LEFT]?.x ?? 0,
+        this.configuration.offsets?.[CubeFace.LEFT]?.y ?? 0,
+      );
+      // Si la texture est inversée par rapport à v7, décommentez :
+      // leftMatrix.invert();
+
+      this.faces[CubeFace.LEFT] = new Graphics()
         .moveTo(0, 0)
         .lineTo(0, this.configuration.size.z * 32)
         .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x + this.configuration.size.z * 32)
         .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)
-        .endFill();
-    if (this.configuration.size.y > 0 && this.configuration.size.z > 0)
+        .fill({
+          texture,
+          textureSpace: 'global',
+          color: new Color(color).premultiply(this.configuration.shadows?.[CubeFace.LEFT] ?? 0.8).toNumber(),
+          matrix: leftMatrix,
+        });
+    }
+
+    if (this.configuration.size.y > 0 && this.configuration.size.z > 0) {
+      const rightMatrix = new Matrix(
+        1, -0.5, 0, 1,
+        this.configuration.offsets?.[CubeFace.RIGHT]?.x ?? 0,
+        this.configuration.offsets?.[CubeFace.RIGHT]?.y ?? 0,
+      );
+      // Si la texture est inversée par rapport à v7, décommentez :
+      // rightMatrix.invert();
+
       this.faces[CubeFace.RIGHT] = new Graphics()
-        .beginTextureFill({
-          texture: texture,
-          color: new Color(color).premultiply(this.configuration.shadows?.[CubeFace.RIGHT] ?? 0.71).toNumber(),
-          matrix: new Matrix(
-            1,
-            -0.5,
-            0,
-            1,
-            this.configuration.offsets?.[CubeFace.RIGHT]?.x ?? 0,
-            this.configuration.offsets?.[CubeFace.RIGHT]?.y ?? 0,
-          ),
-        })
         .moveTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)
         .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x + this.configuration.size.z * 32)
         .lineTo(
@@ -94,23 +90,12 @@ export class Cube extends Container {
           -16 * (this.configuration.size.y - 1) + 16 * (this.configuration.size.x - 1),
         )
         .lineTo(32 * this.configuration.size.x, 16 * this.configuration.size.x)
-        .endFill();
-
-    if (this.configuration.layer) {
-      if (this.faces[CubeFace.TOP]) {
-        this.faces[CubeFace.TOP].parentLayer = this.configuration.layer;
-        this.faces[CubeFace.TOP].zOrder = this.configuration.zOrders?.[CubeFace.TOP] ?? 0;
-      }
-
-      if (this.faces[CubeFace.LEFT]) {
-        this.faces[CubeFace.LEFT].parentLayer = this.configuration.layer;
-        this.faces[CubeFace.LEFT].zOrder = this.configuration.zOrders?.[CubeFace.LEFT] ?? 0;
-      }
-
-      if (this.faces[CubeFace.RIGHT]) {
-        this.faces[CubeFace.RIGHT].parentLayer = this.configuration.layer;
-        this.faces[CubeFace.RIGHT].zOrder = this.configuration.zOrders?.[CubeFace.RIGHT] ?? 0;
-      }
+        .fill({
+          texture,
+          textureSpace: 'global',
+          color: new Color(color).premultiply(this.configuration.shadows?.[CubeFace.RIGHT] ?? 0.71).toNumber(),
+          matrix: rightMatrix,
+        });
     }
 
     if (this.faces[CubeFace.TOP]) this.addChild(this.faces[CubeFace.TOP]);

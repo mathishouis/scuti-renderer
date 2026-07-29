@@ -81,6 +81,7 @@ export class StairPart extends RoomPart {
     const position = this._containerPosition();
     this.container.x = position.x;
     this.container.y = position.y;
+    this.container.zIndex = floorOrder(this._position, { x: 1, y: this._length });
 
     switch (this._direction) {
       case Direction.NORTH:
@@ -132,22 +133,8 @@ export class StairPart extends RoomPart {
       );
     } else if (this._direction === Direction.SOUTH) {
       this.container.hitArea = new Polygon();
-      /*this.container.addChild(new Graphics().beginFill(0x00FF00, 0.3).drawPolygon(
-                new Point(0 - 24, 0 + 12),
-                new Point(32 * 1 - 24, -16 * 1 + 12),
-                new Point(32 * (this._length + 1) + 32 * (1 - 1) - 24, -16 * (1 - 1) + 16 * (this._length - 1) + 12),
-                new Point(32 * this._length - 24, 16 * this._length + 12),
-                new Point(0 - 24, 0 + 12)
-            ).endFill());*/
     } else if (this._direction === Direction.EAST) {
       this.container.hitArea = new Polygon();
-      /*this.container.addChild(new Graphics().beginFill(0xFF0000, 0.3).drawPolygon(
-                new Point(0 - 24, 24 - 12),
-                new Point(32 * this._length - 24, -16 * this._length + 24 - 12),
-                new Point(64 + 32 * (this._length - 1) - 24, -16 * (this._length - 1) + 24 - 12),
-                new Point(32 - 24, 40 - 12),
-                new Point(0 - 24, 24 - 12)
-            ).endFill());*/
     }
 
     this.container.eventMode = 'static';
@@ -270,7 +257,6 @@ export class StairPart extends RoomPart {
       }
 
       const cube: Cube = new Cube({
-        layer: this.room.renderer.layer,
         zOrders: zOrders,
         texture: material.texture,
         color: material.color,

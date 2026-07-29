@@ -1,54 +1,35 @@
-import { Sprite, SpriteMaskFilter } from 'pixi.js';
+import { Filter, GlProgram } from 'pixi.js';
 
-const vertex = `attribute vec2 aVertexPosition;
-attribute vec2 aTextureCoord;
+const vertex = `#version 300 es
+precision highp float;
+in vec2 aPosition;
+out vec2 vTextureCoord;
+uniform vec4 uInputSize;
+uniform vec4 uOutputFrame;
+uniform vec4 uOutputTexture;
 
-uniform mat3 projectionMatrix;
-uniform mat3 otherMatrix;
-
-varying vec2 vMaskCoord;
-varying vec2 vTextureCoord;
-
-void main(void)
-{
-    gl_Position = vec4((projectionMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
-
-    vTextureCoord = aTextureCoord;
-    vMaskCoord = ( otherMatrix * vec3( aTextureCoord, 1.0)  ).xy;
+void main(void) {
+  vec2 position = aPosition * uOutputFrame.zw + uOutputFrame.xy;
+  position.x = position.x * (2.0 / uOutputTexture.x) - 1.0;
+  position.y = position.y * (2.0 / uOutputTexture.y) - 1.0;
+  gl_Position = vec4(position, 0.0, 1.0);
+  vTextureCoord = aPosition * (uOutputFrame.zw * uInputSize.zw);
 }`;
 
-const fragment = `
-    varying vec2 vMaskCoord;
-    varying vec2 vTextureCoord;
-    
-    uniform sampler2D uSampler;
-    uniform sampler2D mask;
-    uniform float alpha;
-    uniform float npmAlpha;
-    uniform vec4 maskClamp;
-    
-    void main(void)
-    {
-        float clip = step(3.5,
-            step(maskClamp.x, vMaskCoord.x) +
-            step(maskClamp.y, vMaskCoord.y) +
-            step(vMaskCoord.x, maskClamp.z) +
-            step(vMaskCoord.y, maskClamp.w));
-    
-        vec4 original = texture2D(uSampler, vTextureCoord);
-        vec4 masky = texture2D(mask, vMaskCoord);
-        float alphaMul = 1.0 - npmAlpha * (1.0 - masky.a);
-    
-        original *= (alphaMul * masky.a * alpha * clip);
-    
-        gl_FragColor = original;
-    }
-`;
+const fragment = `#version 300 es
+precision mediump float;
+in vec2 vTextureCoord;
+out vec4 finalColor;
+uniform sampler2D uTexture;
 
-export class BlackSpriteMaskFilter extends SpriteMaskFilter {
-  constructor(maskSprite: Sprite) {
-    super(vertex, fragment);
+void main(void) {
+  finalColor = texture(uTexture, vTextureCoord);
+}`;
 
-    this.maskSprite = maskSprite;
+export class BlackSpriteMaskFilter extends Filter {
+  constructor(maskSprite: any) {
+    super({
+      glProgram: GlProgram.from({ vertex, fragment, name: 'black-sprite-mask-filter' }),
+    });
   }
 }

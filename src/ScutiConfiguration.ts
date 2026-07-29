@@ -56,7 +56,7 @@ export class ScutiConfiguration {
   public set canvas(element: HTMLElement) {
     this._canvas = element;
     this.renderer.canvas = element;
-    this.renderer.canvas.append(this.renderer.application.view as HTMLCanvasElement);
+    this.renderer.canvas.append(this.renderer.application.canvas);
   }
 
   public get width(): number {
@@ -65,7 +65,7 @@ export class ScutiConfiguration {
 
   public set width(width: number) {
     this._width = width;
-    this.renderer.application.renderer.view.width = width;
+    this.renderer.application.renderer.canvas.width = width;
   }
 
   public get height(): number {
@@ -74,7 +74,7 @@ export class ScutiConfiguration {
 
   public set height(height: number) {
     this._height = height;
-    this.renderer.application.renderer.view.height = height;
+    this.renderer.application.renderer.canvas.height = height;
   }
 
   public get backgroundColor(): number {

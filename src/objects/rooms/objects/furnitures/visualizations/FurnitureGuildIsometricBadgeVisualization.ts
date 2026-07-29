@@ -1,6 +1,6 @@
 import { FurnitureAnimatedVisualization } from './FurnitureAnimatedVisualization';
 import { RoomFurniture } from '../RoomFurniture';
-import { Container, ImageResource, Matrix, Rectangle, Sprite, Texture } from 'pixi.js';
+import { Assets, Container, Matrix, Sprite, Texture } from 'pixi.js';
 
 interface Configuration {
   furniture: RoomFurniture;
@@ -44,10 +44,14 @@ export class FurnitureGuildIsometricBadgeVisualization extends FurnitureAnimated
     const trim = super.getLayerTexture(id)?.trim;
 
     if (tag === FurnitureGuildIsometricBadgeVisualization.THUMBNAIL_TAG && this._thumbnail && trim) {
-      const baseTexture = Texture.from(this._thumbnail);
+      const thumbnailTexture = Texture.from(this._thumbnail);
+      if (!thumbnailTexture) {
+        Assets.load(this._thumbnail).then((result) => { if (result) this.reset(); }).catch(() => {});
+        return super.getLayerTexture(id);
+      }
       const scale = 1.1;
       const matrix = new Matrix();
-      const difference = trim.width / baseTexture.width;
+      const difference = trim.width / thumbnailTexture.width;
 
       switch (this.furniture.direction) {
         case 2:
@@ -56,7 +60,7 @@ export class FurnitureGuildIsometricBadgeVisualization extends FurnitureAnimated
           matrix.c = 0;
           matrix.d = difference * scale;
           matrix.tx = 0;
-          matrix.ty = 0.5 * difference * baseTexture.width;
+          matrix.ty = 0.5 * difference * thumbnailTexture.width;
           break;
         case 0:
         case 4:
@@ -77,13 +81,18 @@ export class FurnitureGuildIsometricBadgeVisualization extends FurnitureAnimated
       }
 
       const container = new Container();
-      const sprite = new Sprite(baseTexture);
-      sprite.transform.setFromMatrix(matrix);
-      container.addChild(sprite);
-      const texture = this.furniture.room.renderer.application.renderer.generateTexture(container);
-      texture.trim = new Rectangle(trim.x, trim.y, texture.width, texture.height);
+      const sprite = new Sprite(thumbnailTexture);
 
-      return texture;
+      sprite.scale.set(
+        Math.sqrt(matrix.a ** 2 + matrix.b ** 2),
+        Math.sqrt(matrix.c ** 2 + matrix.d ** 2),
+      );
+      sprite.skew.set(Math.atan2(-matrix.c, matrix.d), Math.atan2(matrix.b, matrix.a));
+      sprite.rotation = 0;
+      sprite.position.set(matrix.tx, matrix.ty);
+
+      container.addChild(sprite);
+      return this.furniture.room.renderer.application.renderer.generateTexture(container);
     }
 
     return super.getLayerTexture(id);

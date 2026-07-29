@@ -4,7 +4,6 @@ import { LandscapePart } from '../LandscapePart';
 import { Cube } from '../../../../geometry/Cube';
 import { CubeFace } from '../../../../../../enums/CubeFace';
 import { Direction } from '../../../../../../enums/Direction';
-import { ReverseSpriteMaskFilter } from '../../../../../filters/ReverseSpriteMaskFilter';
 
 export abstract class LandscapeLayer {
   public container: Container = new Container();
@@ -45,10 +44,7 @@ export abstract class LandscapeLayer {
   }
 
   public render(): void {
-    const { visualization, renderer } = this.part.room;
-    const { door } = visualization.layers.parts;
     const cube: Cube = new Cube({
-      layer: this.part.container.parentLayer,
       size: this.size,
       zOrders: {
         [CubeFace.TOP]: -3,
@@ -63,12 +59,6 @@ export abstract class LandscapeLayer {
       color: this.color,
       texture: this.texture,
     });
-
-    if (this.door) {
-      const filter: ReverseSpriteMaskFilter = new ReverseSpriteMaskFilter(door.sprite);
-      cube.faces[CubeFace.RIGHT].filters = [filter];
-      cube.faces[CubeFace.RIGHT].filterArea = door.sprite.filterArea;
-    }
 
     const { x, y } = this.position;
     cube.x = x;

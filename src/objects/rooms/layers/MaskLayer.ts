@@ -3,8 +3,6 @@ import { Room } from '../Room';
 import { LandscapeWindowMask } from '../parts/wall/landscapes/layers/items/LandscapeWindowMask';
 import { LandscapePart } from '../parts/wall/landscapes/LandscapePart';
 import { Container, Sprite } from 'pixi.js';
-import { Layer } from '@pixi/layers';
-import { BlackSpriteMaskFilter } from '../../filters/BlackSpriteMaskFilter';
 
 export class MaskLayer extends RoomLayer {
   public childrens: LandscapeWindowMask[] = [];
@@ -30,7 +28,7 @@ export class MaskLayer extends RoomLayer {
 
   public destroy(): void {
     if (this.sprite !== undefined) {
-      this.room.visualization.layers.parts.landscapes.filters = [];
+      this.room.visualization.layers.parts.landscapes.mask = null;
       this.sprite.destroy(true);
       this.sprite = undefined as any;
     }
@@ -44,7 +42,7 @@ export class MaskLayer extends RoomLayer {
 
     this.sprite = this.landscapeSprite();
     this.room.visualization.container.addChild(this.sprite);
-    this.room.visualization.layers.parts.landscapes.filters = [new BlackSpriteMaskFilter(this.sprite)];
+    //this.room.visualization.layers.parts.landscapes.mask = this.sprite;
   }
 
   public landscapeSprite(): Sprite {

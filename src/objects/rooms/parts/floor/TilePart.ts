@@ -74,7 +74,6 @@ export class TilePart extends RoomPart {
 
     const position = this._containerPosition();
     const cube: Cube = new Cube({
-      layer: this.room.renderer.layer,
       zOrders: {
         [CubeFace.TOP]: zOrder,
         [CubeFace.LEFT]: zOrder,
@@ -88,11 +87,12 @@ export class TilePart extends RoomPart {
         z: this._door ? 0 : this._thickness / 32,
       },
     });
-    this.container.addChild(new Graphics().lineStyle(2, 0xff0000).drawPolygon(this._hitArea()).endFill());
+    this.container.addChild(new Graphics().poly(this._hitArea().points, true).stroke({ color: 0xff0000, width: 2 }));
     this.container.hitArea = this._hitArea();
     this.container.eventMode = 'static';
     this.container.x = position.x;
     this.container.y = position.y;
+    this.container.zIndex = zOrder;
 
     this.container.addChild(cube);
   }

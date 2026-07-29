@@ -2,7 +2,7 @@ import { FurnitureBrandedImageVisualization } from './FurnitureBrandedImageVisua
 import { Direction } from '../../../../../enums/Direction';
 import { Vector2D, Vector3D } from '../../../../../types/Vector';
 import { RoomFurniture } from '../RoomFurniture';
-import { Texture } from 'pixi.js';
+import { Assets, Texture } from 'pixi.js';
 
 interface Configuration {
   furniture: RoomFurniture;
@@ -18,11 +18,26 @@ export class FurnitureRoomBackgroundVisualization extends FurnitureBrandedImageV
 
     const texture = Texture.from(this._image);
 
-    this._directionalOffsets.set(1, { x: 0, y: -texture.orig.height });
+    if (texture) {
+      this._setDirectionalOffsets(texture.orig.width, texture.orig.height);
+    } else {
+      Assets.load(this._image)
+        .then((result) => {
+          if (!result) return;
+          const loaded = Texture.from(this._image);
+          if (loaded) this._setDirectionalOffsets(loaded.orig.width, loaded.orig.height);
+          this.reset();
+        })
+        .catch(() => {});
+    }
+  }
+
+  private _setDirectionalOffsets(w: number, h: number): void {
+    this._directionalOffsets.set(1, { x: 0, y: -h });
     this._directionalOffsets.set(3, { x: 0, y: 0 });
-    this._directionalOffsets.set(4, { x: -texture.orig.width / 2, y: -texture.orig.height / 2 });
-    this._directionalOffsets.set(5, { x: -texture.orig.width, y: 0 });
-    this._directionalOffsets.set(7, { x: -texture.orig.width, y: -texture.orig.height });
+    this._directionalOffsets.set(4, { x: -w / 2, y: -h / 2 });
+    this._directionalOffsets.set(5, { x: -w, y: 0 });
+    this._directionalOffsets.set(7, { x: -w, y: -h });
   }
 
   public getLayerXOffset(id: number, direction: number): number {

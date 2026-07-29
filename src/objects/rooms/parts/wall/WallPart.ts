@@ -7,7 +7,6 @@ import { OffsetVector2D, Vector2D, Vector3D } from '../../../../types/Vector';
 import { CubeFace } from '../../../../enums/CubeFace';
 import { WallMaterial } from '../../materials/WallMaterial';
 import { Direction } from '../../../../enums/Direction';
-import { ReverseSpriteMaskFilter } from '../../../filters/ReverseSpriteMaskFilter';
 import { wallOrder } from '../../../../utils/Sorting';
 
 interface Configuration {
@@ -87,7 +86,6 @@ export class WallPart extends RoomPart {
     const position = this._containerPosition(size);
 
     const cube: Cube = new Cube({
-      layer: this.room.renderer.layer,
       zOrders: {
         [CubeFace.TOP]: zOrder,
         [CubeFace.LEFT]: zOrder - 0.5,
@@ -98,15 +96,11 @@ export class WallPart extends RoomPart {
       size: size,
     });
 
-    if (this._isDoor()) {
-      const filter: ReverseSpriteMaskFilter = new ReverseSpriteMaskFilter(this.room.visualization.layers.parts.door.sprite);
-      cube.faces[CubeFace.RIGHT].filters = [filter];
-    }
-
     this.container.hitArea = this._hitArea(this.direction, size);
     this.container.eventMode = 'static';
     this.container.x = position.x;
     this.container.y = position.y;
+    this.container.zIndex = zOrder;
 
     this.container.addChild(cube);
   }

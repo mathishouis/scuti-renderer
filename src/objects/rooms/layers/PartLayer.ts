@@ -3,7 +3,7 @@ import { Room } from '../Room';
 import { RoomPart } from '../parts/RoomPart';
 import { CursorPart } from '../parts/floor/CursorPart';
 import { DoorPart } from '../parts/wall/DoorPart';
-import { Layer } from '@pixi/layers';
+import { Container } from 'pixi.js';
 import { TilePart } from '../parts/floor/TilePart';
 import { StairPart } from '../parts/floor/StairPart';
 import { WallPart } from '../parts/wall/WallPart';
@@ -12,7 +12,7 @@ import { LandscapePart } from '../parts/wall/landscapes/LandscapePart';
 export class PartLayer extends RoomLayer {
   public cursor!: CursorPart;
   public door!: DoorPart;
-  public landscapes: Layer = new Layer();
+  public landscapes: Container = new Container();
   public childrens: RoomPart[] = [];
 
   constructor(public room: Room) {

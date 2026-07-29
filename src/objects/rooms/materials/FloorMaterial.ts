@@ -17,7 +17,7 @@ export class FloorMaterial extends RoomMaterial {
     const material: Material = asset('room/materials').data.materials.floors.find((material: Material) => material.id === this.id);
     const sprite: Sprite = new Sprite(asset('room/materials').textures[material.texture]);
 
-    this.texture = new Texture(this.room.renderer.application.renderer.generateTexture(sprite).baseTexture);
+    this.texture = this.room.renderer.application.renderer.generateTexture(sprite);
     this.color = material.color;
   }
 

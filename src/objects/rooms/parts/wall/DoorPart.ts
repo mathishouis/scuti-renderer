@@ -24,8 +24,6 @@ export class DoorPart extends RoomPart {
   public render(): void {
     this.sprite = new Sprite(asset('room/content').textures['door']);
     this.sprite.skew.set(0, -0.46);
-    this.sprite.parentLayer = this.room.renderer.layer;
-    this.sprite.zOrder = 1000000;
     this.sprite.tint = 0x000000;
 
     this.container.x = 32 * (this.configuration.position.x + 1) - 32 * this.configuration.position.y;
@@ -35,6 +33,7 @@ export class DoorPart extends RoomPart {
       32 * this.configuration.position.z -
       this.sprite.height +
       2;
+    this.container.zIndex = 1000000;
     this.container.addChild(this.sprite);
   }
 

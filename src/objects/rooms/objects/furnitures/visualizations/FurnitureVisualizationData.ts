@@ -1,7 +1,17 @@
 import { Vector3D } from '../../../../../types/Vector';
 import { FurnitureVisualization } from './FurnitureVisualization';
-import { BLEND_MODES, Spritesheet } from 'pixi.js';
+import { Spritesheet } from 'pixi.js';
 import { asset } from '../../../../../utils/Assets';
+
+const INK_TO_BLEND: Record<string, string> = {
+  ADD: 'add',
+  NORMAL: 'normal',
+  MULTIPLY: 'multiply',
+  SCREEN: 'screen',
+  OVERLAY: 'overlay',
+  DARKEN: 'darken',
+  LIGHTEN: 'lighten',
+};
 
 interface CachedLayer {
   frames: number[];
@@ -15,7 +25,7 @@ interface CachedLayer {
   alpha: number;
   interactive: boolean;
   flipped: boolean;
-  blend: BLEND_MODES | undefined;
+  blend: string | undefined;
   offsets: Vector3D;
   directions: number[];
   needUpdate: boolean;
@@ -60,7 +70,7 @@ export class FurnitureVisualizationData {
     const { colors, layers, animations, layerCount, masks } = properties;
     const letter = layerId == layerCount ? 'sd' : String.fromCharCode(97 + layerId);
     const name = `${furniture.data.name}_${letter}_${furniture.direction}_0`;
-    const layer = {
+    const layer: CachedLayer = {
       frames: [],
       frameIndex: 0,
       loopCount: 0,
@@ -107,7 +117,7 @@ export class FurnitureVisualizationData {
     if (layerProperty && layerProperty.z) layer.offsets.z = layerProperty.z;
     if (layerProperty && layerProperty.alpha) layer.alpha = layerProperty.alpha / 255;
     if (layerProperty && layerProperty.interactive) layer.interactive = layerProperty.interactive;
-    if (layerProperty && layerProperty.ink) layer.blend = BLEND_MODES[layerProperty.ink] as any;
+    if (layerProperty && layerProperty.ink) layer.blend = INK_TO_BLEND[layerProperty.ink as string] ?? layerProperty.ink.toLowerCase();
     if (frames[name] && frames[name].flipped) layer.flipped = true;
     if (layerId == layerCount) layer.alpha = 0.2;
 

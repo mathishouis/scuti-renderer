@@ -8,6 +8,7 @@ import { LandscapeMaterial } from '../../src';
 import { FloorFurniture } from '../../src/objects/rooms/objects/furnitures/FloorFurniture';
 import { benchmark } from '../../src/utils/Benchmark';
 import { perf } from '../../src/utils/Logger';
+import {WallFurniture} from "../../src/objects/rooms/objects/furnitures/WallFurniture";
 
 const renderer: Scuti = new Scuti({
   canvas: document.getElementById('app') as HTMLElement,
@@ -150,6 +151,7 @@ const room: Room = new Room({
   floorMaterial: new FloorMaterial(101),
   floorThickness: 8,
   wallMaterial: new WallMaterial(108),
+  //wallMaterial: new WallMaterial(131),
   wallThickness: 8,
   wallHeight: -1,
   landscapeMaterial: new LandscapeMaterial(101),
@@ -179,6 +181,87 @@ room.add(firework);*/
   state: 2,
 });
 room.add(firework2);*/
+
+const windowFurniture = new WallFurniture({
+  id: 4054,
+  position: {
+    x: 4,
+    y: 4,
+    offsets: {
+      x: 0,
+      y: 0,
+    },
+  },
+  /*position: {
+    x: -1,
+    y: 1,
+    offsets: {
+      x: 7,
+      y: -25,
+    },
+  },*/
+  direction: 2,
+  state: 0,
+});
+
+const windowFurniture4 = new WallFurniture({
+  id: 4054,
+  position: {
+    x: 7,
+    y: 7,
+    offsets: {
+      x: 0,
+      y: 0,
+    },
+  },
+  /*position: {
+    x: -1,
+    y: 1,
+    offsets: {
+      x: 7,
+      y: -25,
+    },
+  },*/
+  direction: 2,
+  state: 0,
+});
+
+const windowFurniture2 = new WallFurniture({
+  //id: 4039,
+  id: 4037,
+  position: {
+    x: 0,
+    y: 5,
+    offsets: {
+      x: 5,
+      y: 43,
+    },
+  },
+  direction: 2,
+  state: 0,
+});
+
+const windowFurniture3 = new WallFurniture({
+  id: 4037,
+  position: {
+    x: 4,
+    y: 0,
+    offsets: {
+      x: 7,
+      y: 57,
+    },
+  },
+  direction: 4,
+  state: 0,
+});
+
+/*setTimeout(() => {
+  wheel2.state = 2;
+}, 1000);*/
+room.add(windowFurniture);
+room.add(windowFurniture2);
+room.add(windowFurniture3);
+room.add(windowFurniture4);
 
 const firework3 = new FloorFurniture({
   //id: 4840,

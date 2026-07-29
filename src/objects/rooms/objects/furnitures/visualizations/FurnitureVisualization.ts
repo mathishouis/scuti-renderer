@@ -1,7 +1,6 @@
 import { RoomObjectVisualization } from '../../RoomObjectVisualization';
 import { asset } from '../../../../../utils/Assets';
 import { FurnitureLayer } from '../FurnitureLayer';
-import { BLEND_MODES } from '@pixi/constants';
 import { RoomFurniture } from '../RoomFurniture';
 import { Texture } from 'pixi.js';
 import { FurnitureVisualizationData } from './FurnitureVisualizationData';
@@ -70,7 +69,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
         y: this.getLayerYOffset(id, this.furniture.direction),
         z: this.getLayerZOffset(id, this.furniture.direction),
       },
-      blend: this.getLayerBlend(id) as any,
+      blend: this.getLayerBlend(id),
       flip: this.getLayerFlipped(id),
       interactive: this.getLayerInteractive(id),
       tag: this.getLayerTag(id),
@@ -118,7 +117,6 @@ export class FurnitureVisualization extends RoomObjectVisualization {
 
         if (layer.needUpdate) {
           layer.needUpdate = false;
-          //this.layers.get(i)?.destroy();
           this.layer(i);
         }
       }
@@ -205,7 +203,7 @@ export class FurnitureVisualization extends RoomObjectVisualization {
     return layer ? layer.interactive : false;
   }
 
-  public getLayerBlend(id: number): BLEND_MODES | undefined {
+  public getLayerBlend(id: number): string | undefined {
     const layer = this.data.layers.get(id);
     return layer ? layer.blend : undefined;
   }

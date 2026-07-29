@@ -28,12 +28,11 @@ export class CursorPart extends RoomPart {
     const texture: Texture = asset('room/content').textures['tile_cursor'];
 
     this._sprite = new Sprite(texture);
-    this._sprite.parentLayer = this.room.renderer.layer;
 
     if (this.room.parsedHeightMap.door === this._position) {
-      this._sprite.zOrder = cursorOrder(this._position, true);
+      this.container.zIndex = cursorOrder(this._position, true);
     } else {
-      this._sprite.zOrder = cursorOrder(this._position);
+      this.container.zIndex = cursorOrder(this._position);
     }
 
     this.container.addChild(this._sprite);
@@ -54,9 +53,9 @@ export class CursorPart extends RoomPart {
 
     if (this.room.parsedHeightMap.door) {
       if (this.room.parsedHeightMap.door.x === x && this.room.parsedHeightMap.door.y === y) {
-        this._sprite.zOrder = cursorOrder(this._position, true);
+        this.container.zIndex = cursorOrder(this._position, true);
       } else {
-        this._sprite.zOrder = cursorOrder(this._position);
+        this.container.zIndex = cursorOrder(this._position);
       }
     }
   }
